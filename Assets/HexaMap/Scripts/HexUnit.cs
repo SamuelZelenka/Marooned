@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
 public class HexUnit : MonoBehaviour
 {
@@ -181,20 +180,4 @@ public class HexUnit : MonoBehaviour
         location.Unit = null;
         Destroy(gameObject);
     }
-
-
-    #region Save and Load
-    public void Save(BinaryWriter writer)
-    {
-        location.coordinates.Save(writer);
-        writer.Write((int)orientation);
-    }
-
-    public static void Load(BinaryReader reader, HexGrid grid)
-    {
-        HexCoordinates coordinates = HexCoordinates.Load(reader);
-        int orientation = reader.ReadInt32();
-        grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation);
-    }
-    #endregion
 }

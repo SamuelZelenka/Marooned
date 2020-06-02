@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.IO;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 
@@ -12,6 +11,8 @@ public class HexGrid : MonoBehaviour
     public HexUnit unitPrefab;
 
     HexCell[] cells;
+
+    public bool setTerrain = true;
 
     List<HexUnit> units = new List<HexUnit>();
 
@@ -37,22 +38,23 @@ public class HexGrid : MonoBehaviour
 
         HexUnit.unitPrefab = unitPrefab;
 
-        CreateMap(cellCountX, cellCountY);
+        CreateMap(cellCountX, cellCountY, true);
     }
 
-    public bool CreateMap(int x, int y)
+    public bool CreateMap(int x, int y, bool newMap)
     {
+        ClearCells();
         ClearUnits();
 
         cellCountX = x;
         cellCountY = y;
-        CreateCells();
+        CreateCells(newMap);
 
-        //Debug unit
-        HexUnit unit = Instantiate(unitPrefab);
-        unit.transform.position = cells[0].Position;
-        cells[0].Unit = unit;
-        unit.Location = cells[0];
+        ////Debug unit
+        //HexUnit unit = Instantiate(unitPrefab);
+        //unit.transform.position = cells[0].Position;
+        //cells[0].Unit = unit;
+        //unit.Location = cells[0];
 
         return true;
     }
@@ -72,7 +74,7 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    void CreateCells()
+    void CreateCells(bool newMap)
     {
         cells = new HexCell[cellCountY * cellCountX];
 
@@ -80,12 +82,20 @@ public class HexGrid : MonoBehaviour
         {
             for (int x = 0; x < cellCountX; x++)
             {
-                CreateCell(x, y, i++);
+                CreateCell(x, y, i++, newMap);
+            }
+        }
+
+        if (!newMap)
+        {
+            foreach (var item in cells)
+            {
+                item.CalculateBitmask();
             }
         }
     }
 
-    void CreateCell(int x, int y, int i)
+    void CreateCell(int x, int y, int i, bool newMap)
     {
         Vector3 position;
         position.x = (x + y * 0.5f - y / 2) * (HexMetrics.innerRadius * 2f);
@@ -96,34 +106,42 @@ public class HexGrid : MonoBehaviour
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
 
-        //Connect hex neighbors to the west
-        if (x > 0)
+        if (newMap)
         {
-            cell.SetNeighbor(HexDirection.W, cells[i - 1]);
-        }
-        if (y > 0)
-        {
-            if ((y & 1) == 0) //If even row (with X = 0 to the leftmost position)
+            //Connect hex neighbors to the west
+            if (x > 0)
             {
-                cell.SetNeighbor(HexDirection.SE, cells[i - cellCountX]);
-                if (x > 0)
+                cell.SetNeighbor(HexDirection.W, cells[i - 1]);
+            }
+            if (y > 0)
+            {
+                if ((y & 1) == 0) //If even row (with X = 0 to the leftmost position)
                 {
-                    cell.SetNeighbor(HexDirection.SW, cells[i - cellCountX - 1]);
+                    cell.SetNeighbor(HexDirection.SE, cells[i - cellCountX]);
+                    if (x > 0)
+                    {
+                        cell.SetNeighbor(HexDirection.SW, cells[i - cellCountX - 1]);
+                    }
+                }
+                else //Un-even row (with X = 0 with incline into the row)
+                {
+                    cell.SetNeighbor(HexDirection.SW, cells[i - cellCountX]);
+                    if (x < cellCountX - 1)
+                    {
+                        cell.SetNeighbor(HexDirection.SE, cells[i - cellCountX + 1]);
+                    }
                 }
             }
-            else //Un-even row (with X = 0 with incline into the row)
-            {
-                cell.SetNeighbor(HexDirection.SW, cells[i - cellCountX]);
-                if (x < cellCountX - 1)
-                {
-                    cell.SetNeighbor(HexDirection.SE, cells[i - cellCountX + 1]);
-                }
-            }
+            cell.Traversable = true;
         }
 
         cell.transform.SetParent(this.transform);
 
-        SetTerrainCellVisual(cell);
+
+        if (setTerrain && newMap)
+        {
+            SetTerrainCellVisual(cell);
+        }
     }
 
     /// <summary>
@@ -139,12 +157,12 @@ public class HexGrid : MonoBehaviour
         if (HexMetrics.landChance > HexMetrics.SampleHashGrid(cell.Position).a)
         {
             tile = landTile;
-            cell.IsOcean = false;
+            cell.IsLand = true;
         }
         else
         {
             tile = oceanTile;
-            cell.IsOcean = true;
+            cell.IsLand = false;
         }
 
         terrain.SetTile(tilemapPosition, tile);
@@ -203,6 +221,30 @@ public class HexGrid : MonoBehaviour
         unit.Die();
     }
 
+    public void ShowGameGrid(bool status)
+    {
+        foreach (var item in cells)
+        {
+            item.ShowGameGrid(status);
+        }
+    }
+
+    public void ShowEditGrid(bool status)
+    {
+        foreach (var item in cells)
+        {
+            item.ShowEditGrid(status);
+        }
+    }
+
+    public void ShowNeighborGizmos(bool status)
+    {
+        foreach (var item in cells)
+        {
+            item.showNeighborGizmos = status;
+        }
+    }
+
     void ClearUnits()
     {
         for (int i = 0; i < units.Count; i++)
@@ -212,49 +254,114 @@ public class HexGrid : MonoBehaviour
         units.Clear();
     }
 
-    #region Save and Load
-    public void Save(BinaryWriter writer)
+    void ClearCells()
     {
-        writer.Write(cellCountX);
-        writer.Write(cellCountY);
-
-        for (int i = 0; i < cells.Length; i++)
+        if (cells != null)
         {
-            cells[i].Save(writer);
-        }
-
-        writer.Write(units.Count);
-        for (int i = 0; i < units.Count; i++)
-        {
-            units[i].Save(writer);
-        }
-    }
-
-    public void Load(BinaryReader reader)
-    {
-        ClearUnits();
-
-        int x = reader.ReadInt32();
-        int z = reader.ReadInt32();
-
-        if (cellCountX != x || cellCountY != z)
-        {
-            if (!CreateMap(x, z))
+            for (int i = 0; i < cells.Length; i++)
             {
-                return;
+                GameObject.Destroy(cells[i].gameObject);
             }
         }
+    }
 
-        for (int i = 0; i < cells.Length; i++)
-        {
-            cells[i].Load(reader);
-        }
+    #region Save and Load
+    public HexCell[] Save()
+    {
+        return cells;
+    }
 
-        int unitCount = reader.ReadInt32();
-        for (int i = 0; i < unitCount; i++)
+    public void Load(BattleMap map)
+    {
+        CreateMap(map.cellCountX, map.cellCountY, false);
+        for (int i = 0; i < map.cells.Length; i++)
         {
-            HexUnit.Load(reader, this);
+            cells[i].Load(map.cells[i], this);
         }
     }
+
+    //public void Save(BinaryWriter writer)
+    //{
+    //    writer.Write(cellCountX);
+    //    writer.Write(cellCountY);
+
+    //    for (int i = 0; i < cells.Length; i++)
+    //    {
+    //        cells[i].Save(writer);
+
+    //        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+    //        {
+    //            HexCell neighbor = cells[i].GetNeighbor(d);
+    //            if (neighbor)
+    //            {
+    //                writer.Write(true);
+    //            }
+    //            else
+    //            {
+    //                writer.Write(false);
+    //            }
+    //        }
+
+    //        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+    //        {
+    //            HexCell neighbor = cells[i].GetNeighbor(d);
+    //            if (neighbor)
+    //            {
+    //                neighbor.coordinates.Save(writer);
+    //            }
+    //        }
+    //    }
+
+    //    writer.Write(units.Count);
+    //    for (int i = 0; i < units.Count; i++)
+    //    {
+    //        units[i].Save(writer);
+    //    }
+    //}
+
+    //public void Load(BinaryReader reader)
+    //{
+    //    ClearUnits();
+
+    //    int x = reader.ReadInt32();
+    //    int y = reader.ReadInt32();
+
+    //    if (cellCountX != x || cellCountY != y)
+    //    {
+    //        if (!CreateMap(x, y))
+    //        {
+    //            return;
+    //        }
+    //    }
+
+    //    for (int i = 0; i < cells.Length; i++)
+    //    {
+    //        cells[i].Load(reader);
+
+    //        bool[] connections = new bool[6];
+    //        for (int j = 0; j < connections.Length; j++)
+    //        {
+    //            connections[j] = reader.ReadBoolean();
+    //        }
+
+    //        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+    //        {
+    //            if (connections[(int)d])
+    //            {
+    //                HexCell neighbor = GetCell(HexCoordinates.Load(reader));
+    //                if (neighbor)
+    //                {
+    //                    cells[i].SetNeighbor(d, neighbor);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    int unitCount = reader.ReadInt32();
+    //    for (int i = 0; i < unitCount; i++)
+    //    {
+    //        HexUnit.Load(reader, this);
+    //    }
+    //}
     #endregion
 }

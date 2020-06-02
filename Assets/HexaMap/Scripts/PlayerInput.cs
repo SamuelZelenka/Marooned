@@ -11,10 +11,10 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        if (!EventSystem.current.CompareTag("UI"))
-        {
+        //if (!EventSystem.current.CompareTag("UI"))
+        //{
             HandleInput();
-        }
+        //}
     }
 
     private void HandleInput()

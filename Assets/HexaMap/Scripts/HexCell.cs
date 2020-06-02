@@ -5,41 +5,57 @@ using System.IO;
 public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
-    public RectTransform uiRect;
     public Text label;
+    public SpriteRenderer gameGrid;
+    public SpriteRenderer editorGrid;
     public SpriteRenderer highlight;
     public HexUnit Unit { get; set; }
-
-    #region Terrain
-    int terrainTypeIndex;
-    public int TerrainTypeIndex
+    bool traversable;
+    public bool Traversable
     {
-        get => terrainTypeIndex;
+        get => traversable;
         set
         {
-            if (terrainTypeIndex != value)
-            {
-                terrainTypeIndex = value;
-            }
+            traversable = value;
+            ChangeEditGrid(value);
         }
     }
 
-    public bool IsOcean { get; set; }
-    public int GetIslandBitmask()
+    public bool showNeighborGizmos = true;
+
+    #region Terrain
+    //int terrainTypeIndex;
+    //public int TerrainTypeIndex
+    //{
+    //    get => terrainTypeIndex;
+    //    set
+    //    {
+    //        if (terrainTypeIndex != value)
+    //        {
+    //            terrainTypeIndex = value;
+    //        }
+    //    }
+    //}
+
+    public bool IsOcean { get => !IsLand; }
+    public bool IsLand { get; set; }
+
+    public int Bitmask { get; private set; }
+
+    public void CalculateBitmask()
     {
-        if (IsOcean)
-        {
-            Debug.LogError("Should not check island bitmask for ocean hexes");
-            return -1;
-        }
         int index = 0;
         short bitValue = 1;
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
         {
-            index += GetNeighbor(d).IsOcean ? bitValue * 0 : bitValue * 1;
+            HexCell neighbor = GetNeighbor(d);
+            if (neighbor && neighbor.IsLand)
+            {
+                index += bitValue;
+            }
             bitValue *= 2;
         }
-        return index;
+        Bitmask = index;
     }
     #endregion
 
@@ -54,6 +70,11 @@ public class HexCell : MonoBehaviour
 
     public void SetNeighbor(HexDirection direction, HexCell cell)
     {
+        HexCell neighbor = neighbors[(int)direction]; //Old neighbor
+        if (neighbor)
+        {
+            neighbor.neighbors[(int)direction.Opposite()] = null;
+        }
         neighbors[(int)direction] = cell;
         cell.neighbors[(int)direction.Opposite()] = this;
     }
@@ -101,6 +122,21 @@ public class HexCell : MonoBehaviour
         label.enabled = status;
     }
 
+    public void ShowGameGrid(bool status)
+    {
+        gameGrid.enabled = status;
+    }
+
+    public void ChangeEditGrid(bool traversable)
+    {
+        editorGrid.color = traversable ? Color.green : Color.red;
+    }
+
+    public void ShowEditGrid(bool status)
+    {
+        editorGrid.enabled = status;
+    }
+
     public void SetHighlightStatus(bool status, Color color)
     {
         highlight.enabled = status;
@@ -108,14 +144,40 @@ public class HexCell : MonoBehaviour
     }
 
     #region Save and Load
-    public void Save(BinaryWriter writer)
+    public void Load(HexCellData data, HexGrid grid)
     {
-        writer.Write((byte)terrainTypeIndex);
-    }
+        Traversable = data.traversable;
+        IsLand = data.isLand;
+        Bitmask = data.bitmask;
 
-    public void Load(BinaryReader reader)
-    {
-        terrainTypeIndex = reader.ReadByte();
+        for (int i = 0; i < data.connected.Length; i++)
+        {
+            if (data.connected[i])
+            {
+                SetNeighbor((HexDirection)i, grid.GetCell(data.connectedCoordinates[i]));
+            }
+        }
     }
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        if (showNeighborGizmos)
+        {
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = GetNeighbor(d);
+                if (neighbor)
+                {
+                    Color gizmoColor = Color.green;
+                    if (!neighbor.Traversable || !this.Traversable)
+                    {
+                        gizmoColor = Color.red;
+                    }
+                    Gizmos.color = gizmoColor;
+                    Gizmos.DrawLine(this.Position, neighbor.Position);
+                }
+            }
+        }
+    }
 }

@@ -65,6 +65,10 @@ public class Pathfinding : MonoBehaviour
                 {
                     continue;
                 }
+                if (!neighbor.Traversable)
+                {
+                    continue;
+                }
                 //
 
                 int hexEnterCost = 0;
