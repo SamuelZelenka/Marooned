@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 public class InGameCamera : MonoBehaviour
 {
     const float SCENEWIDTH = 80, SCENEHEIGHT = 40;
