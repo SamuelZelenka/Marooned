@@ -3,26 +3,26 @@ using UnityEditor;
 
 public class SaveLoadBattleMapMenu : MonoBehaviour
 {
-    public bool saveMode;
+    //public bool saveMode;
     public HexGrid hexGrid;
 
     public BattleMap selectedMap;
 
-    public void SaveLoad()
-    {
-        if (saveMode)
-        {
-            Debug.Log("Saving map");
-            Save();
-        }
-        else
-        {
-            Debug.Log("Loading map");
-            Load();
-        }
-        //nameInput.text = "Enter a new name or choose an existing map";
-        //Close();
-    }
+    //public void SaveLoad()
+    //{
+    //    if (saveMode)
+    //    {
+    //        Debug.Log("Saving map");
+    //        Save();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Loading map");
+    //        Load();
+    //    }
+    //    //nameInput.text = "Enter a new name or choose an existing map";
+    //    //Close();
+    //}
 
     public void Save()
     {

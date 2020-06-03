@@ -35,7 +35,7 @@ public static class HexMetrics
     public const float hashGridScale = 2.5f;
     static HexHash[] hashGrid;
 
-    public const float landChance = 0.1f;
+    public const float landChance = 0.25f;
     #endregion
 
     //Creates a hexhash grid, containing hexhashes with randomized values

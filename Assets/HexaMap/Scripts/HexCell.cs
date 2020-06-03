@@ -4,11 +4,14 @@ using System.IO;
 
 public class HexCell : MonoBehaviour
 {
-    public HexCoordinates coordinates;
     public Text label;
     public SpriteRenderer gameGrid;
     public SpriteRenderer editorGrid;
     public SpriteRenderer highlight;
+
+    public HexCoordinates coordinates;
+    public HexGrid myGrid;
+
     public HexUnit Unit { get; set; }
     bool traversable;
     public bool Traversable
@@ -24,26 +27,27 @@ public class HexCell : MonoBehaviour
     public bool showNeighborGizmos = true;
 
     #region Terrain
-    //int terrainTypeIndex;
-    //public int TerrainTypeIndex
-    //{
-    //    get => terrainTypeIndex;
-    //    set
-    //    {
-    //        if (terrainTypeIndex != value)
-    //        {
-    //            terrainTypeIndex = value;
-    //        }
-    //    }
-    //}
-
-    public bool IsOcean { get => !IsLand; }
     public bool IsLand { get; set; }
+    public bool IsOcean { get => !IsLand; }
 
-    public int Bitmask { get; private set; }
+    private int bitmask;
+    public int Bitmask
+    {
+        get => bitmask;
+        private set
+        {
+            bitmask = value;
+            myGrid.SetTerrainCellVisual(this);
+        }
+    }
 
     public void CalculateBitmask()
     {
+        if (IsOcean)
+        {
+            Bitmask = -1;
+            return;
+        }
         int index = 0;
         short bitValue = 1;
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
@@ -112,6 +116,7 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    #region Grid and Labels
     public void SetLabel(string text)
     {
         label.text = text;
@@ -142,6 +147,7 @@ public class HexCell : MonoBehaviour
         highlight.enabled = status;
         highlight.color = color;
     }
+    #endregion
 
     #region Save and Load
     public void Load(HexCellData data, HexGrid grid)

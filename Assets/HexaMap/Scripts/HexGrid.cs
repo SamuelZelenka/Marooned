@@ -18,8 +18,9 @@ public class HexGrid : MonoBehaviour
 
     public int seed;
     public Tilemap terrain;
-    public TileBase oceanTile;
-    public TileBase landTile;
+    public TileBase[] edgeTiles;
+    public TileBase[] oceanTiles;
+    public TileBase[] landTiles;
 
     private void OnEnable()
     {
@@ -55,24 +56,10 @@ public class HexGrid : MonoBehaviour
         //unit.transform.position = cells[0].Position;
         //cells[0].Unit = unit;
         //unit.Location = cells[0];
-
         return true;
     }
 
-    public HexCell GetCell(Vector3 position)
-    {
-        position = transform.InverseTransformPoint(position);
-        HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        int index = coordinates.X + coordinates.Y * cellCountX + coordinates.Y / 2;
-        if (index >= 0 && cells.Length > index)
-        {
-            return cells[index];
-        }
-        else
-        {
-            return null;
-        }
-    }
+   
 
     void CreateCells(bool newMap)
     {
@@ -86,7 +73,7 @@ public class HexGrid : MonoBehaviour
             }
         }
 
-        if (!newMap)
+        if (newMap && setTerrain)
         {
             foreach (var item in cells)
             {
@@ -136,11 +123,11 @@ public class HexGrid : MonoBehaviour
         }
 
         cell.transform.SetParent(this.transform);
-
+        cell.myGrid = this;
 
         if (setTerrain && newMap)
         {
-            SetTerrainCellVisual(cell);
+            cell.IsLand = (HexMetrics.landChance > HexMetrics.SampleHashGrid(cell.Position).a);
         }
     }
 
@@ -148,21 +135,28 @@ public class HexGrid : MonoBehaviour
     /// Paints terrain on the tilemap
     /// </summary>
     /// <param name="cell"></param>
-    private void SetTerrainCellVisual(HexCell cell)
+    public void SetTerrainCellVisual(HexCell cell)
     {
+        if (!setTerrain)
+        {
+            return;
+        }
         Vector3Int tilemapPosition = HexCoordinates.CoordinatesToTilemapCoordinates(cell.coordinates);
 
         TileBase tile;
+        int cellBitmask = cell.Bitmask;
 
-        if (HexMetrics.landChance > HexMetrics.SampleHashGrid(cell.Position).a)
+        if (cellBitmask >= 0 && cellBitmask <= 62 )
         {
-            tile = landTile;
-            cell.IsLand = true;
+            tile  = edgeTiles[cell.Bitmask];
         }
-        else
+        else if (cellBitmask < 0) //Ocean tile
         {
-            tile = oceanTile;
-            cell.IsLand = false;
+            tile = Utility.ReturnRandom(oceanTiles);
+        }
+        else //If over 62 (full land tile with all neighbors also landtiles)
+        {
+            tile = Utility.ReturnRandom(landTiles);
         }
 
         terrain.SetTile(tilemapPosition, tile);
@@ -192,6 +186,21 @@ public class HexGrid : MonoBehaviour
         if (hit.collider)
         {
             return GetCell(hit.point);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public HexCell GetCell(Vector3 position)
+    {
+        position = transform.InverseTransformPoint(position);
+        HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+        int index = coordinates.X + coordinates.Y * cellCountX + coordinates.Y / 2;
+        if (index >= 0 && cells.Length > index)
+        {
+            return cells[index];
         }
         else
         {
@@ -268,6 +277,10 @@ public class HexGrid : MonoBehaviour
     #region Save and Load
     public HexCell[] Save()
     {
+        foreach (var item in cells)
+        {
+            item.CalculateBitmask();
+        }
         return cells;
     }
 
@@ -279,89 +292,5 @@ public class HexGrid : MonoBehaviour
             cells[i].Load(map.cells[i], this);
         }
     }
-
-    //public void Save(BinaryWriter writer)
-    //{
-    //    writer.Write(cellCountX);
-    //    writer.Write(cellCountY);
-
-    //    for (int i = 0; i < cells.Length; i++)
-    //    {
-    //        cells[i].Save(writer);
-
-    //        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-    //        {
-    //            HexCell neighbor = cells[i].GetNeighbor(d);
-    //            if (neighbor)
-    //            {
-    //                writer.Write(true);
-    //            }
-    //            else
-    //            {
-    //                writer.Write(false);
-    //            }
-    //        }
-
-    //        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-    //        {
-    //            HexCell neighbor = cells[i].GetNeighbor(d);
-    //            if (neighbor)
-    //            {
-    //                neighbor.coordinates.Save(writer);
-    //            }
-    //        }
-    //    }
-
-    //    writer.Write(units.Count);
-    //    for (int i = 0; i < units.Count; i++)
-    //    {
-    //        units[i].Save(writer);
-    //    }
-    //}
-
-    //public void Load(BinaryReader reader)
-    //{
-    //    ClearUnits();
-
-    //    int x = reader.ReadInt32();
-    //    int y = reader.ReadInt32();
-
-    //    if (cellCountX != x || cellCountY != y)
-    //    {
-    //        if (!CreateMap(x, y))
-    //        {
-    //            return;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < cells.Length; i++)
-    //    {
-    //        cells[i].Load(reader);
-
-    //        bool[] connections = new bool[6];
-    //        for (int j = 0; j < connections.Length; j++)
-    //        {
-    //            connections[j] = reader.ReadBoolean();
-    //        }
-
-    //        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-    //        {
-    //            if (connections[(int)d])
-    //            {
-    //                HexCell neighbor = GetCell(HexCoordinates.Load(reader));
-    //                if (neighbor)
-    //                {
-    //                    cells[i].SetNeighbor(d, neighbor);
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    int unitCount = reader.ReadInt32();
-    //    for (int i = 0; i < unitCount; i++)
-    //    {
-    //        HexUnit.Load(reader, this);
-    //    }
-    //}
     #endregion
 }
