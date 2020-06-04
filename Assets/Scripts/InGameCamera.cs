@@ -4,7 +4,7 @@ public class InGameCamera : MonoBehaviour
     const float SCENEWIDTH = 80, SCENEHEIGHT = 40;
     enum Directions { Up, Left, Down, Right }
 
-    Camera instance;
+    Camera instance = null;
     [SerializeField] CameraEffect cameraEffect = null;
 
     float maxPosX = 0;
@@ -20,21 +20,19 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] float zoomLerpSpeed = 0;
     [Range(0, 1)] [SerializeField] float zoomSpeedScale = 0;
 
-    CameraTransform newCameraTransform;
+    CameraTransform newCameraTransform = new CameraTransform();
 
-    Vector3 mouseDownPos;
-    Vector3 mouseUpPos;
+    Vector3 mouseDownPos = new Vector3();
+    Vector3 mouseUpPos = new Vector3();
 
     float cursorDetectionRange = 30;
 
-    bool isTracking;
-    [SerializeField] Vector3 currentTrackingPoint;
+    bool isTracking = false;
+    [SerializeField] Vector3 currentTrackingPoint = new Vector3();
 
     private void Start()
     {
         instance = Camera.main;
-
-        isTracking = false;
         newCameraTransform = new CameraTransform(instance);
     }
     private void Update()
