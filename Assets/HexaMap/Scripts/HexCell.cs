@@ -26,9 +26,11 @@ public class HexCell : MonoBehaviour
 
     public bool showNeighborGizmos = true;
 
-    #region Terrain
+    #region Terrain and Features
     public bool IsLand { get; set; }
     public bool IsOcean { get => !IsLand; }
+
+    public bool HasHarbor { get; set; }
 
     private int bitmask;
     public int Bitmask
@@ -90,21 +92,14 @@ public class HexCell : MonoBehaviour
     {
         get
         {
-            return movementCost + SearchHeuristic;
+            return MovementCost + SearchHeuristic;
         }
     }
     public HexCell NextWithSamePriority { get; set; }
     public int SearchPhase { get; set; } // 0 = not been reached | 1 = currently in searchfrontier | 2 = has been reached and taken out from frontier
 
-    int movementCost;
-    public int MovementCost
-    {
-        get => movementCost;
-        set
-        {
-            movementCost = value;
-        }
-    }
+    public int MovementCostPenalty { get; set; }
+    public int MovementCost { get; set; }
     public HexCell PathFrom { get; set; }
     #endregion
 

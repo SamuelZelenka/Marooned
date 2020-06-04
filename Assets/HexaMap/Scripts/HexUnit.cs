@@ -2,20 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HexUnit : MonoBehaviour
+public abstract class HexUnit : MonoBehaviour
 {
-    public static HexUnit unitPrefab;
     List<HexCell> pathToTravel;
-    const float travelSpeed = 4f;
-    const float rotationSpeed = 180f;
 
+    [Header("Movement")]
+    const float travelSpeed = 4f;
     public int movement = 5, maxMovement = 5;
-    public bool canMoveOnOcean;
-    public bool canMoveOnLand;
     public int oceanMovementCost = 1;
     public int landMovementCost = 1;
-
     public bool useCurvedMovement = true;
+
+    public bool playerControlled;
+    public HexGrid myGrid;
+    public Pathfinding pathfinding;
+
 
     public bool IsMoving
     {
@@ -63,36 +64,15 @@ public class HexUnit : MonoBehaviour
         transform.localPosition = location.Position;
     }
 
+    public abstract bool CanMoveTo(HexCell cell);
 
+    public abstract IEnumerator PerformAutomaticTurn();
 
-    public bool CanMoveTo(HexCell cell)
-    {
-        if (cell.Unit)
-        {
-            return false;
-        }
-        if (cell.IsOcean)
-        {
-            if (!canMoveOnOcean)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if (!canMoveOnLand)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void Travel(List<HexCell> path)
+    public IEnumerator Travel(List<HexCell> path)
     {
         Location = path[path.Count - 1];
         pathToTravel = path;
-        StartCoroutine(TravelPath());
+        yield return StartCoroutine(TravelPath());
     }
 
     IEnumerator TravelPath()

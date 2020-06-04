@@ -36,6 +36,8 @@ public static class HexMetrics
     static HexHash[] hashGrid;
 
     public const float landChance = 0.25f;
+    public const float harborChance = 0.1f;
+    public const float shipSpawnChance = 0.3f;
     #endregion
 
     //Creates a hexhash grid, containing hexhashes with randomized values

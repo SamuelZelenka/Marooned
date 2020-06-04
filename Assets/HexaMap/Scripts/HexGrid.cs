@@ -6,21 +6,24 @@ public class HexGrid : MonoBehaviour
 {
     public int cellCountX = 20, cellCountY = 15;
 
+    [Header("References")]
     public HexCell cellPrefab;
     public Texture2D noiseSource;
-    public HexUnit unitPrefab;
+    public Ship shipPrefab;
 
-    HexCell[] cells;
-
-    public bool setTerrain = true;
-
-    List<HexUnit> units = new List<HexUnit>();
-
+    [Header("Terrain")]
+    public bool worldMap = true;
     public int seed;
-    public Tilemap terrain;
+    public Tilemap terrainTilemap;
+    public Tilemap featuresTilemap;
     public TileBase[] edgeTiles;
     public TileBase[] oceanTiles;
     public TileBase[] landTiles;
+    public TileBase[] harborTiles;
+
+    HexCell[] cells;
+    public List<HexUnit> Units { get; private set; }
+    public List<HexCell> Harbors { get; private set; }
 
     private void OnEnable()
     {
@@ -28,16 +31,16 @@ public class HexGrid : MonoBehaviour
         {
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
-            HexUnit.unitPrefab = unitPrefab;
         }
     }
 
     void Awake()
     {
+        Units = new List<HexUnit>();
+        Harbors = new List<HexCell>();
+
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
-
-        HexUnit.unitPrefab = unitPrefab;
 
         CreateMap(cellCountX, cellCountY, true);
     }
@@ -51,15 +54,12 @@ public class HexGrid : MonoBehaviour
         cellCountY = y;
         CreateCells(newMap);
 
-        ////Debug unit
-        //HexUnit unit = Instantiate(unitPrefab);
-        //unit.transform.position = cells[0].Position;
-        //cells[0].Unit = unit;
-        //unit.Location = cells[0];
+
+        //Create DEBUG PLAYER
+        CreatePlayerAndShip(cells[0], HexDirection.NE, true);
+
         return true;
     }
-
-   
 
     void CreateCells(bool newMap)
     {
@@ -73,7 +73,7 @@ public class HexGrid : MonoBehaviour
             }
         }
 
-        if (newMap && setTerrain)
+        if (newMap && worldMap)
         {
             foreach (var item in cells)
             {
@@ -125,7 +125,7 @@ public class HexGrid : MonoBehaviour
         cell.transform.SetParent(this.transform);
         cell.myGrid = this;
 
-        if (setTerrain && newMap)
+        if (worldMap && newMap)
         {
             cell.IsLand = (HexMetrics.landChance > HexMetrics.SampleHashGrid(cell.Position).a);
         }
@@ -137,7 +137,7 @@ public class HexGrid : MonoBehaviour
     /// <param name="cell"></param>
     public void SetTerrainCellVisual(HexCell cell)
     {
-        if (!setTerrain)
+        if (!worldMap)
         {
             return;
         }
@@ -146,9 +146,21 @@ public class HexGrid : MonoBehaviour
         TileBase tile;
         int cellBitmask = cell.Bitmask;
 
-        if (cellBitmask >= 0 && cellBitmask <= 62 )
+        if (cellBitmask >= 0 && cellBitmask <= 62 ) //Edge of islands
         {
             tile  = edgeTiles[cell.Bitmask];
+
+            //Spawn harbors
+            if (HexMetrics.SampleHashGrid(cell.Position).a < HexMetrics.harborChance)
+            {
+                AddHarbor(cell, tilemapPosition);
+
+                //Spawn AI ships
+                if (HexMetrics.SampleHashGrid(cell.Position).b < HexMetrics.shipSpawnChance) 
+                {
+                    CreatePlayerAndShip(cell, (HexDirection) Random.Range((int)HexDirection.NE, (int) HexDirection.NW), false);
+                }
+            }
         }
         else if (cellBitmask < 0) //Ocean tile
         {
@@ -159,7 +171,25 @@ public class HexGrid : MonoBehaviour
             tile = Utility.ReturnRandom(landTiles);
         }
 
-        terrain.SetTile(tilemapPosition, tile);
+        terrainTilemap.SetTile(tilemapPosition, tile);
+    }
+
+    public void AddHarbor(HexCell cell, Vector3Int tilemapPosition)
+    {
+        cell.HasHarbor = true;
+        Harbors.Add(cell);
+
+        List<HexDirection> openwaterConnections = new List<HexDirection>();
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            HexCell neighbor = cell.GetNeighbor(d);
+            if (neighbor && neighbor.IsOcean)
+            {
+                openwaterConnections.Add(d);
+            }
+        }
+        HexDirection dir = Utility.ReturnRandom(openwaterConnections);
+        featuresTilemap.SetTile(tilemapPosition, harborTiles[(int)dir]);
     }
 
     public HexCell GetCell(HexCoordinates coordinates)
@@ -208,25 +238,31 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void ShowUI(bool visible)
+    private void CreatePlayerAndShip(HexCell location, HexDirection direction, bool playerControlled)
     {
-        for (int i = 0; i < cells.Length; i++)
-        {
-            cells[i].ShowUI(visible);
-        }
+        Ship ship = Instantiate(shipPrefab);
+        AddUnit(ship, location, direction, playerControlled);
+        List<HexUnit> playerUnits = new List<HexUnit>();
+        playerUnits.Add(ship);
+        Player newPlayer = new Player(playerUnits, playerControlled);
+        HexGridController.instance.AddPlayerToTurnOrder(newPlayer);
     }
 
-    public void AddUnit(HexUnit unit, HexCell location, int orientation)
+    private void AddUnit(HexUnit unit, HexCell location, HexDirection orientation, bool playerControlled)
     {
-        units.Add(unit);
+        Units.Add(unit);
+        location.Unit = unit;
         unit.transform.SetParent(transform, false);
         unit.Location = location;
         unit.Orientation = (HexDirection)orientation;
+        unit.playerControlled = playerControlled;
+        unit.myGrid = this;
     }
 
     public void RemoveUnit(HexUnit unit)
     {
-        units.Remove(unit);
+        Units.Remove(unit);
+        unit.Location.Unit = null;
         unit.Die();
     }
 
@@ -235,6 +271,15 @@ public class HexGrid : MonoBehaviour
         foreach (var item in cells)
         {
             item.ShowGameGrid(status);
+        }
+    }
+
+    #region UI and Grid
+    public void ShowUI(bool visible)
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].ShowUI(visible);
         }
     }
 
@@ -253,14 +298,15 @@ public class HexGrid : MonoBehaviour
             item.showNeighborGizmos = status;
         }
     }
+    #endregion
 
     void ClearUnits()
     {
-        for (int i = 0; i < units.Count; i++)
+        for (int i = 0; i < Units.Count; i++)
         {
-            units[i].Die();
+            Units[i].Die();
         }
-        units.Clear();
+        Units.Clear();
     }
 
     void ClearCells()

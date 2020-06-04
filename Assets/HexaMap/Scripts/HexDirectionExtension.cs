@@ -41,4 +41,9 @@ public static class HexDirectionExtension
         Debug.Log("Could not find direction to cell");
         return HexDirection.NE;
     }
+
+    public static HexDirection ReturnRandomDirection()
+    {
+        return (HexDirection) Random.Range((int)HexDirection.NE, (int)HexDirection.NW);
+    }
 }

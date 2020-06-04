@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-    int searchFrontierPhase = 0;
+    static int searchFrontierPhase = 0;
     HexCellPriorityQueue searchFrontier = null;
 
     HexCell currentPathFrom, currentPathTo;
@@ -20,13 +19,14 @@ public class Pathfinding : MonoBehaviour
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         HasPath = Search(fromCell, toCell, unit);
-        ShowPath(unit.maxMovement);
+        ShowPath(unit.maxMovement, unit.movement);
     }
 
     //Pathfinding search
     bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
         searchFrontierPhase += 2;
+        Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
@@ -73,7 +73,8 @@ public class Pathfinding : MonoBehaviour
 
                 int hexEnterCost = 0;
 
-                //Special conditions here
+                //Special condition costs here
+                hexEnterCost += neighbor.MovementCostPenalty;
 
                 //Default cost
                 hexEnterCost += neighbor.IsOcean ? unit.oceanMovementCost : unit.landMovementCost;
@@ -105,7 +106,7 @@ public class Pathfinding : MonoBehaviour
         return false;
     }
 
-    public List<HexCell> GetPath()
+    public List<HexCell> GetWholePath()
     {
         if (!HasPath)
         {
@@ -121,14 +122,40 @@ public class Pathfinding : MonoBehaviour
         return path;
     }
 
-    void ShowPath(int maxMovement)
+    public List<HexCell> GetReachablePath(HexUnit unit, out int cost)
+    {
+        if (!HasPath)
+        {
+            cost = 0;
+            return null;
+        }
+        List<HexCell> path = new List<HexCell>();
+        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        {
+            if (c.MovementCost <= unit.movement)
+            {
+            path.Add(c);
+            }
+        }
+        path.Add(currentPathFrom);
+        path.Reverse();
+        cost = path[path.Count - 1].MovementCost;
+        return path;
+    }
+
+    void ShowPath(int maxMovement, int remainingMovement)
     {
         if (HasPath)
         {
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                int turn = (current.MovementCost - 1) / maxMovement;
+                int turn = 0;
+                if (current.MovementCost - remainingMovement > 0)
+                {
+                    turn = (current.MovementCost - 1 - remainingMovement) / maxMovement;
+                    turn++;
+                }
                 current.SetLabel(turn.ToString());
                 //current.SetLabel(current.MovementCost.ToString());
                 current.SetHighlightStatus(true, Color.white);

@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class PlayerInput : MonoBehaviour
 {
     public HexGrid hexGrid;
-    public Pathfinding playerPathfinding;
 
     HexCell currentCell;
     HexUnit selectedUnit;
@@ -13,7 +12,7 @@ public class PlayerInput : MonoBehaviour
     {
         //if (!EventSystem.current.CompareTag("UI"))
         //{
-            HandleInput();
+        HandleInput();
         //}
     }
 
@@ -23,7 +22,7 @@ public class PlayerInput : MonoBehaviour
         {
             DoSelection();
         }
-        else if (selectedUnit && !selectedUnit.IsMoving)
+        else if (selectedUnit && !selectedUnit.IsMoving && selectedUnit.playerControlled)
         {
             if (Input.GetKeyUp(KeyCode.Mouse1))
             {
@@ -49,7 +48,6 @@ public class PlayerInput : MonoBehaviour
 
     void DoSelection()
     {
-        playerPathfinding.ClearPath();
         UpdateCurrentCell();
         if (currentCell)
         {
@@ -57,6 +55,7 @@ public class PlayerInput : MonoBehaviour
 
             if (selectedUnit)
             {
+                selectedUnit.pathfinding.ClearPath();
                 Debug.Log("Selected unit");
             }
         }
@@ -68,22 +67,26 @@ public class PlayerInput : MonoBehaviour
         {
             if (currentCell && selectedUnit.CanMoveTo(currentCell))
             {
-                playerPathfinding.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+                selectedUnit.pathfinding.FindPath(selectedUnit.Location, currentCell, selectedUnit);
             }
             else
             {
-                playerPathfinding.ClearPath();
+                selectedUnit.pathfinding.ClearPath();
             }
         }
     }
 
     void DoMove()
     {
-        if (playerPathfinding.HasPath)
+        if (selectedUnit.pathfinding.HasPath)
         {
-            selectedUnit.Travel(playerPathfinding.GetPath());
-
-            playerPathfinding.ClearPath();
+            List<HexCell> reachablePathThisTurn = selectedUnit.pathfinding.GetReachablePath(selectedUnit, out int cost);
+            if (reachablePathThisTurn != null && reachablePathThisTurn.Count > 1) //An actual path, longer than the included start hex where the unit stands now
+            {
+                StartCoroutine(selectedUnit.Travel(reachablePathThisTurn));
+                selectedUnit.movement -= cost;
+                selectedUnit.pathfinding.ClearPath();
+            }
         }
     }
 }

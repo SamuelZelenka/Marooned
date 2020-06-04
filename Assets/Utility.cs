@@ -40,6 +40,17 @@ public static class Utility
         return default;
     }
 
+    public static T ReturnRandom<T>(List<T> list)
+    {
+        if (list != null && list.Count > 0)
+        {
+            return list[Random.Range(0, list.Count)];
+        }
+        Debug.LogWarning("List empty");
+        return default;
+    }
+
+
     /// <summary>
     //	This makes it easy to create, name and place unique new ScriptableObject asset files.
     /// </summary>
