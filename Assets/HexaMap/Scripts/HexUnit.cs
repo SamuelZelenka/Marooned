@@ -4,18 +4,23 @@ using System.Collections.Generic;
 
 public abstract class HexUnit : MonoBehaviour
 {
-    List<HexCell> pathToTravel;
+    public delegate void HexUnitUpdateHandler(HexUnit unit);
+    public static event HexUnitUpdateHandler UnitMoved;
+
 
     [Header("Movement")]
     const float travelSpeed = 4f;
     public int movement = 5, maxMovement = 5;
     public int oceanMovementCost = 1;
     public int landMovementCost = 1;
-    public bool useCurvedMovement = true;
+    List<HexCell> pathToTravel;
 
+    public int playerIndex;
     public bool playerControlled;
     public HexGrid myGrid;
     public Pathfinding pathfinding;
+
+    public int visionRange;
 
 
     public bool IsMoving
@@ -36,6 +41,7 @@ public abstract class HexUnit : MonoBehaviour
             location = value;
             value.Unit = this;
             transform.localPosition = value.Position;
+            UnitMoved?.Invoke(this);
         }
     }
 
@@ -70,7 +76,6 @@ public abstract class HexUnit : MonoBehaviour
 
     public IEnumerator Travel(List<HexCell> path)
     {
-        Location = path[path.Count - 1];
         pathToTravel = path;
         yield return StartCoroutine(TravelPath());
     }
@@ -80,8 +85,6 @@ public abstract class HexUnit : MonoBehaviour
         float zPos = transform.localPosition.z;
         HexCell latestCell = pathToTravel[0];
 
-        if (useCurvedMovement)
-        {
             Vector3 a, b, c = pathToTravel[0].Position;
             transform.localPosition = c;
 
@@ -106,6 +109,7 @@ public abstract class HexUnit : MonoBehaviour
 
                     yield return null;
                 }
+                Location = pathToTravel[i - 1];
                 t -= 1f;
             }
 
@@ -127,29 +131,7 @@ public abstract class HexUnit : MonoBehaviour
 
                 yield return null;
             }
-        }
-        else
-        {
-            for (int i = 1; i < pathToTravel.Count; i++)
-            {
-                Vector3 a = pathToTravel[i - 1].Position;
-                Vector3 b = pathToTravel[i].Position;
-
-                //Rotation
-                latestCell = pathToTravel[i - 1];
-                Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[i]);
-
-                for (float t = 0f; t < 1f; t += Time.deltaTime * travelSpeed)
-                {
-                    //Move
-                    Vector3 newPos = Vector3.Lerp(a, b, t);
-                    newPos.z = zPos;
-                    transform.localPosition = newPos;
-                    yield return null;
-                }
-            }
-        }
-
+        Location = pathToTravel[pathToTravel.Count - 1];
         transform.localPosition = location.Position;
         pathToTravel = null; //Clear the list
     }
