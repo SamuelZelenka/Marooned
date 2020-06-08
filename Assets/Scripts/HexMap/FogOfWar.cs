@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class FogOfWar : MonoBehaviour
 {
-    int playerIndex;
+    int playerIndex = 0;
     Tilemap fogOfWar;
 
     private void Start()
