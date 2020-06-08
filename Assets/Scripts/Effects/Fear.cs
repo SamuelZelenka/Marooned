@@ -15,4 +15,8 @@ public class Fear : Effect
     {
         character.resources.Vitality -= damage;
     }
+    public override string GetData()
+    {
+        return "";
+    }
 }
