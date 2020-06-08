@@ -41,4 +41,8 @@
         }
         character.isStunned = false;
     }
+    public override string GetData()
+    {
+        return "";
+    }
 }

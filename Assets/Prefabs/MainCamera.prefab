@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 866738384817546384}
   - component: {fileID: 866738384817546385}
   m_Layer: 0
-  m_Name: CameraHolder
+  m_Name: MainCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,16 +41,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 866738384817546387}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 255d554095913b343b21a43c75b02ecd, type: 3}
+  m_Script: {fileID: 11500000, guid: abda27a350148534c8abfb9c80243f49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cameraEffect: {fileID: 866738384862604100}
   fallOffDistance: 5
-  cameraSpeed: 9
+  cameraSpeed: 1
   zoomMin: 5
   zoomMax: 30
-  zoomLerpSpeed: 5
-  zoomSpeedScale: 0.5
+  zoomLerpSpeed: 2
+  zoomSpeedScale: 0.205
   currentTrackingPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &866738384862604102
 GameObject:

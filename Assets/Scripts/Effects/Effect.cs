@@ -4,4 +4,5 @@
 
     public abstract void ApplyEffect(Character character);
     public abstract void EffectTick(Character character);
+    public abstract string GetData();
 }
