@@ -842,7 +842,6 @@ GameObject:
   - component: {fileID: 455256307}
   - component: {fileID: 455256306}
   - component: {fileID: 455256310}
-  - component: {fileID: 455256309}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -915,26 +914,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &455256309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455256305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 463a7964001d4d8419bf52f9957c3188, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraEffect: {fileID: 0}
-  fallOffDistance: 1
-  cameraSpeed: 28.8
-  zoomMin: 5
-  zoomMax: 30
-  zoomLerpSpeed: 1
-  zoomSpeedScale: 1
-  currentTrackingPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &455256310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2492,7 +2471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7499d8b27b0695642a48fe7183434920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveMode: 1
   hexGrid: {fileID: 1740551789}
   selectedMap: {fileID: 0}
 --- !u!1 &1184978633
@@ -4434,11 +4412,11 @@ MonoBehaviour:
   cellPrefab: {fileID: 170003624449977040, guid: cfc035cbc32c5684db00e3a1af59b8d9,
     type: 3}
   noiseSource: {fileID: 2800000, guid: 7b02620f95cc73744844a03ae96354e9, type: 3}
-  unitPrefab: {fileID: 6695498074958621407, guid: 9ac5c2b212baf2646b21d9c1350e9c35,
-    type: 3}
-  setTerrain: 0
+  shipPrefab: {fileID: 0}
+  worldMap: 0
   seed: 1234
-  terrain: {fileID: 1713794489}
+  terrainTilemap: {fileID: 1713794489}
+  featuresTilemap: {fileID: 0}
   edgeTiles:
   - {fileID: 11400000, guid: 16ea320fd37456140a364cc2066db10b, type: 2}
   - {fileID: 11400000, guid: 0b0cd10da9c051746bb92ea6d470521b, type: 2}
@@ -4513,6 +4491,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f4dfdfb898fa687459a1322b940ea571, type: 2}
   - {fileID: 11400000, guid: 52fd1b5137d2d0a478db4cfe24ddc1da, type: 2}
   - {fileID: 11400000, guid: b61fe05e15e1b5f45b21029c2bca50db, type: 2}
+  harborTiles: []
+  setupDebugUntities: 0
 --- !u!4 &1740551790
 Transform:
   m_ObjectHideFlags: 0

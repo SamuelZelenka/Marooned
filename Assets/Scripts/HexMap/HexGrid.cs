@@ -25,6 +25,8 @@ public class HexGrid : MonoBehaviour
     public List<HexUnit> Units { get; private set; }
     public List<HexCell> Harbors { get; private set; }
 
+    public bool setupDebugUntities = false;
+
     private void OnEnable()
     {
         if (!HexMetrics.noiseSource)
@@ -56,8 +58,10 @@ public class HexGrid : MonoBehaviour
 
 
         //Create DEBUG PLAYER
-        CreatePlayerAndShip(cells[0], HexDirection.NE, true);
-
+        if (setupDebugUntities)
+        {
+            CreatePlayerAndShip(cells[0], HexDirection.NE, true);
+        }
         return true;
     }
 
@@ -146,19 +150,22 @@ public class HexGrid : MonoBehaviour
         TileBase tile;
         int cellBitmask = cell.Bitmask;
 
-        if (cellBitmask >= 0 && cellBitmask <= 62 ) //Edge of islands
+        if (cellBitmask >= 0 && cellBitmask <= 62) //Edge of islands
         {
-            tile  = edgeTiles[cell.Bitmask];
+            tile = edgeTiles[cell.Bitmask];
 
             //Spawn harbors
             if (HexMetrics.SampleHashGrid(cell.Position).a < HexMetrics.harborChance)
             {
                 AddHarbor(cell, tilemapPosition);
 
-                //Spawn AI ships
-                if (HexMetrics.SampleHashGrid(cell.Position).b < HexMetrics.shipSpawnChance) 
+                if (setupDebugUntities)
                 {
-                    CreatePlayerAndShip(cell, (HexDirection) Random.Range((int)HexDirection.NE, (int) HexDirection.NW), false);
+                    //Spawn AI ships
+                    if (HexMetrics.SampleHashGrid(cell.Position).b < HexMetrics.shipSpawnChance)
+                    {
+                        CreatePlayerAndShip(cell, (HexDirection)Random.Range((int)HexDirection.NE, (int)HexDirection.NW), false);
+                    }
                 }
             }
         }
