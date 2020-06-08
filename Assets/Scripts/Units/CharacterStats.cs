@@ -16,7 +16,7 @@ public class CharacterStats
         get { return loyalty; }
         set
         {
-
+            loyalty = value;
         }
     }
     public int Strength
@@ -24,7 +24,7 @@ public class CharacterStats
         get { return strength; }
         set
         {
-
+            strength = value;
         }
     }
     public int Stamina
@@ -32,7 +32,7 @@ public class CharacterStats
         get { return stamina; }
         set
         {
-
+            stamina = value;
         }
     }
 
@@ -41,7 +41,7 @@ public class CharacterStats
         get { return constitution; }
         set
         {
-
+            constitution = value;
         }
     }
 
@@ -50,7 +50,7 @@ public class CharacterStats
         get { return agility; }
         set
         {
-
+            agility = value;
         }
     }
 
@@ -59,7 +59,7 @@ public class CharacterStats
         get { return toughness; }
         set
         {
-
+            toughness = value;
         }
     }
 
@@ -68,7 +68,7 @@ public class CharacterStats
         get { return accuracy; }
         set
         {
-
+            accuracy = value;
         }
     }
 

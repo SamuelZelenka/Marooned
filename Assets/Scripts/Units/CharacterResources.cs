@@ -25,7 +25,7 @@ public class CharacterResources
         get { return energy; }
         set
         {
-
+            energy = value;
         }
     }
     public int Hunger
@@ -33,7 +33,7 @@ public class CharacterResources
         get { return hunger; }
         set
         {
-
+            hunger = value;
         }
     }
     public int Hygiene
@@ -41,7 +41,7 @@ public class CharacterResources
         get { return hygiene; }
         set
         {
-
+            hygiene = value;
         }
     }
     public int Bounty
@@ -49,7 +49,7 @@ public class CharacterResources
         get { return bounty; }
         set
         {
-
+            bounty = value;
         }
     }
 }
