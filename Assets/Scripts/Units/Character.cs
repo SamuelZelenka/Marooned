@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Character : MonoBehaviour
+public class Character : HexUnit
 {
     public bool isStunned;
     public CharacterResources resources;
@@ -60,4 +60,14 @@ public class Character : MonoBehaviour
        
     }
     //TEMP METHOD!!!!!
+
+    public override bool CanMoveTo(HexCell cell)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override IEnumerator PerformAutomaticTurn()
+    {
+        throw new System.NotImplementedException();
+    }
 }
