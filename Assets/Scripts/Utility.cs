@@ -78,4 +78,20 @@ public static class Utility
         Selection.activeObject = asset;
         return asset;
     }
+
+    public static float PercentageToFloat(int wholePercentage)
+    {
+        return (float) wholePercentage / 100;
+    }
+
+    public static int FloatToWholePercentage(float floatPercentage)
+    {
+        return Mathf.RoundToInt(floatPercentage * 100);
+    }
+
+    public static string FloatToPercentageText(float floatPercentage)
+    {
+        int percentage = FloatToWholePercentage(floatPercentage);
+        return percentage.ToString() + "%";
+    }
 }
