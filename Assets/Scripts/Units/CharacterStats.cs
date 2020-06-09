@@ -3,22 +3,14 @@ public class CharacterStats
 {
 
     //Stats
-    int loyalty = 0;
     int strength = 0;
     int stamina = 0;
     int constitution = 0;
     int agility = 0;
     int toughness = 0;
     int accuracy = 0;
-
-    public int Loyalty
-    {
-        get { return loyalty; }
-        set
-        {
-            loyalty = value;
-        }
-    }
+    int bounty = 0;
+   
     public int Strength
     {
         get { return strength; }
@@ -72,5 +64,13 @@ public class CharacterStats
         }
     }
 
+    public int Bounty
+    {
+        get { return bounty; }
+        set
+        {
+            bounty = value;
+        }
+    }
 
 }

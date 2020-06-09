@@ -14,12 +14,19 @@ public class Character : HexUnit
     public List<Effect> activeEffects = new List<Effect>();
     List<Effect> removedEffects = new List<Effect>();
 
+    public CrewSimulation.ShipJob ShipJob
+    {
+        get;
+        set;
+    }
+
     public void AddEffect(Effect effect)
     {
         activeEffects.Add(effect);
         effect.ApplyEffect(this);
         Debug.Log(activeEffects.Count);
     }
+
     public void RemoveEffects(Effect effect)
     {
         if (activeEffects.Contains(effect))
@@ -32,6 +39,7 @@ public class Character : HexUnit
             Debug.LogError($"ActiveEffects does not contain this effect");
         }
     }
+
     public void EffectTickUpdate()
     {
         if (activeEffects.Count > 0)
@@ -43,6 +51,7 @@ public class Character : HexUnit
             }
         }
     }
+
     //TEMP METHOD!!!!!
     public void ButtonAddEffect(string effect)
     {
@@ -57,7 +66,7 @@ public class Character : HexUnit
             default:
                 break;
         }
-       
+
     }
     //TEMP METHOD!!!!!
 

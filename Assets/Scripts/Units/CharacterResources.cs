@@ -5,10 +5,11 @@ public class CharacterResources
     //Resources
     [SerializeField] int vitality = 0;
     //int speed;
-    int energy = 0;
-    int hunger = 0;
-    int hygiene = 0;
-    int bounty = 0;
+    float energy = 1;
+    float hunger = 1;
+    float hygiene = 1;
+    float loyalty = 0.5f;
+
 
     public int Vitality {
         get { return vitality; }
@@ -20,36 +21,58 @@ public class CharacterResources
             }
         } 
     }
-    public int Energy
+    public float Energy
     {
         get { return energy; }
         set
         {
-            energy = value;
+            energy = Mathf.Min(value, 1);
         }
     }
-    public int Hunger
+    public float Hunger
     {
         get { return hunger; }
         set
         {
-            hunger = value;
+            hunger = Mathf.Min(value, 1);
         }
     }
-    public int Hygiene
+    public float Hygiene
     {
         get { return hygiene; }
         set
         {
-            hygiene = value;
+            hygiene = Mathf.Min(value, 1);
         }
     }
-    public int Bounty
+
+    public float Loyalty
     {
-        get { return bounty; }
+        get { return loyalty; }
         set
         {
-            bounty = value;
+            loyalty = Mathf.Min(value, 1);
+        }
+    }
+
+    public enum ResourceType { Vitality, Energy, Hunger, Hygiene, Loyalty}
+    public float GetResource(ResourceType resourceType)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Vitality:
+                return Vitality;
+            case ResourceType.Energy:
+                return Energy;
+            case ResourceType.Hunger:
+                return Hunger;
+            case ResourceType.Hygiene:
+                return Hygiene;
+            case ResourceType.Loyalty:
+                return Loyalty;
+            default:
+                Debug.LogError("Not set up resourcetype");
+                return 0;
         }
     }
 }

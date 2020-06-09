@@ -55,25 +55,66 @@ public class HexGridController : MonoBehaviour
             StartCoroutine(activePlayer.PerformAutomaticTurn());
         }
     }
+
 }
 
 public class Player
 {
     List<HexUnit> units = new List<HexUnit>();
     public bool IsHuman { get; private set; }
+    CrewSimulation crewSimulation;
 
-    public Player(List<HexUnit> unitsToControl, bool humanControlled)
+    public Player(List<HexUnit> unitsToControl, bool humanControlled, CrewSimulation crewSimulation)
     {
         units = unitsToControl;
         IsHuman = humanControlled;
+        this.crewSimulation = crewSimulation;
+    }
+
+    public Player(List<HexUnit> unitsToControl, bool humanControlled = false)
+    {
+        units = unitsToControl;
+        IsHuman = humanControlled;
+        this.crewSimulation = null;
+        if (IsHuman)
+        {
+            Debug.LogWarning("Human player is set up with missing ship job system");
+        }
     }
 
     public void StartNewTurn()
     {
         foreach (var item in units)
         {
-            item.movement = item.maxMovement;
+            item.remainingMovementPoints = item.defaultMovementPoints;
         }
+
+        if (IsHuman)
+        {
+            OpenJobPanel();
+        }
+    }
+    
+    private void OpenJobPanel()
+    {
+        if (crewSimulation)
+        {
+        crewSimulation.OpenJobPanel();
+        }
+        else
+        {
+            Debug.LogWarning("Missing ship job system");
+        }
+    }
+
+    public void RunCrewSimulation()
+    {
+        crewSimulation.RunSimulation();
+    }
+
+    private void StartMapMovement()
+    {
+
     }
 
     public IEnumerator PerformAutomaticTurn()

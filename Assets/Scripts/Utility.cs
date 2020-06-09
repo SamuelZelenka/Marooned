@@ -79,19 +79,19 @@ public static class Utility
         return asset;
     }
 
-    public static float PercentageToFloat(int wholePercentage)
+    public static float PercentageToFactor(int wholePercentage)
     {
         return (float) wholePercentage / 100;
     }
 
-    public static int FloatToWholePercentage(float floatPercentage)
+    public static int FactorToPercentage(float floatPercentage)
     {
         return Mathf.RoundToInt(floatPercentage * 100);
     }
 
-    public static string FloatToPercentageText(float floatPercentage)
+    public static string FactorToPercentageText(float floatPercentage)
     {
-        int percentage = FloatToWholePercentage(floatPercentage);
+        int percentage = FactorToPercentage(floatPercentage);
         return percentage.ToString() + "%";
     }
 }

@@ -19,7 +19,7 @@ public class Pathfinding : MonoBehaviour
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         HasPath = Search(fromCell, toCell, unit);
-        ShowPath(unit.maxMovement, unit.movement);
+        ShowPath(unit.defaultMovementPoints, unit.remainingMovementPoints);
     }
 
     //Pathfinding search
@@ -50,7 +50,7 @@ public class Pathfinding : MonoBehaviour
                 return true;
             }
 
-            int currentTurn = (current.MovementCost - 1) / unit.maxMovement;
+            int currentTurn = (current.MovementCost - 1) / unit.defaultMovementPoints;
 
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
@@ -80,10 +80,10 @@ public class Pathfinding : MonoBehaviour
                 hexEnterCost += neighbor.IsOcean ? unit.oceanMovementCost : unit.landMovementCost;
 
                 int combinedCost = current.MovementCost + hexEnterCost;
-                int turn = (combinedCost - 1) / unit.maxMovement;
+                int turn = (combinedCost - 1) / unit.defaultMovementPoints;
                 if (turn > currentTurn)
                 {
-                    combinedCost = turn * unit.maxMovement + hexEnterCost;
+                    combinedCost = turn * unit.defaultMovementPoints + hexEnterCost;
                 }
 
                 if (neighbor.SearchPhase < searchFrontierPhase) //Has not been set before
@@ -132,7 +132,7 @@ public class Pathfinding : MonoBehaviour
         List<HexCell> path = new List<HexCell>();
         for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
         {
-            if (c.MovementCost <= unit.movement)
+            if (c.MovementCost <= unit.remainingMovementPoints)
             {
             path.Add(c);
             }

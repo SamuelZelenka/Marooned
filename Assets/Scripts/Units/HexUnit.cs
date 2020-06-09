@@ -10,7 +10,7 @@ public abstract class HexUnit : MonoBehaviour
 
     [Header("Movement")]
     const float travelSpeed = 4f;
-    public int movement = 5, maxMovement = 5;
+    public int remainingMovementPoints = 5, defaultMovementPoints = 5;
     public int oceanMovementCost = 1;
     public int landMovementCost = 1;
     List<HexCell> pathToTravel;
@@ -20,7 +20,7 @@ public abstract class HexUnit : MonoBehaviour
     public HexGrid myGrid;
     public Pathfinding pathfinding;
 
-    public int visionRange;
+    public int currentVisionRange, defaultVisionRange;
 
 
     public bool IsMoving

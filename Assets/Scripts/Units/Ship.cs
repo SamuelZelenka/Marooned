@@ -5,6 +5,27 @@ using System.Collections.Generic;
 
 public class Ship : HexUnit
 {
+    public List<Character> crew = new List<Character>();
+
+    int hull = 25, maxHull = 25;
+    public int Hull
+    {
+        set
+        {
+            hull = Mathf.Min(maxHull, value);
+        }
+        get => hull;
+    }
+    float cleanliness = 1;
+    public float Cleanliness
+    {
+        get => cleanliness;
+        set
+        {
+            cleanliness = Mathf.Min(value, 1);
+        }
+    }
+
     public override bool CanMoveTo(HexCell cell)
     {
         if (cell.Unit)
@@ -53,7 +74,7 @@ public class Ship : HexUnit
         if (pathfinding.HasPath)
         {
             yield return Travel(pathfinding.GetReachablePath(this, out int cost));
-            movement -= cost;
+            remainingMovementPoints -= cost;
             pathfinding.ClearPath();
         }
         if (Location == target)
