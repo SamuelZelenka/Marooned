@@ -3,6 +3,7 @@ public class InGameCamera : MonoBehaviour
 {
     const float SCENEWIDTH = 80, SCENEHEIGHT = 40;
     enum Directions { Up, Left, Down, Right }
+    Directions myDirection = Directions.Down;
 
     Camera instance = null;
     [SerializeField] CameraEffect cameraEffect = null;
@@ -11,14 +12,14 @@ public class InGameCamera : MonoBehaviour
     float minPosX = 0;
     float maxPosY = 0;
     float minPosY = 0;
-    [SerializeField] float fallOffDistance = 0;
     [Range(0, 100)] [SerializeField] float cameraSpeed = 0;
-
+  
     [Header("Zoom")]
     [SerializeField] float zoomMin = 0;
     [SerializeField] float zoomMax = 0;
     [SerializeField] float zoomLerpSpeed = 0;
-    [Range(0, 1)] [SerializeField] float zoomSpeedScale = 0;
+    [Range(0, 1)] [SerializeField] float zoomSensitivity = 1;
+    [Range(1, 10)] [SerializeField] float zoomSpeedScale = 1;
 
     CameraTransform newCameraTransform = new CameraTransform();
 
@@ -47,24 +48,7 @@ public class InGameCamera : MonoBehaviour
         if (Input.GetAxis("CameraZoom") != 0)
         {
             newCameraTransform.cameraPosition = transform.position;
-            newCameraTransform.cameraSize -= Input.GetAxis("CameraZoom") * zoomSpeedScale;
-        }
-        //Edge detection
-        if (Input.mousePosition.x > Screen.width - cursorDetectionRange)
-        {
-            MoveDirection(Directions.Right);
-        }
-        if (Input.mousePosition.x < 0 + cursorDetectionRange)
-        {
-            MoveDirection(Directions.Left);
-        }
-        if (Input.mousePosition.y > Screen.height - cursorDetectionRange)
-        {
-            MoveDirection(Directions.Up);
-        }
-        if (Input.mousePosition.y < 0 + cursorDetectionRange)
-        {
-            MoveDirection(Directions.Down);
+            newCameraTransform.cameraSize -= Input.GetAxis("CameraZoom") * zoomSensitivity;
         }
         //Middle Mouse Movement
         if (Input.GetMouseButtonDown(2))
@@ -76,22 +60,56 @@ public class InGameCamera : MonoBehaviour
             mouseUpPos = instance.ScreenToWorldPoint(Input.mousePosition);
             newCameraTransform.cameraPosition = transform.position + mouseDownPos - mouseUpPos;
         }
-        //Keys
-        if (Input.GetAxis("Horizontal") > 0)
+        else
         {
-            MoveDirection(Directions.Right);
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+            {
+                //Key movement
+                MoveDirection(Directions.Right, Input.GetAxis("Horizontal") > 0);
+                MoveDirection(Directions.Left, Input.GetAxis("Horizontal") < 0);
+                MoveDirection(Directions.Down, Input.GetAxis("Vertical") < 0);
+                MoveDirection(Directions.Up, Input.GetAxis("Vertical") > 0);
+            }
+            else
+            {
+                //Edge detection
+                MoveDirection(Directions.Right, Input.mousePosition.x > Screen.width - cursorDetectionRange);
+                MoveDirection(Directions.Left, Input.mousePosition.x < 0 + cursorDetectionRange);
+                MoveDirection(Directions.Down, Input.mousePosition.y < 0 + cursorDetectionRange);
+                MoveDirection(Directions.Up, Input.mousePosition.y > Screen.height - cursorDetectionRange);
+            }
         }
-        if (Input.GetAxis("Horizontal") < 0)
+        void MoveDirection(Directions direction, bool isButtonPressed)
         {
-            MoveDirection(Directions.Left);
-        }
-        if (Input.GetAxis("Vertical") > 0)
-        {
-            MoveDirection(Directions.Up);
-        }
-        if (Input.GetAxis("Vertical") < 0)
-        {
-            MoveDirection(Directions.Down);
+            if (isButtonPressed)
+            {
+                myDirection = direction;
+                switch (direction)
+                {
+                    case Directions.Up:
+                        newCameraTransform.cameraPosition.y += cameraSpeed;
+                        break;
+                    case Directions.Left:
+                        newCameraTransform.cameraPosition.x -= cameraSpeed;
+                        break;
+                    case Directions.Down:
+                        newCameraTransform.cameraPosition.y -= cameraSpeed;
+                        break;
+                    case Directions.Right:
+                        newCameraTransform.cameraPosition.x += cameraSpeed;
+                        break;
+                    default:
+                        break;
+                }
+                //Clamp newCameraPosition direction
+                newCameraTransform.cameraPosition = new Vector3(
+                Mathf.Clamp(newCameraTransform.cameraPosition.x, transform.position.x - cameraSpeed, transform.position.x + cameraSpeed),
+                Mathf.Clamp(newCameraTransform.cameraPosition.y, transform.position.y - cameraSpeed, transform.position.y + cameraSpeed));
+            }
+            else if (myDirection == direction)
+            {
+                newCameraTransform.cameraPosition = transform.position;
+            }
         }
     }
     public void UpdatePosition()
@@ -104,35 +122,10 @@ public class InGameCamera : MonoBehaviour
         minPosX = -maxPosX;
         maxPosY = SCENEHEIGHT + (instance.ScreenToWorldPoint(new Vector3(instance.scaledPixelHeight / 2, 0, 0)).y - transform.position.y);
         minPosY = -maxPosY;
-        Vector3 lerpVector = Vector3.Lerp(transform.position, newCameraTransform.cameraPosition, cameraSpeed * (instance.orthographicSize / zoomMax) * Time.deltaTime);
+        Vector3 lerpVector = Vector3.Lerp(transform.position, newCameraTransform.cameraPosition, cameraSpeed * (instance.orthographicSize * zoomSpeedScale / zoomMax) * Time.deltaTime);
         Vector3 clampedVector = new Vector3(Mathf.Clamp(lerpVector.x, minPosX, maxPosX), Mathf.Clamp(lerpVector.y, minPosY, maxPosY), -10);
 
         transform.position = clampedVector;
-    }
-    void MoveDirection(Directions direction)
-    {
-        switch (direction)
-        {
-            case Directions.Up:
-                newCameraTransform.cameraPosition.y += cameraSpeed;
-                break;
-            case Directions.Left:
-                newCameraTransform.cameraPosition.x -= cameraSpeed;
-                break;
-            case Directions.Down:
-                newCameraTransform.cameraPosition.y -= cameraSpeed;
-                break;
-            case Directions.Right:
-                newCameraTransform.cameraPosition.x += cameraSpeed;
-                break;
-            default:
-                break;
-        }
-        //Clamp newCameraPosition direction
-        newCameraTransform.cameraPosition = new Vector3(
-        Mathf.Clamp(newCameraTransform.cameraPosition.x, transform.position.x - fallOffDistance, transform.position.x + fallOffDistance),
-        Mathf.Clamp(newCameraTransform.cameraPosition.y, transform.position.y - fallOffDistance, transform.position.y + fallOffDistance)
-        );
     }
     void TrackPosition()
     {
