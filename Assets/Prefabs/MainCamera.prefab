@@ -45,12 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraEffect: {fileID: 866738384862604100}
-  fallOffDistance: 5
   cameraSpeed: 1
-  zoomMin: 5
-  zoomMax: 30
-  zoomLerpSpeed: 2
-  zoomSpeedScale: 0.205
+  zoomMin: 1
+  zoomMax: 5
+  zoomLerpSpeed: 5
+  zoomSensitivity: 0.25
+  zoomSpeedScale: 10
   currentTrackingPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &866738384862604102
 GameObject:

@@ -1,11 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraEffect : MonoBehaviour
 {
     public enum Effect {Shake}
-
     public void ApplyEffect(float intensity, float duration, Effect effect)
     {
         switch (effect)
@@ -16,12 +14,11 @@ public class CameraEffect : MonoBehaviour
             default:
                 break;
         }
-        
     }
     IEnumerator ShakeEffect(float intensity, float duration)
     {
-        Vector3 originalPos = transform.localPosition;
         float elapsedTime = 0;
+        Vector3 originalPos = transform.localPosition;
 
         while (elapsedTime < duration)
         {
