@@ -17,7 +17,7 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] CameraEffect cameraEffect = null;
     [SerializeField] float cameraLerpSpeed = 5;
     [Range(0, 100)] [SerializeField] float cameraSpeed = 0;
-  
+
     [Header("Zoom")]
     [SerializeField] float zoomMin = 0;
     [SerializeField] float zoomMax = 0;
@@ -60,7 +60,7 @@ public class InGameCamera : MonoBehaviour
         //Zoom
         if (Input.GetAxis("CameraZoom") != 0)
         {
-            newCameraTransform.cameraPosition = transform.position;
+            //newCameraTransform.cameraPosition = transform.position;
             newCameraTransform.cameraSize -= Input.GetAxis("CameraZoom") * zoomSpeed * Time.deltaTime;
         }
         //Middle Mouse Movement
@@ -74,24 +74,21 @@ public class InGameCamera : MonoBehaviour
             mouseUpPos = instance.ScreenToWorldPoint(Input.mousePosition);
             newCameraTransform.cameraPosition = transform.position + mouseDownPos - mouseUpPos;
         }
-        else
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
-            {
-                //Key movement
-                MoveDirection(Directions.Right, Input.GetAxis("Horizontal") > 0);
-                MoveDirection(Directions.Left, Input.GetAxis("Horizontal") < 0);
-                MoveDirection(Directions.Down, Input.GetAxis("Vertical") < 0);
-                MoveDirection(Directions.Up, Input.GetAxis("Vertical") > 0);
-            }
-            else if(edgeMovement)
-            {
-                //Edge detection
-                MoveDirection(Directions.Right, Input.mousePosition.x > Screen.width - cursorDetectionRange);
-                MoveDirection(Directions.Left, Input.mousePosition.x < 0 + cursorDetectionRange);
-                MoveDirection(Directions.Down, Input.mousePosition.y < 0 + cursorDetectionRange);
-                MoveDirection(Directions.Up, Input.mousePosition.y > Screen.height - cursorDetectionRange);
-            }
+            //Key movement
+            MoveDirection(Directions.Right, Input.GetAxis("Horizontal") > 0);
+            MoveDirection(Directions.Left, Input.GetAxis("Horizontal") < 0);
+            MoveDirection(Directions.Down, Input.GetAxis("Vertical") < 0);
+            MoveDirection(Directions.Up, Input.GetAxis("Vertical") > 0);
+        }
+        else if (edgeMovement)
+        {
+            //Edge detection
+            MoveDirection(Directions.Right, Input.mousePosition.x > Screen.width - cursorDetectionRange);
+            MoveDirection(Directions.Left, Input.mousePosition.x < 0 + cursorDetectionRange);
+            MoveDirection(Directions.Down, Input.mousePosition.y < 0 + cursorDetectionRange);
+            MoveDirection(Directions.Up, Input.mousePosition.y > Screen.height - cursorDetectionRange);
         }
         void MoveDirection(Directions direction, bool isButtonPressed)
         {

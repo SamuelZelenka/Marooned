@@ -78,7 +78,7 @@ public class HexMapEditor : MonoBehaviour
 
     void UpdateClickedHex()
     {
-        HexCell cell = hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+        HexCell cell = hexGrid.GetCell();
         if (cell != clickedHex)
         {
             ClickedHex = cell;

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DistributionSystem : MonoBehaviour
 {
+    public GameObject mainPanel;
     public Text distributionTitle;
 
     public DistributionShare distributionPrefab;
@@ -22,6 +23,8 @@ public class DistributionSystem : MonoBehaviour
 
     public void Setup(List<Character> charactersToShare, int totalShare,  int numberOfShares, CharacterResources.ResourceType resourceTypeToShare)
     {
+        mainPanel.SetActive(true);
+
         Sprite resourceSprite;
         Sprite statsprite;
 

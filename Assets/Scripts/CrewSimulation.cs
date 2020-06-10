@@ -8,6 +8,7 @@ public class CrewSimulation : MonoBehaviour
     [Header("References")]
     public Ship ship;
     public Transform jobPanel;
+    public DistributionSystem distributionSystem;
 
     [Header("Job effects")]
     [SerializeField] int sailMovementPoints = 1;
@@ -80,25 +81,42 @@ public class CrewSimulation : MonoBehaviour
                 }
                 break;
             case ShipJob.Clean:
+                if (positionFilled)
+                {
                 foreach (var character in ship.crew)
                 {
                     character.resources.Hygiene += cleanHygiene;
                 }
+                }
                 break;
             case ShipJob.Shanty:
-                foreach (var character in ship.crew)
+                if (positionFilled)
                 {
-                    character.resources.Loyalty += shantyLoyalty;
+                    foreach (var character in ship.crew)
+                    {
+                        character.resources.Loyalty += shantyLoyalty;
+                    }
                 }
                 break;
             case ShipJob.Cook:
                 //Open Split window
+                if (positionFilled)
+                {
+                    distributionSystem.Setup(ship.crew, 100, ship.crew.Count, CharacterResources.ResourceType.Hunger);
+                }
                 break;
             case ShipJob.Surgeon:
                 //Open Split window
+                if (positionFilled)
+                {
+                    distributionSystem.Setup(ship.crew, 100, ship.crew.Count, CharacterResources.ResourceType.Vitality);
+                }
                 break;
             case ShipJob.Shipwright:
-                ship.Hull += shipWrightRepair;
+                if (positionFilled)
+                {
+                    ship.Hull += shipWrightRepair;
+                }
                 break;
             case ShipJob.Cannons:
                 break;

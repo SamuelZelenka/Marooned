@@ -6,6 +6,8 @@ public class Pathfinding : MonoBehaviour
     static int searchFrontierPhase = 0;
     HexCellPriorityQueue searchFrontier = null;
 
+    public bool displayPath = false;
+
     HexCell currentPathFrom, currentPathTo;
     public bool HasPath
     {
@@ -145,7 +147,7 @@ public class Pathfinding : MonoBehaviour
 
     void ShowPath(int maxMovement, int remainingMovement)
     {
-        if (HasPath)
+        if (HasPath && displayPath)
         {
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
@@ -156,14 +158,14 @@ public class Pathfinding : MonoBehaviour
                     turn = (current.MovementCost - 1 - remainingMovement) / maxMovement;
                     turn++;
                 }
-                current.SetLabel(turn.ToString());
-                //current.SetLabel(current.MovementCost.ToString());
+                //current.SetLabel(turn.ToString());
+                current.SetLabel(current.MovementCost.ToString());
                 current.SetHighlightStatus(true, Color.white);
                 current = current.PathFrom;
             }
-        }
         currentPathFrom.SetHighlightStatus(true, Color.blue);
         currentPathTo.SetHighlightStatus(true, Color.red);
+        }
     }
 
     public void ClearPath()

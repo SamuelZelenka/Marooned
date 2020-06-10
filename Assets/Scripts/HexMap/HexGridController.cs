@@ -20,27 +20,33 @@ public class HexGridController : MonoBehaviour
     }
     #endregion
 
-    List<Player> turnOrder = new List<Player>();
-    Player activePlayer;
-    int indexActivePlayer = 0;
+    List<Player> mapTurnOrder = new List<Player>();
+    int activeMapPlayerIndex = 0;
+
+    List<Character> battleTurnOrder = new List<Character>();
+    int activeBattleTurnOrderIndex = 0;
 
     public void AddPlayerToTurnOrder(Player player)
     {
-        turnOrder.Add(player);
+        mapTurnOrder.Add(player);
+    }
+
+    public void DoFirstTurn()
+    {
+        DoTurn(mapTurnOrder[0]);
     }
 
     public void EndTurn()
     {
-        indexActivePlayer++;
-        if (indexActivePlayer >= turnOrder.Count)
+        activeMapPlayerIndex++;
+        if (activeMapPlayerIndex >= mapTurnOrder.Count)
         {
-            indexActivePlayer = 0;
+            activeMapPlayerIndex = 0;
         }
-        activePlayer = turnOrder[indexActivePlayer];
-        DoTurn();
+        DoTurn(mapTurnOrder[activeMapPlayerIndex]);
     }
 
-    private void DoTurn()
+    private void DoTurn(Player activePlayer)
     {
         Debug.Log("Starting new turn");
         activePlayer.StartNewTurn();
@@ -60,20 +66,32 @@ public class HexGridController : MonoBehaviour
 
 public class Player
 {
-    List<HexUnit> units = new List<HexUnit>();
+    List<Character> crew = new List<Character>();
+    Ship ship;
     public bool IsHuman { get; private set; }
     CrewSimulation crewSimulation;
 
-    public Player(List<HexUnit> unitsToControl, bool humanControlled, CrewSimulation crewSimulation)
+    /// <summary>
+    /// Creates a human controlled player
+    /// </summary>
+    /// <param name="ship"></param>
+    /// <param name="humanControlled"></param>
+    /// <param name="crewSimulation"></param>
+    public Player(Ship ship, bool humanControlled, CrewSimulation crewSimulation)
     {
-        units = unitsToControl;
+        this.ship = ship;
         IsHuman = humanControlled;
         this.crewSimulation = crewSimulation;
     }
 
-    public Player(List<HexUnit> unitsToControl, bool humanControlled = false)
+    /// <summary>
+    /// Creates an AI controlled player
+    /// </summary>
+    /// <param name="ship"></param>
+    /// <param name="humanControlled"></param>
+    public Player(Ship ship, bool humanControlled = false)
     {
-        units = unitsToControl;
+        this.ship = ship;
         IsHuman = humanControlled;
         this.crewSimulation = null;
         if (IsHuman)
@@ -84,7 +102,7 @@ public class Player
 
     public void StartNewTurn()
     {
-        foreach (var item in units)
+        foreach (var item in crew)
         {
             item.remainingMovementPoints = item.defaultMovementPoints;
         }
@@ -93,13 +111,17 @@ public class Player
         {
             OpenJobPanel();
         }
+        else
+        {
+            ship.remainingMovementPoints = ship.defaultMovementPoints;
+        }
     }
-    
+
     private void OpenJobPanel()
     {
         if (crewSimulation)
         {
-        crewSimulation.OpenJobPanel();
+            crewSimulation.OpenJobPanel();
         }
         else
         {
@@ -119,10 +141,7 @@ public class Player
 
     public IEnumerator PerformAutomaticTurn()
     {
-        foreach (var item in units)
-        {
-            yield return item.PerformAutomaticTurn();
-        }
+        yield return ship.PerformAutomaticTurn();
         HexGridController.instance.EndTurn();
     }
 }

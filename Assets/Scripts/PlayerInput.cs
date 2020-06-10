@@ -3,10 +3,16 @@ using System.Collections.Generic;
 
 public class PlayerInput : MonoBehaviour
 {
-    public HexGrid hexGrid;
+    Camera playerCamera;
+    public HexGrid terrainGrid;
 
     HexCell currentCell;
     HexUnit selectedUnit;
+
+    private void Start()
+    {
+        playerCamera = Camera.main; //Main camera, can be exchanged if needed
+    }
 
     private void Update()
     {
@@ -37,7 +43,7 @@ public class PlayerInput : MonoBehaviour
 
     bool UpdateCurrentCell()
     {
-        HexCell cell = hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+        HexCell cell = terrainGrid.GetCell();
         if (cell != currentCell)
         {
             currentCell = cell;

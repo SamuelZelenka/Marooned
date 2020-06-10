@@ -36,7 +36,7 @@ public class SaveLoadBattleMapMenu : MonoBehaviour
             map = selectedMap;
         }
 
-        map.Save(hexGrid.cellCountX, hexGrid.cellCountY, hexGrid.Save());
+        map.Save(hexGrid.CellCountX, hexGrid.CellCountY, hexGrid.Save());
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
