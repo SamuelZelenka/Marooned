@@ -10,7 +10,6 @@ public class HexGrid : MonoBehaviour
     [Header("References")]
     public HexCell cellPrefab;
     public Texture2D noiseSource;
-    public Ship shipPrefab;
     public InGameCamera cameraController;
 
     [Header("Terrain")]
@@ -44,8 +43,11 @@ public class HexGrid : MonoBehaviour
         Characters = new List<Character>();
         Harbors = new List<HexCell>();
 
-        HexMetrics.noiseSource = noiseSource;
-        HexMetrics.InitializeHashGrid(seed);
+        if (!HexMetrics.noiseSource)
+        {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+        }
     }
 
     public bool CreateMap(int x, int y, bool newMap)
@@ -70,19 +72,6 @@ public class HexGrid : MonoBehaviour
                 CreateCell(x, y, i++, newMap);
             }
         }
-
-        Vector3 minPos = cells[0].transform.position;
-        minPos.x -= HexMetrics.innerRadius;
-        minPos.y -= HexMetrics.outerRadius;
-
-        Vector3 maxPos = cells[cells.Length -1].transform.position;
-
-        maxPos.x = Mathf.Max(maxPos.x, cells[CellCountX * 2 -1].transform.position.x); //Allow camera movement to the rightmost position (even rows goes further to the right than un-even rows)
-
-        maxPos.x += HexMetrics.innerRadius;
-        maxPos.y += HexMetrics.outerRadius;
-    
-        cameraController.SetBoundries(minPos, maxPos);
 
         if (newMap && worldMap)
         {
@@ -140,6 +129,22 @@ public class HexGrid : MonoBehaviour
         {
             cell.IsLand = (HexMetrics.landChance > HexMetrics.SampleHashGrid(cell.Position).a);
         }
+    }
+
+    public void SetCameraBoundriesToMatchHexGrid()
+    {
+        Vector3 minPos = cells[0].transform.position;
+        minPos.x -= HexMetrics.innerRadius;
+        minPos.y -= HexMetrics.outerRadius;
+
+        Vector3 maxPos = cells[cells.Length - 1].transform.position;
+
+        maxPos.x = Mathf.Max(maxPos.x, cells[CellCountX * 2 - 1].transform.position.x); //Allow camera movement to the rightmost position (even rows goes further to the right than un-even rows)
+
+        maxPos.x += HexMetrics.innerRadius;
+        maxPos.y += HexMetrics.outerRadius;
+
+        cameraController.SetBoundries(minPos, maxPos);
     }
 
     /// <summary>
@@ -254,27 +259,6 @@ public class HexGrid : MonoBehaviour
         }
         return harbor;
     }
-
-    //public void CreatePlayerAndShip(HexCell location, HexDirection direction, bool playerControlled)
-    //{
-    //    Ship ship = Instantiate(shipPrefab);
-    //    AddUnit(ship, location, direction, playerControlled);
-    //    List<HexUnit> playerUnits = new List<HexUnit>();
-    //    playerUnits.Add(ship);
-    //    Player newPlayer = new Player(playerUnits, playerControlled);
-    //    HexGridController.instance.AddPlayerToTurnOrder(newPlayer);
-    //}
-
-    //public void CreatePlayerAndShip(HexDirection direction, bool playerControlled)
-    //{
-    //    Ship ship = Instantiate(shipPrefab);
-    //    AddUnit(ship, GetRandomFreeHarbor(), direction, playerControlled);
-    //    List<HexUnit> playerUnits = new List<HexUnit>();
-    //    playerUnits.Add(ship);
-    //    Player newPlayer = new Player(playerUnits, playerControlled);
-    //    HexGridController.instance.AddPlayerToTurnOrder(newPlayer);
-    //}
-
 
     public void AddShip(Ship unit, HexCell location, HexDirection orientation, bool playerControlled)
     {

@@ -5,6 +5,8 @@ public class PlayerInput : MonoBehaviour
 {
     Camera playerCamera;
     public HexGrid terrainGrid;
+    public HexGrid shipGrid;
+
 
     HexCell currentCell;
     HexUnit selectedUnit;
@@ -43,7 +45,7 @@ public class PlayerInput : MonoBehaviour
 
     bool UpdateCurrentCell()
     {
-        HexCell cell = terrainGrid.GetCell();
+        HexCell cell = terrainGrid.gameObject.activeInHierarchy ? terrainGrid.GetCell() : shipGrid.GetCell();
         if (cell != currentCell)
         {
             currentCell = cell;

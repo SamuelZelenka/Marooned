@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class SessionSetup : MonoBehaviour
 {
-    public HexGrid hexgrid;
-    public Transform playersParentTransform;
+    [Header("Map and references")]
+    public HexGrid terrainGrid;
+    public HexGrid shipGrid;
+    public Transform shipTransform;
 
-    public int cellCountX = 20, cellCountY = 15;
+    public int mapCellCountX = 20, mapCellCountY = 15;
+    public int shipCellCountX = 15, shipCellCountY = 12;
 
-    public int numberOfMerchants = 5;
-
-    public GameObject playerPrefab;
-    public GameObject aiPrefab;
+    [Header("Player setup")]
     public Ship playerStarterShip;
+    public CrewSimulation playerCrewSimulation;
+
+    [Header("AI setup")]
+    public GameObject aiPrefab;
     public Ship aiMerchantShip;
+    public int numberOfMerchants = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +30,12 @@ public class SessionSetup : MonoBehaviour
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
     {
-        hexgrid.CreateMap(cellCountX, cellCountY, true);
+        terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true);
+        shipGrid.CreateMap(shipCellCountX, shipCellCountY, true);
+
+        terrainGrid.SetCameraBoundriesToMatchHexGrid();
+        shipGrid.SetCameraBoundriesToMatchHexGrid();
+
         CreateHumanPlayer();
 
         for (int i = 0; i < numberOfMerchants; i++)
@@ -39,34 +49,27 @@ public class SessionSetup : MonoBehaviour
     //Creates a player from a prefab and spawns a ship and adds it to the controller
     private void CreateHumanPlayer()
     {
-        Transform playerTransform = Instantiate(playerPrefab).transform;
-        playerTransform.SetParent(playersParentTransform);
-
         Ship ship = Instantiate(playerStarterShip);
-        ship.transform.SetParent(playerTransform);
+        ship.transform.SetParent(shipTransform);
 
-        hexgrid.AddShip(ship, hexgrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddShip(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
-        CrewSimulation crewSimulation = playerTransform.GetComponent<CrewSimulation>();
-        crewSimulation.ship = ship;
+        playerCrewSimulation.ship = ship;
 
-        PlayerInput playerInput = playerTransform.GetComponent<PlayerInput>();
-        playerInput.terrainGrid = hexgrid;
-
-        Player newPlayer = new Player(ship, true, crewSimulation);
+        Player newPlayer = new Player(ship, true, playerCrewSimulation);
         HexGridController.instance.AddPlayerToTurnOrder(newPlayer);
     }
 
     //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller
     private void CreateMerchantPlayer()
     {
-        Transform playerTransform = Instantiate(aiPrefab).transform;
-        playerTransform.SetParent(playersParentTransform);
+        Transform aiTransform = Instantiate(aiPrefab).transform;
+        aiTransform.SetParent(shipTransform);
 
         Ship ship = Instantiate(aiMerchantShip);
-        ship.transform.SetParent(playerTransform);
+        ship.transform.SetParent(aiTransform);
 
-        hexgrid.AddShip(ship, hexgrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddShip(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         Player newMerchantPlayer = new Player(ship, false);
         HexGridController.instance.AddPlayerToTurnOrder(newMerchantPlayer);

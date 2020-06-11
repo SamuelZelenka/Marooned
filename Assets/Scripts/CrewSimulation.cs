@@ -7,7 +7,9 @@ public class CrewSimulation : MonoBehaviour
 {
     [Header("References")]
     public Ship ship;
-    public Transform jobPanel;
+    public GameObject jobPanel;
+    public GameObject combatAndManagementView;
+    public GameObject mapView;
     public DistributionSystem distributionSystem;
 
     [Header("Job effects")]
@@ -27,7 +29,9 @@ public class CrewSimulation : MonoBehaviour
 
     public void OpenJobPanel()
     {
-        jobPanel.gameObject.SetActive(true);
+        mapView.SetActive(false);
+        combatAndManagementView.SetActive(true);
+        jobPanel.SetActive(true);
     }
 
     public void RunSimulation()
