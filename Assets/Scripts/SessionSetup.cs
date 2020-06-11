@@ -8,6 +8,7 @@ public class SessionSetup : MonoBehaviour
     public HexGrid terrainGrid;
     public HexGrid shipGrid;
     public Transform shipTransform;
+    public Transform playerCrewParent;
 
     public int mapCellCountX = 20, mapCellCountY = 15;
     public int shipCellCountX = 15, shipCellCountY = 12;
@@ -15,6 +16,7 @@ public class SessionSetup : MonoBehaviour
     [Header("Player setup")]
     public Ship playerStarterShip;
     public CrewSimulation playerCrewSimulation;
+    public Character startingCharacter;
 
     [Header("AI setup")]
     public GameObject aiPrefab;
@@ -43,7 +45,7 @@ public class SessionSetup : MonoBehaviour
             CreateMerchantPlayer();
         }
 
-        HexGridController.instance.DoFirstTurn();
+        TurnSystem.instance.DoFirstTurn();
     }
 
     //Creates a player from a prefab and spawns a ship and adds it to the controller
@@ -57,7 +59,12 @@ public class SessionSetup : MonoBehaviour
         playerCrewSimulation.ship = ship;
 
         Player newPlayer = new Player(ship, true, playerCrewSimulation);
-        HexGridController.instance.AddPlayerToTurnOrder(newPlayer);
+        TurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
+
+        Character character = Instantiate(startingCharacter);
+        character.transform.SetParent(playerCrewParent);
+
+        shipGrid.AddCharacter(character, shipGrid.GetRandomFreeCell(), true);
     }
 
     //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller
@@ -72,6 +79,6 @@ public class SessionSetup : MonoBehaviour
         terrainGrid.AddShip(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         Player newMerchantPlayer = new Player(ship, false);
-        HexGridController.instance.AddPlayerToTurnOrder(newMerchantPlayer);
+        TurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
     }
 }

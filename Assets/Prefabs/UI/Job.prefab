@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 868631270776766289}
   - component: {fileID: 868631270776766303}
   - component: {fileID: 868631270776766302}
+  - component: {fileID: 177536424482548482}
   m_Layer: 5
   m_Name: Character image
   m_TagString: Untagged
@@ -227,6 +228,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &177536424482548482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868631270776766288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2903888120566053800}
+          m_MethodName: SetCharacter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &868631270897545864
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,8 +265,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 868631270897545865}
+  - component: {fileID: 2903888120566053800}
   m_Layer: 5
-  m_Name: Helm
+  m_Name: Job
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,3 +294,20 @@ RectTransform:
   m_AnchoredPosition: {x: -381, y: 15.36}
   m_SizeDelta: {x: 100, y: 130.71364}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2903888120566053800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868631270897545864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0641a266d0af8c34a9df0036205d8322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 0}
+  job: 0
+  crewSimulation: {fileID: 0}
+  portrait: {fileID: 868631270776766302}
+  defaultPortrait: {fileID: 21300000, guid: 14c59f06f3237f1419843b8c9dab36ab, type: 3}

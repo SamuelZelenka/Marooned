@@ -131,7 +131,7 @@ public class CrewSimulation : MonoBehaviour
 
     public void SetCharacterJob(Character newCharacter, ShipJob job)
     {
-        if (newCharacter.ShipJob == ShipJob.None)
+        if (newCharacter.ShipJob != ShipJob.None)
         {
             RemoveCharacterFromItsJob(newCharacter);
         }
@@ -158,6 +158,8 @@ public class CrewSimulation : MonoBehaviour
                 charactersWithoutJobs.Remove(newCharacter);
                 break;
         }
+
+        Debug.Log(newCharacter.characterName + " set to job: " + job.ToString());
     }
 
     private void RemoveCharacterFromItsJob(Character characterToRemove)
@@ -174,10 +176,12 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
             case ShipJob.Brig:
-                jobs[(int)characterToRemove.ShipJob] = null;
                 jobs[(int)characterToRemove.ShipJob].ShipJob = ShipJob.None;
+                jobs[(int)characterToRemove.ShipJob] = null;
                 charactersWithoutJobs.Add(characterToRemove);
                 break;
         }
+
+        Debug.Log(characterToRemove.characterName + " removed from it's job");
     }
 }

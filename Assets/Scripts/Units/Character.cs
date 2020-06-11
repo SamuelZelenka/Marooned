@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Character : HexUnit
 {
+    public string characterName;
+
     public bool isStunned;
     public CharacterResources resources;
     public CharacterStats stats;
@@ -14,11 +16,8 @@ public class Character : HexUnit
     public List<Effect> activeEffects = new List<Effect>();
     List<Effect> removedEffects = new List<Effect>();
 
-    public CrewSimulation.ShipJob ShipJob
-    {
-        get;
-        set;
-    }
+    public Sprite portrait;
+    public CrewSimulation.ShipJob ShipJob { get; set; } = CrewSimulation.ShipJob.None;
 
     public void AddEffect(Effect effect)
     {
@@ -72,7 +71,11 @@ public class Character : HexUnit
 
     public override bool CanMoveTo(HexCell cell)
     {
-        throw new System.NotImplementedException();
+        if (cell.Unit)
+        {
+            return false;
+        }
+        return true;
     }
 
     public override IEnumerator PerformAutomaticTurn()

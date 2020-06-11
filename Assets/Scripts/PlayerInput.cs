@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class PlayerInput : MonoBehaviour
 {
     Camera playerCamera;
     public HexGrid terrainGrid;
     public HexGrid shipGrid;
-
 
     HexCell currentCell;
     HexUnit selectedUnit;
@@ -18,10 +18,10 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        //if (!EventSystem.current.CompareTag("UI"))
-        //{
-        HandleInput();
-        //}
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            HandleInput();
+        }
     }
 
     private void HandleInput()
@@ -95,6 +95,18 @@ public class PlayerInput : MonoBehaviour
                 selectedUnit.remainingMovementPoints -= cost;
                 selectedUnit.pathfinding.ClearPath();
             }
+        }
+    }
+
+    public Character GetSelectedCharacter()
+    {
+        if (selectedUnit is Character)
+        {
+        return selectedUnit as Character;
+        }
+        else
+        {
+            return null;
         }
     }
 }

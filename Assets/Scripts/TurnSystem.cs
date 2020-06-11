@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexGridController : MonoBehaviour
+public class TurnSystem : MonoBehaviour
 {
     #region Singleton
-    public static HexGridController instance;
+    public static TurnSystem instance;
     private void Awake()
     {
         if (instance != null)
@@ -142,6 +142,6 @@ public class Player
     public IEnumerator PerformAutomaticTurn()
     {
         yield return ship.PerformAutomaticTurn();
-        HexGridController.instance.EndTurn();
+        TurnSystem.instance.EndTurn();
     }
 }

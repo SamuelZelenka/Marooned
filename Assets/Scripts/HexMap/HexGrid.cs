@@ -260,6 +260,19 @@ public class HexGrid : MonoBehaviour
         return harbor;
     }
 
+    public HexCell GetRandomFreeCell()
+    {
+        HexCell cell = null;
+
+        int tries = 0;
+        while (cell == null || cell.Unit != null && cell.Traversable && tries < 100)
+        {
+            cell = Utility.ReturnRandom(cells);
+            tries++;
+        }
+        return cell;
+    }
+
     public void AddShip(Ship unit, HexCell location, HexDirection orientation, bool playerControlled)
     {
         Ships.Add(unit);
