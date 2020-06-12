@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fear : Effect
+public class WillpowerDecrease : Effect
 {
     int amount;
-    public Fear(int amount)
+    public WillpowerDecrease(int amount)
     {
-        description = $"Reduces loyalty by {amount}%";
+        description = $"Reduces Willpower by {amount}";
         this.amount = amount;
     }
     public override void ApplyEffect(Character character) { }
