@@ -106,9 +106,12 @@ MonoBehaviour:
   pathfinding: {fileID: 435603174573623447}
   currentVisionRange: 0
   defaultVisionRange: 0
+  characterName: Skelly
   isStunned: 0
   resources:
     vitality: 0
+  portrait: {fileID: -9150419348074050561, guid: e8983668ed68f5f41b4772feb50b6d84,
+    type: 3}
 --- !u!114 &435603174573623447
 MonoBehaviour:
   m_ObjectHideFlags: 0

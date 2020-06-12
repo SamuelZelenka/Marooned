@@ -121,7 +121,7 @@ public class Player
     {
         if (crewSimulation)
         {
-            crewSimulation.OpenJobPanel();
+            crewSimulation.NewTurnSimulation();
         }
         else
         {
@@ -131,7 +131,7 @@ public class Player
 
     public void RunCrewSimulation()
     {
-        crewSimulation.RunSimulation();
+        crewSimulation.RunJobSimulation();
     }
 
     private void StartMapMovement()

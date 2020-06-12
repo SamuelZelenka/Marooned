@@ -17,6 +17,7 @@ public class SessionSetup : MonoBehaviour
     public Ship playerStarterShip;
     public CrewSimulation playerCrewSimulation;
     public Character startingCharacter;
+    public int numberOfStartingCharacters = 1;
 
     [Header("AI setup")]
     public GameObject aiPrefab;
@@ -61,10 +62,13 @@ public class SessionSetup : MonoBehaviour
         Player newPlayer = new Player(ship, true, playerCrewSimulation);
         TurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
 
-        Character character = Instantiate(startingCharacter);
-        character.transform.SetParent(playerCrewParent);
-
-        shipGrid.AddCharacter(character, shipGrid.GetRandomFreeCell(), true);
+        for (int i = 0; i < numberOfStartingCharacters; i++)
+        {
+            Character character = Instantiate(startingCharacter);
+            character.transform.SetParent(playerCrewParent);
+            ship.crew.Add(character);
+            shipGrid.AddCharacter(character, shipGrid.GetRandomFreeCell(), true);
+        }
     }
 
     //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller

@@ -10,37 +10,52 @@ public class CrewSimulation : MonoBehaviour
     public GameObject jobPanel;
     public GameObject combatAndManagementView;
     public GameObject mapView;
-    public DistributionSystem distributionSystem;
+    public DistributionSystem distributionSystem; //Not needed
 
     [Header("Job effects")]
     [SerializeField] int sailMovementPoints = 1;
     [SerializeField] int spotterVision = 2;
     [SerializeField] float cleanHygiene = 0.1f;
     [SerializeField] float shantyLoyalty = 0.1f;
+    [SerializeField] float kitchenHunger = 0.1f;
+    [SerializeField] int medbayVitality = 5;
     [SerializeField] int shipWrightRepair = 5;
+
+    [Header("Job Costs")]
+    [SerializeField] int kitchenFoodConsumption = 1;
+    [SerializeField] int medbayMedicineConsumption = 1;
 
     [Header("Character Simulation")]
     [SerializeField] float hungerReduction = 0.05f;
     [SerializeField] float hygieneReduction = 0.05f;
 
-    public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Cook, Surgeon, Shipwright, Cannons, Brig, None }
+    public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, Brig, None }
     public Character[] jobs = new Character[10];
     public List<Character> charactersWithoutJobs = new List<Character>();
 
-    public void OpenJobPanel()
+
+
+    public void NewTurnSimulation()
+    {
+        OpenSimulationWindows();
+        TurnStartSimulation();
+    }
+
+    private void OpenSimulationWindows()
     {
         mapView.SetActive(false);
         combatAndManagementView.SetActive(true);
         jobPanel.SetActive(true);
     }
 
-    public void RunSimulation()
+    public void RunJobSimulation()
     {
-        CharacterTimeSimulation();
         SimulateJobs();
+
+        //Muteny
     }
 
-    private void CharacterTimeSimulation()
+    private void TurnStartSimulation()
     {
         foreach (var character in ship.crew)
         {
@@ -72,7 +87,7 @@ public class CrewSimulation : MonoBehaviour
                 }
                 break;
             case ShipJob.Sail:
-                if (positionFilled)
+                if (positionFilled && ship.remainingMovementPoints > 0)
                 {
                     ship.remainingMovementPoints += sailMovementPoints;
                 }
@@ -87,10 +102,10 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Clean:
                 if (positionFilled)
                 {
-                foreach (var character in ship.crew)
-                {
-                    character.resources.Hygiene += cleanHygiene;
-                }
+                    foreach (var character in ship.crew)
+                    {
+                        character.resources.Hygiene += cleanHygiene;
+                    }
                 }
                 break;
             case ShipJob.Shanty:
@@ -102,19 +117,29 @@ public class CrewSimulation : MonoBehaviour
                     }
                 }
                 break;
-            case ShipJob.Cook:
-                //Open Split window
+            case ShipJob.Kitchen:
                 if (positionFilled)
                 {
-                    distributionSystem.Setup(ship.crew, 100, ship.crew.Count, CharacterResources.ResourceType.Hunger);
+                    jobs[(int)job].resources.Hunger += kitchenHunger;
+                    //Consume raw food
                 }
+                //Open Split window
+                //if (positionFilled)
+                //{
+                //    distributionSystem.Setup(ship.crew, 100, ship.crew.Count, CharacterResources.ResourceType.Hunger);
+                //}
                 break;
-            case ShipJob.Surgeon:
-                //Open Split window
+            case ShipJob.MedBay:
                 if (positionFilled)
                 {
-                    distributionSystem.Setup(ship.crew, 100, ship.crew.Count, CharacterResources.ResourceType.Vitality);
+                    jobs[(int)job].resources.Vitality += medbayVitality;
+                    //Consume medicine
                 }
+                //Open Split window
+                //if (positionFilled)
+                //{
+                //    distributionSystem.Setup(ship.crew, 100, ship.crew.Count, CharacterResources.ResourceType.Vitality);
+                //}
                 break;
             case ShipJob.Shipwright:
                 if (positionFilled)
@@ -125,6 +150,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Cannons:
                 break;
             case ShipJob.Brig:
+                distributionSystem.Setup(ship.crew, 100, ship.crew.Count);
                 break;
         }
     }
@@ -143,8 +169,8 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Spotter:
             case ShipJob.Clean:
             case ShipJob.Shanty:
-            case ShipJob.Cook:
-            case ShipJob.Surgeon:
+            case ShipJob.Kitchen:
+            case ShipJob.MedBay:
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
             case ShipJob.Brig:
@@ -171,8 +197,8 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Spotter:
             case ShipJob.Clean:
             case ShipJob.Shanty:
-            case ShipJob.Cook:
-            case ShipJob.Surgeon:
+            case ShipJob.Kitchen:
+            case ShipJob.MedBay:
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
             case ShipJob.Brig:

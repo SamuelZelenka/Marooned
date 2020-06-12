@@ -7,60 +7,64 @@ public class DistributionSystem : MonoBehaviour
 {
     public GameObject mainPanel;
     public Text distributionTitle;
+    public Button confirmButton;
 
     public DistributionShare distributionPrefab;
     public Transform distributionParent;
 
+    public DistributionShare captainShare;
     public List<DistributionShare> shares = new List<DistributionShare>();
 
-    public Sprite coin;
-    public Sprite rawFood;
-    public Sprite medicalSupplies;
+    public delegate void DistributionHandler();
+    public static DistributionHandler OnSharesChanged;
 
-    public Sprite hunger;
-    public Sprite vitality;
-    public Sprite loyalty;
-
-    public void Setup(List<Character> charactersToShare, int totalShare,  int numberOfShares, CharacterResources.ResourceType resourceTypeToShare)
+    public void Setup(List<Character> charactersToShare, int totalShare, int numberOfShares)
     {
+        OnSharesChanged += SharesChanged;
         mainPanel.SetActive(true);
-
-        Sprite resourceSprite;
-        Sprite statsprite;
-
-        GetSpritesForDistributionPanels(resourceTypeToShare, out resourceSprite, out statsprite);
 
         for (int i = 0; i < charactersToShare.Count; i++)
         {
             DistributionShare newShareObject = Instantiate(distributionPrefab);
             newShareObject.transform.SetParent(distributionParent);
-            newShareObject.Setup(charactersToShare[i], totalShare, numberOfShares, resourceSprite, statsprite, resourceTypeToShare);
+            if (i > 0)
+            {
+                shares.Add(newShareObject);
+            }
+            else
+            {
+                captainShare = newShareObject;
+            }
+            newShareObject.Setup(charactersToShare[i], totalShare, numberOfShares, i == 0);
         }
     }
 
-    private void GetSpritesForDistributionPanels(CharacterResources.ResourceType resourceTypeToShare, out Sprite distributedSprite, out Sprite affectedStatSprite)
+    public void SharesChanged()
     {
-        switch (resourceTypeToShare)
+        float remainingShare = 1;
+
+        foreach (var item in shares)
         {
-            case CharacterResources.ResourceType.Vitality:
-                distributedSprite = medicalSupplies;
-                affectedStatSprite = vitality;
-                break;
-            case CharacterResources.ResourceType.Hunger:
-                distributedSprite = rawFood;
-                affectedStatSprite = hunger;
-                break;
-            case CharacterResources.ResourceType.Loyalty:
-                distributedSprite = coin;
-                affectedStatSprite = loyalty;
-                break;
-            default:
-            case CharacterResources.ResourceType.Energy:
-            case CharacterResources.ResourceType.Hygiene:
-                distributedSprite = null;
-                affectedStatSprite = null;
-                Debug.LogError("Not set up sprites for distribution");
-                break;
+            remainingShare -= item.shareFactor;
         }
+        confirmButton.interactable = remainingShare > 0;
+        captainShare.SetSliderValue(Utility.FactorToPercentage(remainingShare));
+    }
+
+    public void ConfirmShare()
+    {
+            captainShare.ConfirmShare();
+
+            foreach (var item in shares)
+            {
+                item.ConfirmShare();
+            }
+
+            while (distributionParent.childCount > 0)
+            {
+                Destroy(distributionParent.GetChild(0));
+            }
+            shares.Clear();
+        OnSharesChanged -= SharesChanged;
     }
 }
