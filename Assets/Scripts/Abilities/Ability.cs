@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using UnityEngine;
 public abstract class Ability
 {
     public string abilityName;
@@ -8,7 +8,6 @@ public abstract class Ability
 
     protected int cost;
     protected List<Effect> effects;
-
     public TargetType targetType;
 
     public virtual void Select(Character character)
@@ -29,11 +28,71 @@ public abstract class Ability
 public abstract class TargetType
 {
     public abstract List<HexCell> GetValidCells(HexCell fromCell);
+    public abstract List<HexCell> GetAffectedCells(HexCell selectedCell);
 }
 
 public class SingleTargetAdjacent : TargetType
 {
     public override List<HexCell> GetValidCells(HexCell fromCell)
+    {
+       return CellSearch.GetAdjacent(fromCell);
+    }
+    public override List<HexCell> GetAffectedCells(HexCell selectedCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        affectedCells.Add(selectedCell);
+        return affectedCells;
+    }
+}
+
+public class SwipeAttack : TargetType
+{
+    HexCell unitCell;
+    public override List<HexCell> GetValidCells(HexCell fromCell)
+    {
+        unitCell = fromCell;
+        return CellSearch.GetAdjacent(fromCell);
+    }
+    public override List<HexCell> GetAffectedCells(HexCell selectedCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        
+        foreach (HexCell cell in CellSearch.GetShared(unitCell, selectedCell))
+        {
+            affectedCells.Add(selectedCell);
+        }
+
+        return affectedCells;
+    }
+}
+
+public class NearbyAttack : TargetType
+{
+    public override List<HexCell> GetValidCells(HexCell fromCell)
+    {
+        throw new System.NotImplementedException();
+    }
+    public override List<HexCell> GetAffectedCells(HexCell fromCell)
+    {
+        return null;
+    }
+}
+
+public class SingleTargetRanged : TargetType
+{
+    public override List<HexCell> GetValidCells(HexCell fromCell)
+    {
+        throw new System.NotImplementedException();
+    }
+    public override List<HexCell> GetAffectedCells(HexCell fromCell)
+    {
+        return null;
+    }
+}
+
+public static class CellSearch
+{
+    public static List<HexCell> GetAdjacent(HexCell fromCell)
     {
         List<HexCell> validCells = new List<HexCell>();
 
@@ -54,28 +113,23 @@ public class SingleTargetAdjacent : TargetType
             }
         }
     }
-}
 
-public class SwipeAttack : TargetType
-{
-    public override List<HexCell> GetValidCells(HexCell fromCell)
+    public static List<HexCell> GetShared(HexCell firstCell, HexCell secondCell)
     {
-        throw new System.NotImplementedException();
-    }
-}
 
-public class NearbyAttack : TargetType
-{
-    public override List<HexCell> GetValidCells(HexCell fromCell)
-    {
-        throw new System.NotImplementedException();
-    }
-}
+        List<HexCell> validCells = new List<HexCell>();
 
-public class SingleTargetRanged : TargetType
-{
-    public override List<HexCell> GetValidCells(HexCell fromCell)
-    {
-        throw new System.NotImplementedException();
+        foreach (HexCell first in GetAdjacent(firstCell))
+        {
+            foreach (HexCell second in GetAdjacent(secondCell))
+            {
+                if (first == second)
+                {
+                    validCells.Add(first);
+                }
+            }
+        }
+        return validCells;
     }
+
 }

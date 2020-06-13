@@ -9,6 +9,7 @@ public class Character : HexUnit
     public bool isStunned;
     public CharacterResources resources;
     public CharacterStats stats;
+    public CharacterAbilities abilities;
 
     public delegate void EffectHandler(Effect effect);
     public event EffectHandler OnEffectApplied;

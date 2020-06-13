@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-public class CharacterAbilities : MonoBehaviour
+[System.Serializable]
+public class CharacterAbilities
 {
     Ability selectedAbility = null;
-    List<Ability> abilities = null;
-    Character myCharacter = null;
+    public List<Ability> abilities = null;
     public void SelectAbility(int abilityIndex, Character user)
     {
         selectedAbility = abilities[abilityIndex];
-        List<HexCell> validCells = selectedAbility.targetType.GetValidCells(myCharacter.myGrid.GetCell());
-        myCharacter = user;
+        List<HexCell> validCells = selectedAbility.targetType.GetValidCells(user.myGrid.GetCell());
     }
 }
