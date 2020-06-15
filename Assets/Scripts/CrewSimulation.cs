@@ -150,7 +150,10 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Cannons:
                 break;
             case ShipJob.Brig:
-                distributionSystem.Setup(ship.crew, 100, ship.crew.Count);
+                if (positionFilled)
+                {
+                    distributionSystem.Setup(ship.crew, 100, ship.crew.Count);
+                }
                 break;
         }
     }

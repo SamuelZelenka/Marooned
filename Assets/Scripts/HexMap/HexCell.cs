@@ -107,9 +107,11 @@ public class HexCell : MonoBehaviour
     {
         get
         {
-            return transform.localPosition;
+            return transform.position;
         }
     }
+
+
 
     #region Grid and Labels
     public void SetLabel(string text)

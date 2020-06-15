@@ -28,6 +28,7 @@ public class HexGrid : MonoBehaviour
 
     public List<HexCell> Harbors { get; private set; }
 
+
     private void OnEnable()
     {
         if (!HexMetrics.noiseSource)
@@ -80,6 +81,8 @@ public class HexGrid : MonoBehaviour
                 item.CalculateBitmask();
             }
         }
+
+        SetCameraBoundriesToMatchHexGrid();
     }
 
     void CreateCell(int x, int y, int i, bool newMap)
@@ -90,6 +93,7 @@ public class HexGrid : MonoBehaviour
         position.y = y * (HexMetrics.outerRadius * 1.5f);
 
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
+        cell.transform.SetParent(this.transform);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
 
@@ -122,7 +126,6 @@ public class HexGrid : MonoBehaviour
             cell.Traversable = true;
         }
 
-        cell.transform.SetParent(this.transform);
         cell.myGrid = this;
 
         if (worldMap && newMap)
@@ -225,28 +228,38 @@ public class HexGrid : MonoBehaviour
         hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
         if (hit.collider)
         {
-            return GetCell(hit.point);
+            HexCell foundCell = hit.collider.GetComponent<HexCell>();
+            return foundCell;
         }
         else
         {
             return null;
         }
+        //if (hit.collider)
+        //{
+
+        //    //return GetCell(hit.point);
+        //}
+        //else
+        //{
+        //    return null;
+        //}
     }
 
-    public HexCell GetCell(Vector3 position)
-    {
-        position = transform.InverseTransformPoint(position);
-        HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        int index = coordinates.X + coordinates.Y * CellCountX + coordinates.Y / 2;
-        if (index >= 0 && cells.Length > index)
-        {
-            return cells[index];
-        }
-        else
-        {
-            return null;
-        }
-    }
+    //public HexCell GetCell(Vector3 position)
+    //{
+    //    position = transform.InverseTransformPoint(position);
+    //    HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+    //    int index = coordinates.X + coordinates.Y * CellCountX + coordinates.Y / 2;
+    //    if (index >= 0 && cells.Length > index)
+    //    {
+    //        return cells[index];
+    //    }
+    //    else
+    //    {
+    //        return null;
+    //    }
+    //}
 
     public HexCell GetRandomFreeHarbor()
     {
@@ -305,6 +318,8 @@ public class HexGrid : MonoBehaviour
         character.Location.Unit = null;
         character.Die();
     }
+
+
 
     #region UI and Grid
     public void ShowUI(bool visible)

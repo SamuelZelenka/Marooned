@@ -27,7 +27,7 @@ public class SaveLoadBattleMapMenu : MonoBehaviour
     public void Save()
     {
         BattleMap map;
-        if (selectedMap != null)
+        if (selectedMap == null)
         {
             map = Utility.CreateAsset<BattleMap>();
         }
