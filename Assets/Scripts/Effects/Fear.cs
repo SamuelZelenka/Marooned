@@ -13,7 +13,7 @@ public class Fear : Effect
     public override void ApplyEffect(Character character) { }
     public override void EffectTick(Character character)
     {
-        character.resources.Loyalty -= amount;
+        character.characterData.Loyalty -= amount;
     }
     public override string GetData()
     {

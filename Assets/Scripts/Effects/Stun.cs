@@ -32,7 +32,7 @@
     public void RemoveEffect(Character character)
     {
         character.RemoveEffects(this);
-        foreach (Effect effect in character.activeEffects)
+        foreach (Effect effect in character.characterData.activeEffects)
         {
             if (effect.GetType() == this.GetType())
             {

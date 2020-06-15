@@ -9,7 +9,7 @@
     public override void ApplyEffect(Character character){}
     public override void EffectTick(Character character)
     {
-        character.resources.Vitality -= damage; 
+        character.characterData.Vitality -= damage; 
     }
     public override string GetData()
     {

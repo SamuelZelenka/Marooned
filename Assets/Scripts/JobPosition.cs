@@ -24,7 +24,7 @@ public class JobPosition : MonoBehaviour
         if (selectedCharacter)
         {
             crewSimulation.SetCharacterJob(selectedCharacter, job);
-            portrait.sprite = selectedCharacter.portrait;
+            portrait.sprite = selectedCharacter.characterData.portrait;
         }
     }
 }

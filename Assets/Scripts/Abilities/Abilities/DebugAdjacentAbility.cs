@@ -10,7 +10,6 @@
         effects.Add(new Stun(2));
         targetType = new SingleTargetAdjacent();
     }
-
     public override void Select(Character character)
     {
         base.Select(character);
