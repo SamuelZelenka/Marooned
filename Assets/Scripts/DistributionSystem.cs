@@ -53,18 +53,19 @@ public class DistributionSystem : MonoBehaviour
 
     public void ConfirmShare()
     {
-            captainShare.ConfirmShare();
+        captainShare.ConfirmShare();
 
-            foreach (var item in shares)
-            {
-                item.ConfirmShare();
-            }
+        foreach (var item in shares)
+        {
+            item.ConfirmShare();
+        }
 
-            while (distributionParent.childCount > 0)
-            {
-                Destroy(distributionParent.GetChild(0));
-            }
-            shares.Clear();
+        for (int i = 0; i < distributionParent.childCount; i++)
+        {
+            Destroy(distributionParent.GetChild(i));
+        }
+
+        shares.Clear();
         OnSharesChanged -= SharesChanged;
     }
 }

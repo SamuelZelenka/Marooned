@@ -4,7 +4,26 @@ using UnityEngine.EventSystems;
 
 public class HexMapEditor : MonoBehaviour
 {
+    [Header("References")]
     public HexGrid hexGrid;
+    public Text editingHexCoordinatesText;
+    public Text clickedHexCoordinatesText;
+    public Text newMapSize;
+    public SpriteRenderer playerShip;
+    public SpriteRenderer enemyShip;
+    public SpriteRenderer landRight;
+    public SpriteRenderer fullLand;
+
+    public enum EditorVisuals { ShipToShip, ShipToLand, LandOnly }
+    [Header("Graphics")]
+    public EditorVisuals editorVisuals;
+    public Sprite playerShipSprite;
+    public Sprite enemyShipSprite;
+    public Sprite landRightSprite;
+    public Sprite fullLandSprite;
+
+    int xSize;
+    int ySize;
 
     HexCell editingHex;
     private HexCell EditingHex
@@ -42,13 +61,9 @@ public class HexMapEditor : MonoBehaviour
     }
     HexDirection selectedDirection = HexDirection.NE;
 
-    public Text editingHexCoordinatesText;
-    public Text clickedHexCoordinatesText;
-
     private void Start()
     {
         UpdateUI();
-        hexGrid.ShowEditGrid(true);
     }
 
     public void UpdateUI()
@@ -127,5 +142,60 @@ public class HexMapEditor : MonoBehaviour
     public void ShowNeighborGizmos(bool status)
     {
         hexGrid.ShowNeighborGizmos(status);
+    }
+
+    public void CreateNewMap()
+    {
+        hexGrid.CreateMap(xSize, ySize, true);
+    }
+
+    public void SetXSizeByString(string stringInput)
+    {
+        if (int.TryParse(stringInput, out int number))
+        {
+            xSize = number;
+            newMapSize.text = "X = " + xSize + "\nY = " + ySize;
+        }
+    }
+
+    public void SetYSizeByString(string stringInput)
+    {
+        if (int.TryParse(stringInput, out int number))
+        {
+            ySize = number;
+            newMapSize.text = "X = " + xSize + "\nY = " + ySize;
+        }
+    }
+
+    public void UpdateSprites()
+    {
+        playerShip.enabled = false;
+        enemyShip.enabled = false;
+        landRight.enabled = false;
+        fullLand.enabled = false;
+        playerShip.sprite = null;
+        enemyShip.sprite = null;
+        landRight.sprite = null;
+        fullLand.sprite = null;
+
+        switch (editorVisuals)
+        {
+            case EditorVisuals.ShipToShip:
+                playerShip.sprite = playerShipSprite;
+                enemyShip.sprite = enemyShipSprite;
+                playerShip.enabled = true;
+                enemyShip.enabled = true;
+                break;
+            case EditorVisuals.ShipToLand:
+                playerShip.sprite = playerShipSprite;
+                landRight.sprite = landRightSprite;
+                playerShip.enabled = true;
+                landRight.enabled = true;
+                break;
+            case EditorVisuals.LandOnly:
+                fullLand.sprite = fullLandSprite;
+                fullLand.enabled = true;
+                break;
+        }
     }
 }
