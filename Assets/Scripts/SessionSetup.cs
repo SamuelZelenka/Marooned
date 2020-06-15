@@ -11,13 +11,14 @@ public class SessionSetup : MonoBehaviour
     public Transform playerCrewParent;
 
     public int mapCellCountX = 20, mapCellCountY = 15;
-    public int shipCellCountX = 15, shipCellCountY = 12;
 
     [Header("Player setup")]
     public Ship playerStarterShip;
+    public BattleMap playerStartingGridMap;
     public CrewSimulation playerCrewSimulation;
     public Character startingCharacter;
     public int numberOfStartingCharacters = 1;
+    public CombatSystem combatSystem;
 
     [Header("AI setup")]
     public GameObject aiPrefab;
@@ -33,8 +34,8 @@ public class SessionSetup : MonoBehaviour
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
     {
-        terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true);
-        shipGrid.CreateMap(shipCellCountX, shipCellCountY, true);
+        terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true, true);
+        shipGrid.Load(playerStartingGridMap);
 
         terrainGrid.SetCameraBoundriesToMatchHexGrid();
         shipGrid.SetCameraBoundriesToMatchHexGrid();
@@ -58,6 +59,7 @@ public class SessionSetup : MonoBehaviour
         terrainGrid.AddShip(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         playerCrewSimulation.ship = ship;
+        combatSystem.playerShip = ship;
 
         Player newPlayer = new Player(ship, true, playerCrewSimulation);
         TurnSystem.instance.AddPlayerToTurnOrder(newPlayer);

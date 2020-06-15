@@ -13,7 +13,7 @@ public class HexCell : MonoBehaviour
     public HexGrid myGrid;
 
     public HexUnit Unit { get; set; }
-    bool traversable;
+    bool traversable = false;
     public bool Traversable
     {
         get => traversable;
@@ -21,6 +21,16 @@ public class HexCell : MonoBehaviour
         {
             traversable = value;
             ChangeEditGrid(value);
+        }
+    }
+
+    bool spawnable = false;
+    public bool Spawnable
+    {
+        get => spawnable;
+        set
+        {
+            spawnable = value;
         }
     }
 

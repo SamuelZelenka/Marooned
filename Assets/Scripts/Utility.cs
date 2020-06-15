@@ -58,18 +58,24 @@ public static class Utility
     {
         T asset = ScriptableObject.CreateInstance<T>();
 
-        string path = AssetDatabase.GetAssetPath(Selection.activeObject);
-        if (path == "")
+        //string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+        //if (path == "")
+        //{
+        //    path = "Assets";
+        //    if (pathFolderName != null)
+        //    {
+        //        path += "/" + pathFolderName;
+        //    }
+        //}
+        //else if (Path.GetExtension(path) != "")
+        //{
+        //    path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+        //}
+
+        string path = "Assets";
+        if (pathFolderName != null)
         {
-            path = "Assets";
-            if (pathFolderName != null)
-            {
-                path += "/" + pathFolderName;
-            }
-        }
-        else if (Path.GetExtension(path) != "")
-        {
-            path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+            path += "/" + pathFolderName;
         }
 
         string assetPathAndName = "";
