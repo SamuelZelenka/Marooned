@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Character : HexUnit
 {
-    public CharacterData characterData;
+    public CharacterData characterData = new CharacterData();
 
     public bool isStunned;
     public CharacterAbilities abilities;
