@@ -95,14 +95,14 @@ public class HexMapEditor : MonoBehaviour
         UpdateUI();
     }
 
-    private void ClearSelectionList()
+    public void ClearSelectionList()
     {
         foreach (var item in selectedHexes)
         {
             item.SetHighlightStatus(false, Color.white);
         }
         selectedHexes.Clear();
-        overrideConnectionButton.interactable = (selectedHexes.Count == 1);
+        UpdateUI();
     }
 
     private void AddSelectionHex(HexCell cellToAdd, Color highlightColor)

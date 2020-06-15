@@ -1507,6 +1507,7 @@ GameObject:
   - component: {fileID: 597209629}
   - component: {fileID: 597209628}
   - component: {fileID: 597209632}
+  - component: {fileID: 597209633}
   m_Layer: 5
   m_Name: Canvas Editor
   m_TagString: UI
@@ -1630,6 +1631,22 @@ MonoBehaviour:
   toggleTraversable: 116
   selectMultiple: 304
   selectedHexes: []
+--- !u!114 &597209633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597209627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7499d8b27b0695642a48fe7183434920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexGrid: {fileID: 1740551789}
+  selectedMap: {fileID: 0}
+  selectedMapTextInfo: {fileID: 1304390437}
+  folderName: ZoomedMaps
 --- !u!1 &624645499
 GameObject:
   m_ObjectHideFlags: 0
@@ -3007,7 +3024,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1134753611}
+      - m_Target: {fileID: 597209633}
         m_MethodName: SetMapName
         m_Mode: 0
         m_Arguments:
@@ -3021,7 +3038,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1134753611}
+      - m_Target: {fileID: 597209633}
         m_MethodName: SetMapName
         m_Mode: 0
         m_Arguments:
@@ -3246,7 +3263,6 @@ GameObject:
   - component: {fileID: 1134753608}
   - component: {fileID: 1134753610}
   - component: {fileID: 1134753609}
-  - component: {fileID: 1134753611}
   m_Layer: 5
   m_Name: Panel Map
   m_TagString: UI
@@ -3315,22 +3331,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134753607}
   m_CullTransparentMesh: 0
---- !u!114 &1134753611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1134753607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7499d8b27b0695642a48fe7183434920, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hexGrid: {fileID: 1740551789}
-  selectedMap: {fileID: 0}
-  selectedMapTextInfo: {fileID: 1304390437}
-  folderName: ZoomedMaps
 --- !u!1 &1159319249
 GameObject:
   m_ObjectHideFlags: 0
@@ -5483,7 +5483,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1134753611}
+      - m_Target: {fileID: 597209633}
         m_MethodName: Save
         m_Mode: 1
         m_Arguments:
@@ -6392,7 +6392,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1134753611}
+      - m_Target: {fileID: 597209632}
+        m_MethodName: ClearSelectionList
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 597209633}
         m_MethodName: Load
         m_Mode: 1
         m_Arguments:

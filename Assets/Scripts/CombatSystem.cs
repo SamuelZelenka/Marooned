@@ -24,7 +24,7 @@ public class CombatSystem : MonoBehaviour
 
         foreach (var item in playerShip.crew)
         {
-            hexGrid.AddCharacter(item, hexGrid.GetCell(item.Location.coordinates), true);
+            hexGrid.AddUnit(item, hexGrid.GetCell(item.Location.coordinates), true);
         }
     }
 
@@ -34,7 +34,7 @@ public class CombatSystem : MonoBehaviour
 
         foreach (var item in playerShip.crew)
         {
-            hexGrid.AddCharacter(item, hexGrid.GetCell(item.Location.coordinates), true);
+            hexGrid.AddUnit(item, hexGrid.GetCell(item.Location.coordinates), true);
         }
     }
 }

@@ -447,8 +447,8 @@ MonoBehaviour:
       y: 1
     - x: 2
       y: 2
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -501,8 +501,8 @@ MonoBehaviour:
       y: 1
     - x: 5
       y: 2
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -807,8 +807,8 @@ MonoBehaviour:
       y: 2
     - x: 1
       y: 3
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -861,8 +861,8 @@ MonoBehaviour:
       y: 2
     - x: 4
       y: 3
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -1149,8 +1149,8 @@ MonoBehaviour:
       y: 3
     - x: 0
       y: 4
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -1203,8 +1203,8 @@ MonoBehaviour:
       y: 3
     - x: 3
       y: 4
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -1509,8 +1509,8 @@ MonoBehaviour:
       y: 4
     - x: -1
       y: 5
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101
@@ -1563,8 +1563,8 @@ MonoBehaviour:
       y: 4
     - x: 2
       y: 5
-  - traversable: 0
-    spawnable: 0
+  - traversable: 1
+    spawnable: 1
     isLand: 0
     bitmask: -1
     connected: 010101010101

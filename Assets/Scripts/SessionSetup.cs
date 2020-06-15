@@ -56,7 +56,7 @@ public class SessionSetup : MonoBehaviour
         Ship ship = Instantiate(playerStarterShip);
         ship.transform.SetParent(shipTransform);
 
-        terrainGrid.AddShip(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddUnit(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         playerCrewSimulation.ship = ship;
         combatSystem.playerShip = ship;
@@ -70,7 +70,7 @@ public class SessionSetup : MonoBehaviour
             Character character = Instantiate(startingCharacter);
             character.transform.SetParent(playerCrewParent);
             ship.crew.Add(character);
-            shipGrid.AddCharacter(character, shipGrid.GetRandomFreeCell(), true);
+            shipGrid.AddUnit(character, shipGrid.GetRandomFreeCell(), true);
         }
     }
 
@@ -83,7 +83,7 @@ public class SessionSetup : MonoBehaviour
         Ship ship = Instantiate(aiMerchantShip);
         ship.transform.SetParent(aiTransform);
 
-        terrainGrid.AddShip(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddUnit(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         Player newMerchantPlayer = new Player(ship, false);
         TurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
