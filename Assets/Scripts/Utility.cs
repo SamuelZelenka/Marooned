@@ -54,7 +54,7 @@ public static class Utility
     /// <summary>
     //	This makes it easy to create, name and place unique new ScriptableObject asset files.
     /// </summary>
-    public static T CreateAsset<T>() where T : ScriptableObject
+    public static T CreateAsset<T>(string pathFolderName, string assetName) where T : ScriptableObject
     {
         T asset = ScriptableObject.CreateInstance<T>();
 
@@ -62,13 +62,26 @@ public static class Utility
         if (path == "")
         {
             path = "Assets";
+            if (pathFolderName != null)
+            {
+                path += "/" + pathFolderName;
+            }
         }
         else if (Path.GetExtension(path) != "")
         {
             path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
         }
 
-        string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/New " + typeof(T).ToString() + ".asset");
+        string assetPathAndName = "";
+
+        if (assetName == "")
+        {
+            assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/New " + typeof(T).ToString() + ".asset");
+        }
+        else
+        {
+            assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + assetName + ".asset");
+        }
 
         AssetDatabase.CreateAsset(asset, assetPathAndName);
 
@@ -81,7 +94,7 @@ public static class Utility
 
     public static float PercentageToFactor(int wholePercentage)
     {
-        return (float) wholePercentage / 100;
+        return (float)wholePercentage / 100;
     }
 
     public static int FactorToPercentage(float floatPercentage)

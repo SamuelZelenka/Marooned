@@ -3,33 +3,25 @@ using UnityEditor;
 
 public class SaveLoadBattleMapMenu : MonoBehaviour
 {
-    //public bool saveMode;
     public HexGrid hexGrid;
 
     public BattleMap selectedMap;
 
-    //public void SaveLoad()
-    //{
-    //    if (saveMode)
-    //    {
-    //        Debug.Log("Saving map");
-    //        Save();
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Loading map");
-    //        Load();
-    //    }
-    //    //nameInput.text = "Enter a new name or choose an existing map";
-    //    //Close();
-    //}
+    public string folderName = "ZoomedMaps";
+
+    string mapName = "New Battle Map";
+
+    public void SetMapName(string name)
+    {
+        mapName = name;
+    }
 
     public void Save()
     {
         BattleMap map;
         if (selectedMap == null)
         {
-            map = Utility.CreateAsset<BattleMap>();
+            map = Utility.CreateAsset<BattleMap>(folderName, mapName);
         }
         else
         {
@@ -40,6 +32,7 @@ public class SaveLoadBattleMapMenu : MonoBehaviour
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+        Debug.Log("Map Saved");
     }
 
     public void Load()
@@ -49,5 +42,6 @@ public class SaveLoadBattleMapMenu : MonoBehaviour
             hexGrid.Load(selectedMap);
         }
         hexGrid.ShowEditGrid(true);
+        Debug.Log("Map Loaded");
     }
 }
