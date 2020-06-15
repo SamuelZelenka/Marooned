@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -6,13 +7,17 @@ public class HexMapEditor : MonoBehaviour
 {
     [Header("References")]
     public HexGrid hexGrid;
-    public Text editingHexCoordinatesText;
-    public Text clickedHexCoordinatesText;
+    public Text selectedHexesCoordinateText;
     public Text newMapSize;
     public SpriteRenderer playerShip;
     public SpriteRenderer enemyShip;
     public SpriteRenderer landRight;
     public SpriteRenderer fullLand;
+
+    public Toggle spawnableToggle;
+    public Toggle traversableToggle;
+    public Button overrideConnectionButton;
+    public Text infoMessagePanel;
 
     public enum EditorVisuals { ShipToShip, ShipToLand, LandOnly }
     [Header("Graphics")]
@@ -22,54 +27,25 @@ public class HexMapEditor : MonoBehaviour
     public Sprite landRightSprite;
     public Sprite fullLandSprite;
 
+
+    [Header("Key commands")]
+    public KeyCode toggleTraversable = KeyCode.T;
+    public KeyCode selectMultiple = KeyCode.LeftShift;
+
     int xSize;
     int ySize;
 
-    HexCell editingHex;
-    private HexCell EditingHex
-    {
-        get => editingHex;
-        set
-        {
-            if (editingHex)
-            {
-                editingHex.SetHighlightStatus(false, Color.white);
-            }
-            editingHex = value;
-            if (editingHex)
-            {
-                editingHex.SetHighlightStatus(true, Color.yellow);
-            }
-        }
-    }
-    HexCell clickedHex;
-    private HexCell ClickedHex
-    {
-        get => clickedHex;
-        set
-        {
-            if (clickedHex && clickedHex != editingHex)
-            {
-                clickedHex.SetHighlightStatus(false, Color.white);
-            }
-            clickedHex = value;
-            if (clickedHex)
-            {
-                clickedHex.SetHighlightStatus(true, Color.blue);
-            }
-        }
-    }
+    public List<HexCell> selectedHexes = new List<HexCell>();
+
     HexDirection selectedDirection = HexDirection.NE;
 
     private void Start()
     {
+        xSize = 20;
+        ySize = 15;
+        CreateNewMap();
+        ShowEditGrid(true);
         UpdateUI();
-    }
-
-    public void UpdateUI()
-    {
-        editingHexCoordinatesText.text = editingHex ? editingHex.coordinates.ToString() : "No hex selected for editing";
-        clickedHexCoordinatesText.text = clickedHex ? clickedHex.coordinates.ToString() : "No hex clicked";
     }
 
     private void Update()
@@ -87,48 +63,98 @@ public class HexMapEditor : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            UpdateClickedHex();
+            UpdateSelectionOfHexes(Input.GetKey(selectMultiple));
         }
     }
 
-    void UpdateClickedHex()
+    #region Selection
+    void UpdateSelectionOfHexes(bool selectMultiple)
     {
         HexCell cell = hexGrid.GetCell();
-        if (cell != clickedHex)
+        if (cell == null)
         {
-            ClickedHex = cell;
-            UpdateUI();
+            return;
         }
+
+        if (overrideConnection)
+        {
+            OverrideConnection(cell);
+        }
+        else
+        {
+        if (!selectMultiple)
+        {
+            ClearSelectionList();
+        }
+        if (!selectedHexes.Contains(cell))
+        {
+            AddSelectionHex(cell, Color.blue);
+        }
+        }
+
+        UpdateUI();
     }
 
-    public void ChooseEditingHex()
+    private void ClearSelectionList()
     {
-        if (clickedHex)
+        foreach (var item in selectedHexes)
         {
-            EditingHex = clickedHex;
-            ClickedHex = null;
-            UpdateUI();
+            item.SetHighlightStatus(false, Color.white);
         }
+        selectedHexes.Clear();
+        overrideConnectionButton.interactable = (selectedHexes.Count == 1);
     }
 
+    private void AddSelectionHex(HexCell cellToAdd, Color highlightColor)
+    {
+        selectedHexes.Add(cellToAdd);
+        cellToAdd.SetHighlightStatus(true, highlightColor);
+    }
+    #endregion
+
+    #region CellOptions
     public void ChooseConnectionDirection(int newDir)
     {
         selectedDirection = (HexDirection)newDir;
     }
 
-    public void ChangeTraversable(bool status)
+    public void ChangeSpawnable(bool status)
     {
-        if (editingHex)
+        foreach (HexCell item in selectedHexes)
         {
-            editingHex.Traversable = status;
+            item.Spawnable = status;
         }
     }
 
-    public void OverrideConnection()
+    public void ChangeTraversable(bool status)
     {
-        editingHex.SetNeighbor(selectedDirection, clickedHex);
+        foreach (var item in selectedHexes)
+        {
+            item.Traversable = status;
+        }
     }
 
+    bool overrideConnection = false;
+    public void SelectForOverrideConnection()
+    {
+        overrideConnection = true;
+        DisplayMessage("Overriding the connection with the next cell clicked on");
+    }
+
+    private void OverrideConnection(HexCell cellTo)
+    {
+        if (selectedHexes.Count == 1)
+        {
+            selectedHexes[0].SetNeighbor(selectedDirection, cellTo);
+        }
+        overrideConnection = false;
+        ClearSelectionList();
+        UpdateUI();
+        DisplayMessage("New connection set up");
+    }
+    #endregion
+
+    #region Grid and Gizmos
     public void ShowGameGrid(bool status)
     {
         hexGrid.ShowGameGrid(status);
@@ -143,10 +169,15 @@ public class HexMapEditor : MonoBehaviour
     {
         hexGrid.ShowNeighborGizmos(status);
     }
+    #endregion
 
+    #region New Map
     public void CreateNewMap()
     {
-        hexGrid.CreateMap(xSize, ySize, true);
+        ClearSelectionList();
+        hexGrid.CreateMap(xSize, ySize, true, false);
+        UpdateUI();
+        ShowEditGrid(true);
     }
 
     public void SetXSizeByString(string stringInput)
@@ -154,7 +185,7 @@ public class HexMapEditor : MonoBehaviour
         if (int.TryParse(stringInput, out int number))
         {
             xSize = number;
-            newMapSize.text = "X = " + xSize + "\nY = " + ySize;
+            UpdateUI();
         }
     }
 
@@ -163,9 +194,10 @@ public class HexMapEditor : MonoBehaviour
         if (int.TryParse(stringInput, out int number))
         {
             ySize = number;
-            newMapSize.text = "X = " + xSize + "\nY = " + ySize;
+            UpdateUI();
         }
     }
+    #endregion
 
     public void UpdateSprites()
     {
@@ -198,6 +230,48 @@ public class HexMapEditor : MonoBehaviour
                 break;
         }
 
-        Debug.Log("Sprites updated");
+        DisplayMessage("Sprites updated");
+    }
+
+    private void DisplayMessage(string message)
+    {
+        infoMessagePanel.text = message;
+    }
+
+    public void UpdateUI()
+    {
+        string selectedText = "No hex clicked on";
+        if (selectedHexes.Count == 1)
+        {
+            selectedText = selectedHexes[0].coordinates.ToString();
+        }
+        else if (selectedHexes.Count > 1)
+        {
+            selectedText = "Multiple hexes selected";
+        }
+        selectedHexesCoordinateText.text = selectedText;
+
+        newMapSize.text = "X = " + xSize + "\nY = " + ySize;
+        overrideConnectionButton.interactable = (selectedHexes.Count == 1);
+
+        traversableToggle.SetIsOnWithoutNotify(false);
+        foreach (var item in selectedHexes)
+        {
+            if (item.Traversable)
+            {
+                traversableToggle.SetIsOnWithoutNotify(true);
+                break;
+            }
+        }
+
+        spawnableToggle.SetIsOnWithoutNotify(false);
+        foreach (var item in selectedHexes)
+        {
+            if (item.Spawnable)
+            {
+                spawnableToggle.SetIsOnWithoutNotify(true);
+                break;
+            }
+        }
     }
 }

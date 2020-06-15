@@ -51,18 +51,18 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public bool CreateMap(int x, int y, bool newMap)
+    public bool CreateMap(int x, int y, bool newMap, bool defaultTraversable)
     {
         ClearCells();
         ClearUnits();
 
         CellCountX = x;
         CellCountY = y;
-        CreateCells(newMap);
+        CreateCells(newMap, defaultTraversable);
         return true;
     }
 
-    void CreateCells(bool newMap)
+    void CreateCells(bool newMap, bool defaultTraversable)
     {
         cells = new HexCell[CellCountY * CellCountX];
 
@@ -70,7 +70,7 @@ public class HexGrid : MonoBehaviour
         {
             for (int x = 0; x < CellCountX; x++)
             {
-                CreateCell(x, y, i++, newMap);
+                CreateCell(x, y, i++, newMap, defaultTraversable);
             }
         }
 
@@ -85,7 +85,7 @@ public class HexGrid : MonoBehaviour
         SetCameraBoundriesToMatchHexGrid();
     }
 
-    void CreateCell(int x, int y, int i, bool newMap)
+    void CreateCell(int x, int y, int i, bool newMap, bool defaultTraversable)
     {
         Vector3 position;
         position.x = (x + y * 0.5f - y / 2) * (HexMetrics.innerRadius * 2f);
@@ -123,7 +123,7 @@ public class HexGrid : MonoBehaviour
                     }
                 }
             }
-            cell.Traversable = true;
+            cell.Traversable = defaultTraversable;
         }
 
         cell.myGrid = this;
@@ -246,6 +246,8 @@ public class HexGrid : MonoBehaviour
         //}
     }
 
+    //Removed since we might want to flip the grid in 3d and not use raycast detection on a 2d plane to determine clicked cell
+
     //public HexCell GetCell(Vector3 position)
     //{
     //    position = transform.InverseTransformPoint(position);
@@ -278,10 +280,14 @@ public class HexGrid : MonoBehaviour
         HexCell cell = null;
 
         int tries = 0;
-        while (cell == null || cell.Unit != null && cell.Traversable && tries < 100)
+        while (cell == null || cell.Unit != null && cell.Spawnable && cell.Traversable && tries < 100)
         {
             cell = Utility.ReturnRandom(cells);
             tries++;
+        }
+        if (cell == null)
+        {
+            Debug.Log("Could not find a free cell");
         }
         return cell;
     }
@@ -387,7 +393,7 @@ public class HexGrid : MonoBehaviour
 
     public void Load(BattleMap map)
     {
-        CreateMap(map.cellCountX, map.cellCountY, false);
+        CreateMap(map.cellCountX, map.cellCountY, false, false);
         for (int i = 0; i < map.cells.Length; i++)
         {
             cells[i].Load(map.cells[i], this);
