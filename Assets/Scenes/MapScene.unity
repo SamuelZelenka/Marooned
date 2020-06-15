@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2606,9 +2606,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 163277646}
-  managementMap: {fileID: 11400000, guid: dc47d1dbeda006b47a82f4909e2ade2c, type: 2}
+  managementMap: {fileID: 0}
   battleMaps:
-  - {fileID: 11400000, guid: dc47d1dbeda006b47a82f4909e2ade2c, type: 2}
+  - {fileID: 11400000, guid: 70b1e214db457fa41bb2dbcce417cae9, type: 2}
   playerShip: {fileID: 0}
   debugEnemies: []
 --- !u!4 &926876169
@@ -3314,13 +3314,13 @@ MonoBehaviour:
   mapCellCountY: 15
   playerStarterShip: {fileID: 4841003658517972659, guid: 9ac5c2b212baf2646b21d9c1350e9c35,
     type: 3}
-  playerStartingGridMap: {fileID: 11400000, guid: dc47d1dbeda006b47a82f4909e2ade2c,
+  playerStartingGridMap: {fileID: 11400000, guid: 3c4572ad50da4c74a983a8d76ee9e5f7,
     type: 2}
   playerCrewSimulation: {fileID: 414122934}
   startingCharacter: {fileID: 435603174573623444, guid: fa200656b4984df47856f6e116dd64a8,
     type: 3}
   numberOfStartingCharacters: 3
-  combatSystem: {fileID: 0}
+  combatSystem: {fileID: 926876168}
   aiPrefab: {fileID: 4439904320964768413, guid: 069b902a3055d304882a80a85444ac75,
     type: 3}
   aiMerchantShip: {fileID: 4841003658517972659, guid: f1e7905e4deb4bb49b4972068cbbf14c,

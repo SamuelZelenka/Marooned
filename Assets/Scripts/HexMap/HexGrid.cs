@@ -279,13 +279,14 @@ public class HexGrid : MonoBehaviour
     {
         HexCell cell = null;
 
-        int tries = 0;
-        while (cell == null || cell.Unit != null && cell.Spawnable && cell.Traversable && tries < 100)
+        List<HexCell> cellsToTest = new List<HexCell>();
+        cellsToTest.AddRange(cells);
+        while ((cell == null || cell.Unit != null || !cell.Spawnable || !cell.Traversable) && cellsToTest.Count > 0)
         {
-            cell = Utility.ReturnRandom(cells);
-            tries++;
+            cell = Utility.ReturnRandom(cellsToTest);
+            cellsToTest.Remove(cell);
         }
-        if (cell == null)
+        if (cell == null || cellsToTest.Count == 0)
         {
             Debug.Log("Could not find a free cell");
         }

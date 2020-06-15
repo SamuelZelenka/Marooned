@@ -60,6 +60,7 @@ public class SessionSetup : MonoBehaviour
 
         playerCrewSimulation.ship = ship;
         combatSystem.playerShip = ship;
+        combatSystem.managementMap = playerStartingGridMap;
 
         Player newPlayer = new Player(ship, true, playerCrewSimulation);
         TurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
