@@ -3,7 +3,7 @@ public class InGameCamera : MonoBehaviour
 {
     enum Directions { Up, Left, Down, Right }
 
-    Camera instance = null;
+    [SerializeField] Camera instance = null;
     [SerializeField] bool edgeMovement = true;
 
     [Header("Scene")]
@@ -40,13 +40,12 @@ public class InGameCamera : MonoBehaviour
 
     private void Start()
     {
-        instance = Camera.main;
         newCameraTransform = new CameraTransform(instance);
 
         if (minPosTranform != null && maxPosTransform != null)
         {
-            minPos = minPosTranform.position;
-            maxPos = maxPosTransform.position;
+            minPos = minPosTranform.localPosition;
+            maxPos = maxPosTransform.localPosition;
         }
     }
     private void Update()
@@ -54,6 +53,10 @@ public class InGameCamera : MonoBehaviour
         TrackPosition();
         InputHandler();
         UpdatePosition();
+    }
+    public void SetCamera(Camera camera)
+    {
+        instance = camera;
     }
     void InputHandler()
     {
@@ -72,7 +75,7 @@ public class InGameCamera : MonoBehaviour
         if (Input.GetMouseButton(2))
         {
             mouseUpPos = instance.ScreenToWorldPoint(Input.mousePosition);
-            newCameraTransform.cameraPosition = transform.position + mouseDownPos - mouseUpPos;
+            newCameraTransform.cameraPosition = transform.localPosition + mouseDownPos - mouseUpPos;
         }
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
@@ -123,12 +126,12 @@ public class InGameCamera : MonoBehaviour
         instance.orthographicSize = Mathf.Lerp(instance.orthographicSize, newCameraTransform.cameraSize, zoomLerpSpeed * Time.deltaTime);
 
         //Apply movement
-        float halfScreenWidth = instance.ScreenToWorldPoint(new Vector3(instance.scaledPixelWidth, 0, 0)).x - transform.position.x;
-        float halfScreenHeight = instance.ScreenToWorldPoint(new Vector3(0, instance.scaledPixelHeight, 0)).y - transform.position.y;
+        float halfScreenWidth = instance.ScreenToWorldPoint(new Vector3(instance.scaledPixelWidth, 0, 0)).x - transform.localPosition.x;
+        float halfScreenHeight = instance.ScreenToWorldPoint(new Vector3(0, instance.scaledPixelHeight, 0)).y - transform.localPosition.y;
         newCameraTransform.cameraPosition.x = Mathf.Clamp(newCameraTransform.cameraPosition.x, minPos.x + halfScreenWidth, maxPos.x - halfScreenWidth);
         newCameraTransform.cameraPosition.y = Mathf.Clamp(newCameraTransform.cameraPosition.y, minPos.y + halfScreenHeight, maxPos.y - halfScreenHeight);
 
-        Vector3 lerpVector = Vector3.Lerp(transform.position, newCameraTransform.cameraPosition, cameraLerpSpeed * Time.deltaTime);
+        Vector3 lerpVector = Vector3.Lerp(transform.localPosition, newCameraTransform.cameraPosition, cameraLerpSpeed * Time.deltaTime);
         transform.position = lerpVector;
     }
 

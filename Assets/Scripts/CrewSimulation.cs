@@ -59,8 +59,8 @@ public class CrewSimulation : MonoBehaviour
     {
         foreach (var character in ship.crew)
         {
-            character.resources.Hunger -= hungerReduction;
-            character.resources.Hygiene -= hygieneReduction;
+            character.characterData.Hunger -= hungerReduction;
+            character.characterData.Hygiene -= hygieneReduction;
         }
     }
 
@@ -104,7 +104,7 @@ public class CrewSimulation : MonoBehaviour
                 {
                     foreach (var character in ship.crew)
                     {
-                        character.resources.Hygiene += cleanHygiene;
+                        character.characterData.Hygiene += cleanHygiene;
                     }
                 }
                 break;
@@ -113,14 +113,14 @@ public class CrewSimulation : MonoBehaviour
                 {
                     foreach (var character in ship.crew)
                     {
-                        character.resources.Loyalty += shantyLoyalty;
+                        character.characterData.Loyalty += shantyLoyalty;
                     }
                 }
                 break;
             case ShipJob.Kitchen:
                 if (positionFilled)
                 {
-                    jobs[(int)job].resources.Hunger += kitchenHunger;
+                    jobs[(int)job].characterData.Hunger += kitchenHunger;
                     //Consume raw food
                 }
                 //Open Split window
@@ -132,7 +132,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.MedBay:
                 if (positionFilled)
                 {
-                    jobs[(int)job].resources.Vitality += medbayVitality;
+                    jobs[(int)job].characterData.Vitality += medbayVitality;
                     //Consume medicine
                 }
                 //Open Split window
@@ -160,7 +160,7 @@ public class CrewSimulation : MonoBehaviour
 
     public void SetCharacterJob(Character newCharacter, ShipJob job)
     {
-        if (newCharacter.ShipJob != ShipJob.None)
+        if (newCharacter.characterData.ShipJob != ShipJob.None)
         {
             RemoveCharacterFromItsJob(newCharacter);
         }
@@ -183,17 +183,17 @@ public class CrewSimulation : MonoBehaviour
                     RemoveCharacterFromItsJob(oldCharacter);
                 }
                 jobs[(int)job] = newCharacter;
-                newCharacter.ShipJob = job;
+                newCharacter.characterData.ShipJob = job;
                 charactersWithoutJobs.Remove(newCharacter);
                 break;
         }
 
-        Debug.Log(newCharacter.characterName + " set to job: " + job.ToString());
+        Debug.Log(newCharacter.characterData.characterName + " set to job: " + job.ToString());
     }
 
     private void RemoveCharacterFromItsJob(Character characterToRemove)
     {
-        switch (characterToRemove.ShipJob)
+        switch (characterToRemove.characterData.ShipJob)
         {
             case ShipJob.Helm:
             case ShipJob.Sail:
@@ -205,12 +205,12 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
             case ShipJob.Brig:
-                jobs[(int)characterToRemove.ShipJob].ShipJob = ShipJob.None;
-                jobs[(int)characterToRemove.ShipJob] = null;
+                jobs[(int)characterToRemove.characterData.ShipJob].characterData.ShipJob = ShipJob.None;
+                jobs[(int)characterToRemove.characterData.ShipJob] = null;
                 charactersWithoutJobs.Add(characterToRemove);
                 break;
         }
 
-        Debug.Log(characterToRemove.characterName + " removed from it's job");
+        Debug.Log(characterToRemove.characterData.characterName + " removed from it's job");
     }
 }

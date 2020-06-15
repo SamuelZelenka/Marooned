@@ -7,7 +7,7 @@ public abstract class Ability
     public bool isInstant;
 
     protected int cost;
-    protected List<Effect> effects;
+    protected List<Effect> effects = new List<Effect>();
     public TargetType targetType;
 
     public virtual void Select(Character character)
@@ -17,7 +17,7 @@ public abstract class Ability
 
     public virtual void Use(Character character)
     {
-        character.resources.Energy -= cost;
+        character.characterData.Energy -= cost;
     }
   
     public virtual void DeSelect()

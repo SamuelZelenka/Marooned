@@ -4,35 +4,27 @@ using UnityEngine;
 
 public class Character : HexUnit
 {
-    public string characterName;
+    public CharacterData characterData;
 
     public bool isStunned;
-    public CharacterResources resources;
-    public CharacterStats stats;
     public CharacterAbilities abilities;
 
     public delegate void EffectHandler(Effect effect);
     public event EffectHandler OnEffectApplied;
 
-    public List<Effect> activeEffects = new List<Effect>();
-    List<Effect> removedEffects = new List<Effect>();
-
-    public Sprite portrait;
-    public CrewSimulation.ShipJob ShipJob { get; set; } = CrewSimulation.ShipJob.None;
-
     public void AddEffect(Effect effect)
     {
-        activeEffects.Add(effect);
+        characterData.activeEffects.Add(effect);
         effect.ApplyEffect(this);
-        Debug.Log(activeEffects.Count);
+        Debug.Log(characterData.activeEffects.Count);
     }
 
     public void RemoveEffects(Effect effect)
     {
-        if (activeEffects.Contains(effect))
+        if (characterData.activeEffects.Contains(effect))
         {
-            activeEffects.Remove(effect);
-            removedEffects.Add(effect);
+            characterData.activeEffects.Remove(effect);
+            characterData.removedEffects.Add(effect);
         }
         else
         {
@@ -42,12 +34,12 @@ public class Character : HexUnit
 
     public void EffectTickUpdate()
     {
-        if (activeEffects.Count > 0)
+        if (characterData.activeEffects.Count > 0)
         {
-            for (int i = 0; i < activeEffects.Count; i++)
+            for (int i = 0; i < characterData.activeEffects.Count; i++)
             {
-                activeEffects[i].EffectTick(this);
-                OnEffectApplied?.Invoke(activeEffects[i]);
+                characterData.activeEffects[i].EffectTick(this);
+                OnEffectApplied?.Invoke(characterData.activeEffects[i]);
             }
         }
     }

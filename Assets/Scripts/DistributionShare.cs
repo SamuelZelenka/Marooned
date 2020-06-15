@@ -30,8 +30,8 @@ public class DistributionShare : MonoBehaviour
         //Setup
         this.transform.localScale = new Vector3(1, 1, 1);
         this.character = character;
-        characterName.text = character.characterName;
-        characterPortrait.sprite = character.portrait;
+        characterName.text = character.characterData.characterName;
+        characterPortrait.sprite = character.characterData.portrait;
 
         //Share values
         this.totalShare = totalShare;
@@ -46,7 +46,7 @@ public class DistributionShare : MonoBehaviour
 
     private void UpdateStats()
     {
-        float oldValue = character.resources.Loyalty;
+        float oldValue = character.characterData.Loyalty;
         float newValue = GetCharacterResourceAfterAdd();
         float change = newValue - oldValue;
 
@@ -97,11 +97,11 @@ public class DistributionShare : MonoBehaviour
 
     public void ConfirmShare()
     {
-        character.resources.Loyalty = Mathf.RoundToInt(GetCharacterResourceAfterAdd());
+        character.characterData.Loyalty = Mathf.RoundToInt(GetCharacterResourceAfterAdd());
     }
 
     private float GetCharacterResourceAfterAdd()
     {
-        return Mathf.Min(1, character.resources.Loyalty + shareFactor - Utility.PercentageToFactor(equalSharePercentage));
+        return Mathf.Min(1, character.characterData.Loyalty + shareFactor - Utility.PercentageToFactor(equalSharePercentage));
     }
 }
