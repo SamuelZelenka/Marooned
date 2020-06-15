@@ -197,5 +197,7 @@ public class HexMapEditor : MonoBehaviour
                 fullLand.enabled = true;
                 break;
         }
+
+        Debug.Log("Sprites updated");
     }
 }
