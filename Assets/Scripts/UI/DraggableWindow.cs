@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 
 public class DraggableWindow : MonoBehaviour, IDragHandler, IPointerDownHandler
 {
-    [SerializeField] RectTransform dragRectTransform;
-    [SerializeField] Canvas canvas;
+    [SerializeField] RectTransform dragRectTransform = null;
+    [SerializeField] Canvas canvas = null;
     private void Start()
     {
         canvas = GetComponentInParent<Canvas>();
