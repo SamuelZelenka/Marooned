@@ -18,9 +18,9 @@ public class CharacterStatsView : MonoBehaviour
     [SerializeField] Slider hygiene = null;
     [SerializeField] Text loyalty = null;
 
-    Sprite Portrait;
+    Sprite Portrait = null;
 
-    bool isDragging;
+    bool isDragging = false;
     private void Start()
     {
         characterName.text = "Debug Name";
