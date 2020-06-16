@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CharacterStatsView : MonoBehaviour
 {
-    [SerializeField] Text characterName;
-    [SerializeField] Text strength;
-    [SerializeField] Text stamina;
-    [SerializeField] Text constitution;
-    [SerializeField] Text agility;
-    [SerializeField] Text toughness;
-    [SerializeField] Text accuracy;
-    [SerializeField] Text bounty;
-    [SerializeField] Slider vitality;
-    [SerializeField] Slider energy;
-    [SerializeField] Slider hunger;
-    [SerializeField] Slider hygiene;
-    [SerializeField] Text loyalty;
+    [SerializeField] Text characterName = null;
+    [SerializeField] Text strength = null;
+    [SerializeField] Text stamina = null;
+    [SerializeField] Text constitution = null;
+    [SerializeField] Text agility = null;
+    [SerializeField] Text toughness = null;
+    [SerializeField] Text accuracy = null;
+    [SerializeField] Text bounty = null;
+    [SerializeField] Slider vitality = null;
+    [SerializeField] Slider energy = null;
+    [SerializeField] Slider hunger = null;
+    [SerializeField] Slider hygiene = null;
+    [SerializeField] Text loyalty = null;
 
     Sprite Portrait;
+
+    bool isDragging;
     private void Start()
     {
         characterName.text = "Debug Name";
@@ -37,6 +40,11 @@ public class CharacterStatsView : MonoBehaviour
 
     public void UpdateValues(Character character)
     {
+        vitality.maxValue = character.characterData.MaxVitality;
+        hygiene.maxValue = character.characterData.MaxHygiene;
+        energy.maxValue = character.characterData.MaxEnergy;
+        hunger.maxValue = character.characterData.MaxHunger;
+
         characterName.text = $"{character.characterData.characterName}";
         strength.text = $"Strength: {character.characterData.Strength}";
         stamina.text = $"Stamina: {character.characterData.Stamina}";

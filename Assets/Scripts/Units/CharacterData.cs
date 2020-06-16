@@ -1,18 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class CharacterData
 {
-    public string characterName;
+    public string characterName = "name";
 
     public List<Effect> activeEffects = new List<Effect>();
     public List<Effect> removedEffects = new List<Effect>();
     public CrewSimulation.ShipJob ShipJob { get; set; } = CrewSimulation.ShipJob.None;
 
     #region Visuals
-    public Sprite portrait;
-    public Sprite characterSprite;
+    public Sprite portrait = null;
+    public Sprite inGameSprite = null;
     #endregion
     //Stats
     int strength = 0;
@@ -26,10 +28,14 @@ public class CharacterData
     //Resources
     [SerializeField] int vitality = 30;
     [SerializeField] int maxVitality = 30;
-    [SerializeField] float energy = 1;
-    [SerializeField] float hunger = 1;
-    [SerializeField] float hygiene = 1;
-    [SerializeField] float loyalty = 0.5f;
+    [SerializeField] int energy = 1;
+    [SerializeField] int maxEnergy = 1;
+    [SerializeField] int hunger = 1;
+    [SerializeField] int maxHunger = 1;
+    [SerializeField] int hygiene = 1;
+    [SerializeField] int maxHygiene = 1;
+    [SerializeField] int loyalty = 1;
+    [SerializeField] int maxLoyalty = 10;
 
     #region Stats
     public int Strength
@@ -110,12 +116,29 @@ public class CharacterData
             }
         }
     }
+    public int MaxEnergy
+    {
+        get { return maxEnergy; }
+        set
+        {
+            maxEnergy = value;
+        }
+    }
     public float Energy
     {
         get { return energy; }
         set
         {
-            energy = Mathf.Min(value, 1);
+            energy = Mathf.RoundToInt(Mathf.Min(value, 1));
+        }
+    }
+
+    public int MaxHunger
+    {
+        get { return maxHunger; }
+        set
+        {
+            maxHunger = value;
         }
     }
     public float Hunger
@@ -123,7 +146,15 @@ public class CharacterData
         get { return hunger; }
         set
         {
-            hunger = Mathf.Min(value, 1);
+            hunger = Mathf.RoundToInt(Mathf.Min(value, 1));
+        }
+    }
+    public int MaxHygiene
+    {
+        get { return maxHunger; }
+        set
+        {
+            maxHunger = value;
         }
     }
     public float Hygiene
@@ -131,7 +162,15 @@ public class CharacterData
         get { return hygiene; }
         set
         {
-            hygiene = Mathf.Min(value, 1);
+            hygiene = Mathf.RoundToInt(Mathf.Min(value, 1));
+        }
+    }
+    public int MaxLoyalty
+    {
+        get { return maxHunger; }
+        set
+        {
+            maxHunger = value;
         }
     }
     public float Loyalty
@@ -139,7 +178,7 @@ public class CharacterData
         get { return loyalty; }
         set
         {
-            loyalty = Mathf.Min(value, 1);
+            loyalty = Mathf.RoundToInt(Mathf.Min(value, 1));
         }
     }
     #endregion
