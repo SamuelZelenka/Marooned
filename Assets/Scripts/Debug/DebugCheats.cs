@@ -5,9 +5,8 @@ using UnityEngine;
 public class DebugCheats : MonoBehaviour
 {
     [SerializeField] HexGrid hexGrid = null;
-    [SerializeField] Character hexUnit = null;
+    [SerializeField] HexUnit hexUnit = null;
     [SerializeField] HexCell hexCell = null;
-
 
     void Update()
     {
@@ -15,7 +14,7 @@ public class DebugCheats : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.C))
             {
-                hexGrid.AddCharacter(hexUnit, hexCell, true);
+                hexGrid.AddUnit(hexUnit, hexCell, true);
             }
             if(Input.GetKey(KeyCode.S))
             {

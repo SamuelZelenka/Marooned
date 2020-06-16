@@ -2606,9 +2606,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 163277646}
-  managementMap: {fileID: 11400000, guid: dc47d1dbeda006b47a82f4909e2ade2c, type: 2}
+  managementMap: {fileID: 0}
   battleMaps:
-  - {fileID: 11400000, guid: dc47d1dbeda006b47a82f4909e2ade2c, type: 2}
+  - {fileID: 11400000, guid: a28ec6a1b633f134fbb9c6803da9a656, type: 2}
   playerShip: {fileID: 0}
   debugEnemies: []
 --- !u!4 &926876169
@@ -3314,13 +3314,13 @@ MonoBehaviour:
   mapCellCountY: 15
   playerStarterShip: {fileID: 4841003658517972659, guid: 9ac5c2b212baf2646b21d9c1350e9c35,
     type: 3}
-  playerStartingGridMap: {fileID: 11400000, guid: dc47d1dbeda006b47a82f4909e2ade2c,
+  playerStartingGridMap: {fileID: 11400000, guid: 1b89592233b42704983d8e32e92d310a,
     type: 2}
   playerCrewSimulation: {fileID: 414122934}
   startingCharacter: {fileID: 435603174573623444, guid: fa200656b4984df47856f6e116dd64a8,
     type: 3}
   numberOfStartingCharacters: 3
-  combatSystem: {fileID: 0}
+  combatSystem: {fileID: 926876168}
   aiPrefab: {fileID: 4439904320964768413, guid: 069b902a3055d304882a80a85444ac75,
     type: 3}
   aiMerchantShip: {fileID: 4841003658517972659, guid: f1e7905e4deb4bb49b4972068cbbf14c,
@@ -3394,13 +3394,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1261105865}
-  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
-  m_LocalPosition: {x: 3.62, y: 3.62, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
+  m_LocalPosition: {x: 2.73, y: 2.76, z: 0}
   m_LocalScale: {x: 3, y: 6, z: 1}
   m_Children: []
   m_Father: {fileID: 631791804}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
 --- !u!212 &1261105867
 SpriteRenderer:
   m_ObjectHideFlags: 0

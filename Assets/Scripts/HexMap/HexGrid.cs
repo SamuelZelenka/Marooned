@@ -23,8 +23,7 @@ public class HexGrid : MonoBehaviour
     public TileBase[] harborTiles;
 
     HexCell[] cells;
-    public List<Ship> Ships { get; private set; }
-    public List<Character> Characters { get; private set; }
+    public List<HexUnit> Units { get; private set; }
 
     public List<HexCell> Harbors { get; private set; }
 
@@ -40,8 +39,7 @@ public class HexGrid : MonoBehaviour
 
     void Awake()
     {
-        Ships = new List<Ship>();
-        Characters = new List<Character>();
+        Units = new List<HexUnit>();
         Harbors = new List<HexCell>();
 
         if (!HexMetrics.noiseSource)
@@ -279,22 +277,23 @@ public class HexGrid : MonoBehaviour
     {
         HexCell cell = null;
 
-        int tries = 0;
-        while (cell == null || cell.Unit != null && cell.Spawnable && cell.Traversable && tries < 100)
+        List<HexCell> cellsToTest = new List<HexCell>();
+        cellsToTest.AddRange(cells);
+        while ((cell == null || cell.Unit != null || !cell.Spawnable || !cell.Traversable) && cellsToTest.Count > 0)
         {
-            cell = Utility.ReturnRandom(cells);
-            tries++;
+            cell = Utility.ReturnRandom(cellsToTest);
+            cellsToTest.Remove(cell);
         }
-        if (cell == null)
+        if (cell == null || cellsToTest.Count == 0)
         {
             Debug.Log("Could not find a free cell");
         }
         return cell;
     }
 
-    public void AddShip(Ship unit, HexCell location, HexDirection orientation, bool playerControlled)
+    public void AddUnit(HexUnit unit, HexCell location, HexDirection orientation, bool playerControlled)
     {
-        Ships.Add(unit);
+        Units.Add(unit);
         location.Unit = unit;
         unit.Location = location;
         unit.Orientation = (HexDirection)orientation;
@@ -302,29 +301,21 @@ public class HexGrid : MonoBehaviour
         unit.myGrid = this;
     }
 
-    public void AddCharacter(Character unit, HexCell location, bool playerControlled)
+    public void AddUnit(HexUnit unit, HexCell location, bool playerControlled)
     {
-        Characters.Add(unit);
+        Units.Add(unit);
         location.Unit = unit;
         unit.Location = location;
         unit.playerControlled = playerControlled;
         unit.myGrid = this;
     }
 
-    public void RemoveUnit(Ship unit)
+    public void RemoveUnit(HexUnit unit)
     {
-        Ships.Remove(unit);
+        Units.Remove(unit);
         unit.Location.Unit = null;
         unit.Die();
     }
-
-    public void RemoveUnit(Character character)
-    {
-        Characters.Remove(character);
-        character.Location.Unit = null;
-        character.Die();
-    }
-
 
 
     #region UI and Grid
@@ -363,11 +354,11 @@ public class HexGrid : MonoBehaviour
 
     void ClearUnits()
     {
-        for (int i = 0; i < Ships.Count; i++)
+        for (int i = 0; i < Units.Count; i++)
         {
-            Ships[i].Die();
+            Units[i].Die();
         }
-        Ships.Clear();
+        Units.Clear();
     }
 
     void ClearCells()

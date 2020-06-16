@@ -6,6 +6,7 @@ using UnityEngine;
 public class HexCellData
 {
     public bool traversable;
+    public bool spawnable;
     public bool isLand;
     public int bitmask;
     public bool[] connected;
@@ -14,6 +15,7 @@ public class HexCellData
     public HexCellData(HexCell hexCell)
     {
         this.traversable = hexCell.Traversable;
+        this.spawnable = hexCell.Spawnable;
         this.isLand = hexCell.IsLand;
         bitmask = hexCell.Bitmask;
         this.connected = new bool[6];

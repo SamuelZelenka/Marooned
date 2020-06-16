@@ -160,6 +160,7 @@ public class HexCell : MonoBehaviour
     public void Load(HexCellData data, HexGrid grid)
     {
         Traversable = data.traversable;
+        Spawnable = data.spawnable;
         IsLand = data.isLand;
         Bitmask = data.bitmask;
 
