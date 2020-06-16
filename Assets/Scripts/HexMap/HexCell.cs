@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.IO;
 
 public class HexCell : MonoBehaviour
 {
@@ -24,13 +23,14 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    bool spawnable = false;
-    public bool Spawnable
+    public enum SpawnType { Forbidden, Player, AnyEnemy, MeleeEnemy, SupportEnemy, RangedEnemy}
+    SpawnType typeOfSpawnPos;
+    public SpawnType TypeOfSpawnPos
     {
-        get => spawnable;
+        get => typeOfSpawnPos;
         set
         {
-            spawnable = value;
+            typeOfSpawnPos = value;
         }
     }
 
@@ -160,7 +160,7 @@ public class HexCell : MonoBehaviour
     public void Load(HexCellData data, HexGrid grid)
     {
         Traversable = data.traversable;
-        Spawnable = data.spawnable;
+        typeOfSpawnPos = data.spawnType;
         IsLand = data.isLand;
         Bitmask = data.bitmask;
 

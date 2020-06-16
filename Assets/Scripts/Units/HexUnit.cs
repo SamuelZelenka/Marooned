@@ -15,7 +15,7 @@ public abstract class HexUnit : MonoBehaviour
     public int landMovementCost = 1;
     List<HexCell> pathToTravel;
 
-    public int playerIndex;
+    //public int playerIndex;
     public bool playerControlled;
     public HexGrid myGrid;
     public Pathfinding pathfinding;
@@ -136,6 +136,11 @@ public abstract class HexUnit : MonoBehaviour
         pathToTravel = null; //Clear the list
     }
 
+    public void Despawn()
+    {
+        location.Unit = null;
+        Destroy(gameObject);
+    }
 
     public void Die()
     {

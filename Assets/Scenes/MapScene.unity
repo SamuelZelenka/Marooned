@@ -1155,7 +1155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 217234052}
   m_Layer: 0
-  m_Name: Crew
+  m_Name: PlayerCrew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1758,6 +1758,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598662736}
   m_CullTransparentMesh: 0
+--- !u!1 &621225589
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 621225590}
+  m_Layer: 0
+  m_Name: EnemyCrew
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &621225590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621225589}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 631791804}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &631791803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,6 +1823,7 @@ Transform:
   - {fileID: 1261105866}
   - {fileID: 103170756}
   - {fileID: 217234052}
+  - {fileID: 621225590}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2606,11 +2637,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexGrid: {fileID: 163277646}
+  playerCharacterParent: {fileID: 217234052}
+  enemyCharacterParent: {fileID: 621225590}
+  playerShip: {fileID: 0}
   managementMap: {fileID: 0}
   battleMaps:
   - {fileID: 11400000, guid: a28ec6a1b633f134fbb9c6803da9a656, type: 2}
-  playerShip: {fileID: 0}
-  debugEnemies: []
+  debugEnemies:
+  - {fileID: 435603174573623444, guid: 51d7771ff06815d4ba9c5809ca9336da, type: 3}
 --- !u!4 &926876169
 Transform:
   m_ObjectHideFlags: 0

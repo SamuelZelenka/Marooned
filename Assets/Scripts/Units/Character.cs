@@ -12,6 +12,21 @@ public class Character : HexUnit
     public delegate void EffectHandler(Effect effect);
     public event EffectHandler OnEffectApplied;
 
+    HexCell savedShipLocation;
+    public HexCell SavedShipLocation
+    {
+        get => savedShipLocation;
+        set
+        {
+            if (savedShipLocation)
+            {
+                savedShipLocation.Unit = null;
+            }
+            savedShipLocation = value;
+            value.Unit = this;
+        }
+    }
+
     public void AddEffect(Effect effect)
     {
         characterData.activeEffects.Add(effect);

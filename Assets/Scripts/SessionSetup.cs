@@ -34,8 +34,8 @@ public class SessionSetup : MonoBehaviour
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
     {
-        terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true, true);
-        shipGrid.Load(playerStartingGridMap);
+        terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true, true, true);
+        shipGrid.Load(playerStartingGridMap, true);
 
         terrainGrid.SetCameraBoundriesToMatchHexGrid();
         shipGrid.SetCameraBoundriesToMatchHexGrid();
@@ -70,7 +70,7 @@ public class SessionSetup : MonoBehaviour
             Character character = Instantiate(startingCharacter);
             character.transform.SetParent(playerCrewParent);
             ship.crew.Add(character);
-            shipGrid.AddUnit(character, shipGrid.GetRandomFreeCell(), true);
+            shipGrid.AddUnit(character, shipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);
         }
     }
 

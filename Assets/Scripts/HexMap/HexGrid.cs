@@ -49,14 +49,22 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public bool CreateMap(int x, int y, bool newMap, bool defaultTraversable)
+    public bool CreateMap(int x, int y, bool newMap, bool defaultTraversable, bool destroyUnits)
     {
         ClearCells();
-        ClearUnits();
+        if (destroyUnits)
+        {
+            ClearUnits();
+        }
 
         CellCountX = x;
         CellCountY = y;
         CreateCells(newMap, defaultTraversable);
+
+        if (!destroyUnits)
+        {
+            ReAddUnits(Units);
+        }
         return true;
     }
 
@@ -273,20 +281,28 @@ public class HexGrid : MonoBehaviour
         return harbor;
     }
 
-    public HexCell GetRandomFreeCell()
+    public HexCell GetFreeCellForCharacterSpawn(HexCell.SpawnType spawnTypeRequest)
     {
         HexCell cell = null;
 
         List<HexCell> cellsToTest = new List<HexCell>();
         cellsToTest.AddRange(cells);
-        while ((cell == null || cell.Unit != null || !cell.Spawnable || !cell.Traversable) && cellsToTest.Count > 0)
+
+        bool allowedCell = false;
+        while (!allowedCell && cellsToTest.Count > 0)
         {
             cell = Utility.ReturnRandom(cellsToTest);
             cellsToTest.Remove(cell);
+
+            if (cell != null && cell.Unit == null && cell.TypeOfSpawnPos == spawnTypeRequest && cell.Traversable)
+            {
+                allowedCell = true;
+            }
         }
-        if (cell == null || cellsToTest.Count == 0)
+
+        if (!allowedCell)
         {
-            Debug.Log("Could not find a free cell");
+            Debug.LogWarning("Could not find a free cell of the requested spawntype");
         }
         return cell;
     }
@@ -308,6 +324,19 @@ public class HexGrid : MonoBehaviour
         unit.Location = location;
         unit.playerControlled = playerControlled;
         unit.myGrid = this;
+    }
+
+    private void ReAddUnits(List<HexUnit> units)
+    {
+        List<HexUnit> unitsToReAdd = new List<HexUnit>();
+        unitsToReAdd.AddRange(units);
+
+        units.Clear();
+
+        foreach (var item in unitsToReAdd)
+        {
+            AddUnit(item, GetCell(item.Location.coordinates), item.playerControlled);
+        }
     }
 
     public void RemoveUnit(HexUnit unit)
@@ -356,7 +385,7 @@ public class HexGrid : MonoBehaviour
     {
         for (int i = 0; i < Units.Count; i++)
         {
-            Units[i].Die();
+            Units[i].Despawn();
         }
         Units.Clear();
     }
@@ -382,9 +411,9 @@ public class HexGrid : MonoBehaviour
         return cells;
     }
 
-    public void Load(BattleMap map)
+    public void Load(BattleMap map, bool destroyUnits)
     {
-        CreateMap(map.cellCountX, map.cellCountY, false, false);
+        CreateMap(map.cellCountX, map.cellCountY, false, false, destroyUnits);
         for (int i = 0; i < map.cells.Length; i++)
         {
             cells[i].Load(map.cells[i], this);

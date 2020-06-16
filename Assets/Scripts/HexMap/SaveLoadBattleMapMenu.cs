@@ -47,7 +47,7 @@ public class SaveLoadBattleMapMenu : MonoBehaviour
     {
         if (selectedMap)
         {
-            hexGrid.Load(selectedMap);
+            hexGrid.Load(selectedMap, true);
         }
         hexGrid.ShowEditGrid(true);
         Debug.Log("Map Loaded");

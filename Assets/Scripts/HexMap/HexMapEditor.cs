@@ -14,7 +14,7 @@ public class HexMapEditor : MonoBehaviour
     public SpriteRenderer landRight;
     public SpriteRenderer fullLand;
 
-    public Toggle spawnableToggle;
+    public Dropdown spawnAbleDropdown;
     public Toggle traversableToggle;
     public Button overrideConnectionButton;
     public Text infoMessagePanel;
@@ -118,11 +118,11 @@ public class HexMapEditor : MonoBehaviour
         selectedDirection = (HexDirection)newDir;
     }
 
-    public void ChangeSpawnable(bool status)
+    public void ChangeSpawnType(int newSpawnType)
     {
         foreach (HexCell item in selectedHexes)
         {
-            item.Spawnable = status;
+            item.TypeOfSpawnPos = (HexCell.SpawnType)newSpawnType;
         }
     }
 
@@ -175,7 +175,7 @@ public class HexMapEditor : MonoBehaviour
     public void CreateNewMap()
     {
         ClearSelectionList();
-        hexGrid.CreateMap(xSize, ySize, true, false);
+        hexGrid.CreateMap(xSize, ySize, true, false, true);
         UpdateUI();
         ShowEditGrid(true);
     }
@@ -264,14 +264,11 @@ public class HexMapEditor : MonoBehaviour
             }
         }
 
-        spawnableToggle.SetIsOnWithoutNotify(false);
-        foreach (var item in selectedHexes)
+        spawnAbleDropdown.SetValueWithoutNotify((int)0);
+        //Set the dropdown to the first selected hex type of spawnpos
+        if (selectedHexes.Count > 0)
         {
-            if (item.Spawnable)
-            {
-                spawnableToggle.SetIsOnWithoutNotify(true);
-                break;
-            }
+        spawnAbleDropdown.SetValueWithoutNotify((int)selectedHexes[0].TypeOfSpawnPos);
         }
     }
 }

@@ -4,14 +4,20 @@ using UnityEngine;
 
 public class CombatSystem : MonoBehaviour
 {
+    [Header("References")]
     public HexGrid hexGrid;
+    public Transform playerCharacterParent;
+    public Transform enemyCharacterParent;
 
-    public BattleMap managementMap;
-    public BattleMap[] battleMaps;
-
+    [HideInInspector]
     public Ship playerShip;
 
+    [Header("Setup")]
+    [HideInInspector]
+    public BattleMap managementMap;
+    public BattleMap[] battleMaps;
     public Character[] debugEnemies;
+
 
     public void StartCombat()
     {
@@ -20,21 +26,28 @@ public class CombatSystem : MonoBehaviour
 
     private void SetUpCombat(int size)
     {
-        hexGrid.Load(battleMaps[size]);
+        hexGrid.Load(battleMaps[size], false);
 
-        foreach (var item in playerShip.crew)
+        foreach (Character charactersToSpawn in debugEnemies)
         {
-            hexGrid.AddUnit(item, hexGrid.GetCell(item.Location.coordinates), true);
+            //Instantiate
+            Character spawnedCharacter = Instantiate(charactersToSpawn);
+            spawnedCharacter.transform.SetParent(enemyCharacterParent);
+
+            spawnedCharacter.myGrid = hexGrid;
+
+            //Add
+            hexGrid.AddUnit(spawnedCharacter, hexGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.AnyEnemy), false);
         }
     }
 
     public void EndCombat()
     {
-        hexGrid.Load(managementMap);
+        hexGrid.Load(managementMap, false);
 
         foreach (var item in playerShip.crew)
         {
-            hexGrid.AddUnit(item, hexGrid.GetCell(item.Location.coordinates), true);
+            hexGrid.AddUnit(item, hexGrid.GetCell(item.SavedShipLocation.coordinates), true);
         }
     }
 }

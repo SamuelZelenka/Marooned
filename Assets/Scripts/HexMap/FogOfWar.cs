@@ -3,17 +3,16 @@ using UnityEngine.Tilemaps;
 
 public class FogOfWar : MonoBehaviour
 {
-    int playerIndex = 0;
     Tilemap fogOfWar;
 
     private void Start()
     {
-        
+        //Subscribe Unit Moved To Ship
     }
 
     private void UnitMoved(HexUnit unit)
     {
-        if (unit.playerIndex == playerIndex)
+        if (unit.playerControlled)
         {
             //UpdateFogOfWar(unit.Location.coordinates, unit.visionRange);
         }
