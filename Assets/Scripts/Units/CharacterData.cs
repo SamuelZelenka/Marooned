@@ -16,14 +16,6 @@ public class CharacterData
     public Sprite portrait = null;
     public Sprite inGameSprite = null;
     #endregion
-    //Stats
-    int strength = 0;
-    int stamina = 0;
-    int constitution = 0;
-    int agility = 0;
-    int toughness = 0;
-    int accuracy = 0;
-    int bounty = 0;
 
     //Resources
     public Resource Vitality { get; private set; } = new Resource("Vitality", 30, 30);
@@ -31,6 +23,18 @@ public class CharacterData
     public Resource Hunger { get; private set; } = new Resource("Hunger", 100, 100);
     public Resource Hygiene { get; private set; } = new Resource("Hygiene", 100, 100);
     public Resource Loyalty { get; private set; } = new Resource("Loyalty", 50, 100);
+    public Resource XP { get; private set; } = new Resource("XP", 0, 10);
+
+    //Stats
+    public Stat Strength { get; private set; } = new Stat("Strength", 1);
+    public Stat Stamina { get; private set; } = new Stat("Stamina", 1);
+    public Stat Constitution { get; private set; } = new Stat("Constitution", 1);
+    public Stat Agility { get; private set; } = new Stat("Agility", 1);
+    public Stat Toughness { get; private set; } = new Stat("Toughness", 1);
+    public Stat Accuracy { get; private set; } = new Stat("Accuracy", 1);
+    public Stat Bounty { get; private set; } = new Stat("Bounty", 1);
+
+
 
     //[SerializeField] int vitality = 30;
     //[SerializeField] int maxVitality = 30;
@@ -44,64 +48,72 @@ public class CharacterData
     //[SerializeField] int maxLoyalty = 100;
 
 
-    #region Stats
-    public int Strength
-    {
-        get { return strength; }
-        set
-        {
-            strength = value;
-        }
-    }
-    public int Stamina
-    {
-        get { return stamina; }
-        set
-        {
-            stamina = value;
-        }
-    }
-    public int Constitutuion
-    {
-        get { return constitution; }
-        set
-        {
-            constitution = value;
-        }
-    }
-    public int Agility
-    {
-        get { return agility; }
-        set
-        {
-            agility = value;
-        }
-    }
-    public int Toughness
-    {
-        get { return toughness; }
-        set
-        {
-            toughness = value;
-        }
-    }
-    public int Accuracy
-    {
-        get { return accuracy; }
-        set
-        {
-            accuracy = value;
-        }
-    }
-    public int Bounty
-    {
-        get { return bounty; }
-        set
-        {
-            bounty = value;
-        }
-    }
-    #endregion
+    ////Stats
+    //int strength = 0;
+    //int stamina = 0;
+    //int constitution = 0;
+    //int agility = 0;
+    //int toughness = 0;
+    //int accuracy = 0;
+    //int bounty = 0;
+    //#region Stats
+    //public int Strength
+    //{
+    //    get { return strength; }
+    //    set
+    //    {
+    //        strength = value;
+    //    }
+    //}
+    //public int Stamina
+    //{
+    //    get { return stamina; }
+    //    set
+    //    {
+    //        stamina = value;
+    //    }
+    //}
+    //public int Constitutuion
+    //{
+    //    get { return constitution; }
+    //    set
+    //    {
+    //        constitution = value;
+    //    }
+    //}
+    //public int Agility
+    //{
+    //    get { return agility; }
+    //    set
+    //    {
+    //        agility = value;
+    //    }
+    //}
+    //public int Toughness
+    //{
+    //    get { return toughness; }
+    //    set
+    //    {
+    //        toughness = value;
+    //    }
+    //}
+    //public int Accuracy
+    //{
+    //    get { return accuracy; }
+    //    set
+    //    {
+    //        accuracy = value;
+    //    }
+    //}
+    //public int Bounty
+    //{
+    //    get { return bounty; }
+    //    set
+    //    {
+    //        bounty = value;
+    //    }
+    //}
+    //#endregion
     //#region Resources
     //public int MaxVitality
     //{
@@ -190,30 +202,47 @@ public class CharacterData
     //}
     //#endregion
 
-}
-
-public class Resource
-{
-    const int MINRESOURCEVALUE = 0;
-
-    public string resourceName;
-    public int maxValue;
-    int currentValue;
-    public int CurrentValue
+    public class Resource
     {
-        get => currentValue;
-        set
+        const int MINRESOURCEVALUE = 0;
+
+        public string resourceName;
+        public int maxValue;
+        int currentValue;
+        public int CurrentValue
         {
-            currentValue = Mathf.Clamp(value, MINRESOURCEVALUE, maxValue);
+            get => currentValue;
+            set
+            {
+                currentValue = Mathf.Clamp(value, MINRESOURCEVALUE, maxValue);
+            }
+        }
+
+        public string Percentage => Utility.FactorToPercentageText((float)currentValue / (float)maxValue);
+
+        public Resource(string resourceName, int currentValue, int maxValue)
+        {
+            this.resourceName = resourceName;
+            this.CurrentValue = currentValue;
+            this.maxValue = maxValue;
         }
     }
 
-    public string Percentage => Utility.FactorToPercentageText((float)currentValue / (float)maxValue);
-
-    public Resource(string resourceName, int currentValue, int maxValue)
+    public class Stat
     {
-        this.resourceName = resourceName;
-        this.CurrentValue = currentValue;
-        this.maxValue = maxValue;
+        const int MINSTATVALUE = 1;
+        const int MAXSTATVALUE = 20;
+
+        public string statName;
+        public int CurrentValue { get; private set; }
+
+        public void IncreaseStat(int increase) => CurrentValue += increase;
+
+        public Stat(string statName, int currentValue)
+        {
+            this.statName = statName;
+            this.CurrentValue = currentValue;
+        }
     }
 }
+

@@ -46,12 +46,12 @@ public class CharacterStatsView : MonoBehaviour
         hunger.maxValue = character.characterData.Hunger.maxValue;
 
         characterName.text = $"{character.characterData.characterName}";
-        strength.text = $"Strength: {character.characterData.Strength}";
-        stamina.text = $"Stamina: {character.characterData.Stamina}";
-        constitution.text = $"Constitution: {character.characterData.Constitutuion}";
-        agility.text = $"Agility: {character.characterData.Agility}";
-        toughness.text = $"Toughness: {character.characterData.Toughness}";
-        accuracy.text = $"Accuracy: {character.characterData.Accuracy}";
+        strength.text = $"Strength: {character.characterData.Strength.statName}";
+        stamina.text = $"Stamina: {character.characterData.Stamina.statName}";
+        constitution.text = $"Constitution: {character.characterData.Constitution.statName}";
+        agility.text = $"Agility: {character.characterData.Agility.statName}";
+        toughness.text = $"Toughness: {character.characterData.Toughness.statName}";
+        accuracy.text = $"Accuracy: {character.characterData.Accuracy.statName}";
         bounty.text = $"{0}";
         vitality.value = 5;
         energy.value = 5;
