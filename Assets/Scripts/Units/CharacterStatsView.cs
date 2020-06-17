@@ -40,10 +40,10 @@ public class CharacterStatsView : MonoBehaviour
 
     public void UpdateValues(Character character)
     {
-        vitality.maxValue = character.characterData.MaxVitality;
-        hygiene.maxValue = character.characterData.MaxHygiene;
-        energy.maxValue = character.characterData.MaxEnergy;
-        hunger.maxValue = character.characterData.MaxHunger;
+        vitality.maxValue = character.characterData.Vitality.maxValue;
+        hygiene.maxValue = character.characterData.Hygiene.maxValue;
+        energy.maxValue = character.characterData.Energy.maxValue;
+        hunger.maxValue = character.characterData.Hunger.maxValue;
 
         characterName.text = $"{character.characterData.characterName}";
         strength.text = $"Strength: {character.characterData.Strength}";

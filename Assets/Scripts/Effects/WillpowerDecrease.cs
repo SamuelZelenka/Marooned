@@ -13,7 +13,7 @@ public class WillpowerDecrease : Effect
     public override void ApplyEffect(Character character) { }
     public override void EffectTick(Character character)
     {
-        character.characterData.Loyalty -= amount;
+        character.characterData.Loyalty.CurrentValue -= amount;
     }
     public override string GetData()
     {
