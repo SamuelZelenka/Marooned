@@ -241,33 +241,8 @@ public class HexGrid : MonoBehaviour
         {
             return null;
         }
-        //if (hit.collider)
-        //{
-
-        //    //return GetCell(hit.point);
-        //}
-        //else
-        //{
-        //    return null;
-        //}
+       
     }
-
-    //Removed since we might want to flip the grid in 3d and not use raycast detection on a 2d plane to determine clicked cell
-
-    //public HexCell GetCell(Vector3 position)
-    //{
-    //    position = transform.InverseTransformPoint(position);
-    //    HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-    //    int index = coordinates.X + coordinates.Y * CellCountX + coordinates.Y / 2;
-    //    if (index >= 0 && cells.Length > index)
-    //    {
-    //        return cells[index];
-    //    }
-    //    else
-    //    {
-    //        return null;
-    //    }
-    //}
 
     public HexCell GetRandomFreeHarbor()
     {

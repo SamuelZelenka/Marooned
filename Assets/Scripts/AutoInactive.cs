@@ -21,8 +21,5 @@ public class AutoInactive : MonoBehaviour
         }
     }
 
-    private void SetInactive()
-    {
-        this.gameObject.SetActive(false);
-    }
+    private void SetInactive() => this.gameObject.SetActive(false);
 }

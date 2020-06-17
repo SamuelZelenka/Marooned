@@ -1,39 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CrewSimulation : MonoBehaviour
 {
     [Header("References")]
-    public Ship ship;
-    public GameObject jobPanel;
-    public GameObject combatAndManagementView;
-    public GameObject mapView;
-    public DistributionSystem distributionSystem; //Not needed
+    [SerializeField] GameObject jobPanel = null;
+    [SerializeField] GameObject combatAndManagementView = null;
+    [SerializeField] GameObject mapView = null;
+
+    Player humanPlayer;
+    Ship playerShip;
 
     [Header("Job effects")]
     [SerializeField] int sailMovementPoints = 1;
     [SerializeField] int spotterVision = 2;
-    [SerializeField] float cleanHygiene = 0.1f;
-    [SerializeField] float shantyLoyalty = 0.1f;
-    [SerializeField] float kitchenHunger = 0.1f;
+    [SerializeField] int cleanHygiene = 10;
+    [SerializeField] int shantyLoyalty = 10;
+    [SerializeField] int kitchenHunger = 10;
     [SerializeField] int medbayVitality = 5;
     [SerializeField] int shipWrightRepair = 5;
 
     [Header("Job Costs")]
-    [SerializeField] int kitchenFoodConsumption = 1;
-    [SerializeField] int medbayMedicineConsumption = 1;
+    //[SerializeField] int kitchenFoodConsumption = 1;
+    //[SerializeField] int medbayMedicineConsumption = 1;
 
     [Header("Character Simulation")]
-    [SerializeField] float hungerReduction = 0.05f;
-    [SerializeField] float hygieneReduction = 0.05f;
+    [SerializeField] int hungerReduction = 5;
+    [SerializeField] int hygieneReduction = 5;
 
-    public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, Brig, None }
-    public Character[] jobs = new Character[10];
-    public List<Character> charactersWithoutJobs = new List<Character>();
+    public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, None }
+    Character[] jobs = new Character[9];
 
+    #region Setup References
+    private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;
 
+    private void DoSetup(Player humanPlayer)
+    {
+        this.humanPlayer = humanPlayer;
+        playerShip = humanPlayer.Ship;
+        //Unsubscribe
+        SessionSetup.OnHumanPlayerCreated -= DoSetup;
+    }
+    #endregion
 
     public void NewTurnSimulation()
     {
@@ -57,10 +65,10 @@ public class CrewSimulation : MonoBehaviour
 
     private void TurnStartSimulation()
     {
-        foreach (var character in ship.crew)
+        foreach (var character in humanPlayer.Crew)
         {
-            character.characterData.Hunger -= hungerReduction;
-            character.characterData.Hygiene -= hygieneReduction;
+            character.characterData.Hunger.CurrentValue -= hungerReduction;
+            character.characterData.Hygiene.CurrentValue -= hygieneReduction;
         }
     }
 
@@ -79,48 +87,48 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Helm:
                 if (positionFilled)
                 {
-                    ship.remainingMovementPoints = ship.defaultMovementPoints;
+                    playerShip.remainingMovementPoints = playerShip.defaultMovementPoints;
                 }
                 else
                 {
-                    ship.remainingMovementPoints = 0;
+                    playerShip.remainingMovementPoints = 0;
                 }
                 break;
             case ShipJob.Sail:
-                if (positionFilled && ship.remainingMovementPoints > 0)
+                if (positionFilled && playerShip.remainingMovementPoints > 0)
                 {
-                    ship.remainingMovementPoints += sailMovementPoints;
+                    playerShip.remainingMovementPoints += sailMovementPoints;
                 }
                 break;
             case ShipJob.Spotter:
-                ship.currentVisionRange = ship.defaultVisionRange;
+                playerShip.currentVisionRange = playerShip.defaultVisionRange;
                 if (positionFilled)
                 {
-                    ship.currentVisionRange += spotterVision;
+                    playerShip.currentVisionRange += spotterVision;
                 }
                 break;
             case ShipJob.Clean:
                 if (positionFilled)
                 {
-                    foreach (var character in ship.crew)
+                    foreach (var character in humanPlayer.Crew)
                     {
-                        character.characterData.Hygiene += cleanHygiene;
+                        character.characterData.Hygiene.CurrentValue += cleanHygiene;
                     }
                 }
                 break;
             case ShipJob.Shanty:
                 if (positionFilled)
                 {
-                    foreach (var character in ship.crew)
+                    foreach (var character in humanPlayer.Crew)
                     {
-                        character.characterData.Loyalty += shantyLoyalty;
+                        character.characterData.Loyalty.CurrentValue += shantyLoyalty;
                     }
                 }
                 break;
             case ShipJob.Kitchen:
                 if (positionFilled)
                 {
-                    jobs[(int)job].characterData.Hunger += kitchenHunger;
+                    jobs[(int)job].characterData.Hunger.CurrentValue += kitchenHunger;
                     //Consume raw food
                 }
                 //Open Split window
@@ -132,7 +140,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.MedBay:
                 if (positionFilled)
                 {
-                    jobs[(int)job].characterData.Vitality += medbayVitality;
+                    jobs[(int)job].characterData.Vitality.CurrentValue += medbayVitality;
                     //Consume medicine
                 }
                 //Open Split window
@@ -144,16 +152,10 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Shipwright:
                 if (positionFilled)
                 {
-                    ship.Hull += shipWrightRepair;
+                    playerShip.Hull += shipWrightRepair;
                 }
                 break;
             case ShipJob.Cannons:
-                break;
-            case ShipJob.Brig:
-                if (positionFilled)
-                {
-                    distributionSystem.Setup(ship.crew, 100, ship.crew.Count);
-                }
                 break;
         }
     }
@@ -176,7 +178,6 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.MedBay:
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
-            case ShipJob.Brig:
                 Character oldCharacter = jobs[(int)job];
                 if (oldCharacter)
                 {
@@ -184,7 +185,6 @@ public class CrewSimulation : MonoBehaviour
                 }
                 jobs[(int)job] = newCharacter;
                 newCharacter.characterData.ShipJob = job;
-                charactersWithoutJobs.Remove(newCharacter);
                 break;
         }
 
@@ -204,10 +204,8 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.MedBay:
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
-            case ShipJob.Brig:
                 jobs[(int)characterToRemove.characterData.ShipJob].characterData.ShipJob = ShipJob.None;
                 jobs[(int)characterToRemove.characterData.ShipJob] = null;
-                charactersWithoutJobs.Add(characterToRemove);
                 break;
         }
 

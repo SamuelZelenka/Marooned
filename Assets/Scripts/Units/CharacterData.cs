@@ -26,16 +26,23 @@ public class CharacterData
     int bounty = 0;
 
     //Resources
-    [SerializeField] int vitality = 30;
-    [SerializeField] int maxVitality = 30;
-    [SerializeField] int energy = 1;
-    [SerializeField] int maxEnergy = 1;
-    [SerializeField] int hunger = 1;
-    [SerializeField] int maxHunger = 1;
-    [SerializeField] int hygiene = 1;
-    [SerializeField] int maxHygiene = 1;
-    [SerializeField] int loyalty = 1;
-    [SerializeField] int maxLoyalty = 10;
+    public Resource Vitality { get; private set; } = new Resource("Vitality", 30, 30);
+    public Resource Energy { get; private set; } = new Resource("Energy", 100, 100);
+    public Resource Hunger { get; private set; } = new Resource("Hunger", 100, 100);
+    public Resource Hygiene { get; private set; } = new Resource("Hygiene", 100, 100);
+    public Resource Loyalty { get; private set; } = new Resource("Loyalty", 50, 100);
+
+    //[SerializeField] int vitality = 30;
+    //[SerializeField] int maxVitality = 30;
+    //[SerializeField] int energy = 1;
+    //[SerializeField] int maxEnergy = 100;
+    //[SerializeField] int hunger = 1;
+    //[SerializeField] int maxHunger = 1;
+    //[SerializeField] int hygiene = 1;
+    //[SerializeField] int maxHygiene = 100;
+    //[SerializeField] int loyalty = 1;
+    //[SerializeField] int maxLoyalty = 100;
+
 
     #region Stats
     public int Strength
@@ -95,91 +102,118 @@ public class CharacterData
         }
     }
     #endregion
-    #region Resources
-    public int MaxVitality
+    //#region Resources
+    //public int MaxVitality
+    //{
+    //    get { return maxVitality; }
+    //    set
+    //    {
+    //        maxVitality = value;
+    //    }
+    //}
+    //public int Vitality
+    //{
+    //    get { return vitality; }
+    //    set
+    //    {
+    //        vitality = Mathf.Clamp(value, MINRESOURCEVALUE, maxVitality);
+    //        if (vitality <= 0)
+    //        {
+    //            Debug.Log("Is dead");
+    //        }
+    //    }
+    //}
+    //public int MaxEnergy
+    //{
+    //    get { return maxEnergy; }
+    //    set
+    //    {
+    //        maxEnergy = value;
+    //    }
+    //}
+    //public int Energy
+    //{
+    //    get { return energy; }
+    //    set
+    //    {
+    //        energy = Mathf.Clamp(value, MINRESOURCEVALUE, maxEnergy);
+    //    }
+    //}
+
+    //public int MaxHunger
+    //{
+    //    get { return maxHunger; }
+    //    set
+    //    {
+    //        maxHunger = value;
+    //    }
+    //}
+    //public int Hunger
+    //{
+    //    get { return hunger; }
+    //    set
+    //    {
+    //        hunger = Mathf.RoundToInt(Mathf.Min(value, 1));
+    //    }
+    //}
+    //public int MaxHygiene
+    //{
+    //    get { return maxHunger; }
+    //    set
+    //    {
+    //        maxHunger = value;
+    //    }
+    //}
+    //public float Hygiene
+    //{
+    //    get { return hygiene; }
+    //    set
+    //    {
+    //        hygiene = Mathf.RoundToInt(Mathf.Min(value, 1));
+    //    }
+    //}
+    //public int MaxLoyalty
+    //{
+    //    get { return maxHunger; }
+    //    set
+    //    {
+    //        maxHunger = value;
+    //    }
+    //}
+    //public float Loyalty
+    //{
+    //    get { return loyalty; }
+    //    set
+    //    {
+    //        loyalty = Mathf.RoundToInt(Mathf.Min(value, 1));
+    //    }
+    //}
+    //#endregion
+
+}
+
+public class Resource
+{
+    const int MINRESOURCEVALUE = 0;
+
+    public string resourceName;
+    public int maxValue;
+    int currentValue;
+    public int CurrentValue
     {
-        get { return maxVitality; }
+        get => currentValue;
         set
         {
-            maxVitality = value;
-        }
-    }
-    public int Vitality
-    {
-        get { return vitality; }
-        set
-        {
-            vitality = Mathf.Clamp(value, 0, maxVitality);
-            if (vitality <= 0)
-            {
-                Debug.Log("Is dead");
-            }
-        }
-    }
-    public int MaxEnergy
-    {
-        get { return maxEnergy; }
-        set
-        {
-            maxEnergy = value;
-        }
-    }
-    public float Energy
-    {
-        get { return energy; }
-        set
-        {
-            energy = Mathf.RoundToInt(Mathf.Min(value, 1));
+            currentValue = Mathf.Clamp(value, MINRESOURCEVALUE, maxValue);
         }
     }
 
-    public int MaxHunger
+    public string Percentage => Utility.FactorToPercentageText((float)currentValue / (float)maxValue);
+
+    public Resource(string resourceName, int currentValue, int maxValue)
     {
-        get { return maxHunger; }
-        set
-        {
-            maxHunger = value;
-        }
+        this.resourceName = resourceName;
+        this.CurrentValue = currentValue;
+        this.maxValue = maxValue;
     }
-    public float Hunger
-    {
-        get { return hunger; }
-        set
-        {
-            hunger = Mathf.RoundToInt(Mathf.Min(value, 1));
-        }
-    }
-    public int MaxHygiene
-    {
-        get { return maxHunger; }
-        set
-        {
-            maxHunger = value;
-        }
-    }
-    public float Hygiene
-    {
-        get { return hygiene; }
-        set
-        {
-            hygiene = Mathf.RoundToInt(Mathf.Min(value, 1));
-        }
-    }
-    public int MaxLoyalty
-    {
-        get { return maxHunger; }
-        set
-        {
-            maxHunger = value;
-        }
-    }
-    public float Loyalty
-    {
-        get { return loyalty; }
-        set
-        {
-            loyalty = Mathf.RoundToInt(Mathf.Min(value, 1));
-        }
-    }
-    #endregion
 }

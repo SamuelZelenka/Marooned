@@ -17,7 +17,7 @@ public abstract class Ability
 
     public virtual void Use(Character character)
     {
-        character.characterData.Energy -= cost;
+        character.characterData.Energy.CurrentValue -= cost;
     }
   
     public virtual void DeSelect()

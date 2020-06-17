@@ -46,7 +46,7 @@ public class DistributionShare : MonoBehaviour
 
     private void UpdateStats()
     {
-        float oldValue = character.characterData.Loyalty;
+        float oldValue = character.characterData.Loyalty.CurrentValue;
         float newValue = GetCharacterResourceAfterAdd();
         float change = newValue - oldValue;
 
@@ -95,13 +95,10 @@ public class DistributionShare : MonoBehaviour
         slider.value += change;
     }
 
-    public void ConfirmShare()
-    {
-        character.characterData.Loyalty = Mathf.RoundToInt(GetCharacterResourceAfterAdd());
-    }
+    public void ConfirmShare() => character.characterData.Loyalty.CurrentValue = Mathf.RoundToInt(GetCharacterResourceAfterAdd());
 
     private float GetCharacterResourceAfterAdd()
     {
-        return Mathf.Min(1, character.characterData.Loyalty + shareFactor - Utility.PercentageToFactor(equalSharePercentage));
+        return Mathf.Min(character.characterData.Loyalty.maxValue, character.characterData.Loyalty.CurrentValue + Utility.FactorToPercentage(shareFactor) - equalSharePercentage);
     }
 }

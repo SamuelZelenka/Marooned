@@ -9,8 +9,12 @@ public class CombatSystem : MonoBehaviour
     public Transform playerCharacterParent;
     public Transform enemyCharacterParent;
 
-    [HideInInspector]
-    public Ship playerShip;
+    public GameObject combatCanvas;
+    public GameObject mapView;
+    public GameObject combatView;
+
+    Player humanPlayer;
+    Ship playerShip;
 
     [Header("Setup")]
     [HideInInspector]
@@ -18,9 +22,22 @@ public class CombatSystem : MonoBehaviour
     public BattleMap[] battleMaps;
     public Character[] debugEnemies;
 
+    #region Setup References
+    private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;
+
+    private void DoSetup(Player humanPlayer)
+    {
+        this.humanPlayer = humanPlayer;
+        playerShip = humanPlayer.Ship;
+        //Unsubscribe
+        SessionSetup.OnHumanPlayerCreated -= DoSetup;
+    }
+    #endregion
+
 
     public void StartCombat()
     {
+        ChangeView(true);
         SetUpCombat(0);
     }
 
@@ -30,13 +47,13 @@ public class CombatSystem : MonoBehaviour
 
         foreach (Character charactersToSpawn in debugEnemies)
         {
-            //Instantiate
+            //Instantiate enemies
             Character spawnedCharacter = Instantiate(charactersToSpawn);
             spawnedCharacter.transform.SetParent(enemyCharacterParent);
 
             spawnedCharacter.myGrid = hexGrid;
 
-            //Add
+            //Add character to grid
             hexGrid.AddUnit(spawnedCharacter, hexGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.AnyEnemy), false);
         }
     }
@@ -45,9 +62,19 @@ public class CombatSystem : MonoBehaviour
     {
         hexGrid.Load(managementMap, false);
 
-        foreach (var item in playerShip.crew)
+        foreach (var item in humanPlayer.Crew)
         {
-            hexGrid.AddUnit(item, hexGrid.GetCell(item.SavedShipLocation.coordinates), true);
+            //Add move characters back to their saved location
+            item.Location = hexGrid.GetCell(item.SavedShipLocation.coordinates);
+            item.SavedShipLocation = item.Location;
         }
+        ChangeView(false);
+    }
+
+    private void ChangeView(bool showCombat)
+    {
+        combatCanvas.SetActive(showCombat);
+        combatView.SetActive(showCombat);
+        mapView.SetActive(!showCombat);
     }
 }

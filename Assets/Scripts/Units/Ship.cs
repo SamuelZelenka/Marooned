@@ -2,11 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class Ship : HexUnit
 {
-    public List<Character> crew = new List<Character>();
-
     int hull = 25, maxHull = 25;
     public int Hull
     {

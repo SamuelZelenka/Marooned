@@ -23,13 +23,13 @@ public class SessionSetup : MonoBehaviour
     [Header("AI setup")]
     public GameObject aiPrefab;
     public Ship aiMerchantShip;
-    public int numberOfMerchants = 5;
+    public int numberOfMerchantShips = 5;
+
+    public delegate void PlayerSetup(Player player);
+    public static PlayerSetup OnHumanPlayerCreated;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        ConfirmSetup();
-    }
+    void Start() => ConfirmSetup();
 
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
@@ -42,36 +42,36 @@ public class SessionSetup : MonoBehaviour
 
         CreateHumanPlayer();
 
-        for (int i = 0; i < numberOfMerchants; i++)
+        for (int i = 0; i < numberOfMerchantShips; i++)
         {
             CreateMerchantPlayer();
         }
 
-        TurnSystem.instance.DoFirstTurn();
+        MapTurnSystem.instance.DoFirstTurn();
     }
 
     //Creates a player from a prefab and spawns a ship and adds it to the controller
     private void CreateHumanPlayer()
     {
-        Ship ship = Instantiate(playerStarterShip);
-        ship.transform.SetParent(shipTransform);
+        Ship newShip = Instantiate(playerStarterShip);
+        newShip.transform.SetParent(shipTransform);
 
-        terrainGrid.AddUnit(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddUnit(newShip, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
-        playerCrewSimulation.ship = ship;
-        combatSystem.playerShip = ship;
         combatSystem.managementMap = playerStartingGridMap;
 
-        Player newPlayer = new Player(ship, true, playerCrewSimulation);
-        TurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
+        Player newPlayer = new Player(newShip, true, playerCrewSimulation);
+        MapTurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
 
         for (int i = 0; i < numberOfStartingCharacters; i++)
         {
             Character character = Instantiate(startingCharacter);
             character.transform.SetParent(playerCrewParent);
-            ship.crew.Add(character);
+            newPlayer.Crew.Add(character);
             shipGrid.AddUnit(character, shipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);
         }
+
+        OnHumanPlayerCreated?.Invoke(newPlayer);
     }
 
     //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller
@@ -80,12 +80,12 @@ public class SessionSetup : MonoBehaviour
         Transform aiTransform = Instantiate(aiPrefab).transform;
         aiTransform.SetParent(shipTransform);
 
-        Ship ship = Instantiate(aiMerchantShip);
-        ship.transform.SetParent(aiTransform);
+        Ship newShip = Instantiate(aiMerchantShip);
+        newShip.transform.SetParent(aiTransform);
 
-        terrainGrid.AddUnit(ship, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddUnit(newShip, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
-        Player newMerchantPlayer = new Player(ship, false);
-        TurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
+        Player newMerchantPlayer = new Player(newShip, false);
+        MapTurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
     }
 }
