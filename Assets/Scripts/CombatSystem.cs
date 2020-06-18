@@ -12,6 +12,7 @@ public class CombatSystem : MonoBehaviour
     public GameObject combatCanvas;
     public GameObject mapView;
     public GameObject combatView;
+    public CombatTurnSystem turnSystem;
 
     Player humanPlayer;
     Ship playerShip;
@@ -34,7 +35,6 @@ public class CombatSystem : MonoBehaviour
     }
     #endregion
 
-
     public void StartCombat()
     {
         ChangeView(true);
@@ -44,7 +44,12 @@ public class CombatSystem : MonoBehaviour
     private void SetUpCombat(int size)
     {
         hexGrid.Load(battleMaps[size], false);
+        List<Character> allCharacters = new List<Character>();
 
+        //Player characters
+        allCharacters.AddRange(humanPlayer.Crew);
+
+        //Enemy characters
         foreach (Character charactersToSpawn in debugEnemies)
         {
             //Instantiate enemies
@@ -55,7 +60,13 @@ public class CombatSystem : MonoBehaviour
 
             //Add character to grid
             hexGrid.AddUnit(spawnedCharacter, hexGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.AnyEnemy), false);
+
+            //Add character to list of all characters involved in combat
+            allCharacters.Add(spawnedCharacter);
         }
+
+        turnSystem.SetupNewCombat(allCharacters);
+        turnSystem.StartCombat();
     }
 
     public void EndCombat()

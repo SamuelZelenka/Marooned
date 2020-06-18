@@ -19,21 +19,21 @@ public class MapTurnSystem : MonoBehaviour
     }
     #endregion
 
-    List<Player> mapTurnOrder = new List<Player>();
-    int activeMapPlayerIndex = 0;
+    List<Player> turnOrder = new List<Player>();
+    int activeIndex = 0;
      
-    public void AddPlayerToTurnOrder(Player player) => mapTurnOrder.Add(player);
+    public void AddPlayerToTurnOrder(Player player) => turnOrder.Add(player);
 
-    public void DoFirstTurn() => DoTurn(mapTurnOrder[0]);
+    public void DoFirstTurn() => DoTurn(turnOrder[0]);
 
     public void EndTurn()
     {
-        activeMapPlayerIndex++;
-        if (activeMapPlayerIndex >= mapTurnOrder.Count)
+        activeIndex++;
+        if (activeIndex >= turnOrder.Count)
         {
-            activeMapPlayerIndex = 0;
+            activeIndex = 0;
         }
-        DoTurn(mapTurnOrder[activeMapPlayerIndex]);
+        DoTurn(turnOrder[activeIndex]);
     }
 
     private void DoTurn(Player activePlayer)

@@ -88,6 +88,12 @@ public class Character : HexUnit
 
     public override IEnumerator PerformAutomaticTurn()
     {
-        throw new System.NotImplementedException();
+        //Do turn
+        CombatTurnSystem.OnTurnBegining?.Invoke(this);
+
+
+        //End turn
+        CombatTurnSystem.OnTurnEnding?.Invoke(this);
+        yield return null;
     }
 }
