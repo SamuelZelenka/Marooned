@@ -92,7 +92,11 @@ public class CombatTurnSystem : MonoBehaviour
         activeCharacter = turnOrder.Dequeue();
         Debug.Log("Starting turn for " + activeCharacter.characterData.characterName);
 
-        StartCoroutine(activeCharacter.StartNewTurn());
+        activeCharacter.StartNewTurn();
+        if (!activeCharacter.playerControlled)
+        {
+            StartCoroutine(activeCharacter.PerformAutomaticTurn());
+        }
     }
 
 

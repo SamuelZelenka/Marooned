@@ -86,18 +86,9 @@ public class Character : HexUnit
         return true;
     }
 
-    public override IEnumerator StartNewTurn()
+    public override void StartNewTurn()
     {
         remainingMovementPoints = defaultMovementPoints;
-
-        if (playerControlled)
-        {
-            
-        }
-        else
-        {
-            yield return PerformAutomaticTurn();
-        }
     }
 
     HexCell target;
@@ -124,22 +115,22 @@ public class Character : HexUnit
 
     IEnumerator MoveToTarget()
     {
-        pathfinding.FindPath(Location, target, this);
+        Pathfinding.FindPath(Location, target, this, playerControlled);
         int tries = 0;
-        while (!pathfinding.HasPath && tries < 100) //Target unreachable
+        while (!Pathfinding.HasPath && tries < 100) //Target unreachable
         {
             HexCell adjacentToTarget = target.GetNeighbor(HexDirectionExtension.ReturnRandomDirection());
             if (adjacentToTarget)
             {
-                pathfinding.FindPath(Location, adjacentToTarget, this);
+                Pathfinding.FindPath(Location, adjacentToTarget, this, playerControlled);
             }
             tries++;
         }
-        if (pathfinding.HasPath)
+        if (Pathfinding.HasPath)
         {
-            yield return Travel(pathfinding.GetReachablePath(this, out int cost));
+            yield return Travel(Pathfinding.GetReachablePath(this, out int cost));
             remainingMovementPoints -= cost;
-            pathfinding.ClearPath();
+            Pathfinding.ClearPath();
         }
         if (Location == target)
         {

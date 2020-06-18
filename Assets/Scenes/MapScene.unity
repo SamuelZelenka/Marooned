@@ -1618,8 +1618,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 319792083}
-        m_MethodName: EndTurn
+      - m_Target: {fileID: 926876170}
+        m_MethodName: EndActiveCharacterTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2396,7 +2396,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2019508797
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -2454,6 +2454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 926876169}
   - component: {fileID: 926876168}
+  - component: {fileID: 926876170}
   m_Layer: 0
   m_Name: Systems and Managers
   m_TagString: Untagged
@@ -2479,6 +2480,7 @@ MonoBehaviour:
   combatCanvas: {fileID: 804279535}
   mapView: {fileID: 1908089044}
   combatView: {fileID: 631791803}
+  turnSystem: {fileID: 926876170}
   managementMap: {fileID: 0}
   battleMaps:
   - {fileID: 11400000, guid: a28ec6a1b633f134fbb9c6803da9a656, type: 2}
@@ -2498,6 +2500,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &926876170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926876167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4d0a2a46c1dfa4c89f2cd70eb477cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1025709651
 GameObject:
   m_ObjectHideFlags: 0
@@ -5462,7 +5476,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 834985033
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}

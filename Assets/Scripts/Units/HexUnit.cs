@@ -18,7 +18,6 @@ public abstract class HexUnit : MonoBehaviour
     //public int playerIndex;
     public bool playerControlled;
     public HexGrid myGrid;
-    public Pathfinding pathfinding;
 
     public int currentVisionRange, defaultVisionRange;
 
@@ -72,7 +71,7 @@ public abstract class HexUnit : MonoBehaviour
 
     public abstract bool CanMoveTo(HexCell cell);
 
-    public abstract IEnumerator StartNewTurn();
+    public abstract void StartNewTurn();
 
     public abstract IEnumerator PerformAutomaticTurn();
 
@@ -87,42 +86,20 @@ public abstract class HexUnit : MonoBehaviour
         float zPos = transform.localPosition.z;
         HexCell latestCell = pathToTravel[0];
 
-            Vector3 a, b, c = pathToTravel[0].Position;
-            transform.localPosition = c;
+        Vector3 a, b, c = pathToTravel[0].Position;
+        transform.localPosition = c;
 
 
-            float t = Time.deltaTime * travelSpeed;
-            for (int i = 1; i < pathToTravel.Count; i++)
-            {
-                a = c;
-                b = pathToTravel[i - 1].Position;
-                c = (b + pathToTravel[i].Position) * 0.5f;
-
-                //Rotation
-                latestCell = pathToTravel[i - 1];
-                Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[i]);
-
-                for (; t < 1f; t += Time.deltaTime * travelSpeed)
-                {
-                    //Move
-                    Vector3 newPos = Bezier.GetPoint(a, b, c, t);
-                    newPos.z = zPos;
-                    transform.localPosition = newPos;
-
-                    yield return null;
-                }
-                Location = pathToTravel[i - 1];
-                t -= 1f;
-            }
-
-            //Last point
+        float t = Time.deltaTime * travelSpeed;
+        for (int i = 1; i < pathToTravel.Count; i++)
+        {
             a = c;
-            b = pathToTravel[pathToTravel.Count - 1].Position;
-            c = b;
+            b = pathToTravel[i - 1].Position;
+            c = (b + pathToTravel[i].Position) * 0.5f;
 
             //Rotation
-            latestCell = pathToTravel[pathToTravel.Count - 2];
-            Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[pathToTravel.Count - 1]);
+            latestCell = pathToTravel[i - 1];
+            Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[i]);
 
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
@@ -133,6 +110,28 @@ public abstract class HexUnit : MonoBehaviour
 
                 yield return null;
             }
+            Location = pathToTravel[i - 1];
+            t -= 1f;
+        }
+
+        //Last point
+        a = c;
+        b = pathToTravel[pathToTravel.Count - 1].Position;
+        c = b;
+
+        //Rotation
+        latestCell = pathToTravel[pathToTravel.Count - 2];
+        Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[pathToTravel.Count - 1]);
+
+        for (; t < 1f; t += Time.deltaTime * travelSpeed)
+        {
+            //Move
+            Vector3 newPos = Bezier.GetPoint(a, b, c, t);
+            newPos.z = zPos;
+            transform.localPosition = newPos;
+
+            yield return null;
+        }
         Location = pathToTravel[pathToTravel.Count - 1];
         transform.localPosition = location.Position;
         pathToTravel = null; //Clear the list

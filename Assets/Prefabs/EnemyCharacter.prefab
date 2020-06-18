@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 435603174573623446}
   - component: {fileID: 435603174573623445}
   - component: {fileID: 435603174573623444}
-  - component: {fileID: 435603174573623447}
   m_Layer: 0
   m_Name: EnemyCharacter
   m_TagString: Untagged
@@ -101,20 +100,11 @@ MonoBehaviour:
   landMovementCost: 1
   playerControlled: 0
   myGrid: {fileID: 0}
-  pathfinding: {fileID: 435603174573623447}
+  pathfinding: {fileID: 0}
   currentVisionRange: 0
   defaultVisionRange: 0
+  characterData:
+    characterName: name
+    portrait: {fileID: 0}
+    inGameSprite: {fileID: 0}
   isStunned: 0
---- !u!114 &435603174573623447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435603174573623449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba3aed3a20a280144b85253babb8ccef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayPath: 0

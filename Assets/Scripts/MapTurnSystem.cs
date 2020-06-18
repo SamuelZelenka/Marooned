@@ -41,12 +41,7 @@ public class MapTurnSystem : MonoBehaviour
         Debug.Log("Starting new turn");
         activePlayer.StartNewTurn();
 
-        if (activePlayer.IsHuman)
-        {
-            Debug.Log("Human player turn");
-            return;
-        }
-        else
+        if (!activePlayer.IsHuman)
         {
             StartCoroutine(activePlayer.PerformAutomaticTurn());
         }

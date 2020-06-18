@@ -1,31 +1,42 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinding : MonoBehaviour
+public static class Pathfinding
 {
     static int searchFrontierPhase = 0;
-    HexCellPriorityQueue searchFrontier = null;
+    static HexCellPriorityQueue searchFrontier = null;
 
-    public bool displayPath = false;
 
-    HexCell currentPathFrom, currentPathTo;
-    public bool HasPath
+    static HexUnit searcherUnit;
+    static HexCell currentPathFrom, currentPathTo;
+    public static bool HasPath
     {
         set;
         get;
     }
 
-    public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
+    public static void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit, bool displayPath)
     {
         ClearPath();
+        //New unit == Clear old pathfinding
+        if (searcherUnit != unit)
+        {
+            unit.myGrid.ClearSearchHeuristics();
+            searchFrontierPhase = 0;
+            searchFrontier = null;
+        }
+        searcherUnit = unit;
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         HasPath = Search(fromCell, toCell, unit);
-        ShowPath(unit.defaultMovementPoints, unit.remainingMovementPoints);
+        if (displayPath)
+        {
+            ShowPath(unit.defaultMovementPoints, unit.remainingMovementPoints);
+        }
     }
 
     //Pathfinding search
-    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
+    static bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
         searchFrontierPhase += 2;
         Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
@@ -108,7 +119,7 @@ public class Pathfinding : MonoBehaviour
         return false;
     }
 
-    public List<HexCell> GetWholePath()
+    public static List<HexCell> GetWholePath()
     {
         if (!HasPath)
         {
@@ -124,7 +135,7 @@ public class Pathfinding : MonoBehaviour
         return path;
     }
 
-    public List<HexCell> GetReachablePath(HexUnit unit, out int cost)
+    public static List<HexCell> GetReachablePath(HexUnit unit, out int cost)
     {
         if (!HasPath)
         {
@@ -136,7 +147,7 @@ public class Pathfinding : MonoBehaviour
         {
             if (c.MovementCost <= unit.remainingMovementPoints)
             {
-            path.Add(c);
+                path.Add(c);
             }
         }
         path.Add(currentPathFrom);
@@ -145,9 +156,9 @@ public class Pathfinding : MonoBehaviour
         return path;
     }
 
-    void ShowPath(int maxMovement, int remainingMovement)
+    static void ShowPath(int maxMovement, int remainingMovement)
     {
-        if (HasPath && displayPath)
+        if (HasPath)
         {
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
@@ -163,12 +174,12 @@ public class Pathfinding : MonoBehaviour
                 current.SetHighlightStatus(true, Color.white);
                 current = current.PathFrom;
             }
-        currentPathFrom.SetHighlightStatus(true, Color.blue);
-        currentPathTo.SetHighlightStatus(true, Color.red);
+            currentPathFrom.SetHighlightStatus(true, Color.blue);
+            currentPathTo.SetHighlightStatus(true, Color.red);
         }
     }
 
-    public void ClearPath()
+    public static void ClearPath()
     {
         if (HasPath)
         {

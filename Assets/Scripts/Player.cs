@@ -69,7 +69,7 @@ public class Player
 
     private void StartMapMovement()
     {
-
+        
     }
 
     public IEnumerator PerformAutomaticTurn()

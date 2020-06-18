@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 435603174573623446}
   - component: {fileID: 435603174573623445}
   - component: {fileID: 435603174573623444}
-  - component: {fileID: 435603174573623447}
   m_Layer: 0
-  m_Name: DebugCharacter
+  m_Name: PlayerCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +69,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1230583947
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -1590161608256548545, guid: e8983668ed68f5f41b4772feb50b6d84,
     type: 3}
@@ -100,28 +99,13 @@ MonoBehaviour:
   defaultMovementPoints: 5
   oceanMovementCost: 1
   landMovementCost: 1
-  playerIndex: 0
   playerControlled: 1
   myGrid: {fileID: 0}
-  pathfinding: {fileID: 435603174573623447}
+  pathfinding: {fileID: 0}
   currentVisionRange: 0
   defaultVisionRange: 0
-  characterName: Skelly
+  characterData:
+    characterName: name
+    portrait: {fileID: 0}
+    inGameSprite: {fileID: 0}
   isStunned: 0
-  resources:
-    vitality: 0
-  portrait: {fileID: -9150419348074050561, guid: e8983668ed68f5f41b4772feb50b6d84,
-    type: 3}
---- !u!114 &435603174573623447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435603174573623449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba3aed3a20a280144b85253babb8ccef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayPath: 1

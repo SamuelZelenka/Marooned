@@ -97,6 +97,15 @@ public class HexCell : MonoBehaviour
     #endregion
 
     #region Pathfinding
+    public void ClearPathfinding()
+    {
+        SearchHeuristic = 0;
+        NextWithSamePriority = null;
+        SearchPhase = 0;
+        MovementCost = 0;
+        PathFrom = null;
+    }
+
     public int SearchHeuristic { get; set; }
     public int SearchPriority
     {
@@ -108,8 +117,8 @@ public class HexCell : MonoBehaviour
     public HexCell NextWithSamePriority { get; set; }
     public int SearchPhase { get; set; } // 0 = not been reached | 1 = currently in searchfrontier | 2 = has been reached and taken out from frontier
 
-    public int MovementCostPenalty { get; set; }
-    public int MovementCost { get; set; }
+    public int MovementCostPenalty { get; set; } //The hex individual cost
+    public int MovementCost { get; set; } //The total cost to move here by a single unit now searching
     public HexCell PathFrom { get; set; }
     #endregion
 

@@ -85,6 +85,15 @@ public class HexGrid : MonoBehaviour
             foreach (var item in cells)
             {
                 item.CalculateBitmask();
+
+                if (item.IsLand)
+                {
+                    //Spawn harbors
+                    if (HexMetrics.SampleHashGrid(item.Position).a < HexMetrics.harborChance)
+                    {
+                        AddHarbor(item);
+                    }
+                }
             }
         }
 
@@ -174,12 +183,6 @@ public class HexGrid : MonoBehaviour
         if (cellBitmask >= 0 && cellBitmask <= 62) //Edge of islands
         {
             tile = edgeTiles[cell.Bitmask];
-
-            //Spawn harbors
-            if (HexMetrics.SampleHashGrid(cell.Position).a < HexMetrics.harborChance)
-            {
-                AddHarbor(cell, tilemapPosition);
-            }
         }
         else if (cellBitmask < 0) //Ocean tile
         {
@@ -193,8 +196,10 @@ public class HexGrid : MonoBehaviour
         terrainTilemap.SetTile(tilemapPosition, tile);
     }
 
-    public void AddHarbor(HexCell cell, Vector3Int tilemapPosition)
+    public void AddHarbor(HexCell cell)
     {
+        Vector3Int tilemapPosition = HexCoordinates.CoordinatesToTilemapCoordinates(cell.coordinates);
+
         cell.HasHarbor = true;
         Harbors.Add(cell);
 
@@ -241,7 +246,32 @@ public class HexGrid : MonoBehaviour
         {
             return null;
         }
-       
+    }
+
+    public HexCell GetRandomFreeCell()
+    {
+        HexCell cell = null;
+
+        List<HexCell> cellsToTest = new List<HexCell>();
+        cellsToTest.AddRange(cells);
+
+        bool allowedCell = false;
+        while (!allowedCell && cellsToTest.Count > 0)
+        {
+            cell = Utility.ReturnRandom(cellsToTest);
+            cellsToTest.Remove(cell);
+
+            if (cell != null && cell.Unit == null && cell.Traversable)
+            {
+                allowedCell = true;
+            }
+        }
+
+        if (!allowedCell)
+        {
+            Debug.LogWarning("Could not find a free cell of the requested spawntype");
+        }
+        return cell;
     }
 
     public HexCell GetRandomFreeHarbor()
@@ -282,6 +312,7 @@ public class HexGrid : MonoBehaviour
         return cell;
     }
 
+    #region Units
     public void AddUnit(HexUnit unit, HexCell location, HexDirection orientation, bool playerControlled)
     {
         Units.Add(unit);
@@ -320,7 +351,7 @@ public class HexGrid : MonoBehaviour
         unit.Location.Unit = null;
         unit.Die();
     }
-
+    #endregion
 
     #region UI and Grid
     public void ShowUI(bool visible)
@@ -373,6 +404,14 @@ public class HexGrid : MonoBehaviour
             {
                 GameObject.Destroy(cells[i].gameObject);
             }
+        }
+    }
+
+    public void ClearSearchHeuristics()
+    {
+        foreach (var item in cells)
+        {
+            item.ClearPathfinding();
         }
     }
 

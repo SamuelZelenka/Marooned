@@ -83,7 +83,7 @@ public class SessionSetup : MonoBehaviour
         Ship newShip = Instantiate(aiMerchantShip);
         newShip.transform.SetParent(aiTransform);
 
-        terrainGrid.AddUnit(newShip, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddUnit(newShip, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), false);
 
         Player newMerchantPlayer = new Player(newShip, false);
         MapTurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);

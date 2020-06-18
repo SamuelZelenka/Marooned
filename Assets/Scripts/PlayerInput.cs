@@ -63,7 +63,7 @@ public class PlayerInput : MonoBehaviour
 
             if (selectedUnit)
             {
-                selectedUnit.pathfinding.ClearPath();
+                Pathfinding.ClearPath();
                 Debug.Log("Selected unit");
             }
         }
@@ -75,25 +75,25 @@ public class PlayerInput : MonoBehaviour
         {
             if (currentCell && selectedUnit.CanMoveTo(currentCell))
             {
-                selectedUnit.pathfinding.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+                Pathfinding.FindPath(selectedUnit.Location, currentCell, selectedUnit, true);
             }
             else
             {
-                selectedUnit.pathfinding.ClearPath();
+                Pathfinding.ClearPath();
             }
         }
     }
 
     void DoMove()
     {
-        if (selectedUnit.pathfinding.HasPath)
+        if (Pathfinding.HasPath)
         {
-            List<HexCell> reachablePathThisTurn = selectedUnit.pathfinding.GetReachablePath(selectedUnit, out int cost);
+            List<HexCell> reachablePathThisTurn = Pathfinding.GetReachablePath(selectedUnit, out int cost);
             if (reachablePathThisTurn != null && reachablePathThisTurn.Count > 1) //An actual path, longer than the included start hex where the unit stands now
             {
                 StartCoroutine(selectedUnit.Travel(reachablePathThisTurn));
                 selectedUnit.remainingMovementPoints -= cost;
-                selectedUnit.pathfinding.ClearPath();
+                Pathfinding.ClearPath();
             }
         }
     }
