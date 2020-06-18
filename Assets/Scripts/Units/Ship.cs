@@ -39,6 +39,18 @@ public class Ship : HexUnit
         return true;
     }
 
+    public override IEnumerator StartNewTurn()
+    {
+        if (playerControlled)
+        {
+
+        }
+        else
+        {
+            remainingMovementPoints = defaultMovementPoints;
+            yield return PerformAutomaticTurn();
+        }
+    }
 
     HexCell target;
     public override IEnumerator PerformAutomaticTurn()

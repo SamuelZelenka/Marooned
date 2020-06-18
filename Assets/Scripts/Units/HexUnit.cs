@@ -72,6 +72,8 @@ public abstract class HexUnit : MonoBehaviour
 
     public abstract bool CanMoveTo(HexCell cell);
 
+    public abstract IEnumerator StartNewTurn();
+
     public abstract IEnumerator PerformAutomaticTurn();
 
     public IEnumerator Travel(List<HexCell> path)

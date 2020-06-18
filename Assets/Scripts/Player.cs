@@ -42,18 +42,11 @@ public class Player
 
     public void StartNewTurn()
     {
-        foreach (var item in Crew)
-        {
-            item.remainingMovementPoints = item.defaultMovementPoints;
-        }
+        Ship.StartNewTurn();
 
         if (IsHuman)
         {
             OpenJobPanel();
-        }
-        else
-        {
-            Ship.remainingMovementPoints = Ship.defaultMovementPoints;
         }
     }
 

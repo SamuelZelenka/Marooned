@@ -91,15 +91,8 @@ public class CombatTurnSystem : MonoBehaviour
     {
         activeCharacter = turnOrder.Dequeue();
         Debug.Log("Starting turn for " + activeCharacter.characterData.characterName);
-        if (activeCharacter.playerControlled)
-        {
-            Debug.Log("Player controlled character turn");
-        }
-        else
-        {
-            Debug.Log("AI controlled character turn");
-            StartCoroutine(activeCharacter.PerformAutomaticTurn());
-        }
+
+        StartCoroutine(activeCharacter.StartNewTurn());
     }
 
 
