@@ -23,6 +23,37 @@ public class CombatSystem : MonoBehaviour
     public BattleMap[] battleMaps;
     public Character[] debugEnemies;
 
+    public Character ActiveCharacter
+    {
+        private set;
+        get;
+    }
+
+    private Ability selectedAbility;
+    List<HexCell> validTargetHexes;
+    private List<HexCell> ValidTargetHexes
+    {
+        get => validTargetHexes;
+        set
+        {
+            if (validTargetHexes != null)
+            {
+                foreach (var item in validTargetHexes)
+                {
+                    item.ShowTargetingOutline(false, Color.white);
+                }
+            }
+            validTargetHexes = value;
+            if (validTargetHexes != null)
+            {
+                foreach (var item in validTargetHexes)
+                {
+                    item.ShowTargetingOutline(true, Color.blue);
+                }
+            }
+        }
+    }
+
     #region Setup References
     private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;
 
@@ -34,6 +65,30 @@ public class CombatSystem : MonoBehaviour
         SessionSetup.OnHumanPlayerCreated -= DoSetup;
     }
     #endregion
+
+    private void OnEnable()
+    {
+        CombatTurnSystem.OnTurnBegining += SetActiveCharacter;
+    }
+
+    private void OnDisable()
+    {
+        CombatTurnSystem.OnTurnBegining -= SetActiveCharacter;
+    }
+
+    private void SetActiveCharacter(Character activeCharacter)
+    {
+        Debug.Log(activeCharacter.name);
+        selectedAbility = null;
+        ValidTargetHexes = new List<HexCell>();
+        ActiveCharacter = activeCharacter;
+    }
+
+    public void SelectAbility(int selection)
+    {
+        selectedAbility = ActiveCharacter.abilityCollection.SelectAbility(selection, out List<HexCell> targetHexes);
+        ValidTargetHexes = targetHexes;
+    }
 
     public void StartCombat()
     {

@@ -99,7 +99,7 @@ public class HexMapEditor : MonoBehaviour
     {
         foreach (var item in selectedHexes)
         {
-            item.SetHighlightStatus(false, Color.white);
+            item.ShowPathfindingOutline(false, Color.white);
         }
         selectedHexes.Clear();
         UpdateUI();
@@ -108,7 +108,7 @@ public class HexMapEditor : MonoBehaviour
     private void AddSelectionHex(HexCell cellToAdd, Color highlightColor)
     {
         selectedHexes.Add(cellToAdd);
-        cellToAdd.SetHighlightStatus(true, highlightColor);
+        cellToAdd.ShowPathfindingOutline(true, highlightColor);
     }
     #endregion
 

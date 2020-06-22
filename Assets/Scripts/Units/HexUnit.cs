@@ -21,7 +21,6 @@ public abstract class HexUnit : MonoBehaviour
 
     public int currentVisionRange, defaultVisionRange;
 
-
     public bool IsMoving
     {
         get => pathToTravel != null && pathToTravel.Count > 0;

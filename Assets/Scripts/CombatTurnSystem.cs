@@ -89,8 +89,16 @@ public class CombatTurnSystem : MonoBehaviour
     //Starting the turn for the character in the first position in the queue
     private void StartNextTurn()
     {
+        //De-select last active character
+        if (activeCharacter)
+        {
+            activeCharacter.ShowCharacterArrow(false);
+        }
         activeCharacter = turnOrder.Dequeue();
         Debug.Log("Starting turn for " + activeCharacter.characterData.characterName);
+
+        OnTurnBegining?.Invoke(activeCharacter);
+        activeCharacter.ShowCharacterArrow(true);
 
         activeCharacter.StartNewTurn();
         if (!activeCharacter.playerControlled)

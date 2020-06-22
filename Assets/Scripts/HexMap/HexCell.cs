@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
+    public enum OutLineType { Game, Pathfinding, Target, Editor}
+
     public Text label;
-    public SpriteRenderer gameGrid;
-    public SpriteRenderer editorGrid;
-    public SpriteRenderer highlight;
+    public SpriteRenderer[] outlineVisuals = new SpriteRenderer[4];
 
     public HexCoordinates coordinates;
     public HexGrid myGrid;
@@ -19,20 +19,12 @@ public class HexCell : MonoBehaviour
         set
         {
             traversable = value;
-            ChangeEditGrid(value);
+            ChangeEditOutlineColor(value);
         }
     }
 
-    public enum SpawnType { Forbidden, Player, AnyEnemy, MeleeEnemy, SupportEnemy, RangedEnemy}
-    SpawnType typeOfSpawnPos;
-    public SpawnType TypeOfSpawnPos
-    {
-        get => typeOfSpawnPos;
-        set
-        {
-            typeOfSpawnPos = value;
-        }
-    }
+    public enum SpawnType { Forbidden, Player, AnyEnemy, MeleeEnemy, SupportEnemy, RangedEnemy }
+    public SpawnType TypeOfSpawnPos { get; set; }
 
     public bool showNeighborGizmos = true;
 
@@ -130,46 +122,63 @@ public class HexCell : MonoBehaviour
         }
     }
 
-
-
     #region Grid and Labels
-    public void SetLabel(string text)
+    public void SetLabel(string text) => label.text = text;
+    public void ShowUI(bool status) => label.enabled = status;
+
+    public void ShowOutline(bool status, OutLineType outlineType)
     {
-        label.text = text;
+        switch (outlineType)
+        {
+            case OutLineType.Game:
+                ShowGameOutline(status);
+                break;
+            case OutLineType.Pathfinding:
+                ShowPathfindingOutline(status, Color.white);
+                break;
+            case OutLineType.Target:
+                ShowTargetingOutline(status, Color.white);
+                break;
+            case OutLineType.Editor:
+                ShowEditOutline(status);
+                break;
+        }
     }
 
-    public void ShowUI(bool status)
+    public void ShowGameOutline(bool status)
     {
-        label.enabled = status;
+        if (Traversable)
+        {
+            outlineVisuals[(int)OutLineType.Game].enabled = status;
+        }
+        else
+        {
+            outlineVisuals[(int)OutLineType.Game].enabled = false;
+        }
     }
 
-    public void ShowGameGrid(bool status)
+    public void ShowPathfindingOutline(bool status, Color color)
     {
-        gameGrid.enabled = status;
+        outlineVisuals[(int)OutLineType.Pathfinding].enabled = status;
+        outlineVisuals[(int)OutLineType.Pathfinding].color = color;
     }
 
-    public void ChangeEditGrid(bool traversable)
+    public void ShowTargetingOutline(bool status, Color color)
     {
-        editorGrid.color = traversable ? Color.green : Color.red;
+        outlineVisuals[(int)OutLineType.Target].enabled = status;
+        outlineVisuals[(int)OutLineType.Target].color = color;
     }
 
-    public void ShowEditGrid(bool status)
-    {
-        editorGrid.enabled = status;
-    }
+    public void ChangeEditOutlineColor(bool traversable) => outlineVisuals[(int)OutLineType.Editor].color = traversable? Color.green : Color.red;
 
-    public void SetHighlightStatus(bool status, Color color)
-    {
-        highlight.enabled = status;
-        highlight.color = color;
-    }
+    public void ShowEditOutline(bool status) => outlineVisuals[(int)OutLineType.Editor].enabled = status;
     #endregion
 
     #region Save and Load
     public void Load(HexCellData data, HexGrid grid)
     {
         Traversable = data.traversable;
-        typeOfSpawnPos = data.spawnType;
+        TypeOfSpawnPos = data.spawnType;
         IsLand = data.isLand;
         Bitmask = data.bitmask;
 

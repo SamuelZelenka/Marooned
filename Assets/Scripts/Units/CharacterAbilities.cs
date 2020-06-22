@@ -7,11 +7,18 @@ public class CharacterAbilities
         {"debug", new DebugAdjacentAbility() } 
     };
 
-    Ability selectedAbility = null;
-    public List<Ability> abilities = null;
-    public void SelectAbility(int abilityIndex, Character user)
+    public CharacterAbilities(Character owner)
     {
-        selectedAbility = abilities[abilityIndex];
-        List<HexCell> validCells = selectedAbility.targetType.GetValidCells(user.myGrid.GetCell());
+        this.owner = owner;
+        abilities = new List<Ability>();
+    }
+
+    Character owner;
+    List<Ability> abilities;
+
+    public Ability SelectAbility(int abilityIndex, out List<HexCell> possibleTargets)
+    {
+        possibleTargets = abilities[abilityIndex].targetType.GetValidCells(owner.myGrid.GetCell());
+        return abilities[abilityIndex];
     }
 }

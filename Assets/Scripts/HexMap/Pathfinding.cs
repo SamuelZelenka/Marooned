@@ -171,11 +171,11 @@ public static class Pathfinding
                 }
                 //current.SetLabel(turn.ToString());
                 current.SetLabel(current.MovementCost.ToString());
-                current.SetHighlightStatus(true, Color.white);
+                current.ShowPathfindingOutline(true, Color.white);
                 current = current.PathFrom;
             }
-            currentPathFrom.SetHighlightStatus(true, Color.blue);
-            currentPathTo.SetHighlightStatus(true, Color.red);
+            currentPathFrom.ShowPathfindingOutline(true, Color.blue);
+            currentPathTo.ShowPathfindingOutline(true, Color.red);
         }
     }
 
@@ -187,16 +187,16 @@ public static class Pathfinding
             while (current != currentPathFrom)
             {
                 current.SetLabel(null);
-                current.SetHighlightStatus(false, Color.white);
+                current.ShowPathfindingOutline(false, Color.white);
                 current = current.PathFrom;
             }
-            current.SetHighlightStatus(false, Color.white);
+            current.ShowPathfindingOutline(false, Color.white);
             HasPath = false;
         }
         else if (currentPathFrom)
         {
-            currentPathFrom.SetHighlightStatus(false, Color.white);
-            currentPathTo.SetHighlightStatus(false, Color.white);
+            currentPathFrom.ShowPathfindingOutline(false, Color.white);
+            currentPathTo.ShowPathfindingOutline(false, Color.white);
         }
         currentPathFrom = currentPathTo = null;
     }

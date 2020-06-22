@@ -27,6 +27,7 @@ public class HexGrid : MonoBehaviour
 
     public List<HexCell> Harbors { get; private set; }
 
+    static bool gameGridStatus = true;
 
     private void OnEnable()
     {
@@ -35,6 +36,8 @@ public class HexGrid : MonoBehaviour
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
         }
+
+        ShowGameGrid(gameGridStatus);
     }
 
     void Awake()
@@ -65,6 +68,9 @@ public class HexGrid : MonoBehaviour
         {
             ReAddUnits(Units);
         }
+
+        ShowGameGrid(gameGridStatus);
+
         return true;
     }
 
@@ -269,21 +275,35 @@ public class HexGrid : MonoBehaviour
 
         if (!allowedCell)
         {
-            Debug.LogWarning("Could not find a free cell of the requested spawntype");
+            Debug.LogWarning("");
         }
         return cell;
     }
 
     public HexCell GetRandomFreeHarbor()
     {
-        HexCell harbor = null;
-        int tries = 0;
-        while (harbor == null || harbor.Unit != null && tries < 100)
+        HexCell cell = null;
+
+        List<HexCell> cellsToTest = new List<HexCell>();
+        cellsToTest.AddRange(Harbors);
+
+        bool allowedCell = false;
+        while (!allowedCell && cellsToTest.Count > 0)
         {
-            harbor = Utility.ReturnRandom(Harbors);
-            tries++;
+            cell = Utility.ReturnRandom(Harbors);
+            cellsToTest.Remove(cell);
+
+            if (cell != null && cell.Unit == null && cell.Traversable)
+            {
+                allowedCell = true;
+            }
         }
-        return harbor;
+
+        if (!allowedCell)
+        {
+            Debug.LogWarning("Could not find a free cell of the requested spawntype");
+        }
+        return cell;
     }
 
     public HexCell GetFreeCellForCharacterSpawn(HexCell.SpawnType spawnTypeRequest)
@@ -364,9 +384,14 @@ public class HexGrid : MonoBehaviour
 
     public void ShowGameGrid(bool status)
     {
+        if (cells == null)
+        {
+            return;
+        }
+        gameGridStatus = status;
         foreach (var item in cells)
         {
-            item.ShowGameGrid(status);
+            item.ShowGameOutline(status);
         }
     }
 
@@ -374,7 +399,7 @@ public class HexGrid : MonoBehaviour
     {
         foreach (var item in cells)
         {
-            item.ShowEditGrid(status);
+            item.ShowEditOutline(status);
         }
     }
 
@@ -432,6 +457,7 @@ public class HexGrid : MonoBehaviour
         {
             cells[i].Load(map.cells[i], this);
         }
+        ShowGameGrid(gameGridStatus);
     }
     #endregion
 }

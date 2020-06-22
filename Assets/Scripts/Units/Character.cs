@@ -6,11 +6,18 @@ public class Character : HexUnit
 {
     public CharacterData characterData = new CharacterData();
 
+    public GameObject animatedArrow;
+
     public bool isStunned;
-    public CharacterAbilities abilities;
+    public CharacterAbilities abilityCollection;
 
     public delegate void EffectHandler(Effect effect);
     public event EffectHandler OnEffectApplied;
+
+    private void Awake()
+    {
+        abilityCollection = new CharacterAbilities(this);   
+    }
 
     HexCell savedShipLocation;
     public HexCell SavedShipLocation
@@ -76,6 +83,8 @@ public class Character : HexUnit
 
     }
     //TEMP METHOD!!!!!
+
+    public void ShowCharacterArrow(bool status) => animatedArrow.SetActive(status);
 
     public override bool CanMoveTo(HexCell cell)
     {
