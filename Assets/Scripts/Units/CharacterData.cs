@@ -8,8 +8,8 @@ public class CharacterData
 {
     public string characterName = "name";
 
-    public List<Effect> activeEffects = new List<Effect>();
-    public List<Effect> removedEffects = new List<Effect>();
+    public List<TickEffect> activeEffects = new List<TickEffect>();
+    public List<TickEffect> removedEffects = new List<TickEffect>();
     public CrewSimulation.ShipJob ShipJob { get; set; } = CrewSimulation.ShipJob.None;
 
     #region Visuals

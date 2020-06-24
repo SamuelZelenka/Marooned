@@ -1,18 +1,22 @@
-﻿public class Poison : Effect
+﻿public class Poison : TickEffect
 {
     int damage;
-    public Poison(int damage)
+    public Poison(int damage, int duration)
     {
-        description = $"Reduces vitality by {damage}";
+        if (duration == 1)
+        {
+            Description = $"Reduces the target's vitality with {damage} for {duration} turn";
+        }
+        else
+        {
+            Description = $"Reduces the target's vitality with {damage} for {duration} turns";
+        }
         this.damage = damage;
+        base.duration = duration;
     }
-    public override void ApplyEffect(Character character){}
     public override void EffectTick(Character character)
     {
         character.characterData.Vitality.CurrentValue -= damage;
-    }
-    public override string GetData()
-    {
-        return "";
+        base.EffectTick(character);
     }
 }
