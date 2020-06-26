@@ -131,5 +131,4 @@ public static class CellSearch
         }
         return validCells;
     }
-
 }
