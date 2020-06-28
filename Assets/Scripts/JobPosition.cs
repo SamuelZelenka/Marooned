@@ -30,7 +30,7 @@ public class JobPosition : MonoBehaviour
     //Input from the UI-system when a character is placed on a job
     public void ClickDetected()
     {
-        Character selectedCharacter = input.GetSelectedCharacter();
+        Character selectedCharacter = input.GetActiveCharacter();
         if (selectedCharacter)
         {
             crewSimulation.SetCharacterJob(selectedCharacter, job);

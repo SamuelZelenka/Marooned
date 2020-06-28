@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class HexCell : MonoBehaviour
 {
-    public enum OutLineType { Game, Pathfinding, Target, Editor}
+    public enum OutLineType { Game, Pathfinding, Target, Editor }
 
     public Text label;
     public SpriteRenderer[] outlineVisuals = new SpriteRenderer[4];
@@ -27,6 +28,9 @@ public class HexCell : MonoBehaviour
     public SpawnType TypeOfSpawnPos { get; set; }
 
     public bool showNeighborGizmos = true;
+
+    public delegate void HexCellHandler(HexCell cell);
+    public static HexCellHandler OnHexCellHoover;
 
     #region Terrain and Features
     public bool IsLand { get; set; }
@@ -74,6 +78,46 @@ public class HexCell : MonoBehaviour
     public HexCell GetNeighbor(HexDirection direction)
     {
         return neighbors[(int)direction];
+    }
+
+    public HexCell GetNeighbor(HexDirection direction, bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded)
+    {
+        HexCell neighbor = GetNeighbor(direction);
+        if (neighbor == null)
+        {
+            return null;
+        }
+        if (traversableNeeded && !neighbor.Traversable)
+        {
+            return null;
+        }
+        if (freeNeeded && neighbor.Unit != null)
+        {
+            return null;
+        }
+        if (landNeeded && !neighbor.IsLand)
+        {
+            return null;
+        }
+        if (oceanNeeded && !neighbor.IsOcean)
+        {
+            return null;
+        }
+        return neighbor;
+    }
+
+    public List<HexCell> GetNeighbors(bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded)
+    {
+        List<HexCell> allNeighbors = new List<HexCell>();
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            HexCell neighbor = GetNeighbor(d, traversableNeeded, freeNeeded, landNeeded, oceanNeeded);
+            if (neighbor != null)
+            {
+                allNeighbors.Add(neighbor);
+            }
+        }
+        return allNeighbors;
     }
 
     public void SetNeighbor(HexDirection direction, HexCell cell)
@@ -169,10 +213,12 @@ public class HexCell : MonoBehaviour
         outlineVisuals[(int)OutLineType.Target].color = color;
     }
 
-    public void ChangeEditOutlineColor(bool traversable) => outlineVisuals[(int)OutLineType.Editor].color = traversable? Color.green : Color.red;
+    public void ChangeEditOutlineColor(bool traversable) => outlineVisuals[(int)OutLineType.Editor].color = traversable ? Color.green : Color.red;
 
     public void ShowEditOutline(bool status) => outlineVisuals[(int)OutLineType.Editor].enabled = status;
     #endregion
+
+    public void OnMouseEnter() => OnHexCellHoover?.Invoke(this);
 
     #region Save and Load
     public void Load(HexCellData data, HexGrid grid)

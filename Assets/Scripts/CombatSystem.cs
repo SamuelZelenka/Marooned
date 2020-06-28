@@ -23,6 +23,11 @@ public class CombatSystem : MonoBehaviour
     public BattleMap[] battleMaps;
     public Character[] debugEnemies;
 
+    public delegate void CombatHandler();
+    public static CombatHandler OnCombatStart;
+    public static CombatHandler OnCombatEnd;
+
+
     public Character ActiveCharacter
     {
         private set;
@@ -53,6 +58,36 @@ public class CombatSystem : MonoBehaviour
             }
         }
     }
+    List<HexCell> abilityAffectedHexes;
+    private List<HexCell> AbilityAffectedHexes
+    {
+        get => abilityAffectedHexes;
+        set
+        {
+            if (abilityAffectedHexes != null)
+            {
+                foreach (var item in abilityAffectedHexes)
+                {
+                    if (validTargetHexes.Contains(item))
+                    {
+                        item.ShowTargetingOutline(true, Color.blue);
+                    }
+                    else
+                    {
+                        item.ShowTargetingOutline(false, Color.white);
+                    }
+                }
+            }
+            abilityAffectedHexes = value;
+            if (abilityAffectedHexes != null)
+            {
+                foreach (var item in abilityAffectedHexes)
+                {
+                    item.ShowTargetingOutline(true, Color.red);
+                }
+            }
+        }
+    }
 
     #region Setup References
     private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;
@@ -69,11 +104,13 @@ public class CombatSystem : MonoBehaviour
     private void OnEnable()
     {
         CombatTurnSystem.OnTurnBegining += SetActiveCharacter;
+        HexCell.OnHexCellHoover += MouseOverHexCell;
     }
 
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= SetActiveCharacter;
+        HexCell.OnHexCellHoover -= MouseOverHexCell;
     }
 
     private void SetActiveCharacter(Character activeCharacter)
@@ -86,12 +123,38 @@ public class CombatSystem : MonoBehaviour
 
     public void SelectAbility(int selection)
     {
-        selectedAbility = ActiveCharacter.abilityCollection.SelectAbility(selection, out List<HexCell> targetHexes);
-        ValidTargetHexes = targetHexes;
+        selectedAbility = ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
+        Debug.Log("Selected ability " + selectedAbility.abilityDescription);
+        ValidTargetHexes = abilityTargetHexes;
+    }
+
+    private void MouseOverHexCell(HexCell mouseOverCell)
+    {
+        if (selectedAbility != null && ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
+        {
+            AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(ActiveCharacter.Location, mouseOverCell);
+        }
+    }
+
+    public void UseAbility(HexCell cellClickedOn)
+    {
+        MouseOverHexCell(cellClickedOn);
+        if (selectedAbility != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(cellClickedOn))
+        {
+            Debug.Log("Using ability " + selectedAbility.abilityDescription);
+            foreach (var item in AbilityAffectedHexes)
+            {
+                if (item.Unit is Character)
+                {
+                    selectedAbility.Use(item.Unit as Character);
+                }
+            }
+        }
     }
 
     public void StartCombat()
     {
+        OnCombatStart?.Invoke();
         ChangeView(true);
         SetUpCombat(0);
     }
@@ -126,6 +189,7 @@ public class CombatSystem : MonoBehaviour
 
     public void EndCombat()
     {
+        OnCombatEnd?.Invoke();
         hexGrid.Load(managementMap, false);
 
         foreach (var item in humanPlayer.Crew)

@@ -29,7 +29,7 @@ public class CrewSimulation : MonoBehaviour
     [SerializeField] int hygieneReduction = 5;
 
     public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, None }
-    JobPosition[] jobs = new JobPosition[9];
+    [SerializeField] JobPosition[] jobs = new JobPosition[9];
 
     #region Setup References
     private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;

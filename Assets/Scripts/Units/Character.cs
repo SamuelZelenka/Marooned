@@ -9,15 +9,11 @@ public class Character : HexUnit
     public GameObject animatedArrow;
 
     public bool isStunned;
-    public CharacterAbilities abilityCollection;
+    List<Ability> Abilities { get; set; } = new List<Ability>();
+    public List<int> abilityID = new List<int>();
 
     public delegate void EffectHandler(Effect effect);
     public event EffectHandler OnEffectApplied;
-
-    private void Awake()
-    {
-        abilityCollection = new CharacterAbilities(this);   
-    }
 
     HexCell savedShipLocation;
     public HexCell SavedShipLocation
@@ -34,14 +30,28 @@ public class Character : HexUnit
         }
     }
 
-    public void AddEffect(Effect effect)
+    private void Awake()
+    {
+        foreach (var item in abilityID)
+        {
+            if (Ability.abilityDictionary.TryGetValue(item, out Ability foundAbility))
+            {
+                Abilities.Add(foundAbility);
+            }
+            else
+            {
+                Debug.LogError("Ability ID " + item + " not found in dictionary");
+            }
+        }
+    }
+
+    public void AddEffect(TickEffect effect)
     {
         characterData.activeEffects.Add(effect);
-        effect.ApplyEffect(this);
         Debug.Log(characterData.activeEffects.Count);
     }
 
-    public void RemoveEffects(Effect effect)
+    public void RemoveEffects(TickEffect effect)
     {
         if (characterData.activeEffects.Contains(effect))
         {
@@ -66,23 +76,29 @@ public class Character : HexUnit
         }
     }
 
-    //TEMP METHOD!!!!!
-    public void ButtonAddEffect(string effect)
+    public Ability SelectAbility(int abilityIndex, out List<HexCell> possibleTargets)
     {
-        switch (effect)
-        {
-            case "stun":
-                AddEffect(new Stun(2));
-                break;
-            case "bleed":
-                AddEffect(new Bleed(2));
-                break;
-            default:
-                break;
-        }
-
+        possibleTargets = Abilities[abilityIndex].targetType.GetValidCells(Location);
+        return Abilities[abilityIndex];
     }
-    //TEMP METHOD!!!!!
+
+    ////TEMP METHOD!!!!!
+    //public void ButtonAddEffect(string effect)
+    //{
+    //    switch (effect)
+    //    {
+    //        case "stun":
+    //            AddEffect(new Stun(2));
+    //            break;
+    //        case "bleed":
+    //            AddEffect(new Bleed(2));
+    //            break;
+    //        default:
+    //            break;
+    //    }
+
+    //}
+    ////TEMP METHOD!!!!!
 
     public void ShowCharacterArrow(bool status) => animatedArrow.SetActive(status);
 

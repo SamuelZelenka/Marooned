@@ -7,102 +7,149 @@ public class PlayerInput : MonoBehaviour
     Camera playerCamera;
     public HexGrid terrainGrid;
     public HexGrid shipGrid;
+    public CombatSystem combatSystem;
 
-    HexCell currentCell;
+    bool combatModeActive = false;
+    bool updatePathfinding = true;
+
+    HexCell selectedCell;
+    HexCell SelectedCell
+    {
+        get => selectedCell;
+        set
+        {
+            selectedCell = value;
+            if (combatModeActive)
+            {
+                combatSystem.UseAbility(value);
+            }
+        }
+    }
+    HexUnit ActiveUnit
+    {
+        get;
+        set;
+    }
     HexUnit selectedUnit;
+    HexUnit SelectedUnit
+    {
+        get => selectedUnit;
+        set
+        {
+            selectedUnit = value;
+            if (value != null && !combatModeActive && value.playerControlled)
+            {
+                ActiveUnit = value;
+            }
+        }
+    }
+    HexCell mouseHooverCell;
+    HexCell MouseHooverCell
+    {
+        get => mouseHooverCell;
+        set
+        {
+            mouseHooverCell = value;
+            updatePathfinding = true;
+        }
+    }
 
     private void Start()
     {
         playerCamera = Camera.main; //Main camera, can be exchanged if needed
     }
 
+    private void OnEnable()
+    {
+        CombatSystem.OnCombatStart += StartCombatMode;
+        CombatSystem.OnCombatEnd += EndCombatMode;
+        CombatTurnSystem.OnTurnBegining += DoUnitSelection;
+        HexCell.OnHexCellHoover += DoMouseHooverCellSelection;
+    }
+
+    private void OnDisable()
+    {
+        CombatSystem.OnCombatStart -= StartCombatMode;
+        CombatSystem.OnCombatEnd -= EndCombatMode;
+        CombatTurnSystem.OnTurnBegining -= DoUnitSelection;
+        HexCell.OnHexCellHoover -= DoMouseHooverCellSelection;
+    }
+
     private void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (Input.anyKey)
         {
-            HandleInput();
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                SelectedCell = MouseHooverCell;
+                SelectedUnit = SelectedCell.Unit;
+            }
+            if (Input.GetKey(KeyCode.Mouse1))
+            {
+                if (updatePathfinding)
+                {
+                    DoPathfinding(MouseHooverCell);
+                }
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            DoMove();
         }
     }
 
-    private void HandleInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            DoSelection();
-        }
-        else if (selectedUnit && !selectedUnit.IsMoving && selectedUnit.playerControlled)
-        {
-            if (Input.GetKeyUp(KeyCode.Mouse1))
-            {
-                DoMove();
-            }
-            else if (Input.GetKey(KeyCode.Mouse1))
-            {
-                DoPathfinding();
-            }
-        }
-    }
+    void StartCombatMode() => combatModeActive = true;
+    void EndCombatMode() => combatModeActive = false;
 
-    bool UpdateCurrentCell()
-    {
-        HexCell cell = terrainGrid.gameObject.activeInHierarchy ? terrainGrid.GetCell() : shipGrid.GetCell();
-        if (cell != currentCell)
-        {
-            currentCell = cell;
-            return true;
-        }
-        return false;
-    }
+    void DoUnitSelection(HexUnit unit) => ActiveUnit = unit;
+    void DoMouseHooverCellSelection(HexCell cell) => MouseHooverCell = cell;
 
-    void DoSelection()
-    {
-        UpdateCurrentCell();
-        if (currentCell)
-        {
-            selectedUnit = currentCell.Unit;
+    //HexCell GetCellUnderMouse() => terrainGrid.gameObject.activeInHierarchy? terrainGrid.GetCell() : shipGrid.GetCell();
 
-            if (selectedUnit)
-            {
-                Pathfinding.ClearPath();
-                Debug.Log("Selected unit");
-            }
-        }
-    }
-
-    void DoPathfinding()
+    #region Movement
+    void DoPathfinding(HexCell hooverCell)
     {
-        if (UpdateCurrentCell())
+        Debug.Log("Doing pathfinding");
+        if (hooverCell && ActiveUnit.CanMoveTo(hooverCell))
         {
-            if (currentCell && selectedUnit.CanMoveTo(currentCell))
-            {
-                Pathfinding.FindPath(selectedUnit.Location, currentCell, selectedUnit, true);
-            }
-            else
-            {
-                Pathfinding.ClearPath();
-            }
+            Pathfinding.FindPath(ActiveUnit.Location, hooverCell, ActiveUnit, true);
         }
+        else
+        {
+            Pathfinding.ClearPath();
+        }
+        updatePathfinding = false;
     }
 
     void DoMove()
     {
-        if (Pathfinding.HasPath)
+        if (ActiveUnit)
         {
-            List<HexCell> reachablePathThisTurn = Pathfinding.GetReachablePath(selectedUnit, out int cost);
-            if (reachablePathThisTurn != null && reachablePathThisTurn.Count > 1) //An actual path, longer than the included start hex where the unit stands now
+            if (Pathfinding.HasPath)
             {
-                StartCoroutine(selectedUnit.Travel(reachablePathThisTurn));
-                selectedUnit.remainingMovementPoints -= cost;
-                Pathfinding.ClearPath();
+                Debug.Log("Doing move");
+                List<HexCell> reachablePathThisTurn = Pathfinding.GetReachablePath(ActiveUnit, out int cost);
+                if (reachablePathThisTurn != null && reachablePathThisTurn.Count > 1) //An actual path, longer than the included start hex where the unit stands now
+                {
+                    StartCoroutine(ActiveUnit.Travel(reachablePathThisTurn));
+                    ActiveUnit.remainingMovementPoints -= cost;
+                    Pathfinding.ClearPath();
+                }
+            }
+            else
+            {
+                Debug.Log("No path");
             }
         }
     }
+    #endregion
 
-    public Character GetSelectedCharacter()
+
+    public Character GetActiveCharacter()
     {
-        if (selectedUnit is Character)
+        if (ActiveUnit is Character)
         {
-        return selectedUnit as Character;
+            return ActiveUnit as Character;
         }
         else
         {
