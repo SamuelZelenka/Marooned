@@ -45,6 +45,12 @@ public class Character : HexUnit
         }
     }
 
+    public override void ShowUnitActive(bool status)
+    {
+        base.ShowUnitActive(status);
+        animatedArrow.SetActive(status);
+    }
+
     public void AddEffect(TickEffect effect)
     {
         characterData.activeEffects.Add(effect);
@@ -100,7 +106,6 @@ public class Character : HexUnit
     //}
     ////TEMP METHOD!!!!!
 
-    public void ShowCharacterArrow(bool status) => animatedArrow.SetActive(status);
 
     public override bool CanMoveTo(HexCell cell)
     {

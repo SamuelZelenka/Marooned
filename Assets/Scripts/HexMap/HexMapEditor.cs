@@ -82,14 +82,14 @@ public class HexMapEditor : MonoBehaviour
         }
         else
         {
-        if (!selectMultiple)
-        {
-            ClearSelectionList();
-        }
-        if (!selectedHexes.Contains(cell))
-        {
-            AddSelectionHex(cell, Color.blue);
-        }
+            if (!selectMultiple)
+            {
+                ClearSelectionList();
+            }
+            if (!selectedHexes.Contains(cell))
+            {
+                AddSelectionHex(cell);
+            }
         }
 
         UpdateUI();
@@ -99,16 +99,16 @@ public class HexMapEditor : MonoBehaviour
     {
         foreach (var item in selectedHexes)
         {
-            item.ShowPathfindingOutline(false, Color.white);
+            item.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
         }
         selectedHexes.Clear();
         UpdateUI();
     }
 
-    private void AddSelectionHex(HexCell cellToAdd, Color highlightColor)
+    private void AddSelectionHex(HexCell cellToAdd)
     {
         selectedHexes.Add(cellToAdd);
-        cellToAdd.ShowPathfindingOutline(true, highlightColor);
+        cellToAdd.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
     }
     #endregion
 
@@ -268,7 +268,7 @@ public class HexMapEditor : MonoBehaviour
         //Set the dropdown to the first selected hex type of spawnpos
         if (selectedHexes.Count > 0)
         {
-        spawnAbleDropdown.SetValueWithoutNotify((int)selectedHexes[0].TypeOfSpawnPos);
+            spawnAbleDropdown.SetValueWithoutNotify((int)selectedHexes[0].TypeOfSpawnPos);
         }
     }
 }
