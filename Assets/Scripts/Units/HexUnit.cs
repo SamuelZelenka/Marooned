@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public abstract class HexUnit : MonoBehaviour
 {
     public delegate void HexUnitUpdateHandler(HexUnit unit);
-    public static event HexUnitUpdateHandler UnitMoved;
+    public static event HexUnitUpdateHandler OnUnitMoved;
 
     [Header("Movement")]
     const float travelSpeed = 4f;
@@ -38,7 +38,7 @@ public abstract class HexUnit : MonoBehaviour
             location = value;
             value.Unit = this;
             transform.localPosition = value.Position;
-            UnitMoved?.Invoke(this);
+            OnUnitMoved?.Invoke(this);
         }
     }
 
@@ -78,8 +78,16 @@ public abstract class HexUnit : MonoBehaviour
 
     public IEnumerator Travel(List<HexCell> path)
     {
+        if (playerControlled)
+        {
+            Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
+        }
         pathToTravel = path;
         yield return StartCoroutine(TravelPath());
+        if (playerControlled)
+        {
+            Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
+        }
     }
 
     IEnumerator TravelPath()

@@ -69,14 +69,6 @@ public class CombatSystem : MonoBehaviour
                 foreach (var item in abilityAffectedHexes)
                 {
                     item.ShowHighlight(false, HexCell.HighlightType.AbilityAffected);
-                    //if (validTargetHexes.Contains(item))
-                    //{
-                    //    item.ShowHighlight(true, HexCell.HighlightType.ValidCombatInteraction);
-                    //}
-                    //else
-                    //{
-                    //    item.ShowHighlight(false, HexCell.HighlightType.ValidCombatInteraction);
-                    //}
                 }
             }
             abilityAffectedHexes = value;
@@ -106,12 +98,14 @@ public class CombatSystem : MonoBehaviour
     {
         CombatTurnSystem.OnTurnBegining += SetActiveCharacter;
         HexCell.OnHexCellHoover += MouseOverHexCell;
+        HexUnit.OnUnitMoved += ResetHexes;
     }
 
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= SetActiveCharacter;
         HexCell.OnHexCellHoover -= MouseOverHexCell;
+        HexUnit.OnUnitMoved -= ResetHexes;
     }
 
     private void SetActiveCharacter(Character activeCharacter)
@@ -135,6 +129,13 @@ public class CombatSystem : MonoBehaviour
         {
             AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(ActiveCharacter.Location, mouseOverCell);
         }
+    }
+
+    private void ResetHexes(HexUnit unitMoved)
+    {
+        ValidTargetHexes = null;
+        AbilityAffectedHexes = null;
+        selectedAbility = null;
     }
 
     public void UseAbility(HexCell cellClickedOn)

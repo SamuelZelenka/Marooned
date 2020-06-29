@@ -174,7 +174,6 @@ public static class Pathfinding
                 current.ShowPathFrom(true, current.PathFrom);
                 current = current.PathFrom;
             }
-            //currentPathFrom.ShowHighlight(true, Color.blue);
             currentPathTo.ShowHighlight(true, HexCell.HighlightType.PathfindingEnd);
         }
     }
