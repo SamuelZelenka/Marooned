@@ -7,7 +7,6 @@ public abstract class HexUnit : MonoBehaviour
     public delegate void HexUnitUpdateHandler(HexUnit unit);
     public static event HexUnitUpdateHandler UnitMoved;
 
-
     [Header("Movement")]
     const float travelSpeed = 4f;
     public int remainingMovementPoints = 5, defaultMovementPoints = 5;
@@ -63,10 +62,13 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
-    public void ValidateLocation()
+    public virtual void ShowUnitActive(bool status)
     {
-        transform.localPosition = location.Position;
+        Location.ShowHighlight(status, HexCell.HighlightType.ActiveCell);
     }
+
+
+    public void ValidateLocation() => transform.localPosition = location.Position;
 
     public abstract bool CanMoveTo(HexCell cell);
 

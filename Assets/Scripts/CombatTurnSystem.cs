@@ -92,13 +92,13 @@ public class CombatTurnSystem : MonoBehaviour
         //De-select last active character
         if (activeCharacter)
         {
-            activeCharacter.ShowCharacterArrow(false);
+            activeCharacter.ShowUnitActive(false);
         }
         activeCharacter = turnOrder.Dequeue();
         Debug.Log("Starting turn for " + activeCharacter.characterData.characterName);
 
         OnTurnBegining?.Invoke(activeCharacter);
-        activeCharacter.ShowCharacterArrow(true);
+        activeCharacter.ShowUnitActive(true);
 
         activeCharacter.StartNewTurn();
         if (!activeCharacter.playerControlled)

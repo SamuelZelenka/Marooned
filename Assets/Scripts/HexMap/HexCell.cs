@@ -4,10 +4,22 @@ using System.Collections.Generic;
 
 public class HexCell : MonoBehaviour
 {
-    public enum OutLineType { Game, Pathfinding, Target, Editor }
+    public enum HighlightType { ActiveCell, Target, PathfindingEnd, AbilityAffected, ValidMoveInteraction, ValidCombatInteraction }
 
     public Text label;
-    public SpriteRenderer[] outlineVisuals = new SpriteRenderer[4];
+    [Header("Grids")]
+    public SpriteRenderer gameGrid;
+    public SpriteRenderer editorGrid;
+    [Header("Visual outlines and markers")]
+    public SpriteRenderer activeCell;
+    public SpriteRenderer target;
+    public SpriteRenderer pathfindingEnd;
+    public SpriteRenderer abilityAffected;
+    public SpriteRenderer validMoveInteraction;
+    public SpriteRenderer validCombatInteraction;
+
+    public SpriteRenderer visualPathFrom;
+    public SpriteRenderer visualPathTo;
 
     public HexCoordinates coordinates;
     public HexGrid myGrid;
@@ -166,56 +178,87 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    #region Grid and Labels
+    #region Grid, Highlights and Labels
     public void SetLabel(string text) => label.text = text;
     public void ShowUI(bool status) => label.enabled = status;
-
-    public void ShowOutline(bool status, OutLineType outlineType)
-    {
-        switch (outlineType)
-        {
-            case OutLineType.Game:
-                ShowGameOutline(status);
-                break;
-            case OutLineType.Pathfinding:
-                ShowPathfindingOutline(status, Color.white);
-                break;
-            case OutLineType.Target:
-                ShowTargetingOutline(status, Color.white);
-                break;
-            case OutLineType.Editor:
-                ShowEditOutline(status);
-                break;
-        }
-    }
 
     public void ShowGameOutline(bool status)
     {
         if (Traversable)
         {
-            outlineVisuals[(int)OutLineType.Game].enabled = status;
+            gameGrid.enabled = status;
         }
         else
         {
-            outlineVisuals[(int)OutLineType.Game].enabled = false;
+            gameGrid.enabled = false;
         }
     }
 
-    public void ShowPathfindingOutline(bool status, Color color)
+    public void ChangeEditOutlineColor(bool traversable) => editorGrid.color = traversable ? Color.green : Color.red;
+
+    public void ShowEditOutline(bool status) => editorGrid.enabled = status;
+
+    public void ShowHighlight(bool status, HighlightType highlightType)
     {
-        outlineVisuals[(int)OutLineType.Pathfinding].enabled = status;
-        outlineVisuals[(int)OutLineType.Pathfinding].color = color;
+        switch (highlightType)
+        {
+            case HighlightType.ActiveCell:
+                activeCell.enabled = status;
+                break;
+            case HighlightType.Target:
+                target.enabled = status;
+                break;
+            case HighlightType.PathfindingEnd:
+                pathfindingEnd.enabled = status;
+                break;
+            case HighlightType.AbilityAffected:
+                abilityAffected.enabled = status;
+                break;
+            case HighlightType.ValidMoveInteraction:
+                validMoveInteraction.enabled = status;
+                break;
+            case HighlightType.ValidCombatInteraction:
+                validCombatInteraction.enabled = status;
+                break;
+        }
     }
 
-    public void ShowTargetingOutline(bool status, Color color)
+    public void ShowPathFrom(bool status, HexCell fromCell)
     {
-        outlineVisuals[(int)OutLineType.Target].enabled = status;
-        outlineVisuals[(int)OutLineType.Target].color = color;
+        if (fromCell)
+        {
+            fromCell.ShowPathTo(status, this);
+        }
+        if (status)
+        {
+            visualPathFrom.enabled = fromCell != null;
+            if (fromCell)
+            {
+                visualPathFrom.transform.right = fromCell.transform.position - this.transform.position;
+            }
+        }
+        else
+        {
+            visualPathFrom.enabled = false;
+        }
     }
 
-    public void ChangeEditOutlineColor(bool traversable) => outlineVisuals[(int)OutLineType.Editor].color = traversable ? Color.green : Color.red;
-
-    public void ShowEditOutline(bool status) => outlineVisuals[(int)OutLineType.Editor].enabled = status;
+    void ShowPathTo(bool status, HexCell toCell)
+    {
+        if (status)
+        {
+            visualPathTo.enabled = toCell != null;
+            if (toCell)
+            {
+                visualPathTo.transform.right = toCell.transform.position - this.transform.position;
+            }
+            visualPathTo.enabled = visualPathTo != null;
+        }
+        else
+        {
+            visualPathTo.enabled = false;
+        }
+    }
     #endregion
 
     public void OnMouseEnter() => OnHexCellHoover?.Invoke(this);

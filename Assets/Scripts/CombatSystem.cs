@@ -45,7 +45,7 @@ public class CombatSystem : MonoBehaviour
             {
                 foreach (var item in validTargetHexes)
                 {
-                    item.ShowTargetingOutline(false, Color.white);
+                    item.ShowHighlight(false, HexCell.HighlightType.ValidCombatInteraction);
                 }
             }
             validTargetHexes = value;
@@ -53,7 +53,7 @@ public class CombatSystem : MonoBehaviour
             {
                 foreach (var item in validTargetHexes)
                 {
-                    item.ShowTargetingOutline(true, Color.blue);
+                    item.ShowHighlight(true, HexCell.HighlightType.ValidCombatInteraction);
                 }
             }
         }
@@ -68,14 +68,15 @@ public class CombatSystem : MonoBehaviour
             {
                 foreach (var item in abilityAffectedHexes)
                 {
-                    if (validTargetHexes.Contains(item))
-                    {
-                        item.ShowTargetingOutline(true, Color.blue);
-                    }
-                    else
-                    {
-                        item.ShowTargetingOutline(false, Color.white);
-                    }
+                    item.ShowHighlight(false, HexCell.HighlightType.AbilityAffected);
+                    //if (validTargetHexes.Contains(item))
+                    //{
+                    //    item.ShowHighlight(true, HexCell.HighlightType.ValidCombatInteraction);
+                    //}
+                    //else
+                    //{
+                    //    item.ShowHighlight(false, HexCell.HighlightType.ValidCombatInteraction);
+                    //}
                 }
             }
             abilityAffectedHexes = value;
@@ -83,7 +84,7 @@ public class CombatSystem : MonoBehaviour
             {
                 foreach (var item in abilityAffectedHexes)
                 {
-                    item.ShowTargetingOutline(true, Color.red);
+                    item.ShowHighlight(true, HexCell.HighlightType.AbilityAffected);
                 }
             }
         }

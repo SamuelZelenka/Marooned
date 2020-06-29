@@ -171,11 +171,11 @@ public static class Pathfinding
                 }
                 //current.SetLabel(turn.ToString());
                 current.SetLabel(current.MovementCost.ToString());
-                current.ShowPathfindingOutline(true, Color.white);
+                current.ShowPathFrom(true, current.PathFrom);
                 current = current.PathFrom;
             }
-            currentPathFrom.ShowPathfindingOutline(true, Color.blue);
-            currentPathTo.ShowPathfindingOutline(true, Color.red);
+            //currentPathFrom.ShowHighlight(true, Color.blue);
+            currentPathTo.ShowHighlight(true, HexCell.HighlightType.PathfindingEnd);
         }
     }
 
@@ -184,19 +184,19 @@ public static class Pathfinding
         if (HasPath)
         {
             HexCell current = currentPathTo;
+            currentPathTo.ShowHighlight(false, HexCell.HighlightType.PathfindingEnd);
             while (current != currentPathFrom)
             {
                 current.SetLabel(null);
-                current.ShowPathfindingOutline(false, Color.white);
+                current.ShowPathFrom(false, current.PathFrom);
                 current = current.PathFrom;
             }
-            current.ShowPathfindingOutline(false, Color.white);
+            current.ShowPathFrom(false, current.PathFrom);
             HasPath = false;
         }
         else if (currentPathFrom)
         {
-            currentPathFrom.ShowPathfindingOutline(false, Color.white);
-            currentPathTo.ShowPathfindingOutline(false, Color.white);
+            currentPathTo.ShowHighlight(false, HexCell.HighlightType.PathfindingEnd);
         }
         currentPathFrom = currentPathTo = null;
     }

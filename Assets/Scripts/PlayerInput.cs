@@ -25,10 +25,24 @@ public class PlayerInput : MonoBehaviour
             }
         }
     }
+    HexUnit activeUnit;
     HexUnit ActiveUnit
     {
-        get;
-        set;
+        get => activeUnit;
+        set
+        {
+            //Old
+            if (activeUnit)
+            {
+                activeUnit.ShowUnitActive(false);
+            }
+            activeUnit = value;
+            //New
+            if (activeUnit)
+            {
+                activeUnit.ShowUnitActive(true);
+            }
+        }
     }
     HexUnit selectedUnit;
     HexUnit SelectedUnit
