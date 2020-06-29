@@ -1,6 +1,9 @@
-﻿public abstract class Effect
+﻿using UnityEngine;
+
+public abstract class Effect
 {
     string description;
+    public Sprite effectSprite;
     public string Description
     {
         get;

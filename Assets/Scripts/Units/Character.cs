@@ -9,7 +9,7 @@ public class Character : HexUnit
     public GameObject animatedArrow;
 
     public bool isStunned;
-    List<Ability> Abilities { get; set; } = new List<Ability>();
+    public List<Ability> Abilities { get; set; } = new List<Ability>();
     public List<int> abilityID = new List<int>();
 
     public delegate void EffectHandler(Effect effect);
