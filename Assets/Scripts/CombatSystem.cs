@@ -13,6 +13,7 @@ public class CombatSystem : MonoBehaviour
     public GameObject mapView;
     public GameObject combatView;
     public CombatTurnSystem turnSystem;
+    public CombatUIController uiController;
 
     Player humanPlayer;
     Ship playerShip;
@@ -151,6 +152,8 @@ public class CombatSystem : MonoBehaviour
                     selectedAbility.Use(item.Unit as Character);
                 }
             }
+            ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+            uiController.UpdateAllCharacters(a);
         }
     }
 
@@ -168,6 +171,7 @@ public class CombatSystem : MonoBehaviour
 
         //Player characters
         allCharacters.AddRange(humanPlayer.Crew);
+        uiController.UpdateCrewDisplay(humanPlayer.Crew);
 
         //Enemy characters
         foreach (Character charactersToSpawn in debugEnemies)

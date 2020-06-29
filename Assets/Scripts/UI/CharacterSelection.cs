@@ -3,27 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectedCharacterDisplay : MonoBehaviour
+public class CharacterSelection : MonoBehaviour
 {
+    Character character;
+
     [SerializeField] Text characterName = null;
     [SerializeField] Image portrait = null;
-    [SerializeField] Text loyalty = null;
+
     [SerializeField] Text strength = null;
     [SerializeField] Text stamina = null;
     [SerializeField] Text constitution = null;
     [SerializeField] Text agility = null;
     [SerializeField] Text toughness = null;
     [SerializeField] Text accuracy = null;
+    [SerializeField] Bar loyalty = null;
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar energy = null;
 
-    [SerializeField] List<Image> abilities = new List<Image>();
-
-    public void UpdateUI(Character character)
+    public void SelectCharacter(HexUnit unit)
     {
+        character = null;
+        if (unit is Character)
+        {
+            character = unit as Character;
+        }
+        else
+        {
+            return;
+        }
+        UpdateUI();
+    }
+    public void UpdateUI()
+    {
+        if (portrait != null)
+        {
+            portrait.sprite = character.characterData.portrait;
+        }
         characterName.text = character.characterData.characterName;
-        portrait.sprite = character.characterData.portrait;
-        loyalty.text = character.characterData.Loyalty.CurrentValue.ToString();
         strength.text = $"STR: {character.characterData.Strength}";
         stamina.text = $"STA: {character.characterData.Stamina}";
         constitution.text = $"CON: {character.characterData.Constitution}";
@@ -37,11 +53,19 @@ public class SelectedCharacterDisplay : MonoBehaviour
         energy.SetMaxValue(character.characterData.Energy.maxValue);
         energy.SetCurrentValue(character.characterData.Energy.CurrentValue);
 
+        loyalty.SetMaxValue(character.characterData.Loyalty.maxValue);
+        loyalty.SetCurrentValue(character.characterData.Loyalty.CurrentValue);
 
 
-        for (int i = 0; i < abilities.Count; i++)
+        if (character.playerControlled)
         {
-            abilities[i].sprite = character.Abilities[i].abilitySprite;
+            //disable abilities
+            //  energy.gameObject.SetActive(true);
+        }
+        else
+        {
+            //  energy.gameObject.SetActive(false);
+
         }
     }
 }

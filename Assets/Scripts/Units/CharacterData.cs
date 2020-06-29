@@ -201,7 +201,7 @@ public class CharacterData
     //    }
     //}
     //#endregion
-
+    [Serializable]
     public class Resource
     {
         const int MINRESOURCEVALUE = 0;
@@ -223,11 +223,15 @@ public class CharacterData
         public Resource(string resourceName, int currentValue, int maxValue)
         {
             this.resourceName = resourceName;
-            this.CurrentValue = currentValue;
             this.maxValue = maxValue;
+            this.CurrentValue = currentValue;
+        }
+        public override string ToString()
+        {
+            return $"{currentValue} / {maxValue}";
         }
     }
-
+    [Serializable]
     public class Stat
     {
         const int MINSTATVALUE = 1;
@@ -242,6 +246,10 @@ public class CharacterData
         {
             this.statName = statName;
             this.CurrentValue = currentValue;
+        }
+        public override string ToString()
+        {
+            return CurrentValue.ToString();
         }
     }
 }

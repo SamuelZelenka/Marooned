@@ -12,7 +12,7 @@ public abstract class Ability
     public string abilityDescription;
     public Sprite abilitySprite;
 
-    protected int cost;
+    public int cost;
     protected List<Effect> effects = new List<Effect>();
     public TargetType targetType;
 
@@ -21,10 +21,7 @@ public abstract class Ability
 
     //}
 
-    public virtual void Use(Character character)
-    {
-        character.characterData.Energy.CurrentValue -= cost;
-    }
+    public abstract void Use(Character character);
 
     //public virtual void DeSelect()
     //{

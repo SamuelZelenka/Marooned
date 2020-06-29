@@ -10,7 +10,9 @@ public class CombatTurnSystem : MonoBehaviour
     public static CharacterHandler OnTurnBegining;
 
     Queue<Character> turnOrder;
-    Character activeCharacter;
+    static Character activeCharacter;
+
+    public static Character ActiveCharacter { get => activeCharacter;}
 
     private void OnEnable()
     {
