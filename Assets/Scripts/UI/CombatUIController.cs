@@ -91,5 +91,4 @@ public class CombatUIController : MonoBehaviour
     private void UnitMoved(HexUnit unit) => UpdateAllCharacters();
     private void CellSelected(HexCell cell) => UpdateAllCharacters();
     private void TurnStarted(Character character) { UpdateTimeline(); UpdateAllCharacters(); }
-
 }
