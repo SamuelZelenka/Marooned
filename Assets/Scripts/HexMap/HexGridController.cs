@@ -2,9 +2,33 @@
 {
     public enum GridMode { Map, Combat, Management}
     public static GridMode currentMode; 
-    public static HexCell selectedCell;
-    public static Character activeCharacter;
-    public static Ship activeShip;
+    static HexCell selectedCell;
+    static Character activeCharacter;
+    static Ship activeShip;
+
+    public delegate void CellHandler(HexCell cell);
+    public static CellHandler OnCellSelected;
+
+    public static HexCell SelectedCell 
+    { 
+        get => selectedCell; 
+        set
+        {
+            selectedCell = value;
+            OnCellSelected?.Invoke(value);
+        }
+    }
+    public static Character ActiveCharacter 
+    {
+        get => activeCharacter;
+        set { activeCharacter = value; }
+    }
+    public static Ship ActiveShip 
+    {
+        get => activeShip;
+        set { activeShip = value; }
+    }
+
 
     public static Character SelectedCharacter
     {

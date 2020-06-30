@@ -75,7 +75,7 @@ public class CombatTurnSystem : MonoBehaviour
     //Called from UI to end player character turn
     public void EndActiveCharacterTurn()
     {
-        OnTurnEnding?.Invoke(HexGridController.activeCharacter);
+        OnTurnEnding?.Invoke(HexGridController.ActiveCharacter);
     }
 
     //Subscribed method to change turn when one character is declared done with its turn
@@ -89,20 +89,20 @@ public class CombatTurnSystem : MonoBehaviour
     private void StartNextTurn()
     {
         //De-select last active character
-        if (HexGridController.activeCharacter)
+        if (HexGridController.ActiveCharacter)
         {
-            HexGridController.activeCharacter.ShowUnitActive(false);
+            HexGridController.ActiveCharacter.ShowUnitActive(false);
         }
-        HexGridController.activeCharacter = turnOrder.Dequeue();
-        Debug.Log("Starting turn for " + HexGridController.activeCharacter.characterData.characterName);
+        HexGridController.ActiveCharacter = turnOrder.Dequeue();
+        Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.characterName);
 
-        OnTurnBegining?.Invoke(HexGridController.activeCharacter);
-        HexGridController.activeCharacter.ShowUnitActive(true);
+        OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);
+        HexGridController.ActiveCharacter.ShowUnitActive(true);
 
-        HexGridController.activeCharacter.StartNewTurn();
-        if (!HexGridController.activeCharacter.playerControlled)
+        HexGridController.ActiveCharacter.StartNewTurn();
+        if (!HexGridController.ActiveCharacter.playerControlled)
         {
-            StartCoroutine(HexGridController.activeCharacter.PerformAutomaticTurn());
+            StartCoroutine(HexGridController.ActiveCharacter.PerformAutomaticTurn());
         }
     }
 

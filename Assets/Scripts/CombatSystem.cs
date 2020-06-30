@@ -110,16 +110,16 @@ public class CombatSystem : MonoBehaviour
 
     public void SelectAbility(int selection)
     {
-        selectedAbility = HexGridController.activeCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
+        selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityDescription);
         ValidTargetHexes = abilityTargetHexes;
     }
 
     private void MouseOverHexCell(HexCell mouseOverCell)
     {
-        if (selectedAbility != null && HexGridController.activeCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
+        if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
         {
-            AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(HexGridController.activeCharacter.Location, mouseOverCell);
+            AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(HexGridController.ActiveCharacter.Location, mouseOverCell);
         }
     }
 
@@ -143,7 +143,7 @@ public class CombatSystem : MonoBehaviour
                     selectedAbility.Use(item.Unit as Character);
                 }
             }
-            HexGridController.activeCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+            HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
             uiController.UpdateAllCharacters();
         }
     }
@@ -152,6 +152,7 @@ public class CombatSystem : MonoBehaviour
     {
         OnCombatStart?.Invoke();
         ChangeView(true);
+        HexGridController.currentMode = HexGridController.GridMode.Combat;
         SetUpCombat(0);
     }
 
@@ -188,6 +189,7 @@ public class CombatSystem : MonoBehaviour
     {
         OnCombatEnd?.Invoke();
         hexGrid.Load(managementMap, false);
+        HexGridController.currentMode = HexGridController.GridMode.Map;
 
         foreach (var item in humanPlayer.Crew)
         {

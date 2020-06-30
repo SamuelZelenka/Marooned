@@ -19,10 +19,12 @@ public class CombatUIController : MonoBehaviour
     private void OnEnable()
     {
         HexUnit.OnUnitMoved += UnitMoved;
+        HexGridController.OnCellSelected += CellSelected;
     }
     private void OnDisable()
     {
         HexUnit.OnUnitMoved -= UnitMoved;
+        HexGridController.OnCellSelected -= CellSelected;
     }
     public void UpdateCrewDisplay(List<Character> playerCrew)
     {
@@ -40,10 +42,6 @@ public class CombatUIController : MonoBehaviour
             }
         }
     }
-    private void UnitMoved(HexUnit unit)
-    {
-        UpdateAllCharacters();
-    }
     public void UpdateAllCharacters()
     {
         foreach (PartyMember member in partyMembers)
@@ -53,12 +51,20 @@ public class CombatUIController : MonoBehaviour
                 member.UpdateUI();
             }
         }
-        selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
-        activeCharacter.UpdateUI(HexGridController.activeCharacter);
-
-        for (int i = 0; i < HexGridController.activeCharacter.Abilities.Count; i++)
+        if (HexGridController.SelectedCharacter != null)
         {
-            abilities[i].sprite = HexGridController.activeCharacter.Abilities[i].abilitySprite;
+            selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
+        }
+        if (HexGridController.ActiveCharacter != null)
+        {
+            activeCharacter.UpdateUI(HexGridController.ActiveCharacter);
+
+            for (int i = 0; i < HexGridController.ActiveCharacter.Abilities.Count; i++)
+            {
+                abilities[i].sprite = HexGridController.ActiveCharacter.Abilities[i].abilitySprite;
+            }
         }
     }
+    private void UnitMoved(HexUnit unit) => UpdateAllCharacters();
+    private void CellSelected(HexCell cell) => UpdateAllCharacters();
 }

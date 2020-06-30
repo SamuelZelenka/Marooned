@@ -8,6 +8,8 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] Text characterName = null;
     [SerializeField] Image portrait = null;
 
+    [SerializeField] Text moves = null;
+
     [SerializeField] Text strength = null;
     [SerializeField] Text stamina = null;
     [SerializeField] Text constitution = null;

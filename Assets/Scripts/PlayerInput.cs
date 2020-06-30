@@ -97,7 +97,7 @@ public class PlayerInput : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                HexGridController.selectedCell = MouseHooverCell;
+                HexGridController.SelectedCell = MouseHooverCell;
                 Debug.Log(mouseHooverCell);
                 if (combatModeActive)
                 {
@@ -131,11 +131,11 @@ public class PlayerInput : MonoBehaviour
         HexUnit activeUnit;
         if (HexGridController.currentMode == HexGridController.GridMode.Map)
         {
-            activeUnit = HexGridController.activeShip;
+            activeUnit = HexGridController.ActiveShip;
         }
         else
         {
-            activeUnit = HexGridController.activeCharacter;
+            activeUnit = HexGridController.ActiveCharacter;
         }
 
         if (hooverCell && activeUnit.CanMoveTo(hooverCell))
@@ -154,11 +154,11 @@ public class PlayerInput : MonoBehaviour
         HexUnit activeUnit;
         if (HexGridController.currentMode == HexGridController.GridMode.Map)
         {
-            activeUnit = HexGridController.activeShip;
+            activeUnit = HexGridController.ActiveShip;
         }
         else
         {
-            activeUnit = HexGridController.activeCharacter;
+            activeUnit = HexGridController.ActiveCharacter;
         }
 
         if (activeUnit)
