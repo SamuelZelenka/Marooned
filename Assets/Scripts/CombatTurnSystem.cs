@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class CombatTurnSystem : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class CombatTurnSystem : MonoBehaviour
     public static CharacterHandler OnTurnBegining;
 
     Queue<Character> turnOrder;
+
+    public List<Character> TurnOrder { get => turnOrder.ToList(); }
 
     private void OnEnable()
     {
@@ -88,12 +91,17 @@ public class CombatTurnSystem : MonoBehaviour
     //Starting the turn for the character in the first position in the queue
     private void StartNextTurn()
     {
+
         //De-select last active character
         if (HexGridController.ActiveCharacter)
         {
             HexGridController.ActiveCharacter.ShowUnitActive(false);
         }
         HexGridController.ActiveCharacter = turnOrder.Dequeue();
+        if (!HexGridController.SelectedCell)
+        {
+            HexGridController.SelectedCell = HexGridController.ActiveCharacter.Location;
+        }
         Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.characterName);
 
         OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);

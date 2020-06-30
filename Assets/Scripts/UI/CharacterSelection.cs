@@ -34,6 +34,8 @@ public class CharacterSelection : MonoBehaviour
         toughness.text = $"TOU: {character.characterData.Toughness}";
         accuracy.text = $"ACC: {character.characterData.Accuracy}";
 
+        moves.text = $"Moves: {character.remainingMovementPoints}";
+
         vitality.SetMaxValue(character.characterData.Vitality.maxValue);
         vitality.SetCurrentValue(character.characterData.Vitality.CurrentValue);
 

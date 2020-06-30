@@ -164,6 +164,7 @@ public class CombatSystem : MonoBehaviour
         //Player characters
         allCharacters.AddRange(humanPlayer.Crew);
         uiController.UpdateCrewDisplay(humanPlayer.Crew);
+        
 
         //Enemy characters
         foreach (Character charactersToSpawn in debugEnemies)

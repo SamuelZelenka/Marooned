@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CombatUIController : MonoBehaviour
 {
+    [SerializeField] CombatSystem combatSystem = null;
+
     [Header("Player Party")]
     [SerializeField] List<PartyMember> partyMembers = null;
     [SerializeField] Transform partyTransform = null;
@@ -16,15 +18,36 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] CharacterSelection activeCharacter = null;
     [SerializeField] List<Image> abilities = new List<Image>();
 
+    [Header("Timeline")]
+    [SerializeField] Image currentCharacter = null;
+    [SerializeField] List<Image> upcomingCharacters = new List<Image>();
+
     private void OnEnable()
     {
         HexUnit.OnUnitMoved += UnitMoved;
         HexGridController.OnCellSelected += CellSelected;
+        CombatTurnSystem.OnTurnEnding += TurnStarted;
     }
     private void OnDisable()
     {
         HexUnit.OnUnitMoved -= UnitMoved;
         HexGridController.OnCellSelected -= CellSelected;
+        CombatTurnSystem.OnTurnEnding -= TurnStarted;
+    }
+    public void UpdateTimeline()
+    {
+        currentCharacter.sprite = HexGridController.ActiveCharacter.characterData.portrait;
+        for (int i = 0; i < combatSystem.turnSystem.TurnOrder.Count; i++)
+        {
+            upcomingCharacters[i].sprite = combatSystem.turnSystem.TurnOrder[i].characterData.portrait;
+        }
+        if (upcomingCharacters.Count > combatSystem.turnSystem.TurnOrder.Count)
+        {
+            for (int j = combatSystem.turnSystem.TurnOrder.Count; j < upcomingCharacters.Count; j++)
+            {
+                upcomingCharacters[j].gameObject.SetActive(false);
+            }
+        }
     }
     public void UpdateCrewDisplay(List<Character> playerCrew)
     {
@@ -67,4 +90,6 @@ public class CombatUIController : MonoBehaviour
     }
     private void UnitMoved(HexUnit unit) => UpdateAllCharacters();
     private void CellSelected(HexCell cell) => UpdateAllCharacters();
+    private void TurnStarted(Character character) { UpdateTimeline(); UpdateAllCharacters(); }
+
 }
