@@ -42,17 +42,21 @@ public class Player
 
     public void StartNewTurn()
     {
-        Ship.StartNewTurn();
         HexGridController.ActiveShip = Ship;
 
         if (IsHuman)
         {
-            OpenJobPanel();
+            StartManagementMode();
+        }
+        else
+        {
+            Ship.StartNewTurn();
         }
     }
 
-    private void OpenJobPanel()
+    private void StartManagementMode()
     {
+        HexGridController.CurrentMode = HexGridController.GridMode.Management;
         if (crewSimulation)
         {
             crewSimulation.NewTurnSimulation();
@@ -63,15 +67,15 @@ public class Player
         }
     }
 
-    public void RunCrewSimulation()
-    {
-        crewSimulation.RunJobSimulation();
-    }
+    //public void RunCrewSimulation()
+    //{
+    //    crewSimulation.RunJobSimulation();
+    //}
 
-    private void StartMapMovement()
-    {
-        
-    }
+    //private void StartMapMovement()
+    //{
+
+    //}
 
     public IEnumerator PerformAutomaticTurn()
     {

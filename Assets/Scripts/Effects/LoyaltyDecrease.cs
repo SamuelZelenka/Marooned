@@ -7,8 +7,8 @@
         this.amount = amount;
     }
 
-    public override void ApplyEffect(Character character)
+    public override void ApplyEffect(Character target)
     {
-        character.characterData.Loyalty.CurrentValue -= amount;
+        target.characterData.Loyalty.CurrentValue -= amount;
     }
 }

@@ -5,7 +5,8 @@ public abstract class Ability
 {
     public static Dictionary<int, Ability> abilityDictionary = new Dictionary<int, Ability>()
     {
-        {0, new ChainWhip()}
+        {0, new ChainWhip()},
+        {100, new Slice()}
     };
 
     public string abilityName;
@@ -16,17 +17,13 @@ public abstract class Ability
     protected List<Effect> effects = new List<Effect>();
     public TargetType targetType;
 
-    //public virtual void Select(Character character)
-    //{
-
-    //}
-
-    public abstract void Use(Character character);
-
-    //public virtual void DeSelect()
-    //{
-
-    //}
+    public void Use(Character target)
+    {
+        foreach (var item in effects)
+        {
+            item.ApplyEffect(target);
+        }
+    }
 }
 
 public abstract class TargetType

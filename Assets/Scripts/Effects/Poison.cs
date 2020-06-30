@@ -14,9 +14,9 @@
         this.damage = damage;
         base.duration = duration;
     }
-    public override void EffectTick(Character character)
+    public override void EffectTick(Character target)
     {
-        character.characterData.Vitality.CurrentValue -= damage;
-        base.EffectTick(character);
+        target.characterData.Vitality.CurrentValue -= damage;
+        base.EffectTick(target);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Ship : HexUnit
 {
+    #region Stats
     int hull = 25, maxHull = 25;
     public int Hull
     {
@@ -22,8 +23,9 @@ public class Ship : HexUnit
             cleanliness = Mathf.Min(value, 1);
         }
     }
+    #endregion
 
-    public override bool CanMoveTo(HexCell cell)
+    public override bool CanEnter(HexCell cell)
     {
         if (cell.Unit)
         {
@@ -41,6 +43,7 @@ public class Ship : HexUnit
 
     public override void StartNewTurn()
     {
+        base.StartNewTurn();
         if (playerControlled)
         {
 
@@ -51,6 +54,7 @@ public class Ship : HexUnit
         }
     }
 
+    #region AI
     HexCell target;
     public override IEnumerator PerformAutomaticTurn()
     {
@@ -101,4 +105,5 @@ public class Ship : HexUnit
         }
         return newTarget;
     }
+    #endregion
 }

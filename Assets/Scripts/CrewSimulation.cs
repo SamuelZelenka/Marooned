@@ -5,8 +5,6 @@ public class CrewSimulation : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] GameObject jobPanel = null;
-    [SerializeField] GameObject combatAndManagementView = null;
-    [SerializeField] GameObject mapView = null;
 
     Player humanPlayer;
     Ship playerShip;
@@ -49,28 +47,33 @@ public class CrewSimulation : MonoBehaviour
         TurnStartSimulation();
     }
 
-    private void OpenSimulationWindows()
+    public void OpenSimulationWindows()
     {
-        mapView.SetActive(false);
-        combatAndManagementView.SetActive(true);
         jobPanel.SetActive(true);
     }
 
-    public void RunJobSimulation()
-    {
-        SimulateJobs();
-
-        //Muteny
-    }
 
     private void TurnStartSimulation()
     {
+        playerShip.remainingMovementPoints = 0;
         foreach (var character in humanPlayer.Crew)
         {
             character.characterData.Hunger.CurrentValue -= hungerReduction;
             character.characterData.Hygiene.CurrentValue -= hygieneReduction;
         }
     }
+
+    public void ConfirmJobPositions()
+    {
+        jobPanel.SetActive(false);
+        SimulateJobs();
+
+
+        //Muteny
+
+        playerShip.StartNewTurn();
+    }
+
 
     private void SimulateJobs()
     {

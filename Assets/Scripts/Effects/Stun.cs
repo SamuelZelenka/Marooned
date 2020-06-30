@@ -12,25 +12,25 @@
         }
         base.duration = duration;
     }
-    public override void ApplyEffect(Character character)
+    public override void ApplyEffect(Character target)
     {
-        base.ApplyEffect(character);
-        character.isStunned = true;
+        base.ApplyEffect(target);
+        target.isStunned = true;
     }
-    public override void EffectTick(Character character)
+    public override void EffectTick(Character target)
     {
-        base.EffectTick(character);
+        base.EffectTick(target);
     }
-    public override void RemoveEffect(Character character)
+    public override void RemoveEffect(Character target)
     {
-        base.RemoveEffect(character);
-        foreach (Effect effect in character.characterData.activeEffects)
+        base.RemoveEffect(target);
+        foreach (Effect effect in target.characterData.activeEffects)
         {
             if (effect.GetType() == this.GetType())
             {
                 return;
             }
         }
-        character.isStunned = false;
+        target.isStunned = false;
     }
 }

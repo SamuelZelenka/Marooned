@@ -122,14 +122,13 @@ public class PlayerInput : MonoBehaviour
     void EndCombatMode() => combatModeActive = false;
     void DoMouseHooverCellSelection(HexCell cell) => MouseHooverCell = cell;
 
-    //HexCell GetCellUnderMouse() => terrainGrid.gameObject.activeInHierarchy? terrainGrid.GetCell() : shipGrid.GetCell();
 
     #region Movement
     void DoPathfinding(HexCell hooverCell)
     {
         Debug.Log("Doing pathfinding");
         HexUnit activeUnit;
-        if (HexGridController.currentMode == HexGridController.GridMode.Map)
+        if (HexGridController.CurrentMode == HexGridController.GridMode.Map)
         {
             activeUnit = HexGridController.ActiveShip;
         }
@@ -138,7 +137,7 @@ public class PlayerInput : MonoBehaviour
             activeUnit = HexGridController.ActiveCharacter;
         }
 
-        if (hooverCell && activeUnit.CanMoveTo(hooverCell))
+        if (hooverCell && activeUnit.CanEnter(hooverCell))
         {
             Pathfinding.FindPath(activeUnit.Location, hooverCell, activeUnit, true);
         }
@@ -152,7 +151,7 @@ public class PlayerInput : MonoBehaviour
     void DoMove()
     {
         HexUnit activeUnit;
-        if (HexGridController.currentMode == HexGridController.GridMode.Map)
+        if (HexGridController.CurrentMode == HexGridController.GridMode.Map)
         {
             activeUnit = HexGridController.ActiveShip;
         }
