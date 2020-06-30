@@ -13,7 +13,7 @@ public abstract class HexUnit : MonoBehaviour
     public int oceanMovementCost = 1;
     public int landMovementCost = 1;
     List<HexCell> pathToTravel;
-    List<HexCell> reachableCells = new List<HexCell>();
+    List<HexCell> reachableCells = new List<HexCell>(); public List<HexCell> ReachableCells { get => reachableCells; }
 
     public bool playerControlled;
     public HexGrid myGrid;

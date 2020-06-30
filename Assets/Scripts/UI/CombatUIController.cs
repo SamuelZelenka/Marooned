@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class CombatUIController : MonoBehaviour
 {
-    [SerializeField] CombatSystem combatSystem = null;
-
     [Header("Player Party")]
     [SerializeField] List<PartyMember> partyMembers = null;
     [SerializeField] Transform partyTransform = null;
@@ -34,16 +32,16 @@ public class CombatUIController : MonoBehaviour
         HexGridController.OnCellSelected -= CellSelected;
         CombatTurnSystem.OnTurnEnding -= TurnStarted;
     }
-    public void UpdateTimeline()
+    public void UpdateTimeline(List<Character> turnOrder)
     {
         currentCharacter.sprite = HexGridController.ActiveCharacter.characterData.portrait;
-        for (int i = 0; i < combatSystem.turnSystem.TurnOrder.Count; i++)
+        for (int i = 0; i < turnOrder.Count; i++)
         {
-            upcomingCharacters[i].sprite = combatSystem.turnSystem.TurnOrder[i].characterData.portrait;
+            upcomingCharacters[i].sprite = turnOrder[i].characterData.portrait;
         }
-        if (upcomingCharacters.Count > combatSystem.turnSystem.TurnOrder.Count)
+        if (upcomingCharacters.Count > turnOrder.Count)
         {
-            for (int j = combatSystem.turnSystem.TurnOrder.Count; j < upcomingCharacters.Count; j++)
+            for (int j = turnOrder.Count; j < upcomingCharacters.Count; j++)
             {
                 upcomingCharacters[j].gameObject.SetActive(false);
             }
@@ -90,5 +88,5 @@ public class CombatUIController : MonoBehaviour
     }
     private void UnitMoved(HexUnit unit) => UpdateAllCharacters();
     private void CellSelected(HexCell cell) => UpdateAllCharacters();
-    private void TurnStarted(Character character) { UpdateTimeline(); UpdateAllCharacters(); }
+    private void TurnStarted(Character character) { UpdateAllCharacters(); }
 }

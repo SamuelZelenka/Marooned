@@ -15,7 +15,7 @@ public abstract class Ability
 
     public int cost;
     protected List<Effect> effects = new List<Effect>();
-    public TargetType targetType;
+    public TargetType targeting;
 
     public void Use(Character target)
     {
@@ -28,13 +28,13 @@ public abstract class Ability
 
 public abstract class TargetType
 {
-    public abstract List<HexCell> GetValidCells(HexCell fromCell);
+    public abstract List<HexCell> GetValidTargets(HexCell fromCell);
     public abstract List<HexCell> GetAffectedCells(HexCell fromCell, HexCell selectedCell);
 }
 
 public class SingleTargetAdjacent : TargetType
 {
-    public override List<HexCell> GetValidCells(HexCell fromCell)
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
         return CellFinder.GetAllAdjacent(fromCell);
     }
@@ -48,7 +48,7 @@ public class SingleTargetAdjacent : TargetType
 
 public class SwipeAdjacent : TargetType
 {
-    public override List<HexCell> GetValidCells(HexCell fromCell)
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
         return CellFinder.GetAllAdjacent(fromCell);
     }

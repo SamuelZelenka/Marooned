@@ -22,7 +22,7 @@ public class CombatSystem : MonoBehaviour
     [HideInInspector]
     public BattleMap managementMap;
     public BattleMap[] battleMaps;
-    public Character[] debugEnemies;
+    public List<Character> debugEnemies = new List<Character>();
 
     public delegate void CombatHandler();
     public static CombatHandler OnCombatStart;
@@ -102,52 +102,6 @@ public class CombatSystem : MonoBehaviour
         HexUnit.OnUnitMoved -= ResetHexes;
     }
 
-    private void ResetSelections(Character activeCharacter)
-    {
-        selectedAbility = null;
-        ValidTargetHexes = new List<HexCell>();
-    }
-
-    public void SelectAbility(int selection)
-    {
-        selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
-        Debug.Log("Selected ability " + selectedAbility.abilityDescription);
-        ValidTargetHexes = abilityTargetHexes;
-    }
-
-    private void MouseOverHexCell(HexCell mouseOverCell)
-    {
-        if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
-        {
-            AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(HexGridController.ActiveCharacter.Location, mouseOverCell);
-        }
-    }
-
-    private void ResetHexes(HexUnit unitMoved)
-    {
-        ValidTargetHexes = null;
-        AbilityAffectedHexes = null;
-        selectedAbility = null;
-    }
-
-    public void UseAbility(HexCell cellClickedOn)
-    {
-        MouseOverHexCell(cellClickedOn);
-        if (selectedAbility != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(cellClickedOn))
-        {
-            Debug.Log("Using ability " + selectedAbility.abilityDescription);
-            foreach (var item in AbilityAffectedHexes)
-            {
-                if (item.Unit is Character)
-                {
-                    selectedAbility.Use(item.Unit as Character);
-                }
-            }
-            HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-            uiController.UpdateAllCharacters();
-        }
-    }
-
     public void StartCombat()
     {
         OnCombatStart?.Invoke();
@@ -163,9 +117,10 @@ public class CombatSystem : MonoBehaviour
         //Player characters
         allCharacters.AddRange(humanPlayer.Crew);
         uiController.UpdateCrewDisplay(humanPlayer.Crew);
-        
+
 
         //Enemy characters
+        AI aiController = new AI(debugEnemies, humanPlayer.Crew);
         foreach (Character charactersToSpawn in debugEnemies)
         {
             //Instantiate enemies
@@ -173,6 +128,7 @@ public class CombatSystem : MonoBehaviour
             spawnedCharacter.transform.SetParent(enemyCharacterParent);
 
             spawnedCharacter.myGrid = hexGrid;
+            spawnedCharacter.SetAI(aiController);
 
             //Add character to grid
             hexGrid.AddUnit(spawnedCharacter, hexGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.AnyEnemy), false);
@@ -198,6 +154,52 @@ public class CombatSystem : MonoBehaviour
             item.SavedShipLocation = item.Location;
         }
         OpenCombatCanvas(false);
+    }
+
+    private void ResetHexes(HexUnit unitMoved)
+    {
+        ValidTargetHexes = null;
+        AbilityAffectedHexes = null;
+        selectedAbility = null;
+    }
+
+    private void ResetSelections(Character activeCharacter)
+    {
+        selectedAbility = null;
+        ValidTargetHexes = new List<HexCell>();
+    }
+
+    private void MouseOverHexCell(HexCell mouseOverCell)
+    {
+        if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
+        {
+            AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, mouseOverCell);
+        }
+    }
+
+    public void SelectAbility(int selection)
+    {
+        selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
+        Debug.Log("Selected ability " + selectedAbility.abilityDescription);
+        ValidTargetHexes = abilityTargetHexes;
+    }
+
+    public void UseAbility(HexCell cellClickedOn)
+    {
+        MouseOverHexCell(cellClickedOn);
+        if (selectedAbility != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(cellClickedOn))
+        {
+            Debug.Log("Using ability " + selectedAbility.abilityDescription);
+            foreach (var item in AbilityAffectedHexes)
+            {
+                if (item.Unit is Character)
+                {
+                    selectedAbility.Use(item.Unit as Character);
+                }
+            }
+            HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+            uiController.UpdateAllCharacters();
+        }
     }
 
     private void OpenCombatCanvas(bool showCombat)

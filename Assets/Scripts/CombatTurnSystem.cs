@@ -10,9 +10,9 @@ public class CombatTurnSystem : MonoBehaviour
     public static CharacterHandler OnTurnEnding;
     public static CharacterHandler OnTurnBegining;
 
-    Queue<Character> turnOrder;
+    public CombatUIController uIController;
 
-    public List<Character> TurnOrder { get => turnOrder.ToList(); }
+    Queue<Character> turnOrder;
 
     private void OnEnable()
     {
@@ -91,7 +91,6 @@ public class CombatTurnSystem : MonoBehaviour
     //Starting the turn for the character in the first position in the queue
     private void StartNextTurn()
     {
-
         //De-select last active character
         if (HexGridController.ActiveCharacter)
         {
@@ -111,6 +110,7 @@ public class CombatTurnSystem : MonoBehaviour
         {
             StartCoroutine(HexGridController.ActiveCharacter.PerformAutomaticTurn());
         }
+        uIController.UpdateTimeline(turnOrder.ToList());
     }
 
 

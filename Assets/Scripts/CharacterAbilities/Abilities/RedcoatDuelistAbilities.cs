@@ -3,7 +3,7 @@
     public Slice()
     {
         cost = 10;
-        targetType = new SingleTargetAdjacent();
+        targeting = new SingleTargetAdjacent();
         effects.Add(new Damage(5));
     }
 }
