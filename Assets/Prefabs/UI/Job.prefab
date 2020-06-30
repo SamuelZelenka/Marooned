@@ -246,7 +246,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 2903888120566053800}
-          m_MethodName: SetCharacter
+          m_MethodName: ClickDetected
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -311,3 +311,4 @@ MonoBehaviour:
   crewSimulation: {fileID: 0}
   portrait: {fileID: 868631270776766302}
   defaultPortrait: {fileID: 21300000, guid: 14c59f06f3237f1419843b8c9dab36ab, type: 3}
+  characterOnJob: {fileID: 0}

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class PartyMember : MonoBehaviour
 {
 
-    Character character;
+    public Character character;
     [SerializeField] Text characterName = null;
     [SerializeField] Image portraitImage = null;
     [SerializeField] List<Image> effects = null;

@@ -28,13 +28,6 @@ public class CombatSystem : MonoBehaviour
     public static CombatHandler OnCombatStart;
     public static CombatHandler OnCombatEnd;
 
-
-    public Character ActiveCharacter
-    {
-        private set;
-        get;
-    }
-
     private Ability selectedAbility;
     List<HexCell> validTargetHexes;
     private List<HexCell> ValidTargetHexes
@@ -97,38 +90,36 @@ public class CombatSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatTurnSystem.OnTurnBegining += SetActiveCharacter;
+        CombatTurnSystem.OnTurnBegining += ResetSelections;
         HexCell.OnHexCellHoover += MouseOverHexCell;
         HexUnit.OnUnitMoved += ResetHexes;
     }
 
     private void OnDisable()
     {
-        CombatTurnSystem.OnTurnBegining -= SetActiveCharacter;
+        CombatTurnSystem.OnTurnBegining -= ResetSelections;
         HexCell.OnHexCellHoover -= MouseOverHexCell;
         HexUnit.OnUnitMoved -= ResetHexes;
     }
 
-    private void SetActiveCharacter(Character activeCharacter)
+    private void ResetSelections(Character activeCharacter)
     {
-        Debug.Log(activeCharacter.name);
         selectedAbility = null;
         ValidTargetHexes = new List<HexCell>();
-        ActiveCharacter = activeCharacter;
     }
 
     public void SelectAbility(int selection)
     {
-        selectedAbility = ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
+        selectedAbility = HexGridController.activeCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityDescription);
         ValidTargetHexes = abilityTargetHexes;
     }
 
     private void MouseOverHexCell(HexCell mouseOverCell)
     {
-        if (selectedAbility != null && ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
+        if (selectedAbility != null && HexGridController.activeCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
         {
-            AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(ActiveCharacter.Location, mouseOverCell);
+            AbilityAffectedHexes = selectedAbility.targetType.GetAffectedCells(HexGridController.activeCharacter.Location, mouseOverCell);
         }
     }
 
@@ -152,8 +143,8 @@ public class CombatSystem : MonoBehaviour
                     selectedAbility.Use(item.Unit as Character);
                 }
             }
-            ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-            uiController.UpdateAllCharacters(a);
+            HexGridController.activeCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+            uiController.UpdateAllCharacters();
         }
     }
 

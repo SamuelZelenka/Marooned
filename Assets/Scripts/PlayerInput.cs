@@ -9,54 +9,58 @@ public class PlayerInput : MonoBehaviour
     public HexGrid shipGrid;
     public CombatSystem combatSystem;
 
-    bool combatModeActive = false;
+    static bool combatModeActive = false;
     bool updatePathfinding = true;
 
-    HexCell selectedCell;
-    HexCell SelectedCell
-    {
-        get => selectedCell;
-        set
-        {
-            selectedCell = value;
-            if (combatModeActive)
-            {
-                combatSystem.UseAbility(value);
-            }
-        }
-    }
-    HexUnit activeUnit;
-    HexUnit ActiveUnit
-    {
-        get => activeUnit;
-        set
-        {
-            //Old
-            if (activeUnit)
-            {
-                activeUnit.ShowUnitActive(false);
-            }
-            activeUnit = value;
-            //New
-            if (activeUnit)
-            {
-                activeUnit.ShowUnitActive(true);
-            }
-        }
-    }
-    HexUnit selectedUnit;
-    HexUnit SelectedUnit
-    {
-        get => selectedUnit;
-        set
-        {
-            selectedUnit = value;
-            if (value != null && !combatModeActive && value.playerControlled)
-            {
-                ActiveUnit = value;
-            }
-        }
-    }
+    public delegate void UnitHandler(HexUnit unit);
+    public static UnitHandler OnUnitSelected;
+
+    //HexCell selectedCell;
+    //HexCell SelectedCell
+    //{
+    //    get => selectedCell;
+    //    set
+    //    {
+    //        selectedCell = value;
+    //        if (combatModeActive)
+    //        {
+    //            combatSystem.UseAbility(value);
+    //        }
+    //    }
+    //}
+    //HexUnit activeUnit;
+    //HexUnit ActiveUnit
+    //{
+    //    get => activeUnit;
+    //    set
+    //    {
+    //        //Old
+    //        if (activeUnit)
+    //        {
+    //            activeUnit.ShowUnitActive(false);
+    //        }
+    //        activeUnit = value;
+    //        //New
+    //        if (activeUnit)
+    //        {
+    //            activeUnit.ShowUnitActive(true);
+    //        }
+    //    }
+    //}
+    //static HexUnit selectedUnit;
+    //public static HexUnit SelectedUnit
+    //{
+    //    get => selectedUnit;
+    //    set
+    //    {
+    //        selectedUnit = value;
+    //        if (value != null && !combatModeActive && value.playerControlled)
+    //        {
+    //            ActiveUnit = value;
+    //        }
+    //        OnUnitSelected?.Invoke(value);
+    //    }
+    //}
     HexCell mouseHooverCell;
     HexCell MouseHooverCell
     {
@@ -77,7 +81,6 @@ public class PlayerInput : MonoBehaviour
     {
         CombatSystem.OnCombatStart += StartCombatMode;
         CombatSystem.OnCombatEnd += EndCombatMode;
-        CombatTurnSystem.OnTurnBegining += DoUnitSelection;
         HexCell.OnHexCellHoover += DoMouseHooverCellSelection;
     }
 
@@ -85,7 +88,6 @@ public class PlayerInput : MonoBehaviour
     {
         CombatSystem.OnCombatStart -= StartCombatMode;
         CombatSystem.OnCombatEnd -= EndCombatMode;
-        CombatTurnSystem.OnTurnBegining -= DoUnitSelection;
         HexCell.OnHexCellHoover -= DoMouseHooverCellSelection;
     }
 
@@ -95,8 +97,12 @@ public class PlayerInput : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                SelectedCell = MouseHooverCell;
-                SelectedUnit = SelectedCell.Unit;
+                HexGridController.selectedCell = MouseHooverCell;
+                Debug.Log(mouseHooverCell);
+                if (combatModeActive)
+                {
+                    combatSystem.UseAbility(MouseHooverCell);
+                }
             }
             if (Input.GetKey(KeyCode.Mouse1))
             {
@@ -114,8 +120,6 @@ public class PlayerInput : MonoBehaviour
 
     void StartCombatMode() => combatModeActive = true;
     void EndCombatMode() => combatModeActive = false;
-
-    void DoUnitSelection(HexUnit unit) => ActiveUnit = unit;
     void DoMouseHooverCellSelection(HexCell cell) => MouseHooverCell = cell;
 
     //HexCell GetCellUnderMouse() => terrainGrid.gameObject.activeInHierarchy? terrainGrid.GetCell() : shipGrid.GetCell();
@@ -124,9 +128,19 @@ public class PlayerInput : MonoBehaviour
     void DoPathfinding(HexCell hooverCell)
     {
         Debug.Log("Doing pathfinding");
-        if (hooverCell && ActiveUnit.CanMoveTo(hooverCell))
+        HexUnit activeUnit;
+        if (HexGridController.currentMode == HexGridController.GridMode.Map)
         {
-            Pathfinding.FindPath(ActiveUnit.Location, hooverCell, ActiveUnit, true);
+            activeUnit = HexGridController.activeShip;
+        }
+        else
+        {
+            activeUnit = HexGridController.activeCharacter;
+        }
+
+        if (hooverCell && activeUnit.CanMoveTo(hooverCell))
+        {
+            Pathfinding.FindPath(activeUnit.Location, hooverCell, activeUnit, true);
         }
         else
         {
@@ -137,16 +151,26 @@ public class PlayerInput : MonoBehaviour
 
     void DoMove()
     {
-        if (ActiveUnit)
+        HexUnit activeUnit;
+        if (HexGridController.currentMode == HexGridController.GridMode.Map)
+        {
+            activeUnit = HexGridController.activeShip;
+        }
+        else
+        {
+            activeUnit = HexGridController.activeCharacter;
+        }
+
+        if (activeUnit)
         {
             if (Pathfinding.HasPath)
             {
                 Debug.Log("Doing move");
-                List<HexCell> reachablePathThisTurn = Pathfinding.GetReachablePath(ActiveUnit, out int cost);
+                List<HexCell> reachablePathThisTurn = Pathfinding.GetReachablePath(activeUnit, out int cost);
                 if (reachablePathThisTurn != null && reachablePathThisTurn.Count > 1) //An actual path, longer than the included start hex where the unit stands now
                 {
-                    StartCoroutine(ActiveUnit.Travel(reachablePathThisTurn));
-                    ActiveUnit.remainingMovementPoints -= cost;
+                    StartCoroutine(activeUnit.Travel(reachablePathThisTurn));
+                    activeUnit.remainingMovementPoints -= cost;
                     Pathfinding.ClearPath();
                 }
             }
@@ -158,16 +182,4 @@ public class PlayerInput : MonoBehaviour
     }
     #endregion
 
-
-    public Character GetActiveCharacter()
-    {
-        if (ActiveUnit is Character)
-        {
-            return ActiveUnit as Character;
-        }
-        else
-        {
-            return null;
-        }
-    }
 }

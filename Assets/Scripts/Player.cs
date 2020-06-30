@@ -43,6 +43,7 @@ public class Player
     public void StartNewTurn()
     {
         Ship.StartNewTurn();
+        HexGridController.activeShip = Ship;
 
         if (IsHuman)
         {

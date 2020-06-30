@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class CharacterSelection : MonoBehaviour
 {
-    Character character;
-
     [SerializeField] Text characterName = null;
     [SerializeField] Image portrait = null;
 
@@ -20,20 +18,7 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar energy = null;
 
-    public void SelectCharacter(HexUnit unit)
-    {
-        character = null;
-        if (unit is Character)
-        {
-            character = unit as Character;
-        }
-        else
-        {
-            return;
-        }
-        UpdateUI();
-    }
-    public void UpdateUI()
+    public void UpdateUI(Character character)
     {
         if (portrait != null)
         {
