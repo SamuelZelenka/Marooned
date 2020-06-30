@@ -88,16 +88,10 @@ public class CombatTurnSystem : MonoBehaviour
     //Starting the turn for the character in the first position in the queue
     private void StartNextTurn()
     {
-        //De-select last active character
-        if (HexGridController.ActiveCharacter)
-        {
-            HexGridController.ActiveCharacter.ShowUnitActive(false);
-        }
         HexGridController.ActiveCharacter = turnOrder.Dequeue();
         Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.characterName);
 
         OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);
-        HexGridController.ActiveCharacter.ShowUnitActive(true);
 
         HexGridController.ActiveCharacter.StartNewTurn();
         if (!HexGridController.ActiveCharacter.playerControlled)

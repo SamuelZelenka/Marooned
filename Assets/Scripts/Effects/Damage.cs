@@ -6,8 +6,8 @@
         Description = $"Reduces {damage} vitality.";
         this.damage = damage;
     }
-    public override void ApplyEffect(Character character)
+    public override void ApplyEffect(Character target)
     {
-        character.characterData.Vitality.CurrentValue -= damage;
+        target.characterData.Vitality.CurrentValue -= damage;
     }
 }

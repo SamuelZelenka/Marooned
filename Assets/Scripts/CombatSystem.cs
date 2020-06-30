@@ -151,8 +151,7 @@ public class CombatSystem : MonoBehaviour
     public void StartCombat()
     {
         OnCombatStart?.Invoke();
-        ChangeView(true);
-        HexGridController.currentMode = HexGridController.GridMode.Combat;
+        OpenCombatCanvas(true);
         SetUpCombat(0);
     }
 
@@ -189,7 +188,7 @@ public class CombatSystem : MonoBehaviour
     {
         OnCombatEnd?.Invoke();
         hexGrid.Load(managementMap, false);
-        HexGridController.currentMode = HexGridController.GridMode.Map;
+        HexGridController.CurrentMode = HexGridController.GridMode.Map;
 
         foreach (var item in humanPlayer.Crew)
         {
@@ -197,13 +196,11 @@ public class CombatSystem : MonoBehaviour
             item.Location = hexGrid.GetCell(item.SavedShipLocation.coordinates);
             item.SavedShipLocation = item.Location;
         }
-        ChangeView(false);
+        OpenCombatCanvas(false);
     }
 
-    private void ChangeView(bool showCombat)
+    private void OpenCombatCanvas(bool showCombat)
     {
         combatCanvas.SetActive(showCombat);
-        combatView.SetActive(showCombat);
-        mapView.SetActive(!showCombat);
     }
 }

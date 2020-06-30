@@ -74,7 +74,7 @@ public static class Pathfinding
                 }
 
                 //Hexes forbidden to move to
-                if (!unit.CanMoveTo(neighbor))
+                if (!unit.CanEnter(neighbor))
                 {
                     continue;
                 }
@@ -198,5 +198,89 @@ public static class Pathfinding
             currentPathTo.ShowHighlight(false, HexCell.HighlightType.PathfindingEnd);
         }
         currentPathFrom = currentPathTo = null;
+    }
+
+    public static List<HexCell> GetAllReachableCells(HexCell fromCell, HexUnit unit)
+    {
+        ClearPath();
+        //New unit == Clear old pathfinding
+        if (searcherUnit != unit)
+        {
+            unit.myGrid.ClearSearchHeuristics();
+            searchFrontierPhase = 0;
+            searchFrontier = null;
+        }
+        searcherUnit = unit;
+
+
+        List<HexCell> reachableCells = new List<HexCell>();
+
+        searchFrontierPhase += 2;
+        Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
+        if (searchFrontier == null)
+        {
+            searchFrontier = new HexCellPriorityQueue();
+        }
+        else
+        {
+            searchFrontier.Clear();
+        }
+
+        fromCell.SearchPhase = searchFrontierPhase;
+        fromCell.MovementCost = 0;
+        searchFrontier.Enqueue(fromCell);
+
+        while (searchFrontier.Count > 0)
+        {
+            HexCell current = searchFrontier.Dequeue();
+            current.SearchPhase += 1;
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+                {
+                    continue;
+                }
+
+                //Hexes forbidden to move to
+                if (!unit.CanEnter(neighbor))
+                {
+                    continue;
+                }
+                if (!neighbor.Traversable)
+                {
+                    continue;
+                }
+                //
+
+                int hexEnterCost = 0;
+
+                //Special condition costs here
+                hexEnterCost += neighbor.MovementCostPenalty;
+
+                //Default cost
+                hexEnterCost += neighbor.IsOcean ? unit.oceanMovementCost : unit.landMovementCost;
+
+                int combinedCost = current.MovementCost + hexEnterCost;
+
+                if (neighbor.SearchPhase < searchFrontierPhase) //Has not been set before
+                {
+                    neighbor.SearchPhase = searchFrontierPhase;
+                    neighbor.MovementCost = combinedCost;
+
+                    if (neighbor.MovementCost <= unit.remainingMovementPoints)
+                    {
+                        reachableCells.Add(neighbor);
+                        searchFrontier.Enqueue(neighbor);
+                    }
+                }
+                else if (combinedCost < neighbor.MovementCost) //Update cost
+                {
+                    neighbor.MovementCost = combinedCost;
+                }
+            }
+        }
+        return reachableCells;
     }
 }

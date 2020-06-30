@@ -9,12 +9,12 @@ public abstract class HexUnit : MonoBehaviour
 
     [Header("Movement")]
     const float travelSpeed = 4f;
-    public int remainingMovementPoints = 5, defaultMovementPoints = 5;
+    public int remainingMovementPoints = 0, defaultMovementPoints = 5;
     public int oceanMovementCost = 1;
     public int landMovementCost = 1;
     List<HexCell> pathToTravel;
+    List<HexCell> reachableCells = new List<HexCell>();
 
-    //public int playerIndex;
     public bool playerControlled;
     public HexGrid myGrid;
 
@@ -38,6 +38,12 @@ public abstract class HexUnit : MonoBehaviour
             location = value;
             value.Unit = this;
             transform.localPosition = value.Position;
+            if (myGrid)
+            {
+                ShowReachableCells(false);
+                CalculateReachableCells();
+                ShowReachableCells(true);
+            }
             OnUnitMoved?.Invoke(this);
         }
     }
@@ -62,32 +68,55 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
-    public virtual void ShowUnitActive(bool status)
+    public virtual void StartNewTurn()
     {
-        Location.ShowHighlight(status, HexCell.HighlightType.ActiveCell);
+        ShowUnitActive(true);
     }
 
+    public void EndTurn()
+    {
+        ShowUnitActive(false);
+    }
 
     public void ValidateLocation() => transform.localPosition = location.Position;
 
-    public abstract bool CanMoveTo(HexCell cell);
+    public abstract bool CanEnter(HexCell cell);
 
-    public abstract void StartNewTurn();
+    private void CalculateReachableCells() => reachableCells = Pathfinding.GetAllReachableCells(Location, this);
+
+    private void ShowReachableCells(bool status)
+    {
+        if (!playerControlled)
+        {
+            return;
+        }
+        foreach (var item in reachableCells)
+        {
+            item.ShowHighlight(status, HexCell.HighlightType.ValidMoveInteraction);
+        }
+    }
+
+    public virtual void ShowUnitActive(bool status)
+    {
+        Location.ShowHighlight(status, HexCell.HighlightType.ActiveCell);
+
+        ShowReachableCells(false);
+
+        if (status)
+        {
+            CalculateReachableCells();
+            ShowReachableCells(true);
+        }
+    }
 
     public abstract IEnumerator PerformAutomaticTurn();
 
     public IEnumerator Travel(List<HexCell> path)
     {
-        if (playerControlled)
-        {
-            Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
-        }
+        Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
         pathToTravel = path;
         yield return StartCoroutine(TravelPath());
-        if (playerControlled)
-        {
-            Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
-        }
+        Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
     }
 
     IEnumerator TravelPath()
@@ -119,7 +148,7 @@ public abstract class HexUnit : MonoBehaviour
 
                 yield return null;
             }
-            Location = pathToTravel[i - 1];
+            //Location = pathToTravel[i - 1]; //Removed to ignore OnHexUnit moved while only being on a path (need solution for Fog of War updates)
             t -= 1f;
         }
 

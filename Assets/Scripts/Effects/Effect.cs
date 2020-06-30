@@ -9,26 +9,26 @@ public abstract class Effect
         get;
         protected set;
     }
-    public abstract void ApplyEffect(Character character);
+    public abstract void ApplyEffect(Character target);
 }
 
 public abstract class TickEffect : Effect
 {
-    public override void ApplyEffect(Character character)
+    public override void ApplyEffect(Character target)
     {
-        character.AddEffect(this);
+        target.AddEffect(this);
     }
-    public virtual void EffectTick(Character character)
+    public virtual void EffectTick(Character target)
     {
         if (counter >= duration)
         {
-            RemoveEffect(character);
+            RemoveEffect(target);
         }
         counter++;
     }
-    public virtual void RemoveEffect(Character character)
+    public virtual void RemoveEffect(Character target)
     {
-        character.RemoveEffects(this);
+        target.RemoveEffects(this);
     }
     protected int duration;
     private int counter = 0;

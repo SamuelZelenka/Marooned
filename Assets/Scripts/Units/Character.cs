@@ -15,6 +15,7 @@ public class Character : HexUnit
     public delegate void EffectHandler(Effect effect);
     public event EffectHandler OnEffectApplied;
 
+    //Used for storing locations on the player ship
     HexCell savedShipLocation;
     public HexCell SavedShipLocation
     {
@@ -32,6 +33,7 @@ public class Character : HexUnit
 
     private void Awake()
     {
+        //Setup abilities
         foreach (var item in abilityID)
         {
             if (Ability.abilityDictionary.TryGetValue(item, out Ability foundAbility))
@@ -51,6 +53,7 @@ public class Character : HexUnit
         animatedArrow.SetActive(status);
     }
 
+    #region Effects and abilities
     public void AddEffect(TickEffect effect)
     {
         characterData.activeEffects.Add(effect);
@@ -87,27 +90,10 @@ public class Character : HexUnit
         possibleTargets = Abilities[abilityIndex].targetType.GetValidCells(Location);
         return Abilities[abilityIndex];
     }
-
-    ////TEMP METHOD!!!!!
-    //public void ButtonAddEffect(string effect)
-    //{
-    //    switch (effect)
-    //    {
-    //        case "stun":
-    //            AddEffect(new Stun(2));
-    //            break;
-    //        case "bleed":
-    //            AddEffect(new Bleed(2));
-    //            break;
-    //        default:
-    //            break;
-    //    }
-
-    //}
-    ////TEMP METHOD!!!!!
+    #endregion
 
 
-    public override bool CanMoveTo(HexCell cell)
+    public override bool CanEnter(HexCell cell)
     {
         if (cell.Unit)
         {
@@ -118,9 +104,11 @@ public class Character : HexUnit
 
     public override void StartNewTurn()
     {
+        base.StartNewTurn();
         remainingMovementPoints = defaultMovementPoints;
     }
 
+    #region AI
     HexCell target;
     public override IEnumerator PerformAutomaticTurn()
     {
@@ -177,4 +165,5 @@ public class Character : HexUnit
         }
         return newTarget;
     }
+    #endregion
 }

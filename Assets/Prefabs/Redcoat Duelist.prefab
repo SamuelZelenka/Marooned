@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 435603174573623445}
   - component: {fileID: 435603174573623444}
   m_Layer: 0
-  m_Name: EnemyCharacter
+  m_Name: Redcoat Duelist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,8 @@ SpriteRenderer:
   m_SortingLayerID: -1230583947
   m_SortingLayer: 6
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 08ad890560ee1cd4b8326a657db3379e, type: 3}
+  m_Sprite: {fileID: -5272090767817339503, guid: e8983668ed68f5f41b4772feb50b6d84,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,11 +105,13 @@ MonoBehaviour:
   currentVisionRange: 0
   defaultVisionRange: 0
   characterData:
-    characterName: name
-    portrait: {fileID: 0}
+    characterName: Redcoat Duelist
+    portrait: {fileID: 7340332454120297748, guid: e8983668ed68f5f41b4772feb50b6d84,
+      type: 3}
     inGameSprite: {fileID: 0}
   animatedArrow: {fileID: 743500340433588429}
   isStunned: 0
+  abilityID: 64000000
 --- !u!1 &743500340433588429
 GameObject:
   m_ObjectHideFlags: 0
