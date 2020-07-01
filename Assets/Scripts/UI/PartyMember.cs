@@ -18,6 +18,10 @@ public class PartyMember : MonoBehaviour
     {
         this.character = character;
     }
+    public void SelectThisCharacter()
+    {
+        HexGridController.SelectedCell = character.Location;
+    }
     public void UpdateUI()
     {
         characterName.text = character.characterData.characterName;

@@ -117,6 +117,10 @@ public class Character : HexUnit
         base.StartNewTurn();
         remainingMovementPoints = defaultMovementPoints;
     }
+    public void SelectThisCharacter()
+    {
+        HexGridController.SelectedCell = this.Location;
+    }
 
     #region AI
     public void SetAI(AI ai) => aiController = ai;
