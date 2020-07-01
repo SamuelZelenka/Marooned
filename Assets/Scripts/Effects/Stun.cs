@@ -12,9 +12,9 @@
         }
         base.duration = duration;
     }
-    public override void ApplyEffect(Character target)
+    public override void ApplyEffect(Character target, SkillcheckSystem.CombatOutcome outcome)
     {
-        base.ApplyEffect(target);
+        base.ApplyEffect(target, outcome);
         target.isStunned = true;
     }
     public override void EffectTick(Character target)

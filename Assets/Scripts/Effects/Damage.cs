@@ -6,8 +6,8 @@
         Description = $"Reduces {damage} vitality.";
         this.damage = damage;
     }
-    public override void ApplyEffect(Character target)
+    public override void ApplyEffect(Character target, SkillcheckSystem.CombatOutcome outcome)
     {
-        target.characterData.Vitality.CurrentValue -= damage;
+        target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, damage);
     }
 }

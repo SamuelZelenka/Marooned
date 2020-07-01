@@ -8,6 +8,9 @@
         abilityDescription = $"Deal {damage} vitality damage and reduce {loyaltyDecrease} loyalty from up to three adjacent targets";
         abilitySprite = null;
         cost = 10;
+        RequireSkillCheck = true;
+        AttackerSkillcheck = CharacterStatType.Strength;
+        TargetSkillcheck = CharacterStatType.Agility;
         effects.Add(new Damage(damage));
         effects.Add(new LoyaltyDecrease(loyaltyDecrease));
         targeting = new SwipeAdjacent();

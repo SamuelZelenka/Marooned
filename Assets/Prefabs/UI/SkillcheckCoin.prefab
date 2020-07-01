@@ -93,7 +93,6 @@ MonoBehaviour:
   lossSprite: {fileID: 4843393401301733221, guid: e8983668ed68f5f41b4772feb50b6d84,
     type: 3}
   undecidedSprite: {fileID: 21300000, guid: fccc6a2da15f3fa43b9456a3b5b08064, type: 3}
-  flipSpeed: 1
 --- !u!1 &1888181486193472042
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +128,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -50, y: -50}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &606282579355096129
 CanvasRenderer:

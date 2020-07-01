@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class SkillcheckCoin : MonoBehaviour
 {
-    const float percentageToWin = 50;
+    const float PERCENTAGETOWIN = 50;
     [SerializeField] Image coinFace = null;
     [SerializeField] Sprite winSprite = null, lossSprite = null, undecidedSprite = null;
-    const float flipTime = 0.5f;
-    const float maxRotation = 50f;
+    public const float FLIPTIME = 0.5f;
+    const float MAXROTATION = 50f;
 
-    public static bool FlipCoin() => Random.Range(0, 100) >= percentageToWin;
+    public static bool GetCoinflipResult() => Random.Range(0, 100) >= PERCENTAGETOWIN;
 
     public void TurnCoinToUndecided()
     {
@@ -23,9 +23,9 @@ public class SkillcheckCoin : MonoBehaviour
         float flipTimer = 0;
 
         //Rotate
-        while (flipTimer < flipTime)
+        while (flipTimer < FLIPTIME)
         {
-            float rotation = maxRotation * (flipTime - flipTimer) / flipTime;
+            float rotation = MAXROTATION * (FLIPTIME - flipTimer) / FLIPTIME;
             coinFace.sprite = Utility.ReturnRandom(winSprite, lossSprite);
             this.transform.Rotate(new Vector3(0, rotation, 0));
             yield return null;

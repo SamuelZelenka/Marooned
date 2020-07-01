@@ -15,6 +15,7 @@ public class CombatSystem : MonoBehaviour
     public GameObject combatView;
     public CombatTurnSystem turnSystem;
     public CombatUIController uiController;
+    [SerializeField] SkillcheckSystem skillcheckSystem = null;
 
     Player humanPlayer;
     Ship playerShip;
@@ -77,6 +78,7 @@ public class CombatSystem : MonoBehaviour
             }
         }
     }
+    List<Character> abilityTargetCharacters = new List<Character>();
 
     #region Setup References
 
@@ -107,14 +109,14 @@ public class CombatSystem : MonoBehaviour
     private void OnEnable()
     {
         CombatTurnSystem.OnTurnBegining += ResetSelections;
-        HexCell.OnHexCellHoover += MarkCellsToBeAffected;
+        HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
         HexUnit.OnUnitMoved += ResetHexes;
     }
 
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= ResetSelections;
-        HexCell.OnHexCellHoover -= MarkCellsToBeAffected;
+        HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
         HexUnit.OnUnitMoved -= ResetHexes;
     }
 
@@ -183,13 +185,15 @@ public class CombatSystem : MonoBehaviour
     {
         selectedAbility = null;
         ValidTargetHexes = new List<HexCell>();
+        abilityTargetCharacters = new List<Character>();
     }
 
-    private void MarkCellsToBeAffected(HexCell mouseOverCell)
+    private void MarkCellsAndCharactersToBeAffected(HexCell targetCell)
     {
-        if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
+        if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(targetCell))
         {
-            AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, mouseOverCell);
+            AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, targetCell);
+            abilityTargetCharacters = selectedAbility.targeting.GetAffectedCharacters(HexGridController.ActiveCharacter.Location, targetCell);
         }
     }
 
@@ -211,20 +215,25 @@ public class CombatSystem : MonoBehaviour
 
     public void UseAbility(HexCell selectedCellForTarget)
     {
-        MarkCellsToBeAffected(selectedCellForTarget);
-        if (selectedAbility != null && ValidTargetHexes != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(selectedCellForTarget))
+        MarkCellsAndCharactersToBeAffected(selectedCellForTarget);
+        if (selectedAbility != null && ValidTargetHexes != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(selectedCellForTarget)) //Have selected an ability
         {
-            if (HexGridController.ActiveCharacter.characterData.Energy.CurrentValue >= selectedAbility.cost)
+            if (HexGridController.ActiveCharacter.characterData.Energy.CurrentValue >= selectedAbility.cost) //Have enough energy
             {
                 Debug.Log("Using ability " + selectedAbility.abilityName);
-                foreach (var item in AbilityAffectedHexes)
+                if (selectedAbility.RequireSkillCheck)
                 {
-                    if (item.Unit is Character)
-                    {
-                        selectedAbility.Use(item.Unit as Character);
-                    }
+                    skillcheckSystem.OnCombatOutcomesDecided += ResolveUsedAbility;
+
+                    Character attacker = HexGridController.ActiveCharacter;
+                    List<Character> targets = selectedAbility.targeting.GetAffectedCharacters(attacker.Location, selectedCellForTarget);
+
+                    skillcheckSystem.StartContestedSkillcheck(attacker, targets, selectedAbility.AttackerSkillcheck, selectedAbility.TargetSkillcheck);
                 }
-                HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+                else
+                {
+                    ResolveUsedAbility();
+                }
             }
             else
             {
@@ -235,6 +244,28 @@ public class CombatSystem : MonoBehaviour
         {
             Debug.Log("Action not possible. No action selected or clicked hex is not a valid hex");
         }
+    }
+
+    //Required outcomes
+    private void ResolveUsedAbility(List<SkillcheckSystem.CombatOutcome> attackOutcome)
+    {
+        skillcheckSystem.OnCombatOutcomesDecided -= ResolveUsedAbility;
+        for (int i = 0; i < abilityTargetCharacters.Count; i++)
+        {
+            selectedAbility.Use(abilityTargetCharacters[i], attackOutcome[i]);
+        }
+        HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+        OnAbilityUsed?.Invoke();
+    }
+
+    //No required outcomes
+    private void ResolveUsedAbility()
+    {
+        for (int i = 0; i < abilityTargetCharacters.Count; i++)
+        {
+            selectedAbility.Use(abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
+        }
+        HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
         OnAbilityUsed?.Invoke();
     }
 

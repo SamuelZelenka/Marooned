@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CharacterStatType { Strength, Stamina, Constituation, Agility, Toughness, Accuracy}
+
 [Serializable]
 public class CharacterData
 {
@@ -34,173 +36,28 @@ public class CharacterData
     public Stat Accuracy { get; private set; } = new Stat("Accuracy", 1);
     public Stat Bounty { get; private set; } = new Stat("Bounty", 1);
 
+    public int GetStatValue(CharacterStatType statType)
+    {
+        switch (statType)
+        {
+            case CharacterStatType.Strength:
+                return Strength.CurrentValue;
+            case CharacterStatType.Stamina:
+                return Stamina.CurrentValue;
+            case CharacterStatType.Constituation:
+                return Constitution.CurrentValue;
+            case CharacterStatType.Agility:
+                return Agility.CurrentValue;
+            case CharacterStatType.Toughness:
+                return Toughness.CurrentValue;
+            case CharacterStatType.Accuracy:
+                return Accuracy.CurrentValue;
+            default:
+                Debug.LogError("Stat not found");
+                return int.MinValue;
+        }
+    }
 
-
-    //[SerializeField] int vitality = 30;
-    //[SerializeField] int maxVitality = 30;
-    //[SerializeField] int energy = 1;
-    //[SerializeField] int maxEnergy = 100;
-    //[SerializeField] int hunger = 1;
-    //[SerializeField] int maxHunger = 1;
-    //[SerializeField] int hygiene = 1;
-    //[SerializeField] int maxHygiene = 100;
-    //[SerializeField] int loyalty = 1;
-    //[SerializeField] int maxLoyalty = 100;
-
-
-    ////Stats
-    //int strength = 0;
-    //int stamina = 0;
-    //int constitution = 0;
-    //int agility = 0;
-    //int toughness = 0;
-    //int accuracy = 0;
-    //int bounty = 0;
-    //#region Stats
-    //public int Strength
-    //{
-    //    get { return strength; }
-    //    set
-    //    {
-    //        strength = value;
-    //    }
-    //}
-    //public int Stamina
-    //{
-    //    get { return stamina; }
-    //    set
-    //    {
-    //        stamina = value;
-    //    }
-    //}
-    //public int Constitutuion
-    //{
-    //    get { return constitution; }
-    //    set
-    //    {
-    //        constitution = value;
-    //    }
-    //}
-    //public int Agility
-    //{
-    //    get { return agility; }
-    //    set
-    //    {
-    //        agility = value;
-    //    }
-    //}
-    //public int Toughness
-    //{
-    //    get { return toughness; }
-    //    set
-    //    {
-    //        toughness = value;
-    //    }
-    //}
-    //public int Accuracy
-    //{
-    //    get { return accuracy; }
-    //    set
-    //    {
-    //        accuracy = value;
-    //    }
-    //}
-    //public int Bounty
-    //{
-    //    get { return bounty; }
-    //    set
-    //    {
-    //        bounty = value;
-    //    }
-    //}
-    //#endregion
-    //#region Resources
-    //public int MaxVitality
-    //{
-    //    get { return maxVitality; }
-    //    set
-    //    {
-    //        maxVitality = value;
-    //    }
-    //}
-    //public int Vitality
-    //{
-    //    get { return vitality; }
-    //    set
-    //    {
-    //        vitality = Mathf.Clamp(value, MINRESOURCEVALUE, maxVitality);
-    //        if (vitality <= 0)
-    //        {
-    //            Debug.Log("Is dead");
-    //        }
-    //    }
-    //}
-    //public int MaxEnergy
-    //{
-    //    get { return maxEnergy; }
-    //    set
-    //    {
-    //        maxEnergy = value;
-    //    }
-    //}
-    //public int Energy
-    //{
-    //    get { return energy; }
-    //    set
-    //    {
-    //        energy = Mathf.Clamp(value, MINRESOURCEVALUE, maxEnergy);
-    //    }
-    //}
-
-    //public int MaxHunger
-    //{
-    //    get { return maxHunger; }
-    //    set
-    //    {
-    //        maxHunger = value;
-    //    }
-    //}
-    //public int Hunger
-    //{
-    //    get { return hunger; }
-    //    set
-    //    {
-    //        hunger = Mathf.RoundToInt(Mathf.Min(value, 1));
-    //    }
-    //}
-    //public int MaxHygiene
-    //{
-    //    get { return maxHunger; }
-    //    set
-    //    {
-    //        maxHunger = value;
-    //    }
-    //}
-    //public float Hygiene
-    //{
-    //    get { return hygiene; }
-    //    set
-    //    {
-    //        hygiene = Mathf.RoundToInt(Mathf.Min(value, 1));
-    //    }
-    //}
-    //public int MaxLoyalty
-    //{
-    //    get { return maxHunger; }
-    //    set
-    //    {
-    //        maxHunger = value;
-    //    }
-    //}
-    //public float Loyalty
-    //{
-    //    get { return loyalty; }
-    //    set
-    //    {
-    //        loyalty = Mathf.RoundToInt(Mathf.Min(value, 1));
-    //    }
-    //}
-    //#endregion
     [Serializable]
     public class Resource
     {
