@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CombatSystem : MonoBehaviour
 {
+    //Singleton included in Setup below
+
     [Header("References")]
     public HexGrid hexGrid;
     public Transform playerCharacterParent;
@@ -77,7 +78,21 @@ public class CombatSystem : MonoBehaviour
     }
 
     #region Setup References
-    private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;
+
+    #region Singleton
+    public static CombatSystem instance;
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.Log("Another instance of : " + instance.ToString() + " was tried to be instanced, but was destroyed from gameobject: " + this.transform.name);
+            GameObject.Destroy(this);
+            return;
+        }
+        instance = this;
+        SessionSetup.OnHumanPlayerCreated += DoSetup;
+    }
+    #endregion
 
     private void DoSetup(Player humanPlayer)
     {
@@ -91,14 +106,14 @@ public class CombatSystem : MonoBehaviour
     private void OnEnable()
     {
         CombatTurnSystem.OnTurnBegining += ResetSelections;
-        HexCell.OnHexCellHoover += MouseOverHexCell;
+        HexCell.OnHexCellHoover += MarkCellsToBeAffected;
         HexUnit.OnUnitMoved += ResetHexes;
     }
 
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= ResetSelections;
-        HexCell.OnHexCellHoover -= MouseOverHexCell;
+        HexCell.OnHexCellHoover -= MarkCellsToBeAffected;
         HexUnit.OnUnitMoved -= ResetHexes;
     }
 
@@ -169,7 +184,7 @@ public class CombatSystem : MonoBehaviour
         ValidTargetHexes = new List<HexCell>();
     }
 
-    private void MouseOverHexCell(HexCell mouseOverCell)
+    private void MarkCellsToBeAffected(HexCell mouseOverCell)
     {
         if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(mouseOverCell))
         {
@@ -177,27 +192,48 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
+    //Called from the UI when a player selects an ability
     public void SelectAbility(int selection)
     {
         selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
-        Debug.Log("Selected ability " + selectedAbility.abilityDescription);
+        Debug.Log("Selected ability " + selectedAbility.abilityName);
         ValidTargetHexes = abilityTargetHexes;
     }
 
-    public void UseAbility(HexCell cellClickedOn)
+    //Used by the AI when called from the character
+    public void SelectAbility(Ability selection)
     {
-        MouseOverHexCell(cellClickedOn);
-        if (selectedAbility != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(cellClickedOn))
+        selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
+        Debug.Log("Selected ability " + selectedAbility.abilityName);
+        ValidTargetHexes = abilityTargetHexes;
+    }
+
+    public void UseAbility(HexCell selectedCellForTarget)
+    {
+        MarkCellsToBeAffected(selectedCellForTarget);
+        if (selectedAbility != null && ValidTargetHexes != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(selectedCellForTarget))
         {
-            Debug.Log("Using ability " + selectedAbility.abilityDescription);
-            foreach (var item in AbilityAffectedHexes)
+            if (HexGridController.ActiveCharacter.characterData.Energy.CurrentValue >= selectedAbility.cost)
             {
-                if (item.Unit is Character)
+                Debug.Log("Using ability " + selectedAbility.abilityName);
+                foreach (var item in AbilityAffectedHexes)
                 {
-                    selectedAbility.Use(item.Unit as Character);
+                    if (item.Unit is Character)
+                    {
+                        selectedAbility.Use(item.Unit as Character);
+                    }
                 }
+                HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+                uiController.UpdateAllCharacters();
             }
-            HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+            else
+            {
+                Debug.Log("Not enough energy");
+            }
+        }
+        else
+        {
+            Debug.Log("Action not possible. No action selected or clicked hex is not a valid hex");
         }
         uiController.UpdateAllCharacters();
     }

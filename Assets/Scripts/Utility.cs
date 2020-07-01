@@ -30,6 +30,23 @@ public static class Utility
         return list;
     }
 
+    public static T ReturnRandom<T>(T a, T b)
+    {
+        if (a != null && b != null)
+        {
+            if (Random.Range(0, 100) > 50)
+            {
+                return a;
+            }
+            else
+            {
+                return b;
+            }
+        }
+        Debug.LogWarning("Objects not set");
+        return default;
+    }
+
     public static T ReturnRandom<T>(T[] array)
     {
         if (array != null && array.Length > 0)
