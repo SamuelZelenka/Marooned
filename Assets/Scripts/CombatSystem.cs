@@ -28,6 +28,7 @@ public class CombatSystem : MonoBehaviour
     public delegate void CombatHandler();
     public static CombatHandler OnCombatStart;
     public static CombatHandler OnCombatEnd;
+    public static CombatHandler OnAbilityUsed;
 
     private Ability selectedAbility;
     List<HexCell> validTargetHexes;
@@ -224,7 +225,6 @@ public class CombatSystem : MonoBehaviour
                     }
                 }
                 HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-                uiController.UpdateAllCharacters();
             }
             else
             {
@@ -235,7 +235,7 @@ public class CombatSystem : MonoBehaviour
         {
             Debug.Log("Action not possible. No action selected or clicked hex is not a valid hex");
         }
-        uiController.UpdateAllCharacters();
+        OnAbilityUsed?.Invoke();
     }
 
     private void OpenCombatCanvas(bool showCombat)

@@ -21,20 +21,23 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] List<Image> upcomingCharacters = new List<Image>();
 
     [Header("CombatLog")]
-    [SerializeField] List<string> log;
-    [SerializeField] Text logDisplay;
+    [SerializeField] List<string> log = new List<string>();
+    [SerializeField] Text logDisplay = null;
 
     private void OnEnable()
     {
         HexUnit.OnUnitMoved += UnitMoved;
         HexGridController.OnCellSelected += CellSelected;
         CombatTurnSystem.OnTurnEnding += TurnStarted;
+        CombatSystem.OnAbilityUsed += UpdateAllCharacters;
     }
     private void OnDisable()
     {
         HexUnit.OnUnitMoved -= UnitMoved;
         HexGridController.OnCellSelected -= CellSelected;
         CombatTurnSystem.OnTurnEnding -= TurnStarted;
+        CombatSystem.OnAbilityUsed -= UpdateAllCharacters;
+
     }
     public void UpdateCombatLog(string newLog)
     {
