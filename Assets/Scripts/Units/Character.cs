@@ -90,6 +90,16 @@ public class Character : HexUnit
         possibleTargets = Abilities[abilityIndex].targeting.GetValidTargets(Location);
         return Abilities[abilityIndex];
     }
+
+    public Ability SelectAbility(Ability ability, out List<HexCell> possibleTargets)
+    {
+        if (!Abilities.Contains(ability))
+        {
+            throw new System.ArgumentException("Selected ability not part of characters abilities. In " + characterData.characterName + " - " + ability.ToString());
+        }
+        possibleTargets = ability.targeting.GetValidTargets(Location);
+        return ability;
+    }
     #endregion
 
 
@@ -110,9 +120,9 @@ public class Character : HexUnit
 
     #region AI
     public void SetAI(AI ai) => aiController = ai;
-
+    public void SetNextAction(ActionGroup actionGroup) => nextAction = actionGroup;
     AI aiController;
-
+    ActionGroup nextAction;
     //HexCell target;
     public override IEnumerator PerformAutomaticTurn()
     {
@@ -120,56 +130,33 @@ public class Character : HexUnit
         CombatTurnSystem.OnTurnBegining?.Invoke(this);
 
         yield return aiController.CalculateAvailableActions(this);
+        if (nextAction != null)
+        {
+            if (nextAction.cellToEndTurnOn != Location)
+            {
+                yield return MoveToTargetCell(nextAction.cellToEndTurnOn);
+            }
+            if (nextAction.abilityToUse != null)
+            {
+                CombatSystem.instance.SelectAbility(nextAction.abilityToUse);
+                CombatSystem.instance.UseAbility(nextAction.cellAbilityTarget);
+            }
+        }
 
-        //if (target)
-        //{
-        //    yield return MoveToTarget();
-        //}
-        //else
-        //{
-        //    target = FindTarget();
-        //    Debug.Log("AI Finding path from " + Location.coordinates.ToString() + " to " + target.coordinates.ToString());
-        //    yield return MoveToTarget();
-        //}
+        nextAction = null;
 
         //End turn
         CombatTurnSystem.OnTurnEnding?.Invoke(this);
         yield return null;
     }
 
-    //IEnumerator MoveToTarget()
-    //{
-    //    Pathfinding.FindPath(Location, target, this, playerControlled);
-    //    int tries = 0;
-    //    while (!Pathfinding.HasPath && tries < 100) //Target unreachable
-    //    {
-    //        HexCell adjacentToTarget = target.GetNeighbor(HexDirectionExtension.ReturnRandomDirection());
-    //        if (adjacentToTarget)
-    //        {
-    //            Pathfinding.FindPath(Location, adjacentToTarget, this, playerControlled);
-    //        }
-    //        tries++;
-    //    }
-    //    if (Pathfinding.HasPath)
-    //    {
-    //        yield return Travel(Pathfinding.GetReachablePath(this, out int cost));
-    //        remainingMovementPoints -= cost;
-    //        Pathfinding.ClearPath();
-    //    }
-    //    if (Location == target)
-    //    {
-    //        target = null;
-    //    }
-    //}
-
-    //private HexCell FindTarget()
-    //{
-    //    HexCell newTarget = myGrid.GetRandomFreeCell();
-    //    while (Location == newTarget)
-    //    {
-    //        newTarget = myGrid.GetRandomFreeCell();
-    //    }
-    //    return newTarget;
-    //}
+    IEnumerator MoveToTargetCell(HexCell targetCell)
+    {
+        Pathfinding.FindPath(Location, targetCell, this, playerControlled);
+        List<HexCell> path = Pathfinding.GetWholePath();
+        yield return Travel(path);
+        remainingMovementPoints -= path.Count;
+        Pathfinding.ClearPath();
+    }
     #endregion
 }
