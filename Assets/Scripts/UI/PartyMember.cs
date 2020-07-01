@@ -9,7 +9,10 @@ public class PartyMember : MonoBehaviour
     [SerializeField] Image portraitImage = null;
     [SerializeField] List<Image> effects = null;
     [SerializeField] Bar vitality = null;
+    [SerializeField] Bar loyalty = null;
     [SerializeField] Bar energy = null;
+    
+
 
     public void SetCharacter(Character character)
     {
@@ -22,6 +25,8 @@ public class PartyMember : MonoBehaviour
 
         vitality.SetCurrentValue(character.characterData.Vitality.CurrentValue);
         vitality.SetMaxValue(character.characterData.Vitality.maxValue);
+        loyalty.SetCurrentValue(character.characterData.Loyalty.CurrentValue);
+        loyalty.SetMaxValue(character.characterData.Loyalty.maxValue);
         energy.SetCurrentValue(character.characterData.Energy.CurrentValue);
         energy.SetMaxValue(character.characterData.Energy.maxValue);
 

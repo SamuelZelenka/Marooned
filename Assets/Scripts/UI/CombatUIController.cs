@@ -20,6 +20,10 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] Image currentCharacter = null;
     [SerializeField] List<Image> upcomingCharacters = new List<Image>();
 
+    [Header("CombatLog")]
+    [SerializeField] List<string> log;
+    [SerializeField] Text logDisplay;
+
     private void OnEnable()
     {
         HexUnit.OnUnitMoved += UnitMoved;
@@ -32,6 +36,16 @@ public class CombatUIController : MonoBehaviour
         HexGridController.OnCellSelected -= CellSelected;
         CombatTurnSystem.OnTurnEnding -= TurnStarted;
     }
+    public void UpdateCombatLog(string newLog)
+    {
+        log.Add(log.Count + " " + newLog);
+        logDisplay.text = "";
+        for (int i = log.Count - 1; i >= 0; i--)
+        {
+            logDisplay.text += "\n-" + log[i];
+        }
+    }
+
     public void UpdateTimeline(List<Character> turnOrder)
     {
         currentCharacter.sprite = HexGridController.ActiveCharacter.characterData.portrait;
@@ -88,5 +102,5 @@ public class CombatUIController : MonoBehaviour
     }
     private void UnitMoved(HexUnit unit) => UpdateAllCharacters();
     private void CellSelected(HexCell cell) => UpdateAllCharacters();
-    private void TurnStarted(Character character) { UpdateAllCharacters(); }
+    private void TurnStarted(Character character) => UpdateAllCharacters();
 }

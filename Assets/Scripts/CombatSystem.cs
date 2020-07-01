@@ -198,8 +198,8 @@ public class CombatSystem : MonoBehaviour
                 }
             }
             HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-            uiController.UpdateAllCharacters();
         }
+        uiController.UpdateAllCharacters();
     }
 
     private void OpenCombatCanvas(bool showCombat)
