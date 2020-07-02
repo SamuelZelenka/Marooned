@@ -24,36 +24,41 @@ public class MouseTooltip : MonoBehaviour
     #endregion
 
     [Header("References")]
+    [SerializeField] RectTransform canvasRect = null;
+    [SerializeField] RectTransform mainRectTransform = null;
     [SerializeField] Text textField = null;
     [SerializeField] RectTransform backgroundRect = null;
     [SerializeField] Animator animator = null;
-
-    [Header("Settings")]
-    [SerializeField] float textPadding = 10;
-    [SerializeField] float mouseOffset = 25;
 
     [Header("Colors")]
     [SerializeField] Color defaultColor = Color.white;
     [SerializeField] Color allowed = Color.green;
     [SerializeField] Color forbidden = Color.red;
 
+    float textPadding = 0;
 
     private void Update()
     {
-        Vector2 pos = Input.mousePosition;
-        if (Input.mousePosition.x > Screen.width / 2)
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform.parent.GetComponent<RectTransform>(), Input.mousePosition, null, out Vector2 localPoint);
+        transform.localPosition = localPoint;
+
+        Vector2 anchoredPosition = mainRectTransform.anchoredPosition;
+        if (anchoredPosition.x + backgroundRect.rect.width > canvasRect.rect.width)
         {
-            pos += new Vector2(-mouseOffset - backgroundRect.sizeDelta.x, mouseOffset);
+            anchoredPosition.x = canvasRect.rect.width - backgroundRect.rect.width;
         }
-        else
+        if (anchoredPosition.y + backgroundRect.rect.height > canvasRect.rect.height)
         {
-            pos += new Vector2(mouseOffset, mouseOffset);
+            anchoredPosition.y = canvasRect.rect.height - backgroundRect.rect.height;
         }
-        this.transform.position = pos;
+        mainRectTransform.anchoredPosition = anchoredPosition;
     }
 
-    private void Start() => HideTooltip(null);
-
+    private void Start()
+    {
+        textPadding = textField.rectTransform.anchoredPosition.x;
+        Hide();
+    }
 
     private void SetUp(ColorText textColor, string message)
     {
@@ -64,6 +69,8 @@ public class MouseTooltip : MonoBehaviour
         }
 
         gameObject.SetActive(true);
+        transform.SetAsLastSibling();
+
         animator.SetTrigger("FadeIn");
 
         Color color = defaultColor;
@@ -85,20 +92,9 @@ public class MouseTooltip : MonoBehaviour
 
         Vector2 backgroundSize = new Vector2(textField.preferredWidth + textPadding * 2, textField.preferredHeight + textPadding * 2);
         backgroundRect.sizeDelta = backgroundSize;
-
-        Vector2 pos = Input.mousePosition;
-        if (Input.mousePosition.x > Screen.width / 2)
-        {
-            pos += new Vector2(-mouseOffset - backgroundSize.x, mouseOffset);
-        }
-        else
-        {
-            pos += new Vector2(mouseOffset, mouseOffset);
-        }
-        this.transform.position = pos;
     }
 
-    private void HideTooltip(Character character)
+    private void Hide()
     {
         animator.SetTrigger("FadeOut");
         gameObject.SetActive(false);
@@ -106,5 +102,5 @@ public class MouseTooltip : MonoBehaviour
 
     public static void SetUpToolTip(ColorText textColor, string message) => instance.SetUp(textColor, message);
 
-    public static void HideTooltip() => instance.HideTooltip(null);
+    public static void HideTooltip() => instance.Hide();
 }
