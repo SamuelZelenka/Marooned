@@ -18,12 +18,14 @@ public class CombatTurnSystem : MonoBehaviour
     {
         //Subscribe
         OnTurnEnding += ChangeActiveCharacter;
+        CombatSystem.OnAbilityUsed += EndActiveCharacterTurn;
     }
 
     private void OnDisable()
     {
         //Un-subscribe
         OnTurnEnding -= ChangeActiveCharacter;
+        CombatSystem.OnAbilityUsed -= EndActiveCharacterTurn;
     }
 
     /// <summary>

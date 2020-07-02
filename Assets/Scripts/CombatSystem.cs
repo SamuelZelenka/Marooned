@@ -109,7 +109,6 @@ public class CombatSystem : MonoBehaviour
     private void OnEnable()
     {
         CombatTurnSystem.OnTurnBegining += ResetSelections;
-        OnAbilityUsed += ResetSelections;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
         HexUnit.OnUnitMoved += ResetHexes;
     }
@@ -117,7 +116,6 @@ public class CombatSystem : MonoBehaviour
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= ResetSelections;
-        OnAbilityUsed -= ResetSelections;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
         HexUnit.OnUnitMoved -= ResetHexes;
     }
@@ -253,7 +251,6 @@ public class CombatSystem : MonoBehaviour
     private void ResolveUsedAbility(List<SkillcheckSystem.CombatOutcome> attackOutcome)
     {
         skillcheckSystem.OnCombatOutcomesDecided -= ResolveUsedAbility;
-        Debug.Log(attackOutcome.Count + " - " + abilityTargetCharacters.Count);
         for (int i = 0; i < abilityTargetCharacters.Count; i++)
         {
             selectedAbility.Use(abilityTargetCharacters[i], attackOutcome[i]);

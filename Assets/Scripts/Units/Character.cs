@@ -148,10 +148,6 @@ public class Character : HexUnit
         }
 
         nextAction = null;
-
-        //End turn
-        CombatTurnSystem.OnTurnEnding?.Invoke(this);
-        yield return null;
     }
 
     IEnumerator MoveToTargetCell(HexCell targetCell)
