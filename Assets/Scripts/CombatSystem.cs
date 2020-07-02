@@ -256,7 +256,7 @@ public class CombatSystem : MonoBehaviour
             selectedAbility.Use(abilityTargetCharacters[i], attackOutcome[i]);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        uiController.UpdateCombatLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
+        uiController.combatLogDisplay.NewLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters), HexGridController.ActiveCharacter);
         OnAbilityUsed?.Invoke();
     }
 
@@ -268,7 +268,7 @@ public class CombatSystem : MonoBehaviour
             selectedAbility.Use(abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        uiController.UpdateCombatLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
+        uiController.combatLogDisplay.NewLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters), HexGridController.ActiveCharacter);
         OnAbilityUsed?.Invoke();
     }
 

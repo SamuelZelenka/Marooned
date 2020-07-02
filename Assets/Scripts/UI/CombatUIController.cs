@@ -22,7 +22,7 @@ public class CombatUIController : MonoBehaviour
 
     [Header("CombatLog")]
     [SerializeField] List<string> combatLog = new List<string>();
-    [SerializeField] Text combatLogDisplay = null;
+    public CombatLog combatLogDisplay = null;
 
     private void OnEnable()
     {
@@ -38,15 +38,6 @@ public class CombatUIController : MonoBehaviour
         CombatTurnSystem.OnTurnEnding -= TurnStarted;
         CombatSystem.OnAbilityUsed -= UpdateAllCharacters;
 
-    }
-    public void UpdateCombatLog(string newLog)
-    {
-        combatLog.Add(newLog);
-        combatLogDisplay.text = "";
-        for (int i = 0; i < combatLog.Count; i++)
-        {
-            combatLogDisplay.text += "\n-" + combatLog[i];
-        }
     }
 
     public void UpdateTimeline(List<Character> turnOrder)

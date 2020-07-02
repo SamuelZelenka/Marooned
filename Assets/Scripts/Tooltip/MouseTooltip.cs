@@ -20,7 +20,7 @@ public class MouseTooltip : MonoBehaviour
             instance = this;
             if (usedInCombatScene)
             {
-                CombatDelegates.instance.OnPreparedActionChanged += HideTooltip;
+               // CombatDelegates.instance.OnPreparedActionChanged += HideTooltip;
             }
         }
     }
