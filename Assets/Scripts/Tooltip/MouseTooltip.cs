@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MouseTooltip : MonoBehaviour
 {
+    public enum ColorText { Default, Allowed, Forbidden }
     #region Singleton
     public static MouseTooltip instance;
     private void Awake()
@@ -18,32 +19,24 @@ public class MouseTooltip : MonoBehaviour
         else
         {
             instance = this;
-            if (usedInCombatScene)
-            {
-               // CombatDelegates.instance.OnPreparedActionChanged += HideTooltip;
-            }
         }
     }
     #endregion
 
-    [SerializeField] bool usedInCombatScene = true;
-
+    [Header("References")]
     [SerializeField] Text textField = null;
     [SerializeField] RectTransform backgroundRect = null;
-
-    [SerializeField] float textPadding = 10;
-
-
     [SerializeField] Animator animator = null;
+
+    [Header("Settings")]
+    [SerializeField] float textPadding = 10;
+    [SerializeField] float mouseOffset = 25;
 
     [Header("Colors")]
     [SerializeField] Color defaultColor = Color.white;
     [SerializeField] Color allowed = Color.green;
     [SerializeField] Color forbidden = Color.red;
 
-    public enum ColorText { Default, Allowed, Forbidden }
-
-    float mouseOffset = 25;
 
     private void Update()
     {
@@ -59,10 +52,7 @@ public class MouseTooltip : MonoBehaviour
         this.transform.position = pos;
     }
 
-    private void Start()
-    {
-        HideTooltip(null);
-    }
+    private void Start() => HideTooltip(null);
 
 
     private void SetUp(ColorText textColor, string message)
@@ -72,7 +62,6 @@ public class MouseTooltip : MonoBehaviour
             HideTooltip();
             return;
         }
-
 
         gameObject.SetActive(true);
         animator.SetTrigger("FadeIn");
@@ -115,13 +104,7 @@ public class MouseTooltip : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public static void SetUpToolTip(ColorText textColor, string message)
-    {
-        instance.SetUp(textColor, message);
-    }
+    public static void SetUpToolTip(ColorText textColor, string message) => instance.SetUp(textColor, message);
 
-    public static void HideTooltip()
-    {
-        instance.HideTooltip(null);
-    }
+    public static void HideTooltip() => instance.HideTooltip(null);
 }
