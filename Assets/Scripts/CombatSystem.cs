@@ -109,6 +109,7 @@ public class CombatSystem : MonoBehaviour
     private void OnEnable()
     {
         CombatTurnSystem.OnTurnBegining += ResetSelections;
+        OnAbilityUsed += ResetSelections;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
         HexUnit.OnUnitMoved += ResetHexes;
     }
@@ -116,6 +117,7 @@ public class CombatSystem : MonoBehaviour
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= ResetSelections;
+        OnAbilityUsed -= ResetSelections;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
         HexUnit.OnUnitMoved -= ResetHexes;
     }
@@ -181,7 +183,8 @@ public class CombatSystem : MonoBehaviour
         selectedAbility = null;
     }
 
-    private void ResetSelections(Character activeCharacter)
+    private void ResetSelections(Character activeCharacter) => ResetSelections();
+    private void ResetSelections()
     {
         selectedAbility = null;
         ValidTargetHexes = new List<HexCell>();
@@ -250,11 +253,13 @@ public class CombatSystem : MonoBehaviour
     private void ResolveUsedAbility(List<SkillcheckSystem.CombatOutcome> attackOutcome)
     {
         skillcheckSystem.OnCombatOutcomesDecided -= ResolveUsedAbility;
+        Debug.Log(attackOutcome.Count + " - " + abilityTargetCharacters.Count);
         for (int i = 0; i < abilityTargetCharacters.Count; i++)
         {
             selectedAbility.Use(abilityTargetCharacters[i], attackOutcome[i]);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+        uiController.UpdateCombatLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
         OnAbilityUsed?.Invoke();
     }
 
@@ -266,6 +271,7 @@ public class CombatSystem : MonoBehaviour
             selectedAbility.Use(abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
+        uiController.UpdateCombatLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
         OnAbilityUsed?.Invoke();
     }
 

@@ -72,6 +72,7 @@ public class CombatTurnSystem : MonoBehaviour
     /// </summary>
     public void StartCombat()
     {
+
         StartNextTurn();
     }
 
@@ -97,7 +98,7 @@ public class CombatTurnSystem : MonoBehaviour
             HexGridController.ActiveCharacter.ShowUnitActive(false);
         }
         HexGridController.ActiveCharacter = turnOrder.Dequeue();
-        if (!HexGridController.SelectedCell)
+        if (!HexGridController.SelectedCharacter)
         {
             HexGridController.SelectedCell = HexGridController.ActiveCharacter.Location;
         }

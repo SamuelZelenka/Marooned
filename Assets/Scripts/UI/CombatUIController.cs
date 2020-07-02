@@ -21,8 +21,8 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] List<Image> upcomingCharacters = new List<Image>();
 
     [Header("CombatLog")]
-    [SerializeField] List<string> log = new List<string>();
-    [SerializeField] Text logDisplay = null;
+    [SerializeField] List<string> combatLog = new List<string>();
+    [SerializeField] Text combatLogDisplay = null;
 
     private void OnEnable()
     {
@@ -41,11 +41,11 @@ public class CombatUIController : MonoBehaviour
     }
     public void UpdateCombatLog(string newLog)
     {
-        log.Add(log.Count + " " + newLog);
-        logDisplay.text = "";
-        for (int i = log.Count - 1; i >= 0; i--)
+        combatLog.Add(newLog);
+        combatLogDisplay.text = "";
+        for (int i = 0; i < combatLog.Count; i++)
         {
-            logDisplay.text += "\n-" + log[i];
+            combatLogDisplay.text += "\n-" + combatLog[i];
         }
     }
 
@@ -89,7 +89,7 @@ public class CombatUIController : MonoBehaviour
                 member.UpdateUI();
             }
         }
-        if (HexGridController.SelectedCharacter != null)
+        if (HexGridController.SelectedCharacter)
         {
             selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
         }

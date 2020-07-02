@@ -44,6 +44,37 @@ public abstract class Ability
             item.ApplyEffect(target, outcome);
         }
     }
+    public string CreateCombatLogMessage(Character attacker, List<Character> targets)
+    {
+        string targetsToString = "";
+
+        // Billy, John, Robert and Andrew
+
+        if (targets.Count > 1)
+        {
+            for (int i = 0; i < targets.Count; i++)
+            {
+                if (i == targets.Count - 1 )
+                {
+                    targetsToString += $"and {targets[i].characterData.characterName}.";
+                }
+                else if (i == targets.Count - 2)
+                {
+                    targetsToString += $"{targets[i].characterData.characterName} ";
+                }
+                else
+                {
+                    targetsToString += $"{targets[i].characterData.characterName}, ";
+                }
+            }
+        }
+        else
+        {
+            targetsToString = $"{targets[0].characterData.characterName}.";
+        }
+
+        return $"{attacker.characterData.characterName} used {abilityName} on {targetsToString}\n";
+    }
 }
 
 public abstract class TargetType
