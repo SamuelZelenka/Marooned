@@ -120,7 +120,6 @@ public class CombatSystem : MonoBehaviour
 
         //Player characters
         allCharacters.AddRange(HexGridController.player.Crew);
-        uiController.UpdateAllCharacters();
 
 
         //Enemy characters
@@ -141,6 +140,13 @@ public class CombatSystem : MonoBehaviour
             allCharacters.Add(spawnedCharacter);
         }
 
+
+        foreach (Character character in allCharacters)
+        {
+            character.CombatSetup();
+        }
+
+        uiController.UpdateAllCharacters();
         turnSystem.SetupNewCombat(allCharacters);
         turnSystem.StartCombat();
     }

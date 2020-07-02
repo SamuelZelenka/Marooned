@@ -44,6 +44,8 @@ public class Character : HexUnit
         }
     }
 
+    public void CombatSetup() => characterData.ObjectInitialized();
+
     public override void ShowUnitActive(bool status)
     {
         base.ShowUnitActive(status);

@@ -10,13 +10,11 @@ public class CharacterOverHeadUI : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatTurnSystem.OnTurnBegining += TurnStarted;
-        CombatSystem.OnAbilityUsed += UpdateUI;
+        CharacterData.OnResourceChanged += UpdateUI;
     }
     private void OnDisable()
     {
-        CombatTurnSystem.OnTurnBegining -= TurnStarted;
-        CombatSystem.OnAbilityUsed -= UpdateUI;
+        CharacterData.OnResourceChanged -= UpdateUI;
     }
 
     public void UpdateUI()
@@ -26,5 +24,4 @@ public class CharacterOverHeadUI : MonoBehaviour
         loyalty.SetCurrentValue(character.characterData.Loyalty.CurrentValue);
         loyalty.SetMaxValue(character.characterData.Loyalty.maxValue);
     }
-    private void TurnStarted(Character character) => UpdateUI();
 }

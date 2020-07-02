@@ -83,6 +83,7 @@ public class CharacterData
         }
     }
 
+    public void ObjectInitialized() => OnResourceChanged?.Invoke();
 
     [Serializable]
     public class Resource
@@ -108,7 +109,7 @@ public class CharacterData
         {
             this.resourceName = resourceName;
             this.maxValue = maxValue;
-            this.CurrentValue = currentValue;
+            this.currentValue = currentValue;
         }
         public override string ToString()
         {
@@ -138,7 +139,7 @@ public class CharacterData
         public Stat(string statName, int currentValue)
         {
             this.statName = statName;
-            this.CurrentValue = currentValue;
+            this.currentValue = currentValue;
         }
         public override string ToString()
         {
