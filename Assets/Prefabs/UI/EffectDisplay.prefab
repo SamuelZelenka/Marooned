@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6365936963590394231}
   - component: {fileID: 4529410581046118912}
   - component: {fileID: 3823599481507529719}
-  - component: {fileID: 737691835755564548}
+  - component: {fileID: 1471646416812493414}
   - component: {fileID: 4396846000312362931}
   m_Layer: 5
-  m_Name: CombatLogMessage
+  m_Name: EffectDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &737691835755564548
+--- !u!114 &1471646416812493414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,7 +90,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   information: 
   image: {fileID: 3823599481507529719}
-  portrait: {fileID: 0}
 --- !u!114 &4396846000312362931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +107,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 737691835755564548}
+        - m_Target: {fileID: 0}
           m_MethodName: SendToTooltip
           m_Mode: 1
           m_Arguments:
@@ -123,7 +122,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 737691835755564548}
+        - m_Target: {fileID: 0}
           m_MethodName: DisableTooltip
           m_Mode: 1
           m_Arguments:

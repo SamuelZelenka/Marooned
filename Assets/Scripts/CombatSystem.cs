@@ -17,9 +17,6 @@ public class CombatSystem : MonoBehaviour
     public CombatUIController uiController;
     [SerializeField] SkillcheckSystem skillcheckSystem = null;
 
-    Player humanPlayer;
-    Ship playerShip;
-
     [Header("Setup")]
     [HideInInspector]
     public BattleMap managementMap;
@@ -80,8 +77,6 @@ public class CombatSystem : MonoBehaviour
     }
     List<Character> abilityTargetCharacters = new List<Character>();
 
-    #region Setup References
-
     #region Singleton
     public static CombatSystem instance;
     private void Awake()
@@ -93,18 +88,9 @@ public class CombatSystem : MonoBehaviour
             return;
         }
         instance = this;
-        SessionSetup.OnHumanPlayerCreated += DoSetup;
     }
     #endregion
 
-    private void DoSetup(Player humanPlayer)
-    {
-        this.humanPlayer = humanPlayer;
-        playerShip = humanPlayer.Ship;
-        //Unsubscribe
-        SessionSetup.OnHumanPlayerCreated -= DoSetup;
-    }
-    #endregion
 
     private void OnEnable()
     {
@@ -133,12 +119,12 @@ public class CombatSystem : MonoBehaviour
         List<Character> allCharacters = new List<Character>();
 
         //Player characters
-        allCharacters.AddRange(humanPlayer.Crew);
-        uiController.UpdateCrewDisplay(humanPlayer.Crew);
+        allCharacters.AddRange(HexGridController.player.Crew);
+        uiController.UpdateAllCharacters();
 
 
         //Enemy characters
-        AI aiController = new AI(debugEnemies, humanPlayer.Crew);
+        AI aiController = new AI(debugEnemies, HexGridController.player.Crew);
         foreach (Character charactersToSpawn in debugEnemies)
         {
             //Instantiate enemies
@@ -165,7 +151,7 @@ public class CombatSystem : MonoBehaviour
         hexGrid.Load(managementMap, false);
         HexGridController.CurrentMode = HexGridController.GridMode.Map;
 
-        foreach (var item in humanPlayer.Crew)
+        foreach (var item in HexGridController.player.Crew)
         {
             //Add move characters back to their saved location
             item.Location = hexGrid.GetCell(item.SavedShipLocation.coordinates);

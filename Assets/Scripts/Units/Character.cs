@@ -12,9 +12,6 @@ public class Character : HexUnit
     public List<Ability> Abilities { get; set; } = new List<Ability>();
     public List<int> abilityID = new List<int>();
 
-    public delegate void EffectHandler(Effect effect);
-    public event EffectHandler OnEffectApplied;
-
     //Used for storing locations on the player ship
     HexCell savedShipLocation;
     public HexCell SavedShipLocation
@@ -54,33 +51,13 @@ public class Character : HexUnit
     }
 
     #region Effects and abilities
-    public void AddEffect(TickEffect effect)
-    {
-        characterData.activeEffects.Add(effect);
-        Debug.Log(characterData.activeEffects.Count);
-    }
-
-    public void RemoveEffects(TickEffect effect)
-    {
-        if (characterData.activeEffects.Contains(effect))
-        {
-            characterData.activeEffects.Remove(effect);
-            characterData.removedEffects.Add(effect);
-        }
-        else
-        {
-            Debug.LogError($"ActiveEffects does not contain this effect");
-        }
-    }
-
-    public void EffectTickUpdate()
+    private void EffectTickUpdate()
     {
         if (characterData.activeEffects.Count > 0)
         {
             for (int i = 0; i < characterData.activeEffects.Count; i++)
             {
                 characterData.activeEffects[i].EffectTick(this);
-                OnEffectApplied?.Invoke(characterData.activeEffects[i]);
             }
         }
     }
@@ -115,13 +92,9 @@ public class Character : HexUnit
     public override void StartNewTurn()
     {
         base.StartNewTurn();
+        EffectTickUpdate();
         remainingMovementPoints = defaultMovementPoints;
     }
-    public void SelectThisCharacter()
-    {
-        HexGridController.SelectedCell = this.Location;
-    }
-
     #region AI
     public void SetAI(AI ai) => aiController = ai;
     public void SetNextAction(ActionGroup actionGroup) => nextAction = actionGroup;

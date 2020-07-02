@@ -37,7 +37,7 @@ public abstract class TickEffect : Effect
 {
     public override void ApplyEffect(Character target, SkillcheckSystem.CombatOutcome outcome)
     {
-        target.AddEffect(this);
+        target.characterData.AddEffect(this);
     }
     public virtual void EffectTick(Character target)
     {
@@ -49,7 +49,7 @@ public abstract class TickEffect : Effect
     }
     public virtual void RemoveEffect(Character target)
     {
-        target.RemoveEffects(this);
+        target.characterData.RemoveEffects(this);
     }
     protected int duration;
     private int counter = 0;

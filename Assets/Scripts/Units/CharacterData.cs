@@ -8,6 +8,11 @@ public enum CharacterStatType { Strength, Stamina, Constituation, Agility, Tough
 [Serializable]
 public class CharacterData
 {
+    public delegate void CharacterDataHandler();
+    public static event CharacterDataHandler OnResourceChanged;
+    public static event CharacterDataHandler OnStatChanged;
+    public static event CharacterDataHandler OnEffectChanged;
+
     public string characterName = "name";
 
     public List<TickEffect> activeEffects = new List<TickEffect>();
@@ -57,6 +62,27 @@ public class CharacterData
                 return int.MinValue;
         }
     }
+    public void AddEffect(TickEffect effect)
+    {
+        activeEffects.Add(effect);
+        OnEffectChanged?.Invoke();
+        Debug.Log(activeEffects.Count);
+    }
+
+    public void RemoveEffects(TickEffect effect)
+    {
+        if (activeEffects.Contains(effect))
+        {
+            activeEffects.Remove(effect);
+            removedEffects.Add(effect);
+            OnEffectChanged?.Invoke();
+        }
+        else
+        {
+            Debug.LogError($"ActiveEffects does not contain this effect");
+        }
+    }
+
 
     [Serializable]
     public class Resource
@@ -72,6 +98,7 @@ public class CharacterData
             set
             {
                 currentValue = Mathf.Clamp(value, MINRESOURCEVALUE, maxValue);
+                OnResourceChanged?.Invoke();
             }
         }
 
@@ -95,7 +122,16 @@ public class CharacterData
         const int MAXSTATVALUE = 20;
 
         public string statName;
-        public int CurrentValue { get; private set; }
+        private int currentValue;
+        public int CurrentValue 
+        {
+            get => currentValue;
+            private set 
+            { 
+                currentValue = value;
+                OnStatChanged?.Invoke(); 
+            }
+        }
 
         public void IncreaseStat(int increase) => CurrentValue += increase;
 
@@ -109,5 +145,6 @@ public class CharacterData
             return CurrentValue.ToString();
         }
     }
+
 }
 

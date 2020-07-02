@@ -11,8 +11,10 @@ public class PartyMember : MonoBehaviour
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar loyalty = null;
     [SerializeField] Bar energy = null;
-    
+    [SerializeField] MouseHoverImage prefab = null ;
+    [SerializeField] Transform effectParent = null;
 
+    List<MouseHoverImage> activeEffects = new List<MouseHoverImage>();
 
     public void SetCharacter(Character character)
     {
@@ -34,13 +36,35 @@ public class PartyMember : MonoBehaviour
         energy.SetCurrentValue(character.characterData.Energy.CurrentValue);
         energy.SetMaxValue(character.characterData.Energy.maxValue);
 
-        foreach (Image image in effects)
+        if (SyncEffectLists())
         {
-            image.enabled = false;
+            for (int i = 0; i < character.characterData.activeEffects.Count; i++)
+            {
+                string effectDescription = character.characterData.activeEffects[i].Description;
+                Sprite effectSprite = character.characterData.activeEffects[i].effectSprite;
+                activeEffects[i].UpdateUI(effectDescription, effectSprite);
+            }
         }
-        for (int i = 0; i < character.characterData.activeEffects.Count; i++)
+
+        bool SyncEffectLists()
         {
-            effects[i].sprite = character.characterData.activeEffects[i].effectSprite;
+            if (activeEffects.Count < character.characterData.activeEffects.Count)
+            {
+                while (activeEffects.Count < character.characterData.activeEffects.Count)
+                {
+                    activeEffects.Add(Instantiate(prefab, effectParent));
+                }
+            }
+            if (activeEffects.Count > character.characterData.activeEffects.Count)
+            {
+                while (activeEffects.Count > character.characterData.activeEffects.Count)
+                {
+                    activeEffects.RemoveAt(0);
+                }
+            }
+            return activeEffects.Count == character.characterData.activeEffects.Count;
         }
     }
+
+
 }

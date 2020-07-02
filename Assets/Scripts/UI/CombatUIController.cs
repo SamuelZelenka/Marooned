@@ -29,14 +29,18 @@ public class CombatUIController : MonoBehaviour
         HexUnit.OnUnitMoved += UnitMoved;
         HexGridController.OnCellSelected += CellSelected;
         CombatTurnSystem.OnTurnEnding += TurnStarted;
-        CombatSystem.OnAbilityUsed += UpdateAllCharacters;
+        CharacterData.OnEffectChanged += UpdateAllCharacters;
+        CharacterData.OnResourceChanged += UpdateAllCharacters;
+        CharacterData.OnStatChanged += UpdateAllCharacters;
     }
     private void OnDisable()
     {
         HexUnit.OnUnitMoved -= UnitMoved;
         HexGridController.OnCellSelected -= CellSelected;
         CombatTurnSystem.OnTurnEnding -= TurnStarted;
-        CombatSystem.OnAbilityUsed -= UpdateAllCharacters;
+        CharacterData.OnEffectChanged -= UpdateAllCharacters;
+        CharacterData.OnResourceChanged -= UpdateAllCharacters;
+        CharacterData.OnStatChanged -= UpdateAllCharacters;
 
     }
 
@@ -52,22 +56,6 @@ public class CombatUIController : MonoBehaviour
             for (int j = turnOrder.Count; j < upcomingCharacters.Count; j++)
             {
                 upcomingCharacters[j].gameObject.SetActive(false);
-            }
-        }
-    }
-    public void UpdateCrewDisplay(List<Character> playerCrew)
-    {
-        for (int i = 0; i < playerCrew.Count; i++)
-        {
-            partyTransform.GetChild(i).gameObject.SetActive(true);
-            partyMembers[i].SetCharacter(playerCrew[i]);
-            partyMembers[i].UpdateUI();
-        }
-        if (partyTransform.childCount > playerCrew.Count)
-        {
-            for (int j = playerCrew.Count; j < partyTransform.childCount; j++)
-            {
-                partyTransform.GetChild(j).gameObject.SetActive(false);
             }
         }
     }
@@ -91,6 +79,19 @@ public class CombatUIController : MonoBehaviour
             for (int i = 0; i < HexGridController.ActiveCharacter.Abilities.Count; i++)
             {
                 abilities[i].sprite = HexGridController.ActiveCharacter.Abilities[i].abilitySprite;
+            }
+        }
+        for (int i = 0; i < HexGridController.player.Crew.Count; i++)
+        {
+            partyTransform.GetChild(i).gameObject.SetActive(true);
+            partyMembers[i].SetCharacter(HexGridController.player.Crew[i]);
+            partyMembers[i].UpdateUI();
+        }
+        if (partyTransform.childCount > HexGridController.player.Crew.Count)
+        {
+            for (int j = HexGridController.player.Crew.Count; j < partyTransform.childCount; j++)
+            {
+                partyTransform.GetChild(j).gameObject.SetActive(false);
             }
         }
     }

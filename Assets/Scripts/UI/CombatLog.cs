@@ -5,21 +5,18 @@ using UnityEngine.UI;
 public class CombatLog : MonoBehaviour
 {
     [SerializeField] int combatLogLimit = 6;
-    [SerializeField] CombatLogMessage prefab = null;
-    Queue<CombatLogMessage> combatLog = new Queue<CombatLogMessage>();
+    [SerializeField] MouseHoverImage prefab = null;
+    Queue<MouseHoverImage> combatLog = new Queue<MouseHoverImage>();
 
-    
     public void NewLog(string logMessage, Character attacker)
     {
-        CombatLogMessage message = Instantiate(prefab, transform);
-        message.log = logMessage;
-        message.portrait = attacker.characterData.portrait;
+        MouseHoverImage message = Instantiate(prefab, transform);
 
         if (combatLog.Count > combatLogLimit)
         {
             DestroyImmediate(combatLog.Dequeue().gameObject);
         }
         combatLog.Enqueue(message);
-        message.UpdateUI();
+        message.UpdateUI(logMessage, attacker.characterData.portrait);
     }
 }

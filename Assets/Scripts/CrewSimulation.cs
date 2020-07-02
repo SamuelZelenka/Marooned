@@ -6,9 +6,6 @@ public class CrewSimulation : MonoBehaviour
     [Header("References")]
     [SerializeField] GameObject jobPanel = null;
 
-    Player humanPlayer;
-    Ship playerShip;
-
     [Header("Job effects")]
     [SerializeField] int sailMovementPoints = 1;
     [SerializeField] int spotterVision = 2;
@@ -29,18 +26,6 @@ public class CrewSimulation : MonoBehaviour
     public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, None }
     [SerializeField] JobPosition[] jobs = new JobPosition[9];
 
-    #region Setup References
-    private void Awake() => SessionSetup.OnHumanPlayerCreated += DoSetup;
-
-    private void DoSetup(Player humanPlayer)
-    {
-        this.humanPlayer = humanPlayer;
-        playerShip = humanPlayer.Ship;
-        //Unsubscribe
-        SessionSetup.OnHumanPlayerCreated -= DoSetup;
-    }
-    #endregion
-
     public void NewTurnSimulation()
     {
         OpenSimulationWindows();
@@ -55,8 +40,8 @@ public class CrewSimulation : MonoBehaviour
 
     private void TurnStartSimulation()
     {
-        playerShip.remainingMovementPoints = 0;
-        foreach (var character in humanPlayer.Crew)
+        HexGridController.player.Ship.remainingMovementPoints = 0;
+        foreach (var character in HexGridController.player.Crew)
         {
             character.characterData.Hunger.CurrentValue -= hungerReduction;
             character.characterData.Hygiene.CurrentValue -= hygieneReduction;
@@ -71,7 +56,7 @@ public class CrewSimulation : MonoBehaviour
 
         //Muteny
 
-        playerShip.StartNewTurn();
+        HexGridController.player.Ship.StartNewTurn();
     }
 
 
@@ -85,6 +70,8 @@ public class CrewSimulation : MonoBehaviour
 
     private void SimulateJob(ShipJob job, bool positionFilled)
     {
+        Ship playerShip = HexGridController.player.Ship;
+
         switch (job)
         {
             case ShipJob.Helm:
@@ -113,7 +100,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Clean:
                 if (positionFilled)
                 {
-                    foreach (var character in humanPlayer.Crew)
+                    foreach (var character in HexGridController.player.Crew)
                     {
                         character.characterData.Hygiene.CurrentValue += cleanHygiene;
                     }
@@ -122,7 +109,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Shanty:
                 if (positionFilled)
                 {
-                    foreach (var character in humanPlayer.Crew)
+                    foreach (var character in HexGridController.player.Crew)
                     {
                         character.characterData.Loyalty.CurrentValue += shantyLoyalty;
                     }

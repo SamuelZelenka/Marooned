@@ -7,6 +7,7 @@ public class HexGridController : MonoBehaviour
     static HexCell selectedCell;
     static Character activeCharacter;
     static Ship activeShip;
+    public static Player player;
 
     public delegate void CellHandler(HexCell cell);
     public static CellHandler OnCellSelected;

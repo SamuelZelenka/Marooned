@@ -25,9 +25,6 @@ public class SessionSetup : MonoBehaviour
     public Ship aiMerchantShip;
     public int numberOfMerchantShips = 5;
 
-    public delegate void PlayerSetup(Player player);
-    public static PlayerSetup OnHumanPlayerCreated;
-
     // Start is called before the first frame update
     void Start() => ConfirmSetup();
 
@@ -70,8 +67,7 @@ public class SessionSetup : MonoBehaviour
             newPlayer.Crew.Add(character);
             shipGrid.AddUnit(character, shipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);
         }
-
-        OnHumanPlayerCreated?.Invoke(newPlayer);
+        HexGridController.player = newPlayer;
     }
 
     //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller
