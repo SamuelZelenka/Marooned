@@ -28,6 +28,9 @@ public class InGameCamera : MonoBehaviour
     public delegate void CameraTrackHandler(Transform transform);
     public static CameraTrackHandler OnSelectedCharacter;
 
+    public delegate void CameraShakeHandler(float intensity, float duration);
+    public static CameraShakeHandler OnShakeEffect;
+
     CameraTransform newCameraTransform = new CameraTransform();
 
     Vector3 mouseDownPos = new Vector3();
@@ -61,10 +64,12 @@ public class InGameCamera : MonoBehaviour
     private void OnEnable()
     {
         OnSelectedCharacter += SetTarget;
+        OnShakeEffect += CameraShake;
     }
     private void OnDisable()
     {
         OnSelectedCharacter -= SetTarget;
+        OnShakeEffect -= CameraShake;
     }
     public void SetCamera(Camera camera)
     {

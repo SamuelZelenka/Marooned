@@ -120,6 +120,7 @@ public class SkillcheckSystem : MonoBehaviour
         CombatOutcome attackerOutcome = CombatOutcome.NormalHit;
         if (attackerSuccesses == NUMBEROFCOINS) //All successes = crit always
         {
+            InGameCamera.OnShakeEffect?.Invoke(0.5f, 0.2f);
             attackerOutcome = CombatOutcome.Critical;
         }
         else if (attackerSuccesses == 0) //All misses = miss always
