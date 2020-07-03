@@ -1,6 +1,6 @@
 ﻿public class Stun : TickEffect
 {
-    public Stun(int duration)
+    public Stun(int duration) : base((int) EffectIndex.Stun)
     {
         if (duration == 1)
         {

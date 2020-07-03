@@ -1,6 +1,6 @@
 ﻿public class Taunt : TickEffect
 {
-    public Taunt(int duration)
+    public Taunt(int duration) : base((int)EffectIndex.Taunt)
     {
         if (duration == 1)
         {

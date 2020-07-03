@@ -1,7 +1,7 @@
 ﻿public class Damage : Effect
 {
     int damage;
-    public Damage(int damage)
+    public Damage(int damage) : base((int)EffectIndex.Damage)
     {
         Description = $"Reduces {damage} vitality.";
         this.damage = damage;

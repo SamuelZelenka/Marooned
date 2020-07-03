@@ -1,17 +1,31 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class Effect
 {
     public const float GRACEMODIFIER = 0.5f;
     public const float CRITMODIFIER = 1.5f;
 
+    public enum EffectIndex { Bleed, Damage, Displace, LoyaltyDecrease, LoyaltyIncrease, Poison, Stun, Taunt }
+
     string description;
-    public Sprite effectSprite;
+    public Sprite EffectSprite
+    {
+        private set;
+        get;
+    }
     public string Description
     {
         get;
         protected set;
     }
+
+    const string path = "EffectSprites/";
+    protected Effect(int effectIndex)
+    {
+        EffectSprite = Resources.Load<Sprite>(path + "EffectIcon" + effectIndex);
+    }
+
     public abstract void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome);
 
     public static int GetModifiedValue(SkillcheckSystem.CombatOutcome outcome, int originalValue)
@@ -35,6 +49,8 @@ public abstract class Effect
 
 public abstract class TickEffect : Effect
 {
+    public TickEffect(int effectIndex) : base(effectIndex) { }
+
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
     {
         target.characterData.AddEffect(this);

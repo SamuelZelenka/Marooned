@@ -1,7 +1,7 @@
 ﻿public class Bleed : TickEffect
 {
     int damage;
-    public Bleed(int damage, int duration)
+    public Bleed(int damage, int duration) : base((int)EffectIndex.Bleed)
     {
         if (duration == 1)
         {

@@ -1,7 +1,7 @@
 ﻿public class Poison : TickEffect
 {
     int damage;
-    public Poison(int damage, int duration)
+    public Poison(int damage, int duration) : base((int)EffectIndex.Poison)
     {
         if (duration == 1)
         {

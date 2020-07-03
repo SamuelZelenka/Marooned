@@ -80,7 +80,7 @@ public class PartyMember : MonoBehaviour
             for (int i = 0; i < character.characterData.activeEffects.Count; i++)
             {
                 string effectDescription = character.characterData.activeEffects[i].Description;
-                Sprite effectSprite = character.characterData.activeEffects[i].effectSprite;
+                Sprite effectSprite = character.characterData.activeEffects[i].EffectSprite;
                 activeEffects[i].UpdateUI(effectDescription, effectSprite);
             }
         }

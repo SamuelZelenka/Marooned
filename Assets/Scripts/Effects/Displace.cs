@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Displace : Effect
+﻿public class Displace : Effect 
 {
     bool pull;
     int hexes;
 
-    public Displace(bool pull, int hexes)
+    public Displace(bool pull, int hexes) : base((int)EffectIndex.Displace)
     {
         this.pull = pull;
         this.hexes = hexes;
