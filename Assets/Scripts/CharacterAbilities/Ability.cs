@@ -6,7 +6,7 @@ public abstract class Ability
     public static Dictionary<int, Ability> abilityDictionary = new Dictionary<int, Ability>()
     {
         {0, new ChainWhip(0)},
-        {1, new GrabAndPull(0) },
+        {1, new GrabAndPull(1)},
         {100, new Slice(100)}
     };
 

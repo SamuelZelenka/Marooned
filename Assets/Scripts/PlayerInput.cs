@@ -169,7 +169,6 @@ public class PlayerInput : MonoBehaviour
                 if (reachablePathThisTurn != null && reachablePathThisTurn.Count > 1) //An actual path, longer than the included start hex where the unit stands now
                 {
                     StartCoroutine(activeUnit.Travel(reachablePathThisTurn));
-                    activeUnit.remainingMovementPoints -= cost;
                     Pathfinding.ClearPath();
                 }
             }
