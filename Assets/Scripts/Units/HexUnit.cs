@@ -72,6 +72,7 @@ public abstract class HexUnit : MonoBehaviour
 
     public virtual void StartNewTurn()
     {
+        logMessage = new LogMessage();
         ShowUnitActive(true);
     }
 
@@ -118,6 +119,7 @@ public abstract class HexUnit : MonoBehaviour
         Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
         pathToTravel = path;
         remainingMovementPoints -= path.Count; //TODO CHANGE TO PATH COST
+        logMessage.AddLine($"Moved {path.Count} steps.");
         yield return StartCoroutine(TravelPath());
         Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
     }

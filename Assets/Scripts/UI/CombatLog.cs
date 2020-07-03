@@ -7,8 +7,16 @@ public class CombatLog : MonoBehaviour
     [SerializeField] int combatLogLimit = 6;
     [SerializeField] MouseHoverImage prefab = null;
     Queue<MouseHoverImage> combatLog = new Queue<MouseHoverImage>();
+    private void OnEnable()
+    {
+        CombatTurnSystem.OnTurnEnding += NewLog;
+    }
+    private void OnDisable()
+    {
+        CombatTurnSystem.OnTurnEnding -= NewLog;
 
-    public void NewLog(LogMessage log)
+    }
+    public void NewLog(Character character)
     {
         MouseHoverImage message = Instantiate(prefab, transform);
 
@@ -17,6 +25,6 @@ public class CombatLog : MonoBehaviour
             DestroyImmediate(combatLog.Dequeue().gameObject);
         }
         combatLog.Enqueue(message);
-        message.UpdateUI(log.Message, log.UsedAbilitySprite);
+        message.UpdateUI(character.logMessage.Message, character.characterData.portrait);
     }
 }

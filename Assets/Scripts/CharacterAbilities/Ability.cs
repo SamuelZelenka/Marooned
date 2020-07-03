@@ -88,9 +88,9 @@ public abstract class Ability
         }
         else
         {
-            return $"{attacker.characterData.characterName} used {abilityName} but completely failed at aiming.\n";
+            return $"Used {abilityName} but completely failed at aiming.\n";
         }
-        return $"{attacker.characterData.characterName} used {abilityName} on {targetsToString}\n";
+        return $"Used {abilityName} on {targetsToString}\n";
     }
 }
 

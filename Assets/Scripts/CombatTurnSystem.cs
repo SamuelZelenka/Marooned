@@ -74,7 +74,6 @@ public class CombatTurnSystem : MonoBehaviour
     /// </summary>
     public void StartCombat()
     {
-
         StartNextTurn();
     }
 
