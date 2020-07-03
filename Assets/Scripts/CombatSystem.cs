@@ -239,7 +239,8 @@ public class CombatSystem : MonoBehaviour
             selectedAbility.Use(HexGridController.ActiveCharacter, abilityTargetCharacters[i], attackOutcome[i]);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        uiController.combatLogDisplay.NewLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters), HexGridController.ActiveCharacter);
+        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
+        HexGridController.ActiveCharacter.logMessage.SetAbilitySprite(selectedAbility.AbilitySprite);
         OnAbilityUsed?.Invoke();
     }
 
@@ -251,7 +252,8 @@ public class CombatSystem : MonoBehaviour
             selectedAbility.Use(HexGridController.ActiveCharacter, abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        uiController.combatLogDisplay.NewLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters), HexGridController.ActiveCharacter);
+        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
+        HexGridController.ActiveCharacter.logMessage.SetAbilitySprite(selectedAbility.AbilitySprite);
         OnAbilityUsed?.Invoke();
     }
 

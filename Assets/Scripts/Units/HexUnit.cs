@@ -7,6 +7,8 @@ public abstract class HexUnit : MonoBehaviour
     public delegate void HexUnitUpdateHandler(HexUnit unit);
     public static event HexUnitUpdateHandler OnUnitMoved;
 
+    public LogMessage logMessage;
+
     [Header("Movement")]
     const float travelSpeed = 4f;
     public int remainingMovementPoints = 0, defaultMovementPoints = 5;
@@ -185,5 +187,21 @@ public abstract class HexUnit : MonoBehaviour
     {
         location.Unit = null;
         Destroy(gameObject);
+    }
+}
+public class LogMessage
+{
+    string message;
+    Sprite usedAbilitySprite;
+    public string Message { get { return message; } }
+    public Sprite UsedAbilitySprite { get { return usedAbilitySprite; } }
+
+    public void AddLine(string newLine)
+    {
+        message += $"\n{newLine}";
+    }
+    public void SetAbilitySprite(Sprite sprite)
+    {
+        usedAbilitySprite = sprite;
     }
 }
