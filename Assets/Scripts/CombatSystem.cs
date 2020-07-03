@@ -96,14 +96,12 @@ public class CombatSystem : MonoBehaviour
     {
         CombatTurnSystem.OnTurnBegining += ResetSelections;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
-        HexUnit.OnUnitMoved += ResetHexes;
     }
 
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= ResetSelections;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
-        HexUnit.OnUnitMoved -= ResetHexes;
     }
 
     public void StartCombat()
@@ -166,19 +164,12 @@ public class CombatSystem : MonoBehaviour
         OpenCombatCanvas(false);
     }
 
-    private void ResetHexes(HexUnit unitMoved)
+    private void ResetSelections(Character activeCharacter) => ResetSelections();
+    private void ResetSelections()
     {
         ValidTargetHexes = null;
         AbilityAffectedHexes = null;
         selectedAbility = null;
-    }
-
-    private void ResetSelections(Character activeCharacter) => ResetSelections();
-    private void ResetSelections()
-    {
-        selectedAbility = null;
-        ValidTargetHexes = new List<HexCell>();
-        abilityTargetCharacters = new List<Character>();
     }
 
     private void MarkCellsAndCharactersToBeAffected(HexCell targetCell)
@@ -245,7 +236,7 @@ public class CombatSystem : MonoBehaviour
         skillcheckSystem.OnCombatOutcomesDecided -= ResolveUsedAbility;
         for (int i = 0; i < abilityTargetCharacters.Count; i++)
         {
-            selectedAbility.Use(abilityTargetCharacters[i], attackOutcome[i]);
+            selectedAbility.Use(HexGridController.ActiveCharacter, abilityTargetCharacters[i], attackOutcome[i]);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
         uiController.combatLogDisplay.NewLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters), HexGridController.ActiveCharacter);
@@ -257,7 +248,7 @@ public class CombatSystem : MonoBehaviour
     {
         for (int i = 0; i < abilityTargetCharacters.Count; i++)
         {
-            selectedAbility.Use(abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
+            selectedAbility.Use(HexGridController.ActiveCharacter, abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
         }
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
         uiController.combatLogDisplay.NewLog(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters), HexGridController.ActiveCharacter);
