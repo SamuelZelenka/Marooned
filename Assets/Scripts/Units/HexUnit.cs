@@ -119,7 +119,14 @@ public abstract class HexUnit : MonoBehaviour
         Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
         pathToTravel = path;
         remainingMovementPoints -= path.Count; //TODO CHANGE TO PATH COST
-        logMessage.AddLine($"Moved {path.Count} steps.");
+        if (path.Count - 1 > 1)
+        {
+            logMessage.AddLine($"Moved {path.Count - 1} steps.");
+        }
+        else
+        {
+            logMessage.AddLine($"Moved 1 step.");
+        }
         yield return StartCoroutine(TravelPath());
         Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
     }
@@ -194,13 +201,18 @@ public abstract class HexUnit : MonoBehaviour
 }
 public class LogMessage
 {
-    string message;
+    string message = "";
     Sprite usedAbilitySprite;
     public string Message { get { return message; } }
     public Sprite UsedAbilitySprite { get { return usedAbilitySprite; } }
 
     public void AddLine(string newLine)
     {
+        if (message == "")
+        {
+            message += $"{newLine}";
+            return;
+        }
         message += $"\n{newLine}";
     }
     public void SetAbilitySprite(Sprite sprite)

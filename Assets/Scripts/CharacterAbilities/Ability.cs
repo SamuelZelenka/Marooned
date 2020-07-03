@@ -88,9 +88,9 @@ public abstract class Ability
         }
         else
         {
-            return $"Used {abilityName} but completely failed at aiming.\n";
+            return $"Used {abilityName} but completely failed at aiming.";
         }
-        return $"Used {abilityName} on {targetsToString}\n";
+        return $"Used {abilityName} on {targetsToString}";
     }
 }
 

@@ -18,13 +18,22 @@ public class CombatLog : MonoBehaviour
     }
     public void NewLog(Character character)
     {
-        MouseHoverImage message = Instantiate(prefab, transform);
+        string text;
+        MouseHoverImage logBox = Instantiate(prefab, transform);
 
         if (combatLog.Count > combatLogLimit)
         {
             DestroyImmediate(combatLog.Dequeue().gameObject);
         }
-        combatLog.Enqueue(message);
-        message.UpdateUI(character.logMessage.Message, character.characterData.portrait);
+        combatLog.Enqueue(logBox);
+        if (character.logMessage.Message == "")
+        {
+            text = "Did nothing this turn.";
+        }
+        else
+        {
+            text = character.logMessage.Message;
+        }
+        logBox.UpdateUI(text, character.characterData.portrait);
     }
 }
