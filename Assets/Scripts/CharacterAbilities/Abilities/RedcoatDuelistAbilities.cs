@@ -4,7 +4,6 @@
 
     public Slice(int abilityIndex) : base(abilityIndex)
     {
-        abilityDescription = $"Deal {damage} to an adjacent target";
         cost = 10;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
@@ -12,6 +11,7 @@
         effects.Add(new Damage(damage));
         effects.Add(new Bleed(damage, 2));
         targeting = new SingleTargetAdjacent();
+        base.SetDescriptionFromEffects();
     }
 }
 
@@ -21,12 +21,12 @@ public class Parry : Ability //Not implemented
 
     public Parry(int abilityIndex) : base(abilityIndex)
     {
-        abilityDescription = $"Deal {damage} to an adjacent target";
         cost = 10;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
         TargetSkillcheck = CharacterStatType.Agility;
         effects.Add(new Damage(damage));
         targeting = new SingleTargetAdjacent();
+        base.SetDescriptionFromEffects();
     }
 }

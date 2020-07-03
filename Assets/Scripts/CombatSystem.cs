@@ -26,7 +26,6 @@ public class CombatSystem : MonoBehaviour
     public delegate void CombatHandler();
     public static CombatHandler OnCombatStart;
     public static CombatHandler OnCombatEnd;
-    public static CombatHandler OnAbilityUsed;
 
     private Ability selectedAbility;
     List<HexCell> validTargetHexes;
@@ -75,7 +74,7 @@ public class CombatSystem : MonoBehaviour
             }
         }
     }
-    List<Character> abilityTargetCharacters = new List<Character>();
+    List<Character> abilityAffectedCharacters = new List<Character>();
 
     #region Singleton
     public static CombatSystem instance;
@@ -187,13 +186,17 @@ public class CombatSystem : MonoBehaviour
         if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(targetCell))
         {
             AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, targetCell);
-            abilityTargetCharacters = selectedAbility.targeting.GetAffectedCharacters(HexGridController.ActiveCharacter.Location, targetCell);
+            abilityAffectedCharacters = selectedAbility.targeting.GetAffectedCharacters(HexGridController.ActiveCharacter.Location, targetCell);
         }
     }
 
     //Called from the UI when a player selects an ability
     public void SelectAbility(int selection)
     {
+        if (HexGridController.ActiveCharacter.isStunned)
+        {
+            return;
+        }
         ResetSelections();
         selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityName);
@@ -243,31 +246,27 @@ public class CombatSystem : MonoBehaviour
     }
 
     //Required outcomes
-    private void ResolveUsedAbility(List<SkillcheckSystem.CombatOutcome> attackOutcome)
+    private void ResolveUsedAbility(List<SkillcheckSystem.CombatOutcome> attackOutcomes)
     {
         skillcheckSystem.OnCombatOutcomesDecided -= ResolveUsedAbility;
-        for (int i = 0; i < abilityTargetCharacters.Count; i++)
-        {
-            selectedAbility.Use(HexGridController.ActiveCharacter, abilityTargetCharacters[i], attackOutcome[i]);
-        }
+        selectedAbility.Use(HexGridController.ActiveCharacter, abilityAffectedCharacters, attackOutcomes);
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
+        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityAffectedCharacters));
         HexGridController.ActiveCharacter.logMessage.SetAbilitySprite(selectedAbility.AbilitySprite);
-        OnAbilityUsed?.Invoke();
+        EndActiveCharacterTurn();
     }
 
     //No required outcomes
     private void ResolveUsedAbility()
     {
-        for (int i = 0; i < abilityTargetCharacters.Count; i++)
-        {
-            selectedAbility.Use(HexGridController.ActiveCharacter, abilityTargetCharacters[i], SkillcheckSystem.CombatOutcome.NormalHit);
-        }
+        selectedAbility.Use(HexGridController.ActiveCharacter, abilityAffectedCharacters);
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityTargetCharacters));
+        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityAffectedCharacters));
         HexGridController.ActiveCharacter.logMessage.SetAbilitySprite(selectedAbility.AbilitySprite);
-        OnAbilityUsed?.Invoke();
+        EndActiveCharacterTurn();
     }
+
+    public void EndActiveCharacterTurn() => turnSystem.EndActiveCharacterTurn();
 
     private void OpenCombatCanvas(bool showCombat)
     {

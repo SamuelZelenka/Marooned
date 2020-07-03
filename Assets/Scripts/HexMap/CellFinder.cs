@@ -46,6 +46,11 @@ public static class CellFinder
         return validCells;
     }
 
+    public static List<HexCell> GetAOE(HexCell fromCell, int range, bool traversable)
+    {
+        return Pathfinding.GetCellsWithinRange(fromCell, range, traversable);
+    }
+
     //public static List<HexCell> GetAdjacent(HexCell fromCell)
     //{
     //    List<HexCell> validCells = new List<HexCell>();

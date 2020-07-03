@@ -18,14 +18,12 @@ public class CombatTurnSystem : MonoBehaviour
     {
         //Subscribe
         OnTurnEnding += ChangeActiveCharacter;
-        CombatSystem.OnAbilityUsed += EndActiveCharacterTurn;
     }
 
     private void OnDisable()
     {
         //Un-subscribe
         OnTurnEnding -= ChangeActiveCharacter;
-        CombatSystem.OnAbilityUsed -= EndActiveCharacterTurn;
     }
 
     /// <summary>
@@ -77,9 +75,10 @@ public class CombatTurnSystem : MonoBehaviour
         StartNextTurn();
     }
 
-    //Called from UI to end player character turn
+    //Called from UI to end player character turn or when an ability is used
     public void EndActiveCharacterTurn()
     {
+        HexGridController.ActiveCharacter.TurnEnded();
         OnTurnEnding?.Invoke(HexGridController.ActiveCharacter);
     }
 

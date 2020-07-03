@@ -7,6 +7,8 @@ public abstract class Ability
     {
         {0, new ChainWhip(0)},
         {1, new GrabAndPull(1)},
+        {2, new Punch(2)},
+        {3, new WarCry(3) },
         {100, new Slice(100)}
     };
 
@@ -45,15 +47,40 @@ public abstract class Ability
         AbilitySprite = Resources.Load<Sprite>(path + "AbilityIcon" + abilityIndex);
     }
 
-    public void Use(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    //No decided outcomes required (autohits)
+    public virtual void Use(Character attacker, List<Character> targets)
     {
-        if (outcome == SkillcheckSystem.CombatOutcome.Miss)
+        List<SkillcheckSystem.CombatOutcome> outcomes = new List<SkillcheckSystem.CombatOutcome>();
+        for (int i = 0; i < targets.Count; i++)
         {
-            return;
+            outcomes.Add(SkillcheckSystem.CombatOutcome.NormalHit);
         }
-        foreach (var item in effects)
+        Use(attacker, targets, outcomes);
+    }
+
+    public virtual void Use(Character attacker, List<Character> targets, List<SkillcheckSystem.CombatOutcome> outcomes)
+    {
+        for (int i = 0; i < targets.Count; i++)
         {
-            item.ApplyEffect(attacker, target, outcome);
+            if (outcomes[i] == SkillcheckSystem.CombatOutcome.Miss)
+            {
+                continue;
+            }
+            foreach (var item in effects)
+            {
+                item.ApplyEffect(attacker, targets[i], outcomes[i]);
+            }
+        }
+    }
+    protected void SetDescriptionFromEffects()
+    {
+        for (int i = 0; i < effects.Count; i++)
+        {
+            abilityDescription += effects[i].Description;
+            if (i == effects.Count - 1)
+            {
+                abilityDescription += "\n";
+            }
         }
     }
     public string CreateCombatLogMessage(Character attacker, List<Character> targets)
@@ -209,6 +236,32 @@ public class SingleTargetRangeLine : TargetType
     {
         List<HexCell> affectedCells = new List<HexCell>();
         affectedCells.Add(targetCell);
+        return affectedCells;
+    }
+}
+
+public class SelfAOE : TargetType
+{
+    int range;
+
+    public SelfAOE(int range)
+    {
+        this.range = range;
+    }
+
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    {
+        List<HexCell> validCells = new List<HexCell>();
+        validCells.Add(fromCell);
+        return validCells;
+    }
+
+    //FromCell and TargetCell Should be equal
+    public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        affectedCells.AddRange(CellFinder.GetAOE(targetCell, range, true));
+        affectedCells.Add(fromCell);
         return affectedCells;
     }
 }

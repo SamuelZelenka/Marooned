@@ -89,6 +89,15 @@ public class AI
         int score = 0;
         if (actionGroup.abilityToUse != null)
         {
+            //Check taunt
+            bool isTargettingTauntingCharacter = false;
+            Character potentialTaunter = actionGroup.cellAbilityTarget.Unit as Character;
+            if (potentialTaunter != null && potentialTaunter.isTaunting)
+            {
+                isTargettingTauntingCharacter = true;
+            }
+
+            //Check number of targets
             int targets = 0;
             List<HexCell> affectedCells = actionGroup.abilityToUse.targeting.GetAffectedCells(actionGroup.cellToEndTurnOn, actionGroup.cellAbilityTarget);
             foreach (HexCell cell in affectedCells)
@@ -99,7 +108,11 @@ public class AI
                     targets++;
                 }
             }
-            score += actionGroup.abilityToUse.cost * targets;
+
+            //Score
+            score = actionGroup.abilityToUse.cost;
+            score *= targets;
+            score = isTargettingTauntingCharacter ? score * 2 : score;
         }
         actionGroup.score = score;
     }

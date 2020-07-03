@@ -9,6 +9,8 @@ public class Character : HexUnit
     public GameObject animatedArrow;
 
     public bool isStunned;
+    public bool isTaunting;
+
     public List<Ability> Abilities { get; set; } = new List<Ability>();
     public List<int> abilityID = new List<int>();
 
@@ -93,10 +95,22 @@ public class Character : HexUnit
 
     public override void StartNewTurn()
     {
+        if (!isStunned)
+        {
+            remainingMovementPoints = defaultMovementPoints;
+        }
+        else
+        {
+            remainingMovementPoints = 0;
+        }
         base.StartNewTurn();
-        EffectTickUpdate();
-        remainingMovementPoints = defaultMovementPoints;
     }
+
+    public void TurnEnded()
+    {
+        EffectTickUpdate();
+    }
+
     #region AI
     public void SetAI(AI ai) => aiController = ai;
     public void SetNextAction(ActionGroup actionGroup) => nextAction = actionGroup;
@@ -108,21 +122,28 @@ public class Character : HexUnit
         //Do turn
         CombatTurnSystem.OnTurnBegining?.Invoke(this);
 
-        yield return aiController.CalculateAvailableActions(this);
-        if (nextAction != null)
+        if (!isStunned)
         {
-            if (nextAction.cellToEndTurnOn != Location)
+            yield return aiController.CalculateAvailableActions(this);
+            if (nextAction != null)
             {
-                yield return MoveToTargetCell(nextAction.cellToEndTurnOn);
+                if (nextAction.cellToEndTurnOn != Location)
+                {
+                    yield return MoveToTargetCell(nextAction.cellToEndTurnOn);
+                }
+                if (nextAction.abilityToUse != null)
+                {
+                    CombatSystem.instance.SelectAbility(nextAction.abilityToUse);
+                    CombatSystem.instance.UseAbility(nextAction.cellAbilityTarget);
+                }
             }
-            if (nextAction.abilityToUse != null)
-            {
-                CombatSystem.instance.SelectAbility(nextAction.abilityToUse);
-                CombatSystem.instance.UseAbility(nextAction.cellAbilityTarget);
-            }
-        }
 
-        nextAction = null;
+            nextAction = null;
+        }
+        else
+        {
+            CombatSystem.instance.EndActiveCharacterTurn();
+        }
     }
 
     IEnumerator MoveToTargetCell(HexCell targetCell)

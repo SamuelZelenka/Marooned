@@ -118,7 +118,7 @@ public abstract class HexUnit : MonoBehaviour
     {
         Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
         pathToTravel = path;
-        remainingMovementPoints -= path.Count; //TODO CHANGE TO PATH COST
+        remainingMovementPoints -= path.Count - 1; //TODO CHANGE TO PATH COST
         if (path.Count - 1 > 1)
         {
             logMessage.AddLine($"Moved {path.Count - 1} steps.");

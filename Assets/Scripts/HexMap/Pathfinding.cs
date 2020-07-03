@@ -283,4 +283,86 @@ public static class Pathfinding
         }
         return reachableCells;
     }
+
+    /// <summary>
+    /// Used to get all cells "range"-steps from the "fromCell"
+    /// </summary>
+    /// <param name="fromCell"></param>
+    /// <param name="range"></param>
+    /// <returns></returns>
+    public static List<HexCell> GetCellsWithinRange(HexCell fromCell, int range, bool traversableRequirement)
+    {
+        ClearPath();
+        //New unit == Clear old pathfinding
+        if (searcherUnit != null)
+        {
+            fromCell.myGrid.ClearSearchHeuristics();
+            searchFrontierPhase = 0;
+            searchFrontier = null;
+        }
+        searcherUnit = null;
+
+        List<HexCell> cellsInRange = new List<HexCell>();
+
+        searchFrontierPhase += 2;
+        Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
+        if (searchFrontier == null)
+        {
+            searchFrontier = new HexCellPriorityQueue();
+        }
+        else
+        {
+            searchFrontier.Clear();
+        }
+
+        fromCell.SearchPhase = searchFrontierPhase;
+        fromCell.MovementCost = 0;
+        searchFrontier.Enqueue(fromCell);
+
+        while (searchFrontier.Count > 0)
+        {
+            HexCell current = searchFrontier.Dequeue();
+            current.SearchPhase += 1;
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+                {
+                    continue;
+                }
+                if (traversableRequirement && !neighbor.Traversable)
+                {
+                    continue;
+                }
+
+                int hexEnterCost = 0;
+
+                //Special condition costs here
+                hexEnterCost += neighbor.MovementCostPenalty;
+
+                //Default cost
+                hexEnterCost += 1;
+
+                int combinedCost = current.MovementCost + hexEnterCost;
+
+                if (neighbor.SearchPhase < searchFrontierPhase) //Has not been set before
+                {
+                    neighbor.SearchPhase = searchFrontierPhase;
+                    neighbor.MovementCost = combinedCost;
+
+                    if (neighbor.MovementCost <= range)
+                    {
+                        cellsInRange.Add(neighbor);
+                        searchFrontier.Enqueue(neighbor);
+                    }
+                }
+                else if (combinedCost < neighbor.MovementCost) //Update cost
+                {
+                    neighbor.MovementCost = combinedCost;
+                }
+            }
+        }
+        return cellsInRange;
+    }
 }
