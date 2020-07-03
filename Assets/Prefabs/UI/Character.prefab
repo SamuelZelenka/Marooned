@@ -166,7 +166,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 15}
-  m_SizeDelta: {x: 40, y: 60}
+  m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3754035444464334
 CanvasRenderer:
@@ -360,16 +360,6 @@ MonoBehaviour:
   character: {fileID: 0}
   characterName: {fileID: 7822433321907987183}
   portraitImage: {fileID: 216399681313669863}
-  effects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   vitality: {fileID: 2108862988657501780}
   loyalty: {fileID: 3019030016176675227}
   energy: {fileID: 2108862989553516984}
@@ -533,7 +523,7 @@ PrefabInstance:
     - target: {fileID: 1014148335062601995, guid: 9e1bdba003bec85408872246b18076f0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -33
+      value: -36.399994
       objectReference: {fileID: 0}
     - target: {fileID: 1014148335062601995, guid: 9e1bdba003bec85408872246b18076f0,
         type: 3}
@@ -735,7 +725,7 @@ PrefabInstance:
     - target: {fileID: 1014148335062601995, guid: 9e1bdba003bec85408872246b18076f0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24
+      value: -27.399994
       objectReference: {fileID: 0}
     - target: {fileID: 1014148335062601995, guid: 9e1bdba003bec85408872246b18076f0,
         type: 3}
@@ -912,7 +902,7 @@ PrefabInstance:
     - target: {fileID: 1014148335062601995, guid: 9e1bdba003bec85408872246b18076f0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -42
+      value: -45.4
       objectReference: {fileID: 0}
     - target: {fileID: 1014148335062601995, guid: 9e1bdba003bec85408872246b18076f0,
         type: 3}

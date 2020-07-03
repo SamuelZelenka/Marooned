@@ -40,7 +40,7 @@ public abstract class Ability
     const string path = "AbilitySprites/";
     protected Ability(int abilityIndex)
     {
-        AbilitySprite = Resources.Load<Sprite>(path + abilityIndex);
+        AbilitySprite = Resources.Load<Sprite>(path + "AbilityIcon" + abilityIndex);
     }
 
     public void Use(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)

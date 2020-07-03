@@ -20,7 +20,6 @@ public class CharacterStatsView : MonoBehaviour
 
     Sprite Portrait = null;
 
-    bool isDragging = false;
     private void Start()
     {
         characterName.text = "Debug Name";
