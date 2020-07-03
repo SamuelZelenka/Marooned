@@ -25,6 +25,9 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] float zoomSpeed = 1;
     [Range(1, 10)] [SerializeField] float zoomSpeedScale = 1;
 
+    public delegate void CameraTrackHandler(Transform transform);
+    public static CameraTrackHandler OnSelectedCharacter;
+
     CameraTransform newCameraTransform = new CameraTransform();
 
     Vector3 mouseDownPos = new Vector3();
@@ -48,11 +51,20 @@ public class InGameCamera : MonoBehaviour
             maxPos = maxPosTransform.localPosition;
         }
     }
+
     private void Update()
     {
         TrackPosition();
         InputHandler();
         UpdatePosition();
+    }
+    private void OnEnable()
+    {
+        OnSelectedCharacter += SetTarget;
+    }
+    private void OnDisable()
+    {
+        OnSelectedCharacter -= SetTarget;
     }
     public void SetCamera(Camera camera)
     {
@@ -130,6 +142,7 @@ public class InGameCamera : MonoBehaviour
         float halfScreenHeight = instance.ScreenToWorldPoint(new Vector3(0, instance.scaledPixelHeight, 0)).y - transform.localPosition.y;
         newCameraTransform.cameraPosition.x = Mathf.Clamp(newCameraTransform.cameraPosition.x, minPos.x + halfScreenWidth, maxPos.x - halfScreenWidth);
         newCameraTransform.cameraPosition.y = Mathf.Clamp(newCameraTransform.cameraPosition.y, minPos.y + halfScreenHeight, maxPos.y - halfScreenHeight);
+        newCameraTransform.cameraPosition.z = -5;
 
         Vector3 lerpVector = Vector3.Lerp(transform.localPosition, newCameraTransform.cameraPosition, cameraLerpSpeed * Time.deltaTime);
         transform.position = lerpVector;
@@ -168,6 +181,7 @@ public class InGameCamera : MonoBehaviour
     public void SetTarget(Transform trackPos)
     {
         currentTrackingPoint = trackPos.position;
+        isTracking = true;
     }
     #endregion
     public void CameraShake(float intensity, float duration)

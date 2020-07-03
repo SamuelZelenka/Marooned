@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PartyMember : MonoBehaviour
 {
-
+    const float DOUBLECLICKTIME = 0.5f;
     public Character character;
     [SerializeField] Text characterName = null;
     [SerializeField] Image portraitImage = null;
@@ -16,14 +17,42 @@ public class PartyMember : MonoBehaviour
 
     List<MouseHoverImage> activeEffects = new List<MouseHoverImage>();
 
+    bool isClicked = false;
+    float doubleClickTimer;
+
     public void SetCharacter(Character character)
     {
         this.character = character;
     }
-    public void SelectThisCharacter()
+    public void OnClick()
     {
-        HexGridController.SelectedCell = character.Location;
+        if (isClicked)
+        {
+            InGameCamera.OnSelectedCharacter?.Invoke(character.gameObject.transform);
+        }
+        else
+        {
+            HexGridController.SelectedCell = character.Location;
+            doubleClickTimer = DOUBLECLICKTIME;
+            isClicked = true;
+        }
     }
+    private void Update()
+    {
+        if (isClicked)
+        {
+            if (doubleClickTimer < 0)
+            {
+                isClicked = false;
+            }
+            else
+            { 
+                doubleClickTimer -= Time.deltaTime;
+            }
+        }
+    }
+
+
     public void UpdateUI()
     {
         characterName.text = character.characterData.characterName;
