@@ -7,6 +7,7 @@ public class PartyMember : MonoBehaviour
     public Character character;
     [SerializeField] Text characterName = null;
     [SerializeField] Image portraitImage = null;
+    [SerializeField] Image activeBorder = null;
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar loyalty = null;
     [SerializeField] Bar energy = null;
@@ -34,6 +35,16 @@ public class PartyMember : MonoBehaviour
         loyalty.SetMaxValue(character.characterData.Loyalty.maxValue);
         energy.SetCurrentValue(character.characterData.Energy.CurrentValue);
         energy.SetMaxValue(character.characterData.Energy.maxValue);
+
+        if (HexGridController.ActiveCharacter == character)
+        {
+            activeBorder.gameObject.SetActive(true);
+        }
+        else
+        {
+            activeBorder.gameObject.SetActive(false);
+
+        }
 
         if (SyncEffectLists())
         {
