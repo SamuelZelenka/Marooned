@@ -82,8 +82,9 @@ public static class HexDirectionExtension
                 return HexDirection.W;
             }
         }
-        if (deltaX > 0)
+        //if (deltaX > 0)
 
+        return HexDirection.W;
         
         //if (deltaX > 0) //Right
         //{
