@@ -73,16 +73,16 @@ public class WarCry : Ability
             {
                 continue;
             }
-            foreach (var item in effects)
+            foreach (var effect in effects)
             {
                 //Apply taunt on self
-                if (item is Taunt && attacker == targets[i])
+                if (effect is Taunt && attacker == targets[i])
                 {
-                    item.ApplyEffect(attacker, targets[i], outcomes[i]);
+                    effect.ApplyEffect(attacker, targets[i], outcomes[i]);
                 }
-                if (item is LoyaltyIncrease && attacker != targets[i]) //Apply buff in loyalty to other than self
+                if (effect is LoyaltyIncrease && attacker != targets[i] && attacker.playerControlled == targets[i].playerControlled) //Apply buff in loyalty to other than self but only on same team
                 {
-                    item.ApplyEffect(attacker, targets[i], outcomes[i]);
+                    effect.ApplyEffect(attacker, targets[i], outcomes[i]);
                 }
             }
         }
