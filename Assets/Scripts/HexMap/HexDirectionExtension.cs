@@ -56,10 +56,11 @@ public static class HexDirectionExtension
 
         if (deltaX == 0 && deltaY == 0)
         {
-            Debug.LogError("No change detected. No direction can be found between specified cells");
+            Debug.LogWarning("No change detected. No direction can be found between specified cells");
             return HexDirection.NE;
         }
 
+        //Straight lines on grid
         if (deltaX == 0)
         {
             if (deltaY > 0)
@@ -82,50 +83,84 @@ public static class HexDirectionExtension
                 return HexDirection.W;
             }
         }
-        //if (deltaX > 0)
+        if (deltaX < 0)
+        {
+            if (Mathf.Abs(deltaX) == deltaY)
+            {
+                return HexDirection.NW;
+            }
+        }
+        if (deltaX > -deltaY)
+        {
+            if (deltaX == -deltaY)
+            {
+                return HexDirection.SE;
+            }
+        }
 
-        return HexDirection.W;
-        
-        //if (deltaX > 0) //Right
-        //{
-        //    if (deltaY == 0 || deltaX > Mathf.Abs(deltaY))
-        //    {
-        //        return HexDirection.E;
-        //    }
-        //    else
-        //    {
-        //        if (deltaY > 0)
-        //        {
-        //            return HexDirection.NE;
-        //        }
-        //        else
-        //        {
-        //            return HexDirection.SE;
-        //        }
-        //    }
-        //}
-        //else //Left
-        //{
-        //    if (deltaY == 0 || Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
-        //    {
-        //        return HexDirection.W;
-        //    }
-        //    else
-        //    {
-        //        if (deltaY > 0)
-        //        {
-        //            return HexDirection.NW;
-        //        }
-        //        else
-        //        {
-        //            return HexDirection.SW;
-        //        }
-        //    }
-        //}
+        //Line not straight (traversing in multiple directions)
+        if (deltaX > 0)
+        {
+            if (deltaY > 0)
+            {
+                if (deltaX >= deltaY)
+                {
+                    return HexDirection.E;
+                }
+                else
+                {
+                    return HexDirection.NE;
+                }
+            }
+            else
+            {
+                if (deltaX >= Mathf.Abs(deltaY) * 2)
+                {
+                    return HexDirection.E;
+                }
+                else if (Mathf.Abs(deltaY) > deltaX * 2)
+                {
+                    return HexDirection.SW;
+                }
+                else
+                {
+                    return HexDirection.SE;
+                }
+            }
+        }
+        else
+        {
+            if (deltaY < 0)
+            {
+                if (Mathf.Abs(deltaX) >= Mathf.Abs(deltaY))
+                {
+                    return HexDirection.W;
+                }
+                else
+                {
+                    return HexDirection.SW;
+                }
+            }
+            else
+            {
+                if (Mathf.Abs(deltaX) >= deltaY * 2)
+                {
+                    return HexDirection.W;
+                }
+                else if (Mathf.Abs(deltaY) > Mathf.Abs(deltaX) * 2)
+                {
+                    return HexDirection.NE;
+                }
+                else
+                {
+                    return HexDirection.NW;
+                }
+            }
+        }
     }
 
     public static HexDirection ReturnRandomDirection()
     {
-        return (HexDirection) Random.Range((int)HexDirection.NE, (int)HexDirection.NW);
+        return (HexDirection)Random.Range((int)HexDirection.NE, (int)HexDirection.NW);
     }
 }

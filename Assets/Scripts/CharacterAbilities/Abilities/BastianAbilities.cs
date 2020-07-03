@@ -17,6 +17,8 @@
 
 public class GrabAndPull : Ability
 {
+    int range = 3;
+
     public GrabAndPull(int abilityIndex) : base(abilityIndex)
     {
         abilityDescription = $"Pull the target one hex closer";
@@ -25,6 +27,6 @@ public class GrabAndPull : Ability
         AttackerSkillcheck = CharacterStatType.Strength;
         TargetSkillcheck = CharacterStatType.Agility;
         effects.Add(new Displace(true, 1));
-        targeting = new SingleTargetRanged();
+        targeting = new SingleTargetRangeLine(range, true);
     }
 }

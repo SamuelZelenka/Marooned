@@ -92,7 +92,7 @@ public class HexCell : MonoBehaviour
         return neighbors[(int)direction];
     }
 
-    public HexCell GetNeighbor(HexDirection direction, bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded)
+    public HexCell GetNeighbor(HexDirection direction, bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded, bool unitNeeded)
     {
         HexCell neighbor = GetNeighbor(direction);
         if (neighbor == null)
@@ -115,15 +115,19 @@ public class HexCell : MonoBehaviour
         {
             return null;
         }
+        if (unitNeeded && !neighbor.Unit)
+        {
+            return null;
+        }
         return neighbor;
     }
 
-    public List<HexCell> GetNeighbors(bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded)
+    public List<HexCell> GetNeighbors(bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded, bool unitNeeded)
     {
         List<HexCell> allNeighbors = new List<HexCell>();
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
         {
-            HexCell neighbor = GetNeighbor(d, traversableNeeded, freeNeeded, landNeeded, oceanNeeded);
+            HexCell neighbor = GetNeighbor(d, traversableNeeded, freeNeeded, landNeeded, oceanNeeded, unitNeeded);
             if (neighbor != null)
             {
                 allNeighbors.Add(neighbor);

@@ -22,7 +22,7 @@ public class Displace : Effect
         for (int i = 0; i < hexes; i++)
         {
             HexCell cellToTry = pull ? newCell.GetNeighbor(HexDirectionExtension.Opposite(directionToTarget)) : newCell.GetNeighbor(directionToTarget);
-            if (cellToTry.Unit == null)
+            if (cellToTry.Unit != null)
             {
                 break;
             }

@@ -94,13 +94,15 @@ public class CombatSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatTurnSystem.OnTurnBegining += ResetSelections;
+        CombatTurnSystem.OnTurnBegining += NewCharacterTurn;
+        HexUnit.OnUnitMoved += UnitMoved;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
     }
 
     private void OnDisable()
     {
-        CombatTurnSystem.OnTurnBegining -= ResetSelections;
+        CombatTurnSystem.OnTurnBegining -= NewCharacterTurn;
+        HexUnit.OnUnitMoved -= UnitMoved;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
     }
 
@@ -164,7 +166,15 @@ public class CombatSystem : MonoBehaviour
         OpenCombatCanvas(false);
     }
 
-    private void ResetSelections(Character activeCharacter) => ResetSelections();
+    private void UnitMoved(HexUnit movedUnit)
+    {
+        if (HexGridController.ActiveCharacter == movedUnit)
+        {
+            ResetSelections();
+        }
+    }
+    private void NewCharacterTurn(Character newTurnCharacter) => ResetSelections();
+
     private void ResetSelections()
     {
         ValidTargetHexes = null;
@@ -184,6 +194,7 @@ public class CombatSystem : MonoBehaviour
     //Called from the UI when a player selects an ability
     public void SelectAbility(int selection)
     {
+        ResetSelections();
         selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityName);
         ValidTargetHexes = abilityTargetHexes;
@@ -192,6 +203,7 @@ public class CombatSystem : MonoBehaviour
     //Used by the AI when called from the character
     public void SelectAbility(Ability selection)
     {
+        ResetSelections();
         selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityName);
         ValidTargetHexes = abilityTargetHexes;

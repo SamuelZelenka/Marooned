@@ -117,7 +117,7 @@ public class SingleTargetAdjacent : TargetType
 {
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetAllAdjacent(fromCell);
+        return CellFinder.GetAllAdjacent(fromCell, true, true);
     }
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
@@ -131,7 +131,7 @@ public class SwipeAdjacent : TargetType
 {
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetAllAdjacent(fromCell);
+        return CellFinder.GetAllAdjacent(fromCell, true, false);
     }
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
@@ -140,12 +140,12 @@ public class SwipeAdjacent : TargetType
 
         //Sides
         HexDirection dirToSelected = HexDirectionExtension.GetDirectionToNeighbor(fromCell, targetCell);
-        HexCell previousCell = fromCell.GetNeighbor(dirToSelected.Previous(), true, false, false, false);
+        HexCell previousCell = fromCell.GetNeighbor(dirToSelected.Previous(), true, false, false, false, false);
         if (previousCell)
         {
             affectedCells.Add(previousCell);
         }
-        HexCell nextCell = fromCell.GetNeighbor(dirToSelected.Next(), true, false, false, false);
+        HexCell nextCell = fromCell.GetNeighbor(dirToSelected.Next(), true, false, false, false, false);
         if (nextCell)
         {
             affectedCells.Add(nextCell);
@@ -171,9 +171,38 @@ public class AnySingleTarget : TargetType
 
 public class SingleTargetRanged : TargetType
 {
+    int range;
+    public SingleTargetRanged(int range)
+    {
+        this.range = range;
+    }
+
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
         return CellFinder.GetAllCells(fromCell.myGrid, true, true);
+    }
+
+    public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        affectedCells.Add(targetCell);
+        return affectedCells;
+    }
+}
+
+public class SingleTargetRangeLine : TargetType
+{
+    int range;
+    bool blockedByFirstUnit; //Can only hit one target in a line, the first detected is the only possible to hit
+    public SingleTargetRangeLine(int range, bool blockedByFirstUnit)
+    {
+        this.range = range;
+        this.blockedByFirstUnit = blockedByFirstUnit;
+    }
+
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    {
+        return CellFinder.GetInLine(fromCell, true, true, range, blockedByFirstUnit);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
