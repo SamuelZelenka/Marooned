@@ -137,7 +137,7 @@ public abstract class HexUnit : MonoBehaviour
 
             //Rotation
             latestCell = pathToTravel[i - 1];
-            Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[i]);
+            Orientation = HexDirectionExtension.GetDirectionToNeighbor(latestCell, pathToTravel[i]);
 
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
@@ -159,7 +159,7 @@ public abstract class HexUnit : MonoBehaviour
 
         //Rotation
         latestCell = pathToTravel[pathToTravel.Count - 2];
-        Orientation = HexDirectionExtension.GetDirectionTo(latestCell, pathToTravel[pathToTravel.Count - 1]);
+        Orientation = HexDirectionExtension.GetDirectionToNeighbor(latestCell, pathToTravel[pathToTravel.Count - 1]);
 
         for (; t < 1f; t += Time.deltaTime * travelSpeed)
         {

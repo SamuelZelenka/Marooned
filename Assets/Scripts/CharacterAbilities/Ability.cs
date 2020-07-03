@@ -6,6 +6,7 @@ public abstract class Ability
     public static Dictionary<int, Ability> abilityDictionary = new Dictionary<int, Ability>()
     {
         {0, new ChainWhip(0)},
+        {1, new GrabAndPull(0) },
         {100, new Slice(100)}
     };
 
@@ -40,6 +41,7 @@ public abstract class Ability
     const string path = "AbilitySprites/";
     protected Ability(int abilityIndex)
     {
+        abilityName = ToString();
         AbilitySprite = Resources.Load<Sprite>(path + "AbilityIcon" + abilityIndex);
     }
 
@@ -148,6 +150,36 @@ public class SwipeAdjacent : TargetType
         {
             affectedCells.Add(nextCell);
         }
+        return affectedCells;
+    }
+}
+
+public class AnySingleTarget : TargetType
+{
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    {
+        return CellFinder.GetAllCells(fromCell.myGrid, true, true);
+    }
+
+    public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        affectedCells.Add(targetCell);
+        return affectedCells;
+    }
+}
+
+public class SingleTargetRanged : TargetType
+{
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    {
+        return CellFinder.GetAllCells(fromCell.myGrid, true, true);
+    }
+
+    public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        affectedCells.Add(targetCell);
         return affectedCells;
     }
 }

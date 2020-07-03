@@ -9,6 +9,11 @@ public static class CellFinder
         return validCells;
     }
 
+    public static List<HexCell> GetAllCells(HexGrid hexGrid, bool traversable, bool hasUnit)
+    {
+        return hexGrid.GetAllCells(traversable, hasUnit);
+    }
+
     //public static List<HexCell> GetAdjacent(HexCell fromCell)
     //{
     //    List<HexCell> validCells = new List<HexCell>();

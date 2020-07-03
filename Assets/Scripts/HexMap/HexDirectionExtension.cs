@@ -82,44 +82,45 @@ public static class HexDirectionExtension
                 return HexDirection.W;
             }
         }
+        if (deltaX > 0)
 
         
-        if (deltaX > 0) //Right
-        {
-            if (deltaY == 0 || deltaX > Mathf.Abs(deltaY))
-            {
-                return HexDirection.E;
-            }
-            else
-            {
-                if (deltaY > 0)
-                {
-                    return HexDirection.NE;
-                }
-                else
-                {
-                    return HexDirection.SE;
-                }
-            }
-        }
-        else //Left
-        {
-            if (deltaY == 0 || Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
-            {
-                return HexDirection.W;
-            }
-            else
-            {
-                if (deltaY > 0)
-                {
-                    return HexDirection.NW;
-                }
-                else
-                {
-                    return HexDirection.SW;
-                }
-            }
-        }
+        //if (deltaX > 0) //Right
+        //{
+        //    if (deltaY == 0 || deltaX > Mathf.Abs(deltaY))
+        //    {
+        //        return HexDirection.E;
+        //    }
+        //    else
+        //    {
+        //        if (deltaY > 0)
+        //        {
+        //            return HexDirection.NE;
+        //        }
+        //        else
+        //        {
+        //            return HexDirection.SE;
+        //        }
+        //    }
+        //}
+        //else //Left
+        //{
+        //    if (deltaY == 0 || Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
+        //    {
+        //        return HexDirection.W;
+        //    }
+        //    else
+        //    {
+        //        if (deltaY > 0)
+        //        {
+        //            return HexDirection.NW;
+        //        }
+        //        else
+        //        {
+        //            return HexDirection.SW;
+        //        }
+        //    }
+        //}
     }
 
     public static HexDirection ReturnRandomDirection()

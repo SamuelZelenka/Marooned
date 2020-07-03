@@ -7,7 +7,7 @@
         this.amount = amount;
     }
 
-    public override void ApplyEffect(Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
     {
         target.characterData.Loyalty.CurrentValue -= GetModifiedValue(outcome, amount);
     }

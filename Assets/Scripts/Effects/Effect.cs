@@ -12,7 +12,7 @@ public abstract class Effect
         get;
         protected set;
     }
-    public abstract void ApplyEffect(Character target, SkillcheckSystem.CombatOutcome outcome);
+    public abstract void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome);
 
     public static int GetModifiedValue(SkillcheckSystem.CombatOutcome outcome, int originalValue)
     {
@@ -35,7 +35,7 @@ public abstract class Effect
 
 public abstract class TickEffect : Effect
 {
-    public override void ApplyEffect(Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
     {
         target.characterData.AddEffect(this);
     }

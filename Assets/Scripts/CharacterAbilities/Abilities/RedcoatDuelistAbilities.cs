@@ -4,7 +4,6 @@
 
     public Slice(int abilityIndex) : base(abilityIndex)
     {
-        abilityName = this.ToString();
         abilityDescription = $"Deal {damage} to an adjacent target";
         cost = 10;
         RequireSkillCheck = true;
@@ -22,7 +21,6 @@ public class Parry : Ability //Not implemented
 
     public Parry(int abilityIndex) : base(abilityIndex)
     {
-        abilityName = this.ToString();
         abilityDescription = $"Deal {damage} to an adjacent target";
         cost = 10;
         RequireSkillCheck = true;

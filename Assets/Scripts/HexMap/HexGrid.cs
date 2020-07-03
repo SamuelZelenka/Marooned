@@ -254,6 +254,24 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    public List<HexCell> GetAllCells(bool traversable, bool hasUnit)
+    {
+        List<HexCell> foundCells = new List<HexCell>();
+        foreach (var item in cells)
+        {
+            if (traversable && !item.Traversable)
+            {
+                continue;
+            }
+            if (hasUnit && item.Unit == null)
+            {
+                continue;
+            }
+            foundCells.Add(item);
+        }
+        return foundCells;
+    }
+
     public HexCell GetRandomFreeCell()
     {
         HexCell cell = null;
