@@ -7,7 +7,6 @@ public class PartyMember : MonoBehaviour
     public Character character;
     [SerializeField] Text characterName = null;
     [SerializeField] Image portraitImage = null;
-    [SerializeField] List<Image> effects = null;
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar loyalty = null;
     [SerializeField] Bar energy = null;

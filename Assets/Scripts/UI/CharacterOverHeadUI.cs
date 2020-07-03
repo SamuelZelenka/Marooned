@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class CharacterOverHeadUI : MonoBehaviour
 {
-    [SerializeField] Character character;
-    [SerializeField] Bar vitality;
-    [SerializeField] Bar loyalty;
+    [SerializeField] Character character = null;
+    [SerializeField] Bar vitality = null;
+    [SerializeField] Bar loyalty = null;
 
     private void OnEnable()
     {
