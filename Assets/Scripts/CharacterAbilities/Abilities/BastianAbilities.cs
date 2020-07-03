@@ -2,11 +2,10 @@
 {
     int damage = 5;
     int loyaltyDecrease = 5;
-    public ChainWhip()
+    public ChainWhip(int abilityIndex) : base(abilityIndex)
     {
         abilityName = this.ToString();
         abilityDescription = $"Deal {damage} vitality damage and reduce {loyaltyDecrease} loyalty from up to three adjacent targets";
-        abilitySprite = null;
         cost = 10;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
@@ -15,4 +14,9 @@
         effects.Add(new LoyaltyDecrease(loyaltyDecrease));
         targeting = new SwipeAdjacent();
     }
+}
+
+public class GrabAndPull
+{
+
 }

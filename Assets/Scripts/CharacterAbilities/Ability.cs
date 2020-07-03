@@ -5,13 +5,17 @@ public abstract class Ability
 {
     public static Dictionary<int, Ability> abilityDictionary = new Dictionary<int, Ability>()
     {
-        {0, new ChainWhip()},
-        {100, new Slice()}
+        {0, new ChainWhip(0)},
+        {100, new Slice(100)}
     };
 
     public string abilityName;
     public string abilityDescription;
-    public Sprite abilitySprite;
+    public Sprite AbilitySprite
+    {
+        private set;
+        get;
+    }
 
     public int cost;
     public bool RequireSkillCheck
@@ -33,7 +37,13 @@ public abstract class Ability
     protected List<Effect> effects = new List<Effect>();
     public TargetType targeting;
 
-    public void Use(Character target, SkillcheckSystem.CombatOutcome outcome)
+    const string path = "AbilitySprites/";
+    protected Ability(int abilityIndex)
+    {
+        AbilitySprite = Resources.Load<Sprite>(path + abilityIndex);
+    }
+
+    public void Use(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
     {
         if (outcome == SkillcheckSystem.CombatOutcome.Miss)
         {
@@ -41,7 +51,7 @@ public abstract class Ability
         }
         foreach (var item in effects)
         {
-            item.ApplyEffect(target, outcome);
+            item.ApplyEffect(attacker, target, outcome);
         }
     }
     public string CreateCombatLogMessage(Character attacker, List<Character> targets)
@@ -127,7 +137,7 @@ public class SwipeAdjacent : TargetType
         affectedCells.Add(targetCell);
 
         //Sides
-        HexDirection dirToSelected = HexDirectionExtension.GetDirectionTo(fromCell, targetCell);
+        HexDirection dirToSelected = HexDirectionExtension.GetDirectionToNeighbor(fromCell, targetCell);
         HexCell previousCell = fromCell.GetNeighbor(dirToSelected.Previous(), true, false, false, false);
         if (previousCell)
         {

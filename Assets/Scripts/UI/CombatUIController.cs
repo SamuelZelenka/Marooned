@@ -78,7 +78,7 @@ public class CombatUIController : MonoBehaviour
 
             for (int i = 0; i < HexGridController.ActiveCharacter.Abilities.Count; i++)
             {
-                abilities[i].sprite = HexGridController.ActiveCharacter.Abilities[i].abilitySprite;
+                abilities[i].sprite = HexGridController.ActiveCharacter.Abilities[i].AbilitySprite;
             }
         }
         for (int i = 0; i < HexGridController.player.Crew.Count; i++)

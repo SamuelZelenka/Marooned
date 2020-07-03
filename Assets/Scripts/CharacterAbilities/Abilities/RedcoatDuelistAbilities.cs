@@ -2,11 +2,10 @@
 {
     int damage = 5;
 
-    public Slice()
+    public Slice(int abilityIndex) : base(abilityIndex)
     {
         abilityName = this.ToString();
         abilityDescription = $"Deal {damage} to an adjacent target";
-        abilitySprite = null;
         cost = 10;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
@@ -21,11 +20,10 @@ public class Parry : Ability //Not implemented
 {
     int damage = 5;
 
-    public Parry() 
+    public Parry(int abilityIndex) : base(abilityIndex)
     {
         abilityName = this.ToString();
         abilityDescription = $"Deal {damage} to an adjacent target";
-        abilitySprite = null;
         cost = 10;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
