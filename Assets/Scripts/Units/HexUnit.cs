@@ -117,6 +117,7 @@ public abstract class HexUnit : MonoBehaviour
     {
         Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
         pathToTravel = path;
+        remainingMovementPoints -= path.Count; //TODO CHANGE TO PATH COST
         yield return StartCoroutine(TravelPath());
         Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
     }

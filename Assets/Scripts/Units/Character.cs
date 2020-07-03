@@ -130,7 +130,6 @@ public class Character : HexUnit
         Pathfinding.FindPath(Location, targetCell, this, playerControlled);
         List<HexCell> path = Pathfinding.GetWholePath();
         yield return Travel(path);
-        remainingMovementPoints -= path.Count;
         Pathfinding.ClearPath();
     }
     #endregion
