@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CharacterSelection : MonoBehaviour
 {
     [SerializeField] Text characterName = null;
-    [SerializeField] Image portrait = null;
+    [SerializeField] CharacterPortrait portrait = null;
 
     [SerializeField] Text moves = null;
 
@@ -24,7 +24,7 @@ public class CharacterSelection : MonoBehaviour
     {
         if (portrait != null)
         {
-            portrait.sprite = character.characterData.portrait;
+            portrait.UpdatePortrait(character);
         }
         characterName.text = character.characterData.characterName;
         strength.text = $"STR: {character.characterData.Strength}";

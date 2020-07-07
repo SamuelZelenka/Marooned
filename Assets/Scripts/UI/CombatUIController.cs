@@ -17,8 +17,8 @@ public class CombatUIController : MonoBehaviour
     [SerializeField] List<Image> abilities = new List<Image>();
 
     [Header("Timeline")]
-    [SerializeField] Image currentCharacter = null;
-    [SerializeField] List<Image> upcomingCharacters = new List<Image>();
+    [SerializeField] CharacterPortrait currentCharacter = null;
+    [SerializeField] List<CharacterPortrait> upcomingCharacters = new List<CharacterPortrait>();
 
     [Header("CombatLog")]
     [SerializeField] List<string> combatLog = new List<string>();
@@ -46,10 +46,10 @@ public class CombatUIController : MonoBehaviour
 
     public void UpdateTimeline(List<Character> turnOrder)
     {
-        currentCharacter.sprite = HexGridController.ActiveCharacter.characterData.portrait;
+        currentCharacter.UpdatePortrait(HexGridController.ActiveCharacter);
         for (int i = 0; i < turnOrder.Count; i++)
         {
-            upcomingCharacters[i].sprite = turnOrder[i].characterData.portrait;
+            upcomingCharacters[i].UpdatePortrait(turnOrder[i]);
         }
         if (upcomingCharacters.Count > turnOrder.Count)
         {

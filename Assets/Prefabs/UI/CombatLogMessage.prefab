@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3823599481507529719}
   - component: {fileID: 737691835755564548}
   - component: {fileID: 4396846000312362931}
+  - component: {fileID: 4358459732913408791}
   m_Layer: 5
   m_Name: CombatLogMessage
   m_TagString: Untagged
@@ -90,7 +91,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   information: 
   image: {fileID: 3823599481507529719}
-  portrait: {fileID: 0}
 --- !u!114 &4396846000312362931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,3 +134,31 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4358459732913408791}
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &4358459732913408791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6710653906300293798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf88d1fab784464fbe536e157f8fe43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profileImage: {fileID: 3823599481507529719}

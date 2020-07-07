@@ -35,5 +35,6 @@ public class CombatLog : MonoBehaviour
             text = character.logMessage.Message;
         }
         logBox.UpdateUI(text, character.characterData.portrait);
+        logBox.GetComponent<CharacterPortrait>().UpdatePortrait(character);
     }
 }

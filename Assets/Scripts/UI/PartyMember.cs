@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class PartyMember : MonoBehaviour
 {
-    const float DOUBLECLICKTIME = 0.5f;
+
     public Character character;
     [SerializeField] Text characterName = null;
-    [SerializeField] Image portraitImage = null;
+    [SerializeField] CharacterPortrait portraitImage = null;
     [SerializeField] Image activeBorder = null;
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar loyalty = null;
@@ -17,46 +17,18 @@ public class PartyMember : MonoBehaviour
 
     List<MouseHoverImage> activeEffects = new List<MouseHoverImage>();
 
-    bool isClicked = false;
-    float doubleClickTimer;
 
     public void SetCharacter(Character character)
     {
         this.character = character;
     }
-    public void OnClick()
-    {
-        if (isClicked)
-        {
-            InGameCamera.OnSelectedCharacter?.Invoke(character.gameObject.transform);
-        }
-        else
-        {
-            HexGridController.SelectedCell = character.Location;
-            doubleClickTimer = DOUBLECLICKTIME;
-            isClicked = true;
-        }
-    }
-    private void Update()
-    {
-        if (isClicked)
-        {
-            if (doubleClickTimer < 0)
-            {
-                isClicked = false;
-            }
-            else
-            { 
-                doubleClickTimer -= Time.deltaTime;
-            }
-        }
-    }
+
 
 
     public void UpdateUI()
     {
         characterName.text = character.characterData.characterName;
-        portraitImage.sprite = character.characterData.portrait;
+        portraitImage.UpdatePortrait(character);
 
         vitality.SetCurrentValue(character.characterData.Vitality.CurrentValue);
         vitality.SetMaxValue(character.characterData.Vitality.maxValue);
@@ -104,6 +76,4 @@ public class PartyMember : MonoBehaviour
             return activeEffects.Count == character.characterData.activeEffects.Count;
         }
     }
-
-
 }

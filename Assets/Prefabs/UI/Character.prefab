@@ -120,7 +120,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4885447377283667303}
+      - m_Target: {fileID: 2328294811275140594}
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 5680747316920048822}
   - component: {fileID: 3754035444464334}
   - component: {fileID: 216399681313669863}
+  - component: {fileID: 2328294811275140594}
   m_Layer: 5
   m_Name: Portrait
   m_TagString: Untagged
@@ -205,6 +206,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2328294811275140594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127052484023267505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf88d1fab784464fbe536e157f8fe43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profileImage: {fileID: 216399681313669863}
 --- !u!1 &2443751384373651137
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,7 +448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 0}
   characterName: {fileID: 7822433321907987183}
-  portraitImage: {fileID: 216399681313669863}
+  portraitImage: {fileID: 2328294811275140594}
   activeBorder: {fileID: 7444699201657084434}
   vitality: {fileID: 2108862988657501780}
   loyalty: {fileID: 3019030016176675227}
