@@ -3,7 +3,7 @@
     int amount;
     public LoyaltyDecrease(int amount) : base((int)EffectIndex.LoyaltyDecrease)
     {
-        Description = $"Reduces loyalty by {amount}";
+        Description = $"Loyalty reduced by {amount}";
         this.amount = amount;
     }
 

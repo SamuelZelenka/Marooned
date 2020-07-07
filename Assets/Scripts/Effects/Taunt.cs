@@ -4,11 +4,11 @@
     {
         if (duration == 1)
         {
-            Description = $"Taunts the target for {duration} turn";
+            Description = $"Taunted for {duration} turn";
         }
         else
         {
-            Description = $"Taunts the target for {duration} turns";
+            Description = $"Taunted for {duration} turns";
         }
         base.duration = duration;
     }

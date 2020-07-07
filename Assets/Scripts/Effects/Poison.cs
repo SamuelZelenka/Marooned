@@ -5,11 +5,11 @@
     {
         if (duration == 1)
         {
-            Description = $"Reduces the target's vitality with {damage} for {duration} turn";
+            Description = $"Vitality reduced by {damage} for {duration} turn";
         }
         else
         {
-            Description = $"Reduces the target's vitality with {damage} for {duration} turns";
+            Description = $"Vitality reduced by {damage} for {duration} turns";
         }
         this.damage = damage;
         base.duration = duration;

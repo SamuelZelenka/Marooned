@@ -4,11 +4,11 @@
     {
         if (duration == 1)
         {
-            Description = $"Stuns the target for {duration} turn";
+            Description = $"Stunned for {duration} turn";
         }
         else
         {
-            Description = $"Stuns the target for {duration} turns";
+            Description = $"Stunned for {duration} turns";
         }
         base.duration = duration;
     }
