@@ -111,7 +111,9 @@ MonoBehaviour:
       type: 3}
     inGameSprite: {fileID: 0}
   animatedArrow: {fileID: 743500340433588429}
+  overHeadUI: {fileID: 1620036827115091785}
   isStunned: 0
+  isTaunting: 0
   abilityID: 64000000
 --- !u!1 &743500340433588429
 GameObject:
@@ -364,3 +366,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4994178239311599058}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1620036827115091785 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5995808759851098779, guid: 58927be11d6d7e247ab82b6d5217d707,
+    type: 3}
+  m_PrefabInstance: {fileID: 4994178239311599058}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

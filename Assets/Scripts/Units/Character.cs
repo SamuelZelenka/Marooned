@@ -7,6 +7,7 @@ public class Character : HexUnit
     public CharacterData characterData = new CharacterData();
 
     public GameObject animatedArrow;
+    public CharacterOverHeadUI overHeadUI;
 
     public bool isStunned;
     public bool isTaunting;

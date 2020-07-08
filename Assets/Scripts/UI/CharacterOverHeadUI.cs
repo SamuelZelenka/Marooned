@@ -13,17 +13,19 @@ public class CharacterOverHeadUI : MonoBehaviour
 
     List<MouseHoverImage> activeEffects = new List<MouseHoverImage>();
 
-
-
-
     private void OnEnable()
     {
         CharacterData.OnResourceChanged += UpdateUI;
+        CombatTurnSystem.OnTurnEnding += UpdateUI;
+
     }
     private void OnDisable()
     {
         CharacterData.OnResourceChanged -= UpdateUI;
+        CombatTurnSystem.OnTurnEnding -= UpdateUI;
     }
+
+    public void UpdateUI(Character character) => UpdateUI();
 
     public void UpdateUI()
     {
@@ -36,7 +38,7 @@ public class CharacterOverHeadUI : MonoBehaviour
         {
             for (int i = 0; i < character.characterData.activeEffects.Count; i++)
             {
-                string effectDescription = character.characterData.activeEffects[i].Description;
+                string effectDescription = character.characterData.activeEffects[i].GetDescription();
                 Sprite effectSprite = character.characterData.activeEffects[i].EffectSprite;
                 activeEffects[i].UpdateUI(effectDescription, effectSprite);
             }
@@ -55,6 +57,7 @@ public class CharacterOverHeadUI : MonoBehaviour
             {
                 while (activeEffects.Count > character.characterData.activeEffects.Count)
                 {
+                    Destroy(activeEffects[0].gameObject);
                     activeEffects.RemoveAt(0);
                 }
             }

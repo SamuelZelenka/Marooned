@@ -45,6 +45,7 @@ public abstract class Effect
                 return int.MinValue;
         }
     }
+    public abstract string GetDescription();
 }
 
 public abstract class TickEffect : Effect
@@ -62,11 +63,12 @@ public abstract class TickEffect : Effect
             RemoveEffect(target);
         }
         counter++;
+        target.overHeadUI.UpdateUI();
     }
     public virtual void RemoveEffect(Character target)
     {
         target.characterData.RemoveEffects(this);
     }
     protected int duration;
-    private int counter = 0;
+    protected int counter = 0;
 }

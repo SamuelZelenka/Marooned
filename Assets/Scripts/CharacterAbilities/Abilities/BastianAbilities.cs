@@ -36,7 +36,7 @@ public class GrabAndPull : Ability
 public class Punch : Ability
 {
     int damage = 10;
-    int durationStun = 1;
+    int durationStun = 5;
     public Punch(int abilityIndex) : base(abilityIndex)
     {
         cost = 20;

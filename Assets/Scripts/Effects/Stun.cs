@@ -2,14 +2,7 @@
 {
     public Stun(int duration) : base((int) EffectIndex.Stun)
     {
-        if (duration == 1)
-        {
-            Description = $"Stunned for {duration} turn";
-        }
-        else
-        {
-            Description = $"Stunned for {duration} turns";
-        }
+
         base.duration = duration;
     }
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
@@ -32,5 +25,13 @@
             }
         }
         target.isStunned = false;
+    }
+    public override string GetDescription()
+    {
+        if (duration == 1)
+        {
+           return Description = $"Stunned for {duration - counter + 1} turn";
+        }
+           return Description = $"Stunned for {duration - counter + 1} turns";
     }
 }

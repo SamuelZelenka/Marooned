@@ -3,14 +3,7 @@
     int damage;
     public Poison(int damage, int duration) : base((int)EffectIndex.Poison)
     {
-        if (duration == 1)
-        {
-            Description = $"Vitality reduced by {damage} for {duration} turn";
-        }
-        else
-        {
-            Description = $"Vitality reduced by {damage} for {duration} turns";
-        }
+
         this.damage = damage;
         base.duration = duration;
     }
@@ -18,5 +11,13 @@
     {
         target.characterData.Vitality.CurrentValue -= damage;
         base.EffectTick(target);
+    }
+    public override string GetDescription()
+    {
+        if (duration == 1)
+        {
+            return Description = $"Vitality reduced by {damage} for {duration - counter + 1} turn";
+        }
+            return Description = $"Vitality reduced by {damage} for {duration - counter + 1} turns";
     }
 }

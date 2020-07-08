@@ -3,8 +3,12 @@
     int damage;
     public Damage(int damage) : base((int)EffectIndex.Damage)
     {
-        Description = $"Reduced {damage} vitality";
+        GetDescription();
         this.damage = damage;
+    }
+    public override string GetDescription()
+    {
+        return Description = $"Reduced {damage} vitality";
     }
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
     {

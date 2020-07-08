@@ -70,6 +70,7 @@ public class PartyMember : MonoBehaviour
             {
                 while (activeEffects.Count > character.characterData.activeEffects.Count)
                 {
+                    Destroy(activeEffects[0].gameObject);
                     activeEffects.RemoveAt(0);
                 }
             }

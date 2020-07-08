@@ -2,14 +2,7 @@
 {
     public Taunt(int duration) : base((int)EffectIndex.Taunt)
     {
-        if (duration == 1)
-        {
-            Description = $"Taunted for {duration} turn";
-        }
-        else
-        {
-            Description = $"Taunted for {duration} turns";
-        }
+        GetDescription();
         base.duration = duration;
     }
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
@@ -32,5 +25,13 @@
             }
         }
         target.isTaunting = false;
+    }
+    public override string GetDescription()
+    {
+        if (duration == 1)
+        {
+            return Description = $"Taunted for {duration} turn";
+        }
+            return Description = $"Taunted for {duration} turns";
     }
 }
