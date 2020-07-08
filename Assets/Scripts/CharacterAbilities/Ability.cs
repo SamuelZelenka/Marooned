@@ -5,11 +5,15 @@ public abstract class Ability
 {
     public static Dictionary<int, Ability> abilityDictionary = new Dictionary<int, Ability>()
     {
-        {0, new ChainWhip(0)},
-        {1, new GrabAndPull(1)},
-        {2, new Punch(2)},
+        {0, new ChainWhip(0) },
+        {1, new GrabAndPull(1) },
+        {2, new Punch(2) },
         {3, new WarCry(3) },
-        {100, new Slice(100)}
+        {20, new Quickdraw(20) },
+        {21, new PiercingShot(21) },
+        {22, new Shockwave(22) },
+        {23, new TheBigBoom(23) },
+        {100, new Slice(100) }
     };
 
     public string abilityName;
@@ -206,7 +210,7 @@ public class SingleTargetRanged : TargetType
 
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetAllCells(fromCell.myGrid, true, true);
+        return CellFinder.GetCellsWithinRange(fromCell, range, true, true);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
@@ -220,16 +224,14 @@ public class SingleTargetRanged : TargetType
 public class SingleTargetRangeLine : TargetType
 {
     int range;
-    bool blockedByFirstUnit; //Can only hit one target in a line, the first detected is the only possible to hit
-    public SingleTargetRangeLine(int range, bool blockedByFirstUnit)
+    public SingleTargetRangeLine(int range)
     {
         this.range = range;
-        this.blockedByFirstUnit = blockedByFirstUnit;
     }
 
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetInLine(fromCell, true, true, range, blockedByFirstUnit);
+        return CellFinder.GetInLine(fromCell, true, true, range, 0);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
@@ -240,28 +242,61 @@ public class SingleTargetRangeLine : TargetType
     }
 }
 
-public class SelfAOE : TargetType
+public class CollateralRangeLine : TargetType
 {
     int range;
-
-    public SelfAOE(int range)
+    int rangeAfterFirstHit;
+    public CollateralRangeLine(int range, int rangeAfterFirstHit)
     {
         this.range = range;
+        this.rangeAfterFirstHit = rangeAfterFirstHit;
+    }
+
+    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    {
+        return CellFinder.GetInLine(fromCell, true, true, range, 0);
+    }
+
+    public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
+    {
+        List<HexCell> affectedCells = new List<HexCell>();
+        affectedCells.AddRange(CellFinder.GetInLine(fromCell, true, true, range, rangeAfterFirstHit));
+        return affectedCells;
+    }
+}
+
+public class AOE : TargetType
+{
+    int range;
+    int aoeRange;
+    bool selfTarget = false;
+
+    public AOE(int range, int aoeRange, bool selfTarget)
+    {
+        this.range = range;
+        this.aoeRange = aoeRange;
+        this.selfTarget = selfTarget;
     }
 
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
         List<HexCell> validCells = new List<HexCell>();
-        validCells.Add(fromCell);
+        if (selfTarget)
+        {
+            validCells.Add(fromCell);
+        }
+        else
+        {
+            validCells.AddRange(CellFinder.GetCellsWithinRange(fromCell, range, true, true));
+        }
         return validCells;
     }
 
-    //FromCell and TargetCell Should be equal
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
         List<HexCell> affectedCells = new List<HexCell>();
-        affectedCells.AddRange(CellFinder.GetAOE(targetCell, range, true));
-        affectedCells.Add(fromCell);
+        affectedCells.AddRange(CellFinder.GetCellsWithinRange(targetCell, aoeRange, true, false));
+        affectedCells.Add(targetCell);
         return affectedCells;
     }
 }

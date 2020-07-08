@@ -16,8 +16,7 @@ public class SessionSetup : MonoBehaviour
     public Ship playerStarterShip;
     public BattleMap playerStartingGridMap;
     public CrewSimulation playerCrewSimulation;
-    public Character startingCharacter;
-    public int numberOfStartingCharacters = 1;
+    public Character[] startingCharacters;
     public CombatSystem combatSystem;
 
     [Header("AI setup")]
@@ -60,9 +59,9 @@ public class SessionSetup : MonoBehaviour
         Player newPlayer = new Player(newShip, true, playerCrewSimulation);
         MapTurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
 
-        for (int i = 0; i < numberOfStartingCharacters; i++)
+        for (int i = 0; i < startingCharacters.Length; i++)
         {
-            Character character = Instantiate(startingCharacter);
+            Character character = Instantiate(startingCharacters[i]);
             character.transform.SetParent(playerCrewParent);
             newPlayer.Crew.Add(character);
             shipGrid.AddUnit(character, shipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);

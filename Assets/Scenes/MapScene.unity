@@ -3717,9 +3717,9 @@ MonoBehaviour:
   playerStartingGridMap: {fileID: 11400000, guid: 1b89592233b42704983d8e32e92d310a,
     type: 2}
   playerCrewSimulation: {fileID: 414122934}
-  startingCharacter: {fileID: 435603174573623444, guid: fa200656b4984df47856f6e116dd64a8,
-    type: 3}
-  numberOfStartingCharacters: 3
+  startingCharacters:
+  - {fileID: 930899063425889352, guid: a73b69d9578b57d40a958af6a8495e37, type: 3}
+  - {fileID: 5767702583924690790, guid: 57fe4cb9e37d16f4fa76c2012f0978a1, type: 3}
   combatSystem: {fileID: 926876168}
   aiPrefab: {fileID: 4439904320964768413, guid: 069b902a3055d304882a80a85444ac75,
     type: 3}

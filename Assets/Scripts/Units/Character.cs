@@ -99,6 +99,7 @@ public class Character : HexUnit
         if (!isStunned)
         {
             remainingMovementPoints = defaultMovementPoints;
+            characterData.Energy.CurrentValue += CharacterData.DEFAULTENERGYREGEN;
         }
         else
         {

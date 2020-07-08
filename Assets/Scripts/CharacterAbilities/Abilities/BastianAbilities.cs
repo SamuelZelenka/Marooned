@@ -2,11 +2,13 @@
 
 public class ChainWhip : Ability
 {
+    int abilityCost = 10;
     int damage = 5;
     int loyaltyDecrease = 5;
+
     public ChainWhip(int abilityIndex) : base(abilityIndex)
     {
-        cost = 10;
+        cost = abilityCost;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
         TargetSkillcheck = CharacterStatType.Agility;
@@ -19,27 +21,30 @@ public class ChainWhip : Ability
 
 public class GrabAndPull : Ability
 {
+    int abilityCost = 10;
     int range = 3;
 
     public GrabAndPull(int abilityIndex) : base(abilityIndex)
     {
-        cost = 10;
+        cost = abilityCost;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
         TargetSkillcheck = CharacterStatType.Agility;
         effects.Add(new Displace(true, 1));
-        targeting = new SingleTargetRangeLine(range, true);
+        targeting = new SingleTargetRangeLine(range);
         base.SetDescriptionFromEffects();
     }
 }
 
 public class Punch : Ability
 {
+    int abilityCost = 20;
     int damage = 10;
-    int durationStun = 5;
+    int durationStun = 1;
+
     public Punch(int abilityIndex) : base(abilityIndex)
     {
-        cost = 20;
+        cost = abilityCost;
         RequireSkillCheck = true;
         AttackerSkillcheck = CharacterStatType.Strength;
         TargetSkillcheck = CharacterStatType.Agility;
@@ -52,16 +57,18 @@ public class Punch : Ability
 
 public class WarCry : Ability
 {
+    int abilityCost = 100;
     int loyaltyIncrease = 5;
     int durationTaunt = 1;
     int buffrange = 2;
+
     public WarCry(int abilityIndex) : base(abilityIndex)
     {
-        cost = 100;
+        cost = abilityCost;
         RequireSkillCheck = false;
         effects.Add(new Taunt(durationTaunt));
         effects.Add(new LoyaltyIncrease(loyaltyIncrease));
-        targeting = new SelfAOE(buffrange);
+        targeting = new AOE(0, buffrange, true);
         base.SetDescriptionFromEffects();
     }
 
