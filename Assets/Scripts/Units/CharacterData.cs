@@ -19,6 +19,8 @@ public class CharacterData
     public List<TickEffect> removedEffects = new List<TickEffect>();
     public CrewSimulation.ShipJob ShipJob { get; set; } = CrewSimulation.ShipJob.None;
 
+    public const int DEFAULTENERGYREGEN = 20;
+
     #region Visuals
     public Sprite portrait = null;
     #endregion

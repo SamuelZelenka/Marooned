@@ -295,8 +295,8 @@ public class AOE : TargetType
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
         List<HexCell> affectedCells = new List<HexCell>();
-        affectedCells.AddRange(CellFinder.GetCellsWithinRange(targetCell, aoeRange, true, true));
-        affectedCells.Add(fromCell);
+        affectedCells.AddRange(CellFinder.GetCellsWithinRange(targetCell, aoeRange, true, false));
+        affectedCells.Add(targetCell);
         return affectedCells;
     }
 }

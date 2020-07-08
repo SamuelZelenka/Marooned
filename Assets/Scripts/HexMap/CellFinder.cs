@@ -62,6 +62,18 @@ public static class CellFinder
 
     public static List<HexCell> GetCellsWithinRange(HexCell fromCell, int range, bool traversable, bool hasUnit)
     {
-        return Pathfinding.GetCellsWithinRange(fromCell, range, traversable, hasUnit);
+        List<HexCell> cellsWithinReach = Pathfinding.GetCellsWithinRange(fromCell, range, traversable);
+        if (hasUnit)
+        {
+            for (int i = 0; i < cellsWithinReach.Count; i++)
+            {
+                if (cellsWithinReach[i].Unit == null)
+                {
+                    cellsWithinReach.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+        return cellsWithinReach;
     }
 }

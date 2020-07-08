@@ -51,7 +51,7 @@ public class Shockwave : Ability
         TargetSkillcheck = CharacterStatType.Agility;
         effects.Add(new Damage(damage));
         effects.Add(new Displace(false, 1));
-        targeting = new SingleTargetRanged(range);
+        targeting = new SingleTargetRangeLine(range);
         base.SetDescriptionFromEffects();
     }
 }
