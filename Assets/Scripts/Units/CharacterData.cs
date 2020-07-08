@@ -21,7 +21,6 @@ public class CharacterData
 
     #region Visuals
     public Sprite portrait = null;
-    public Sprite inGameSprite = null;
     #endregion
 
     //Resources

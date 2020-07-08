@@ -290,7 +290,7 @@ public static class Pathfinding
     /// <param name="fromCell"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public static List<HexCell> GetCellsWithinRange(HexCell fromCell, int range, bool traversableRequirement)
+    public static List<HexCell> GetCellsWithinRange(HexCell fromCell, int range, bool traversableRequirement, bool hasUnitRequirement)
     {
         ClearPath();
         //New unit == Clear old pathfinding
@@ -332,6 +332,10 @@ public static class Pathfinding
                     continue;
                 }
                 if (traversableRequirement && !neighbor.Traversable)
+                {
+                    continue;
+                }
+                if (hasUnitRequirement && !neighbor.Unit)
                 {
                     continue;
                 }
