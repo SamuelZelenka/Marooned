@@ -10,7 +10,7 @@ public class Character : HexUnit
     public CharacterOverHeadUI overHeadUI;
 
     public bool isStunned;
-    public bool isTaunting;
+    public List<Character> tauntedBy = new List<Character>();
 
     public List<Ability> Abilities { get; set; } = new List<Ability>();
     public List<int> abilityID = new List<int>();
@@ -84,6 +84,12 @@ public class Character : HexUnit
     }
     #endregion
 
+    public bool isFriendlyTo(Character otherCharacter)
+    {
+        //If berserk : return false;
+        //if othercharacter is berserk : return false;
+        return playerControlled == otherCharacter.playerControlled;
+    }
 
     public override bool CanEnter(HexCell cell)
     {
@@ -137,6 +143,10 @@ public class Character : HexUnit
                 {
                     CombatSystem.instance.SelectAbility(nextAction.abilityToUse);
                     CombatSystem.instance.UseAbility(nextAction.cellAbilityTarget);
+                }
+                else
+                {
+                    CombatSystem.instance.EndActiveCharacterTurn();
                 }
             }
 

@@ -1,37 +1,48 @@
 ﻿public class Taunt : TickEffect
 {
-    public Taunt(int duration) : base((int)EffectIndex.Taunt)
+    Character tauntedBy;
+    public Taunt(int duration, bool useOnHostile = true, bool useOnFriendly = false) : base((int)EffectIndex.Taunt, useOnHostile, useOnFriendly)
     {
-        GetDescription();
         base.duration = duration;
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        base.ApplyEffect(attacker, target, outcome);
-        target.isTaunting = true;
+        if (IsValidEffectTarget(hostile))
+        {
+            base.ApplyEffect(attacker, target, outcome, hostile);
+            tauntedBy = attacker;
+            target.tauntedBy.Add(attacker);
+        }
     }
-    public override void EffectTick(Character target)
+    public override void EffectTick(Character owner)
     {
-        base.EffectTick(target);
+        base.EffectTick(owner);
     }
-    public override void RemoveEffect(Character target)
+    public override void RemoveEffect(Character owner)
     {
-        base.RemoveEffect(target);
-        foreach (Effect effect in target.characterData.activeEffects)
+        base.RemoveEffect(owner);
+        foreach (Effect effect in owner.characterData.activeEffects)
         {
             if (effect.GetType() == this.GetType())
             {
                 return;
             }
         }
-        target.isTaunting = false;
+        for (int i = 0; i < owner.tauntedBy.Count; i++)
+        {
+            if (owner.tauntedBy[i] == tauntedBy) 
+            {
+                owner.tauntedBy.RemoveAt(i); //Remove the character from the list of characters taunting the owner
+                break;
+            }
+        }
     }
     public override string GetDescription()
     {
         if (duration == 1)
         {
-            return Description = $"Taunted for {duration} turn";
+            return $"Taunted for {duration} turn";
         }
-            return Description = $"Taunted for {duration} turns";
+        return $"Taunted for {duration} turns";
     }
 }

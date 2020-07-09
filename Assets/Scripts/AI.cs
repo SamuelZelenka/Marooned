@@ -70,7 +70,7 @@ public class AI
         //Score all actiongroups
         foreach (var item in possibleActions)
         {
-            Score(item);
+            Score(item, activeCharacter);
             yield return null; //Wait one frame
         }
 
@@ -84,7 +84,7 @@ public class AI
         activeCharacter.SetNextAction(chosenAction);
     }
 
-    void Score(ActionGroup actionGroup)
+    void Score(ActionGroup actionGroup, Character activeCharacter)
     {
         int score = 0;
         if (actionGroup.abilityToUse != null)
@@ -92,7 +92,7 @@ public class AI
             //Check taunt
             bool isTargettingTauntingCharacter = false;
             Character potentialTaunter = actionGroup.cellAbilityTarget.Unit as Character;
-            if (potentialTaunter != null && potentialTaunter.isTaunting)
+            if (potentialTaunter != null && activeCharacter.tauntedBy.Contains(potentialTaunter))
             {
                 isTargettingTauntingCharacter = true;
             }

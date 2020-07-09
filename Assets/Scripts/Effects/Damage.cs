@@ -1,17 +1,19 @@
 ﻿public class Damage : Effect
 {
     int damage;
-    public Damage(int damage) : base((int)EffectIndex.Damage)
+    public Damage(int damage, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Damage, useOnHostile, useOnFriendly)
     {
-        GetDescription();
         this.damage = damage;
     }
     public override string GetDescription()
     {
-        return Description = $"Reduced {damage} vitality";
+        return $"Reduced {damage} vitality";
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, damage);
+        if (IsValidEffectTarget(hostile))
+        {
+            target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, damage);
+        }
     }
 }

@@ -8,25 +8,23 @@ public abstract class Effect
 
     public enum EffectIndex { Bleed, Damage, Displace, LoyaltyDecrease, LoyaltyIncrease, Poison, Stun, Taunt }
 
-    string description;
     public Sprite EffectSprite
     {
         private set;
         get;
     }
-    public string Description
-    {
-        get;
-        protected set;
-    }
+
+    protected bool useOnHostile, useOnFriendly;
 
     const string path = "EffectSprites/";
-    protected Effect(int effectIndex)
+    protected Effect(int effectIndex, bool useOnHostile, bool useOnFriendly)
     {
         EffectSprite = Resources.Load<Sprite>(path + "EffectIcon" + effectIndex);
+        this.useOnHostile = useOnHostile;
+        this.useOnFriendly = useOnFriendly;
     }
 
-    public abstract void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome);
+    public abstract void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile);
 
     public static int GetModifiedValue(SkillcheckSystem.CombatOutcome outcome, int originalValue)
     {
@@ -46,28 +44,44 @@ public abstract class Effect
         }
     }
     public abstract string GetDescription();
+
+    public bool IsValidEffectTarget(bool characterIsHostile)
+    {
+        if (characterIsHostile == useOnHostile)
+        {
+            return true;
+        }
+        else if (!characterIsHostile && useOnFriendly)
+        {
+            return true;
+        }
+        return false;
+    }
 }
 
 public abstract class TickEffect : Effect
 {
-    public TickEffect(int effectIndex) : base(effectIndex) { }
+    public TickEffect(int effectIndex, bool useOnHostile, bool useOnFriendly) : base(effectIndex, useOnHostile, useOnFriendly) { }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        target.characterData.AddEffect(this);
+        if (IsValidEffectTarget(hostile))
+        {
+            target.characterData.AddEffect(this);
+        }
     }
-    public virtual void EffectTick(Character target)
+    public virtual void EffectTick(Character owner)
     {
         if (counter >= duration)
         {
-            RemoveEffect(target);
+            RemoveEffect(owner);
         }
         counter++;
-        target.overHeadUI.UpdateUI();
+        owner.overHeadUI.UpdateUI();
     }
-    public virtual void RemoveEffect(Character target)
+    public virtual void RemoveEffect(Character owner)
     {
-        target.characterData.RemoveEffects(this);
+        owner.characterData.RemoveEffects(this);
     }
     protected int duration;
     protected int counter = 0;

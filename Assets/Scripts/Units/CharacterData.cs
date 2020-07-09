@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterStatType { Strength, Stamina, Constituation, Agility, Toughness, Accuracy}
+public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy}
 
 [Serializable]
 public class CharacterData
@@ -50,7 +50,7 @@ public class CharacterData
                 return Strength.CurrentValue;
             case CharacterStatType.Stamina:
                 return Stamina.CurrentValue;
-            case CharacterStatType.Constituation:
+            case CharacterStatType.Constitution:
                 return Constitution.CurrentValue;
             case CharacterStatType.Agility:
                 return Agility.CurrentValue;

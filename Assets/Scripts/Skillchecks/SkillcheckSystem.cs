@@ -6,128 +6,172 @@ using UnityEngine.UI;
 public class SkillcheckSystem : MonoBehaviour
 {
     public const int NUMBEROFCOINS = 4;
-
+    public enum SkillcheckRequirement { None, Strength, Accuracy, Agility, Stamina, Constitution, Toughness }
     public enum CombatOutcome { Miss, Grace, NormalHit, Critical }
 
-    public delegate void CombatOutcomeHandler(List<CombatOutcome> combatOutcomes);
+    public delegate void CombatOutcomeHandler(List<CombatOutcome> hostileOutcomes, List<CombatOutcome> friendlyOutcomes);
     public CombatOutcomeHandler OnCombatOutcomesDecided;
 
     [Header("References")]
     [SerializeField] GameObject parent = null;
-    [SerializeField] SkillcheckContester skillcheckAttacker = null;
-    [SerializeField] SkillcheckContester[] skillcheckTarget = null;
+    [SerializeField] SkillcheckContester abilityUserSkillcheckSystem = null;
+    [SerializeField] SkillcheckContester[] hostileSkillcheckSystems = null;
+    [SerializeField] SkillcheckContester[] friendlySkillcheckSystems = null;
 
     [SerializeField] float timeBeforeCoinFlips = 0.2f, timeBeforePanelClose = 1f;
     [SerializeField] bool closeAfterCompleted = true;
 
-    public void StartContestedSkillcheck(Character attacker, List<Character> targets, CharacterStatType attackerSkillcheck, CharacterStatType targetSkillcheck)
+    public void StartContestedSkillcheck
+        (
+        Character abilityUser, List<Character> hostileTargets, List<Character> friendlyTargets,
+        SkillcheckRequirement abilityUserSkillcheck, SkillcheckRequirement hostileDodgeSkillcheck, SkillcheckRequirement friendlyDodgeSkillcheck
+        )
     {
         parent.SetActive(true);
 
-        skillcheckAttacker.SetupSkillcheck(attacker.characterData.GetStatValue(attackerSkillcheck), attacker.characterData.portrait);
+        abilityUserSkillcheckSystem.SetupSkillcheck(GetStatValue(abilityUser, abilityUserSkillcheck), abilityUser.characterData.portrait);
 
         //Hide all defenders
-        foreach (var item in skillcheckTarget)
+        foreach (var item in hostileSkillcheckSystems)
+        {
+            item.gameObject.SetActive(false);
+        }
+        foreach (var item in friendlySkillcheckSystems)
         {
             item.gameObject.SetActive(false);
         }
 
-        for (int i = 0; i < targets.Count; i++)
+        for (int i = 0; i < hostileTargets.Count; i++)
         {
-            skillcheckTarget[i].gameObject.SetActive(true);
-            skillcheckTarget[i].SetupSkillcheck(targets[i].characterData.GetStatValue(targetSkillcheck), targets[i].characterData.portrait);
+            hostileSkillcheckSystems[i].gameObject.SetActive(true);
+            hostileSkillcheckSystems[i].SetupSkillcheck(GetStatValue(hostileTargets[i], hostileDodgeSkillcheck), hostileTargets[i].characterData.portrait);
         }
 
-        StartCoroutine(PerformContestedSkillcheck(targets.Count));
+        for (int i = 0; i < friendlyTargets.Count; i++)
+        {
+            friendlySkillcheckSystems[i].gameObject.SetActive(true);
+            friendlySkillcheckSystems[i].SetupSkillcheck(GetStatValue(friendlyTargets[i], friendlyDodgeSkillcheck), friendlyTargets[i].characterData.portrait);
+        }
+
+        StartCoroutine(PerformContestedSkillcheck(hostileTargets.Count, friendlyTargets.Count));
     }
 
-    IEnumerator PerformContestedSkillcheck(int numberOfDefenders)
+    IEnumerator PerformContestedSkillcheck(int numberOfHostileTargets, int numberOfFriendlyTargets)
     {
         yield return new WaitForSeconds(timeBeforeCoinFlips);
 
+        int userSuccesses = 0;
+        List<bool> userFlips = SkillcheckContester.GetCoinflipResults();
 
-        int attackerSuccesses = 0;
-        List<bool> attackerFlips = SkillcheckContester.GetCoinflipResults();
-
-        for (int i = 0; i < attackerFlips.Count; i++)
+        for (int i = 0; i < userFlips.Count; i++)
         {
-            if (attackerFlips[i])
+            if (userFlips[i])
             {
-                attackerSuccesses++;
+                userSuccesses++;
             }
         }
-        yield return skillcheckAttacker.FlipCoins(attackerFlips);
+        yield return abilityUserSkillcheckSystem.FlipCoins(userFlips);
 
-        CombatOutcome attackerOutcome = DecideAttackerOutcome(attackerSuccesses);
-        List<CombatOutcome> outcomes = new List<CombatOutcome>(numberOfDefenders);
+        CombatOutcome userOutcome = DecideUserOutcome(userSuccesses);
+        List<CombatOutcome> hostileOutcomes = new List<CombatOutcome>(numberOfHostileTargets);
+        List<CombatOutcome> friendlyOutcomes = new List<CombatOutcome>(numberOfFriendlyTargets);
 
         //If crit or miss, no need for other flips, just show crit or miss
-        if (attackerOutcome == CombatOutcome.Critical || attackerOutcome == CombatOutcome.Miss) //Decided outcome
+        if (userOutcome == CombatOutcome.Critical || userOutcome == CombatOutcome.Miss) //Decided outcome
         {
-            skillcheckAttacker.SetOutcomeText(OutcomeString(attackerOutcome));
-            for (int i = 0; i < numberOfDefenders; i++)
+            abilityUserSkillcheckSystem.SetOutcomeText(OutcomeString(userOutcome));
+            for (int i = 0; i < numberOfHostileTargets; i++)
             {
-                skillcheckTarget[i].SetOutcomeText(OutcomeString(attackerOutcome));
-                outcomes.Add(attackerOutcome);
+                hostileSkillcheckSystems[i].SetOutcomeText(OutcomeString(userOutcome));
+                hostileOutcomes.Add(userOutcome);
+            }
+            for (int i = 0; i < numberOfFriendlyTargets; i++)
+            {
+                friendlySkillcheckSystems[i].SetOutcomeText(OutcomeString(userOutcome));
+                friendlyOutcomes.Add(userOutcome);
             }
         }
         else //If possibly a regular or grace hit
         {
-            for (int i = 0; i < numberOfDefenders; i++)
+            for (int i = 0; i < numberOfHostileTargets; i++)
             {
-                StartCoroutine(skillcheckTarget[i].FlipCoins(SkillcheckContester.GetCoinflipResults()));
+                StartCoroutine(hostileSkillcheckSystems[i].FlipCoins(SkillcheckContester.GetCoinflipResults()));
+            }
+            for (int i = 0; i < numberOfFriendlyTargets; i++)
+            {
+                StartCoroutine(friendlySkillcheckSystems[i].FlipCoins(SkillcheckContester.GetCoinflipResults()));
             }
 
             yield return new WaitForSeconds(SkillcheckCoin.FLIPTIME * NUMBEROFCOINS);
 
             bool completed = false;
-            while(!completed)
+            while (!completed)
             {
                 yield return null;
                 completed = true;
-                for (int i = 0; i < numberOfDefenders; i++)
+                for (int i = 0; i < numberOfHostileTargets; i++)
                 {
-                    if (!skillcheckTarget[i].done)
+                    if (!hostileSkillcheckSystems[i].done)
+                    {
+                        completed = false;
+                    }
+                }
+                for (int i = 0; i < numberOfFriendlyTargets; i++)
+                {
+                    if (!friendlySkillcheckSystems[i].done)
                     {
                         completed = false;
                     }
                 }
             }
 
-            for (int i = 0; i < numberOfDefenders; i++)
+            for (int i = 0; i < numberOfHostileTargets; i++)
             {
-                if (CheckResult(skillcheckAttacker.EndValue, skillcheckTarget[i].EndValue))
+                if (CheckResult(abilityUserSkillcheckSystem.EndValue, hostileSkillcheckSystems[i].EndValue))
                 {
-                    skillcheckTarget[i].SetOutcomeText(OutcomeString(attackerOutcome));
-                    outcomes.Add(attackerOutcome);
+                    hostileSkillcheckSystems[i].SetOutcomeText(OutcomeString(userOutcome));
+                    hostileOutcomes.Add(userOutcome);
                 }
                 else
                 {
-                    skillcheckTarget[i].SetOutcomeText(OutcomeString(CombatOutcome.Miss));
-                    outcomes.Add(CombatOutcome.Miss);
+                    hostileSkillcheckSystems[i].SetOutcomeText(OutcomeString(CombatOutcome.Miss));
+                    hostileOutcomes.Add(CombatOutcome.Miss);
+                }
+            }
+            for (int i = 0; i < numberOfFriendlyTargets; i++)
+            {
+                if (CheckResult(abilityUserSkillcheckSystem.EndValue, friendlySkillcheckSystems[i].EndValue))
+                {
+                    friendlySkillcheckSystems[i].SetOutcomeText(OutcomeString(userOutcome));
+                    friendlyOutcomes.Add(userOutcome);
+                }
+                else
+                {
+                    friendlySkillcheckSystems[i].SetOutcomeText(OutcomeString(CombatOutcome.Miss));
+                    friendlyOutcomes.Add(CombatOutcome.Miss);
                 }
             }
         }
 
         yield return new WaitForSeconds(timeBeforePanelClose);
-        EndContestedSkillcheck(outcomes);
+        EndContestedSkillcheck(hostileOutcomes, friendlyOutcomes);
     }
 
 
 
-    private CombatOutcome DecideAttackerOutcome(int attackerSuccesses)
+    private CombatOutcome DecideUserOutcome(int userSuccesses)
     {
         CombatOutcome attackerOutcome = CombatOutcome.NormalHit;
-        if (attackerSuccesses == NUMBEROFCOINS) //All successes = crit always
+        if (userSuccesses == NUMBEROFCOINS) //All successes = crit always
         {
             InGameCamera.OnShakeEffect?.Invoke(0.5f, 0.2f);
             attackerOutcome = CombatOutcome.Critical;
         }
-        else if (attackerSuccesses == 0) //All misses = miss always
+        else if (userSuccesses == 0) //All misses = miss always
         {
             attackerOutcome = CombatOutcome.Miss;
         }
-        else if (attackerSuccesses == 1) //Grace
+        else if (userSuccesses == 1) //Grace
         {
             attackerOutcome = CombatOutcome.Grace;
         }
@@ -153,17 +197,40 @@ public class SkillcheckSystem : MonoBehaviour
         }
     }
 
-    private void EndContestedSkillcheck(List<CombatOutcome> combatOutcomes)
+    private void EndContestedSkillcheck(List<CombatOutcome> hostileOutcomes, List<CombatOutcome> friendlyOutcomes)
     {
         if (closeAfterCompleted)
         {
-            foreach (var item in skillcheckTarget)
+            foreach (var item in hostileSkillcheckSystems)
             {
                 item.gameObject.SetActive(false);
             }
 
             parent.SetActive(false);
         }
-        OnCombatOutcomesDecided?.Invoke(combatOutcomes);
+        OnCombatOutcomesDecided?.Invoke(hostileOutcomes, friendlyOutcomes);
+    }
+
+    private int GetStatValue(Character character, SkillcheckRequirement skillcheckRequirement)
+    {
+        switch (skillcheckRequirement)
+        {
+            case SkillcheckRequirement.Strength:
+                return character.characterData.GetStatValue(CharacterStatType.Strength);
+            case SkillcheckRequirement.Accuracy:
+                return character.characterData.GetStatValue(CharacterStatType.Accuracy);
+            case SkillcheckRequirement.Agility:
+                return character.characterData.GetStatValue(CharacterStatType.Agility);
+            case SkillcheckRequirement.Stamina:
+                return character.characterData.GetStatValue(CharacterStatType.Stamina);
+            case SkillcheckRequirement.Constitution:
+                return character.characterData.GetStatValue(CharacterStatType.Constitution);
+            case SkillcheckRequirement.Toughness:
+                return character.characterData.GetStatValue(CharacterStatType.Toughness);
+            case SkillcheckRequirement.None:
+            default:
+                Debug.LogError("Faulty skillcheck requirement");
+                return int.MinValue;
+        }
     }
 }

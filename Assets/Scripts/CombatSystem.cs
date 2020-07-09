@@ -74,7 +74,18 @@ public class CombatSystem : MonoBehaviour
             }
         }
     }
-    List<Character> abilityAffectedCharacters = new List<Character>();
+    List<Character> hostileAbilityAffectedCharacters = new List<Character>();
+    List<Character> friendlyAbilityAffectedCharacters = new List<Character>();
+    List<Character> AllAffectedCharacters
+    {
+        get
+        {
+            List<Character> allCharacters = new List<Character>();
+            allCharacters.AddRange(hostileAbilityAffectedCharacters);
+            allCharacters.AddRange(friendlyAbilityAffectedCharacters);
+            return allCharacters;
+        }
+    }
 
     #region Singleton
     public static CombatSystem instance;
@@ -186,7 +197,7 @@ public class CombatSystem : MonoBehaviour
         if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(targetCell))
         {
             AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, targetCell);
-            abilityAffectedCharacters = selectedAbility.targeting.GetAffectedCharacters(HexGridController.ActiveCharacter.Location, targetCell);
+            selectedAbility.targeting.GetAffectedCharacters(HexGridController.ActiveCharacter, HexGridController.ActiveCharacter.Location, targetCell, out hostileAbilityAffectedCharacters, out friendlyAbilityAffectedCharacters);
         }
     }
 
@@ -214,24 +225,28 @@ public class CombatSystem : MonoBehaviour
 
     public void UseAbility(HexCell selectedCellForTarget)
     {
+        Character abilityUser = HexGridController.ActiveCharacter;
+
+        if (abilityUser == null)
+            return;
+
         MarkCellsAndCharactersToBeAffected(selectedCellForTarget);
-        if (selectedAbility != null && ValidTargetHexes != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(selectedCellForTarget)) //Have selected an ability
+        if (selectedAbility != null && ValidTargetHexes != null && AbilityAffectedHexes != null && ValidTargetHexes.Contains(selectedCellForTarget)) //Have selected an ability and the target cell is a valid target
         {
-            if (HexGridController.ActiveCharacter.characterData.Energy.CurrentValue >= selectedAbility.cost) //Have enough energy
+            if (abilityUser.characterData.Energy.CurrentValue >= selectedAbility.cost) //Have enough energy
             {
                 Debug.Log("Using ability " + selectedAbility.abilityName);
-                if (selectedAbility.RequireSkillCheck)
+
+                //Autohits
+                if (selectedAbility.AbilityuserHitSkillcheck == SkillcheckSystem.SkillcheckRequirement.None)
                 {
-                    skillcheckSystem.OnCombatOutcomesDecided += ResolveUsedAbility;
-
-                    Character attacker = HexGridController.ActiveCharacter;
-                    List<Character> targets = selectedAbility.targeting.GetAffectedCharacters(attacker.Location, selectedCellForTarget);
-
-                    skillcheckSystem.StartContestedSkillcheck(attacker, targets, selectedAbility.AttackerSkillcheck, selectedAbility.TargetSkillcheck);
+                    selectedAbility.Use(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters); PostAbilityCalculations();
                 }
-                else
+                else //Requires skillchecks
                 {
-                    ResolveUsedAbility();
+                    skillcheckSystem.OnCombatOutcomesDecided += ResolveAbilityOutcomes;
+                    skillcheckSystem.StartContestedSkillcheck(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters,
+                        selectedAbility.AbilityuserHitSkillcheck, selectedAbility.HostileDodgeSkillcheck, selectedAbility.FriendlyDodgeSkillcheck);
                 }
             }
             else
@@ -246,22 +261,17 @@ public class CombatSystem : MonoBehaviour
     }
 
     //Required outcomes
-    private void ResolveUsedAbility(List<SkillcheckSystem.CombatOutcome> attackOutcomes)
+    private void ResolveAbilityOutcomes(List<SkillcheckSystem.CombatOutcome> hostileOutcomes, List<SkillcheckSystem.CombatOutcome> friendlyOutcomes)
     {
-        skillcheckSystem.OnCombatOutcomesDecided -= ResolveUsedAbility;
-        selectedAbility.Use(HexGridController.ActiveCharacter, abilityAffectedCharacters, attackOutcomes);
-        HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityAffectedCharacters));
-        HexGridController.ActiveCharacter.logMessage.SetAbilitySprite(selectedAbility.AbilitySprite);
-        EndActiveCharacterTurn();
+        skillcheckSystem.OnCombatOutcomesDecided -= ResolveAbilityOutcomes;
+        selectedAbility.Use(HexGridController.ActiveCharacter, hostileAbilityAffectedCharacters, hostileOutcomes, friendlyAbilityAffectedCharacters, friendlyOutcomes);
+        PostAbilityCalculations();
     }
 
-    //No required outcomes
-    private void ResolveUsedAbility()
+    private void PostAbilityCalculations()
     {
-        selectedAbility.Use(HexGridController.ActiveCharacter, abilityAffectedCharacters);
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
-        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, abilityAffectedCharacters));
+        HexGridController.ActiveCharacter.logMessage.AddLine(selectedAbility.CreateCombatLogMessage(HexGridController.ActiveCharacter, AllAffectedCharacters));
         HexGridController.ActiveCharacter.logMessage.SetAbilitySprite(selectedAbility.AbilitySprite);
         EndActiveCharacterTurn();
     }

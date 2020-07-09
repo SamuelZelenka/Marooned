@@ -1,32 +1,35 @@
-﻿public class Displace : Effect 
+﻿public class Displace : Effect
 {
     bool pull;
     int hexes;
 
-    public Displace(bool pull, int hexes) : base((int)EffectIndex.Displace)
+    public Displace(bool pull, int hexes, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Displace, useOnHostile, useOnFriendly)
     {
         this.pull = pull;
         this.hexes = hexes;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        HexDirection directionToTarget = HexDirectionExtension.GetDirectionTo(attacker.Location, target.Location);
-
-        HexCell newCell = target.Location;
-        for (int i = 0; i < hexes; i++)
+        if (IsValidEffectTarget(hostile))
         {
-            HexCell cellToTry = pull ? newCell.GetNeighbor(HexDirectionExtension.Opposite(directionToTarget)) : newCell.GetNeighbor(directionToTarget);
-            if (cellToTry.Unit != null)
+            HexDirection directionToTarget = HexDirectionExtension.GetDirectionTo(attacker.Location, target.Location);
+
+            HexCell newCell = target.Location;
+            for (int i = 0; i < hexes; i++)
             {
-                break;
+                HexCell cellToTry = pull ? newCell.GetNeighbor(HexDirectionExtension.Opposite(directionToTarget)) : newCell.GetNeighbor(directionToTarget);
+                if (cellToTry.Unit != null)
+                {
+                    break;
+                }
+                newCell = cellToTry;
             }
-            newCell = cellToTry;
+            target.Location = newCell;
         }
-        target.Location = newCell;
     }
     public override string GetDescription()
     {
-        return Description = $"Displaced 1 hex";
+        return $"Displaced {hexes} hex(es)";
     }
 }

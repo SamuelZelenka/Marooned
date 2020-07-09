@@ -5,11 +5,11 @@
     public Slice(int abilityIndex) : base(abilityIndex)
     {
         cost = 10;
-        RequireSkillCheck = true;
-        AttackerSkillcheck = CharacterStatType.Strength;
-        TargetSkillcheck = CharacterStatType.Agility;
-        effects.Add(new Damage(damage));
-        effects.Add(new Bleed(damage, 2));
+        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Strength;
+        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Toughness;
+        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Toughness;
+        effects.Add(new Damage(damage, true, true));
+        effects.Add(new Bleed(damage, 2, true, true));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
     }
@@ -22,10 +22,10 @@ public class Parry : Ability //Not implemented
     public Parry(int abilityIndex) : base(abilityIndex)
     {
         cost = 10;
-        RequireSkillCheck = true;
-        AttackerSkillcheck = CharacterStatType.Strength;
-        TargetSkillcheck = CharacterStatType.Agility;
-        effects.Add(new Damage(damage));
+        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Strength;
+        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        effects.Add(new Damage(damage, true, true));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
     }

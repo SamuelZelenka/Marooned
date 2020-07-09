@@ -1,37 +1,39 @@
 ﻿public class Stun : TickEffect
 {
-    public Stun(int duration) : base((int) EffectIndex.Stun)
+    public Stun(int duration, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Stun, useOnHostile, useOnFriendly)
     {
-
         base.duration = duration;
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        base.ApplyEffect(attacker, target, outcome);
-        target.isStunned = true;
-    }
-    public override void EffectTick(Character target)
-    {
-        base.EffectTick(target);
-    }
-    public override void RemoveEffect(Character target)
-    {
-        base.RemoveEffect(target);
-        foreach (Effect effect in target.characterData.activeEffects)
+        if (IsValidEffectTarget(hostile))
         {
-            if (effect.GetType() == this.GetType())
+            base.ApplyEffect(attacker, target, outcome, hostile);
+            target.isStunned = true;
+        }
+    }
+    public override void EffectTick(Character owner)
+    {
+        base.EffectTick(owner);
+    }
+    public override void RemoveEffect(Character owner)
+    {
+        base.RemoveEffect(owner);
+        foreach (Effect effect in owner.characterData.activeEffects)
+        {
+            if (effect.GetType() == this.GetType()) //If there is another stun on the owner
             {
                 return;
             }
         }
-        target.isStunned = false;
+        owner.isStunned = false;
     }
     public override string GetDescription()
     {
         if (duration == 1)
         {
-           return Description = $"Stunned for {duration - counter + 1} turn";
+            return $"Stunned for {duration - counter + 1} turn";
         }
-           return Description = $"Stunned for {duration - counter + 1} turns";
+        return $"Stunned for {duration - counter + 1} turns";
     }
 }

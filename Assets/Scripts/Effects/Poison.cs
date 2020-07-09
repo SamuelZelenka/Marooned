@@ -1,23 +1,22 @@
 ﻿public class Poison : TickEffect
 {
     int damage;
-    public Poison(int damage, int duration) : base((int)EffectIndex.Poison)
+    public Poison(int damage, int duration, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Poison, useOnHostile, useOnFriendly)
     {
-
         this.damage = damage;
         base.duration = duration;
     }
-    public override void EffectTick(Character target)
+    public override void EffectTick(Character owner)
     {
-        target.characterData.Vitality.CurrentValue -= damage;
-        base.EffectTick(target);
+        owner.characterData.Vitality.CurrentValue -= damage;
+        base.EffectTick(owner);
     }
     public override string GetDescription()
     {
         if (duration == 1)
         {
-            return Description = $"Vitality reduced by {damage} for {duration - counter + 1} turn";
+            return $"Vitality reduced by {damage} for {duration - counter + 1} turn";
         }
-            return Description = $"Vitality reduced by {damage} for {duration - counter + 1} turns";
+            return $"Vitality reduced by {damage} for {duration - counter + 1} turns";
     }
 }

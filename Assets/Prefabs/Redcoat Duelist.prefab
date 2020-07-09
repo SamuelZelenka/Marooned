@@ -109,8 +109,9 @@ MonoBehaviour:
     portrait: {fileID: 7340332454120297748, guid: e8983668ed68f5f41b4772feb50b6d84,
       type: 3}
   animatedArrow: {fileID: 6954361461245706277}
+  overHeadUI: {fileID: 1178439175894574254}
   isStunned: 0
-  isTaunting: 0
+  tauntedBy: []
   abilityID: 64000000
 --- !u!1001 &428124082419506653
 PrefabInstance:
@@ -258,3 +259,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 428124082419506653}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1178439175894574254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1561527214661319027, guid: 7200afe5f297a1a4394daea4cc744c6c,
+    type: 3}
+  m_PrefabInstance: {fileID: 428124082419506653}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

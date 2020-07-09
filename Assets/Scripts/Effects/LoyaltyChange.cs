@@ -1,37 +1,41 @@
 ﻿public class LoyaltyDecrease : Effect
 {
     int amount;
-    public LoyaltyDecrease(int amount) : base((int)EffectIndex.LoyaltyDecrease)
+    public LoyaltyDecrease(int amount, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.LoyaltyDecrease, useOnHostile, useOnFriendly)
     {
-        GetDescription();
         this.amount = amount;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        target.characterData.Loyalty.CurrentValue -= GetModifiedValue(outcome, amount);
+        if (IsValidEffectTarget(hostile))
+        {
+            target.characterData.Loyalty.CurrentValue -= GetModifiedValue(outcome, amount);
+        }
     }
     public override string GetDescription()
     {
-        return Description = $"Loyalty reduced by {amount}";
+        return $"Loyalty reduced by {amount}";
     }
 }
 
 public class LoyaltyIncrease : Effect
 {
     int amount;
-    public LoyaltyIncrease(int amount) : base((int)EffectIndex.LoyaltyIncrease)
+    public LoyaltyIncrease(int amount, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.LoyaltyIncrease, useOnHostile, useOnFriendly)
     {
-        GetDescription();
         this.amount = amount;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome)
+    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
-        target.characterData.Loyalty.CurrentValue += GetModifiedValue(outcome, amount);
+        if (IsValidEffectTarget(hostile))
+        {
+            target.characterData.Loyalty.CurrentValue += GetModifiedValue(outcome, amount);
+        }
     }
     public override string GetDescription()
     {
-       return Description = $"Increases loyalty by {amount}";
+        return $"Increases loyalty by {amount}";
     }
 }

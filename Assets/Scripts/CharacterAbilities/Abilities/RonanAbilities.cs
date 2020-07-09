@@ -10,10 +10,10 @@ public class Quickdraw : Ability
     public Quickdraw(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        RequireSkillCheck = true;
-        AttackerSkillcheck = CharacterStatType.Accuracy;
-        TargetSkillcheck = CharacterStatType.Agility;
-        effects.Add(new Damage(damage));
+        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
+        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        effects.Add(new Damage(damage, true, true));
         targeting = new CollateralRangeLine(range, rangeAfterFirstHit);
         base.SetDescriptionFromEffects();
     }
@@ -28,10 +28,10 @@ public class PiercingShot : Ability
     public PiercingShot(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        RequireSkillCheck = true;
-        AttackerSkillcheck = CharacterStatType.Accuracy;
-        TargetSkillcheck = CharacterStatType.Agility;
-        effects.Add(new PiercingDamage(damage));
+        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
+        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        effects.Add(new PiercingDamage(damage, true, true));
         targeting = new SingleTargetRanged(range);
         base.SetDescriptionFromEffects();
     }
@@ -46,11 +46,11 @@ public class Shockwave : Ability
     public Shockwave(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        RequireSkillCheck = true;
-        AttackerSkillcheck = CharacterStatType.Accuracy;
-        TargetSkillcheck = CharacterStatType.Agility;
-        effects.Add(new Damage(damage));
-        effects.Add(new Displace(false, 1));
+        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
+        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        effects.Add(new Damage(damage, true, true));
+        effects.Add(new Displace(false, 1, true, true));
         targeting = new SingleTargetRangeLine(range);
         base.SetDescriptionFromEffects();
     }
@@ -66,10 +66,10 @@ public class TheBigBoom : Ability
     public TheBigBoom(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        RequireSkillCheck = true;
-        AttackerSkillcheck = CharacterStatType.Accuracy;
-        TargetSkillcheck = CharacterStatType.Agility;
-        effects.Add(new Damage(damage));
+        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
+        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+        effects.Add(new Damage(damage, true, true));
         targeting = new AOE(range, damageRange, false);
         base.SetDescriptionFromEffects();
     }
