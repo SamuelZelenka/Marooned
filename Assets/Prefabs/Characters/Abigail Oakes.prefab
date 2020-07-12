@@ -624,6 +624,7 @@ MonoBehaviour:
     characterName: name
     portrait: {fileID: 0}
   animatedArrow: {fileID: 800652676508173865}
+  overHeadUI: {fileID: 8918270303014118050}
   isStunned: 0
   isTaunting: 0
   abilityID: 
@@ -1714,3 +1715,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7957762876539427793}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8918270303014118050 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1561527214661319027, guid: 7200afe5f297a1a4394daea4cc744c6c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7957762876539427793}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -11,10 +11,10 @@ public class CombatUIController : MonoBehaviour
 
     [Header("Selected Character")]
     [SerializeField] CharacterSelection selectedCharacter = null;
+    [SerializeField] AbilityUIController abilityUI = null;
 
     [Header("Active Character")]
     [SerializeField] CharacterSelection activeCharacter = null;
-    [SerializeField] List<Image> abilities = new List<Image>();
 
     [Header("Timeline")]
     [SerializeField] CharacterPortrait currentCharacter = null;
@@ -75,11 +75,7 @@ public class CombatUIController : MonoBehaviour
         if (HexGridController.ActiveCharacter != null)
         {
             activeCharacter.UpdateUI(HexGridController.ActiveCharacter);
-
-            for (int i = 0; i < HexGridController.ActiveCharacter.Abilities.Count; i++)
-            {
-                abilities[i].sprite = HexGridController.ActiveCharacter.Abilities[i].AbilitySprite;
-            }
+            abilityUI.UpdateUI();
         }
         for (int i = 0; i < HexGridController.player.Crew.Count; i++)
         {
