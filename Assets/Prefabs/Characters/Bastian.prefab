@@ -1279,7 +1279,7 @@ MonoBehaviour:
   animatedArrow: {fileID: 2743367475867939713}
   overHeadUI: {fileID: 6253834018196412170}
   isStunned: 0
-  isTaunting: 0
+  tauntedBy: []
   abilityID: 00000000010000000200000003000000
 --- !u!1 &4156739820715898806
 GameObject:
@@ -2420,6 +2420,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 503791267634912649, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 503791267634912649, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 503791267634912649, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 1280555909112263142, guid: 7200afe5f297a1a4394daea4cc744c6c,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2450,6 +2465,16 @@ PrefabInstance:
       propertyPath: character
       value: 
       objectReference: {fileID: 930899063425889352}
+    - target: {fileID: 3886619437112920876, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3886619437112920876, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
     - target: {fileID: 4251196923280617641, guid: 7200afe5f297a1a4394daea4cc744c6c,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2459,6 +2484,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4538541132109666471, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_CellSize.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4538541132109666471, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: m_CellSize.y
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5403958976238943832, guid: 7200afe5f297a1a4394daea4cc744c6c,
         type: 3}
