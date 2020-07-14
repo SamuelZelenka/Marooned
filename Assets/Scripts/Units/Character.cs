@@ -167,7 +167,7 @@ public class Character : HexUnit
 
     public override bool CanEnter(HexCell cell)
     {
-        if (cell.Unit)
+        if (!cell.IsFree)
         {
             return false;
         }
