@@ -10,6 +10,9 @@ public class JobPosition : MonoBehaviour
     public Sprite defaultPortrait = null;
 
     public Character characterOnJob;
+
+    [SerializeField] CrewJobDisplay crewJobDisplay;
+
     public bool HasCharacter
     {
         get => characterOnJob != null;
@@ -23,6 +26,7 @@ public class JobPosition : MonoBehaviour
 
     public void SetCharacterToJob(Character newCharacter)
     {
+        crewJobDisplay.character = newCharacter;
         characterOnJob = newCharacter;
         portrait.sprite = newCharacter.characterData.portrait;
     }
@@ -31,9 +35,16 @@ public class JobPosition : MonoBehaviour
     public void ClickDetected()
     {
         Character selectedCharacter = HexGridController.SelectedCharacter;
-        if (selectedCharacter)
+        if (!characterOnJob)
         {
-            crewSimulation.SetCharacterJob(selectedCharacter, job);
+            if (selectedCharacter && selectedCharacter.characterData.ShipJob == CrewSimulation.ShipJob.None)
+            {
+                crewSimulation.SetCharacterJob(selectedCharacter, job);
+            }
+        }
+        else
+        {
+            crewSimulation.RemoveCharacterFromItsJob(characterOnJob, job);
         }
     }
 }

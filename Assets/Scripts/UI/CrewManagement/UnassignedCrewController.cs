@@ -5,11 +5,11 @@ using UnityEngine;
 public class UnassignedCrewController : MonoBehaviour
 {
 
-    [SerializeField] UnassignedCrewDisplay unassignedCharacterPrefab = null;
+    [SerializeField] CrewJobDisplay unassignedCharacterPrefab = null;
     [SerializeField] Transform unassignedCharacterParent = null;
 
     List<Character> unassignedCharacters = new List<Character>();
-    List<UnassignedCrewDisplay> unassignedCharacterImages = new List<UnassignedCrewDisplay>();
+    List<CrewJobDisplay> unassignedCharacterImages = new List<CrewJobDisplay>();
 
     public void UpdateUnassignedCharacterList()
     {
