@@ -152,19 +152,19 @@ public class AOE : TargetType
 {
     int range;
     int aoeRange;
-    bool selfTarget = false;
+    bool selfOriginating = false;
 
-    public AOE(int range, int aoeRange, bool selfTarget)
+    public AOE(int range, int aoeRange, bool selfOriginating)
     {
         this.range = range;
         this.aoeRange = aoeRange;
-        this.selfTarget = selfTarget;
+        this.selfOriginating = selfOriginating;
     }
 
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
         List<HexCell> validCells = new List<HexCell>();
-        if (selfTarget)
+        if (selfOriginating)
         {
             validCells.Add(fromCell);
         }

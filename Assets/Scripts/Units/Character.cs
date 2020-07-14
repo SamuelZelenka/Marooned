@@ -9,11 +9,7 @@ public class Character : HexUnit
     public GameObject animatedArrow;
     public CharacterOverHeadUI overHeadUI;
 
-    public bool isStunned;
-    public List<Character> tauntedBy = new List<Character>();
-
-    public List<Ability> Abilities { get; set; } = new List<Ability>();
-    public List<int> abilityID = new List<int>();
+    
 
     //Used for storing locations on the player ship
     HexCell savedShipLocation;
@@ -56,6 +52,49 @@ public class Character : HexUnit
     }
 
     #region Effects and abilities
+    public bool IsStunned
+    {
+        get => HasCondition(Condition.Stunned);
+    }
+    public bool HasCondition(Condition condition)
+    {
+        switch (condition)
+        {
+            case Condition.Stunned:
+                foreach (var item in characterData.activeEffects)
+                {
+                    if (item is Stun)
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case Condition.Bleeding:
+                foreach (var item in characterData.activeEffects)
+                {
+                    if (item is Bleed)
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case Condition.Poisoned:
+                foreach (var item in characterData.activeEffects)
+                {
+                    if (item is Poison)
+                    {
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
+    }
+    public List<Character> tauntedBy = new List<Character>();
+
+    public List<Ability> Abilities { get; set; } = new List<Ability>();
+    public List<int> abilityID = new List<int>();
+
     private void EffectTickUpdate()
     {
         if (characterData.activeEffects.Count > 0)
@@ -97,12 +136,16 @@ public class Character : HexUnit
         {
             return false;
         }
+        if (!cell.Traversable)
+        {
+            return false;
+        }
         return true;
     }
 
     public override void StartNewTurn()
     {
-        if (!isStunned)
+        if (!IsStunned)
         {
             remainingMovementPoints = defaultMovementPoints;
             characterData.Energy.CurrentValue += CharacterData.DEFAULTENERGYREGEN;
@@ -130,7 +173,7 @@ public class Character : HexUnit
         //Do turn
         CombatTurnSystem.OnTurnBegining?.Invoke(this);
 
-        if (!isStunned)
+        if (!IsStunned)
         {
             yield return aiController.CalculateAvailableActions(this);
             if (nextAction != null)

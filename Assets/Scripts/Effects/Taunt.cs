@@ -1,9 +1,8 @@
 ﻿public class Taunt : TickEffect
 {
     Character tauntedBy;
-    public Taunt(int duration, bool useOnHostile = true, bool useOnFriendly = false) : base((int)EffectIndex.Taunt, useOnHostile, useOnFriendly)
+    public Taunt(int duration, bool useOnHostile = true, bool useOnFriendly = false) : base((int)EffectIndex.Taunt, useOnHostile, useOnFriendly, duration)
     {
-        base.duration = duration;
     }
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {
@@ -14,20 +13,9 @@
             target.tauntedBy.Add(attacker);
         }
     }
-    public override void EffectTick(Character owner)
-    {
-        base.EffectTick(owner);
-    }
     public override void RemoveEffect(Character owner)
     {
         base.RemoveEffect(owner);
-        foreach (Effect effect in owner.characterData.activeEffects)
-        {
-            if (effect.GetType() == this.GetType())
-            {
-                return;
-            }
-        }
         for (int i = 0; i < owner.tauntedBy.Count; i++)
         {
             if (owner.tauntedBy[i] == tauntedBy) 

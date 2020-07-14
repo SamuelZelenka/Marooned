@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class ChainWhip : Ability
+﻿public class ChainWhip : Ability
 {
     int abilityCost = 10;
     int damage = 5;
@@ -38,7 +36,7 @@ public class GrabAndPull : Ability
 
 public class Punch : Ability
 {
-    int abilityCost = 20;
+    int abilityCost = 30;
     int damage = 10;
     int durationStun = 1;
 

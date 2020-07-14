@@ -204,7 +204,7 @@ public class CombatSystem : MonoBehaviour
     //Called from the UI when a player selects an ability
     public void SelectAbility(int selection)
     {
-        if (HexGridController.ActiveCharacter.isStunned)
+        if (HexGridController.ActiveCharacter.IsStunned)
         {
             return;
         }

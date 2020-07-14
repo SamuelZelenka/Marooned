@@ -20,7 +20,7 @@ public class AbilityUIController : MonoBehaviour
         {
             return;
         }
-        if (DisableAbilities("Stunned", activeCharacter.isStunned))
+        if (DisableAbilities("Stunned", activeCharacter.IsStunned))
         {
             return;
         }

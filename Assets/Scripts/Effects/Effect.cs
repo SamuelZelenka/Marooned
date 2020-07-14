@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
+public enum Condition { Stunned, Bleeding, Poisoned}
 
 public abstract class Effect
 {
     public const float GRACEMODIFIER = 0.5f;
     public const float CRITMODIFIER = 1.5f;
 
-    public enum EffectIndex { Bleed, Damage, Displace, LoyaltyDecrease, LoyaltyIncrease, Poison, Stun, Taunt }
+    public enum EffectIndex { Bleed, Damage, Displace, Heal, LoyaltyDecrease, LoyaltyIncrease, Poison, StatBuff, StatDebuff, Stun, Taunt }
 
     public Sprite EffectSprite
     {
@@ -61,7 +62,10 @@ public abstract class Effect
 
 public abstract class TickEffect : Effect
 {
-    public TickEffect(int effectIndex, bool useOnHostile, bool useOnFriendly) : base(effectIndex, useOnHostile, useOnFriendly) { }
+    public TickEffect(int effectIndex, bool useOnHostile, bool useOnFriendly, int duration) : base(effectIndex, useOnHostile, useOnFriendly)
+    {
+        this.duration = duration;
+    }
 
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
     {

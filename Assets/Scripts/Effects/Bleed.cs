@@ -1,10 +1,9 @@
 ﻿public class Bleed : TickEffect
 {
     int damage;
-    public Bleed(int damage, int duration, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Bleed, useOnHostile, useOnFriendly)
+    public Bleed(int damage, int duration, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Bleed, useOnHostile, useOnFriendly, duration)
     {
         this.damage = damage;
-        base.duration = duration;
     }
     public override string GetDescription()
     {

@@ -44,25 +44,35 @@ public class CharacterData
 
     public int GetStatValue(CharacterStatType statType)
     {
+        Stat stat = GetStat(statType);
+        if (stat != null)
+        {
+            return stat.CurrentValue;
+        }
+        return int.MinValue;
+    }
+    public Stat GetStat(CharacterStatType statType)
+    {
         switch (statType)
         {
             case CharacterStatType.Strength:
-                return Strength.CurrentValue;
+                return Strength;
             case CharacterStatType.Stamina:
-                return Stamina.CurrentValue;
+                return Stamina;
             case CharacterStatType.Constitution:
-                return Constitution.CurrentValue;
+                return Constitution;
             case CharacterStatType.Agility:
-                return Agility.CurrentValue;
+                return Agility;
             case CharacterStatType.Toughness:
-                return Toughness.CurrentValue;
+                return Toughness;
             case CharacterStatType.Accuracy:
-                return Accuracy.CurrentValue;
+                return Accuracy;
             default:
                 Debug.LogError("Stat not found");
-                return int.MinValue;
+                return null;
         }
     }
+
     public void AddEffect(TickEffect effect)
     {
         activeEffects.Add(effect);
@@ -136,6 +146,8 @@ public class CharacterData
         }
 
         public void IncreaseStat(int increase) => CurrentValue += increase;
+        public void DecreaseStat(int decrease) => CurrentValue -= decrease;
+
 
         public Stat(string statName, int currentValue)
         {

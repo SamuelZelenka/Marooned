@@ -1,76 +1,80 @@
-﻿using System.Collections.Generic;
-
-public class Quickdraw : Ability
+﻿public class GuitarString : Ability
 {
     int abilityCost = 10;
-    int range = 8;
-    int rangeAfterFirstHit = 1;
-    int damage = 5;
+    int bleed = 2;
+    int bleedDuration = 2;
+    int heal = 5;
 
-    public Quickdraw(int abilityIndex) : base(abilityIndex)
+    public GuitarString(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
         AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        effects.Add(new Damage(damage, true, true));
-        targeting = new CollateralRangeLine(range, rangeAfterFirstHit);
+        effects.Add(new Bleed(bleed, bleedDuration, true, false));
+        effects.Add(new Heal(heal, false, true));
+        targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
     }
 }
 
-public class PiercingShot : Ability
+public class FightSong : Ability
 {
     int abilityCost = 10;
     int range = 8;
-    int damage = 3;
+    int accuracyBuff = 5;
+    int accuracyDebuff = 5;
+    int buffDuration = 2;
+    int debuffDuration = 2;
+    int loyaltyIncrease = 5;
 
-    public PiercingShot(int abilityIndex) : base(abilityIndex)
+    public FightSong(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
         AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        effects.Add(new PiercingDamage(damage, true, true));
+        effects.Add(new StatBuff(accuracyBuff, CharacterStatType.Accuracy, buffDuration, false, true));
+        effects.Add(new LoyaltyIncrease(loyaltyIncrease, false, true));
+        effects.Add(new StatDebuff(accuracyDebuff, CharacterStatType.Accuracy, debuffDuration, true, false));
         targeting = new SingleTargetRanged(range);
         base.SetDescriptionFromEffects();
     }
 }
 
-public class Shockwave : Ability
+public class ToneDeafSinging : Ability
 {
     int abilityCost = 30;
     int range = 8;
-    int damage = 5;
+    int loyaltyDecrease = 25;
 
-    public Shockwave(int abilityIndex) : base(abilityIndex)
+    public ToneDeafSinging(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
         AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        effects.Add(new Damage(damage, true, true));
-        effects.Add(new Displace(false, 1, true, true));
-        targeting = new SingleTargetRangeLine(range);
+        effects.Add(new LoyaltyDecrease(loyaltyDecrease, true, true));
+        targeting = new SingleTargetRanged(range);
         base.SetDescriptionFromEffects();
     }
 }
 
-public class TheBigBoom : Ability
+public class RuleBritannia : Ability
 {
     int abilityCost = 100;
-    int range = 8;
-    int damageRange = 2;
-    int damage = 5;
+    int range = 0;
+    int aoeRange = 2;
+    int duration = 1;
 
-    public TheBigBoom(int abilityIndex) : base(abilityIndex)
+    public RuleBritannia(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
         AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        effects.Add(new Damage(damage, true, true));
-        targeting = new AOE(range, damageRange, false);
+        effects.Add(new Stun(duration, true, false));
+        targeting = new AOE(range, aoeRange, true);
         base.SetDescriptionFromEffects();
     }
 }

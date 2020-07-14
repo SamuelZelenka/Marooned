@@ -1,10 +1,9 @@
 ﻿public class Poison : TickEffect
 {
     int damage;
-    public Poison(int damage, int duration, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Poison, useOnHostile, useOnFriendly)
+    public Poison(int damage, int duration, bool useOnHostile, bool useOnFriendly) : base((int)EffectIndex.Poison, useOnHostile, useOnFriendly, duration)
     {
         this.damage = damage;
-        base.duration = duration;
     }
     public override void EffectTick(Character owner)
     {

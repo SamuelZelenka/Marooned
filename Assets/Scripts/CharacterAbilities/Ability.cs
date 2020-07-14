@@ -9,10 +9,19 @@ public abstract class Ability
         {1, new GrabAndPull(1) },
         {2, new Punch(2) },
         {3, new WarCry(3) },
+        {10, new PoisonBlade(10) },
+        {11, new SneakAttack(11) },
+        {12, new CutInTheKnee(12) },
+        {13, new LethalDose(13) },
         {20, new Quickdraw(20) },
         {21, new PiercingShot(21) },
         {22, new Shockwave(22) },
         {23, new TheBigBoom(23) },
+        {30, new GuitarString(30) },
+        {31, new FightSong(31) },
+        {32, new ToneDeafSinging(32) },
+        {33, new RuleBritannia(33) },
+
         {100, new Slice(100) }
     };
 
