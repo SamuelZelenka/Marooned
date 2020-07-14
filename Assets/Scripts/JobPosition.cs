@@ -35,9 +35,16 @@ public class JobPosition : MonoBehaviour
     public void ClickDetected()
     {
         Character selectedCharacter = HexGridController.SelectedCharacter;
-        if (selectedCharacter && selectedCharacter.characterData.ShipJob == CrewSimulation.ShipJob.None)
+        if (!characterOnJob)
         {
-            crewSimulation.SetCharacterJob(selectedCharacter, job);
+            if (selectedCharacter && selectedCharacter.characterData.ShipJob == CrewSimulation.ShipJob.None)
+            {
+                crewSimulation.SetCharacterJob(selectedCharacter, job);
+            }
+        }
+        else
+        {
+            crewSimulation.RemoveCharacterFromItsJob(characterOnJob, job);
         }
     }
 }

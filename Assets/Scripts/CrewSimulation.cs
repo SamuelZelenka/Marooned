@@ -182,7 +182,7 @@ public class CrewSimulation : MonoBehaviour
         Debug.Log(newCharacter.characterData.characterName + " set to job: " + job.ToString());
     }
 
-    private void RemoveCharacterFromItsJob(Character characterToRemove, ShipJob job)
+    public void RemoveCharacterFromItsJob(Character characterToRemove, ShipJob job)
     {
         switch (job)
         {
