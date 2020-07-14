@@ -7,11 +7,13 @@ public class UnassignedCrewController : MonoBehaviour
 
     [SerializeField] UnassignedCrewDisplay unassignedCharacterPrefab = null;
     [SerializeField] Transform unassignedCharacterParent = null;
+
+    List<Character> unassignedCharacters = new List<Character>();
+    List<UnassignedCrewDisplay> unassignedCharacterImages = new List<UnassignedCrewDisplay>();
+
     public void UpdateUnassignedCharacterList()
     {
-        List<Character> unassignedCharacters = new List<Character>();
-        List<UnassignedCrewDisplay> unassignedCharacterImages = new List<UnassignedCrewDisplay>();
-
+        unassignedCharacters.Clear();
         foreach (Character character in HexGridController.player.Crew)
         {
             if (character.characterData.ShipJob == CrewSimulation.ShipJob.None)

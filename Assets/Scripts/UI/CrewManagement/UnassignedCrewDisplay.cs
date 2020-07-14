@@ -8,5 +8,6 @@ public class UnassignedCrewDisplay : MouseHoverImage
     public void OnClick()
     {
         HexGridController.SelectedCell = character.Location;
+        Debug.Log($"{HexGridController.player.Crew.Count} Crew members");
     }
 }
