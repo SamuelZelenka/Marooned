@@ -1,18 +1,24 @@
 ﻿public class CreateObject : Effect
 {
-    ObjectType type;
-    public CreateObject(ObjectType type) : base((int)EffectIndex.Damage, false, false)
+    int objectIndex;
+    public CreateObject(int objectIndex) : base((int)EffectIndex.Damage, false, false)
     {
-        this.type = type;
+        this.objectIndex = objectIndex;
     }
     public override string GetDescription()
     {
         return $"Create an object on the battlefield";
     }
-    public void UseSpecialEffect(HexCell cell)
+    public HexObject SpawnNormalObject(HexCell cell)
     {
         //Spawn object
-        ObjectSpawnSystem.instance.SpawnObject(type, cell);
+        return ObjectSpawnSystem.instance.SpawnNormalObject(objectIndex, cell);
     }
+    public ActiveHexObject SpawnActiveObject(HexCell cell, int changePerTurn, Character connectedCharacter)
+    {
+        //Spawn object
+        return ObjectSpawnSystem.instance.SpawnActiveObject(objectIndex, cell, changePerTurn, connectedCharacter);
+    }
+
     public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile) { }
 }

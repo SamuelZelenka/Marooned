@@ -10,11 +10,21 @@ public class HexObject : MonoBehaviour
         {
             if (location)
             {
-                location.Unit = null;
+                location.Object = null;
             }
             location = value;
             value.Object = this;
             transform.localPosition = value.Position;
         }
+    }
+
+    public virtual void Despawn()
+    {
+        GameObject.Destroy(this.gameObject);
+    }
+
+    public void OnDestroy()
+    {
+        location.Object = null;
     }
 }

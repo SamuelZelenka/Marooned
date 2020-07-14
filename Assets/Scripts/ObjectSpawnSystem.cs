@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
-public enum ObjectType { BarrelOfAle }
 
 public class ObjectSpawnSystem : MonoBehaviour
 {
     [SerializeField] HexObject[] objects = null;
+    [SerializeField] ActiveHexObject[] activeObjects = null;
+
     [SerializeField] Transform objectParent = null;
 
     #region Singleton
@@ -23,11 +24,22 @@ public class ObjectSpawnSystem : MonoBehaviour
     }
     #endregion
 
-    public void SpawnObject(ObjectType type, HexCell cellToSpawnOn)
+    public HexObject SpawnNormalObject(int objectIndex, HexCell cellToSpawnOn)
     {
-        GameObject objToSpawn = objects[(int)type].gameObject;
+        GameObject objToSpawn = objects[objectIndex].gameObject;
         HexObject spawnedObject = Instantiate(objToSpawn).GetComponent<HexObject>();
         spawnedObject.transform.SetParent(objectParent);
         spawnedObject.Location = cellToSpawnOn;
+        return spawnedObject;
+    }
+
+    public ActiveHexObject SpawnActiveObject(int objectIndex, HexCell cellToSpawnOn, int changePerTurn, Character connectedToCharacter)
+    {
+        GameObject objToSpawn = activeObjects[objectIndex].gameObject;
+        ActiveHexObject spawnedObject = Instantiate(objToSpawn).GetComponent<ActiveHexObject>();
+        spawnedObject.transform.SetParent(objectParent);
+        spawnedObject.Location = cellToSpawnOn;
+        spawnedObject.SetupObject(changePerTurn, connectedToCharacter);
+        return spawnedObject;
     }
 }

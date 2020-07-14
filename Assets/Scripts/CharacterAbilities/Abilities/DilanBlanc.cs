@@ -57,6 +57,8 @@ public class TheGoodStuff : Ability
     int abilityCost = 100;
 
     CreateObject specialEffect;
+    ActiveHexObject spawnedObject;
+    int healPerTurn = 5;
 
     public TheGoodStuff(int abilityIndex) : base(abilityIndex)
     {
@@ -64,13 +66,17 @@ public class TheGoodStuff : Ability
         AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        specialEffect = new CreateObject(ObjectType.BarrelOfAle);
+        specialEffect = new CreateObject(0);
         targeting = new SingleTargetAdjacent(false);
         base.SetDescriptionFromEffects();
     }
 
     public override void Use(Character attacker, List<Character> hostileTargets, List<Character> friendlyTargets, List<HexCell> affectedCells)
     {
-        specialEffect.UseSpecialEffect(affectedCells[0]);
+        if (spawnedObject)
+        {
+            spawnedObject.Despawn();
+        }
+        spawnedObject = specialEffect.SpawnActiveObject(affectedCells[0], healPerTurn, attacker);
     }
 }

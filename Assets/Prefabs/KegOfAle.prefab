@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1243740832935430388}
   - component: {fileID: 6766526209850198875}
-  - component: {fileID: 4109134923279331277}
+  - component: {fileID: 7985162150651009353}
   m_Layer: 0
   m_Name: KegOfAle
   m_TagString: Untagged
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4109134923279331277
+--- !u!114 &7985162150651009353
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,6 +91,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7499557950702558710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33df60c24226b6c4395ec1e442c8b744, type: 3}
+  m_Script: {fileID: 11500000, guid: 24969badaeca3f04d88303f310c7923f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectType: 0

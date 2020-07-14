@@ -2782,7 +2782,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objects:
-  - {fileID: 4109134923279331277, guid: 217d781661df7a441ae93d63e6b024e6, type: 3}
+  - {fileID: 0}
+  activeObjects:
+  - {fileID: 7985162150651009353, guid: 217d781661df7a441ae93d63e6b024e6, type: 3}
   objectParent: {fileID: 1208645165}
 --- !u!1 &956514859
 GameObject:

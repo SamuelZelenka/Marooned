@@ -14,16 +14,41 @@ public static class CellFinder
         return hexGrid.GetAllCells(traversable, hasUnit);
     }
 
-    public static List<HexCell> GetInLine(HexCell fromCell, bool traversable, bool hasUnit, int range, int rangeAfterFirstHit)
+    public static List<HexCell> GetCellsInAllLines(HexCell fromCell, bool traversable, bool hasUnit, int range, int rangeAfterFirstHit)
     {
         List<HexCell> validCells = new List<HexCell>();
 
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
         {
-            HexCell cellToTest = fromCell;
-            for (int i = 0; i < range; i++)
+            validCells.AddRange(GetCellsInDirection(fromCell, d, traversable, hasUnit, range, rangeAfterFirstHit));
+        }
+        return validCells;
+    }
+
+    public static List<HexCell> GetCellsInDirection(HexCell fromCell, HexDirection direction, bool traversable, bool hasUnit, int range, int rangeAfterFirstHit)
+    {
+        List<HexCell> validCells = new List<HexCell>();
+
+        HexCell cellToTest = fromCell;
+        for (int i = 0; i < range; i++)
+        {
+            cellToTest = cellToTest.GetNeighbor(direction);
+            if (!cellToTest)
             {
-                cellToTest = cellToTest.GetNeighbor(d);
+                break;
+            }
+            if (traversable && !cellToTest.Traversable)
+            {
+                continue;
+            }
+            if (hasUnit && !cellToTest.Unit)
+            {
+                continue;
+            }
+            validCells.Add(cellToTest);
+            for (int j = 0; j < rangeAfterFirstHit; j++)
+            {
+                cellToTest = cellToTest.GetNeighbor(direction);
                 if (!cellToTest)
                 {
                     break;
@@ -37,25 +62,8 @@ public static class CellFinder
                     continue;
                 }
                 validCells.Add(cellToTest);
-                for (int j = 0; j < rangeAfterFirstHit; j++)
-                {
-                    cellToTest = cellToTest.GetNeighbor(d);
-                    if (!cellToTest)
-                    {
-                        break;
-                    }
-                    if (traversable && !cellToTest.Traversable)
-                    {
-                        continue;
-                    }
-                    if (hasUnit && !cellToTest.Unit)
-                    {
-                        continue;
-                    }
-                    validCells.Add(cellToTest);
-                }
-                break;
             }
+            break;
         }
         return validCells;
     }

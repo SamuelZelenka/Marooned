@@ -119,7 +119,7 @@ public class SingleTargetRangeLine : TargetType
 
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetInLine(fromCell, true, true, range, 0);
+        return CellFinder.GetCellsInAllLines(fromCell, true, true, range, 0);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
@@ -142,13 +142,14 @@ public class CollateralRangeLine : TargetType
 
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetInLine(fromCell, true, true, range, 0);
+        return CellFinder.GetCellsInAllLines(fromCell, true, true, range, 0);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
         List<HexCell> affectedCells = new List<HexCell>();
-        affectedCells.AddRange(CellFinder.GetInLine(fromCell, true, true, range, rangeAfterFirstHit));
+        HexDirection directionToTarget = HexDirectionExtension.GetDirectionTo(fromCell, targetCell);
+        affectedCells.AddRange(CellFinder.GetCellsInDirection(fromCell, directionToTarget, true, true, range, rangeAfterFirstHit));
         return affectedCells;
     }
 }
