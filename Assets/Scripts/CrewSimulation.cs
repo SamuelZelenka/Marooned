@@ -25,6 +25,7 @@ public class CrewSimulation : MonoBehaviour
 
     public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, None }
     [SerializeField] JobPosition[] jobs = new JobPosition[9];
+    [SerializeField] UnassignedCrewController UnassignedCrewController;
 
     public void NewTurnSimulation()
     {
@@ -177,7 +178,7 @@ public class CrewSimulation : MonoBehaviour
                 newCharacter.characterData.ShipJob = job;
                 break;
         }
-
+        UnassignedCrewController.UpdateUnassignedCharacterList();
         Debug.Log(newCharacter.characterData.characterName + " set to job: " + job.ToString());
     }
 
@@ -198,7 +199,9 @@ public class CrewSimulation : MonoBehaviour
                 characterToRemove.characterData.ShipJob = ShipJob.None;
                 break;
         }
-
+        UnassignedCrewController.UpdateUnassignedCharacterList();
         Debug.Log(characterToRemove.characterData.characterName + " removed from it's job");
     }
+
+
 }
