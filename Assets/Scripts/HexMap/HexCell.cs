@@ -35,6 +35,22 @@ public class HexCell : MonoBehaviour
             ChangeEditOutlineColor(value);
         }
     }
+    public HexObject Object { get; set; }
+    public bool IsFree
+    {
+        get
+        {
+            if (Object != null)
+            {
+                return false;
+            }
+            if (Unit != null)
+            {
+                return false;
+            }
+            return true;
+        }
+    }
 
     public enum SpawnType { Forbidden, Player, AnyEnemy, MeleeEnemy, SupportEnemy, RangedEnemy }
     public SpawnType TypeOfSpawnPos { get; set; }

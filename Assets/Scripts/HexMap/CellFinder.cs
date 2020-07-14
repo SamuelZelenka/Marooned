@@ -2,10 +2,10 @@
 
 public static class CellFinder
 {
-    public static List<HexCell> GetAllAdjacent(HexCell fromCell, bool traversable, bool hasUnit)
+    public static List<HexCell> GetAllAdjacent(HexCell fromCell, bool traversable, bool freeRequirement, bool unitRequirement)
     {
         List<HexCell> validCells = new List<HexCell>();
-        validCells.AddRange(fromCell.GetNeighbors(traversable, false, false, false, hasUnit));
+        validCells.AddRange(fromCell.GetNeighbors(traversable, freeRequirement, false, false, unitRequirement));
         return validCells;
     }
 

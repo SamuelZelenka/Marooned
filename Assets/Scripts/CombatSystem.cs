@@ -240,7 +240,8 @@ public class CombatSystem : MonoBehaviour
                 //Autohits
                 if (selectedAbility.AbilityuserHitSkillcheck == SkillcheckSystem.SkillcheckRequirement.None)
                 {
-                    selectedAbility.Use(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters); PostAbilityCalculations();
+                    selectedAbility.Use(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters, AbilityAffectedHexes);
+                    PostAbilityCalculations();
                 }
                 else //Requires skillchecks
                 {
@@ -264,7 +265,7 @@ public class CombatSystem : MonoBehaviour
     private void ResolveAbilityOutcomes(List<SkillcheckSystem.CombatOutcome> hostileOutcomes, List<SkillcheckSystem.CombatOutcome> friendlyOutcomes)
     {
         skillcheckSystem.OnCombatOutcomesDecided -= ResolveAbilityOutcomes;
-        selectedAbility.Use(HexGridController.ActiveCharacter, hostileAbilityAffectedCharacters, hostileOutcomes, friendlyAbilityAffectedCharacters, friendlyOutcomes);
+        selectedAbility.Use(HexGridController.ActiveCharacter, hostileAbilityAffectedCharacters, hostileOutcomes, friendlyAbilityAffectedCharacters, friendlyOutcomes, AbilityAffectedHexes);
         PostAbilityCalculations();
     }
 

@@ -29,9 +29,14 @@ public abstract class TargetType
 
 public class SingleTargetAdjacent : TargetType
 {
+    bool withUnit;
+    public SingleTargetAdjacent(bool withUnit = true)
+    {
+        this.withUnit = withUnit;
+    }
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetAllAdjacent(fromCell, true, true);
+        return CellFinder.GetAllAdjacent(fromCell, true, !withUnit, withUnit);
     }
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
@@ -45,7 +50,7 @@ public class SwipeAdjacent : TargetType
 {
     public override List<HexCell> GetValidTargets(HexCell fromCell)
     {
-        return CellFinder.GetAllAdjacent(fromCell, true, false);
+        return CellFinder.GetAllAdjacent(fromCell, true, false, false);
     }
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {

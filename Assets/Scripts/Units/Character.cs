@@ -90,6 +90,41 @@ public class Character : HexUnit
         }
         return false;
     }
+    public int NumberOfConditions(Condition condition)
+    {
+        int foundConditions = 0;
+        switch (condition)
+        {
+            case Condition.Stunned:
+                foreach (var item in characterData.activeEffects)
+                {
+                    if (item is Stun)
+                    {
+                        foundConditions++;
+                    }
+                }
+                break;
+            case Condition.Bleeding:
+                foreach (var item in characterData.activeEffects)
+                {
+                    if (item is Bleed)
+                    {
+                        foundConditions++;
+                    }
+                }
+                break;
+            case Condition.Poisoned:
+                foreach (var item in characterData.activeEffects)
+                {
+                    if (item is Poison)
+                    {
+                        foundConditions++;
+                    }
+                }
+                break;
+        }
+        return foundConditions;
+    }
     public List<Character> tauntedBy = new List<Character>();
 
     public List<Ability> Abilities { get; set; } = new List<Ability>();

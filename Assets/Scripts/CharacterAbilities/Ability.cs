@@ -21,7 +21,10 @@ public abstract class Ability
         {31, new FightSong(31) },
         {32, new ToneDeafSinging(32) },
         {33, new RuleBritannia(33) },
-
+        {40, new Cleave(40) },
+        {41, new CarefulIncision(41) },
+        {42, new BadMedicine(42) },
+        {43, new TheGoodStuff(43) },
         {100, new Slice(100) }
     };
 
@@ -62,7 +65,7 @@ public abstract class Ability
     }
 
     //No decided outcomes required (autohits)
-    public virtual void Use(Character attacker, List<Character> hostileTargets, List<Character> friendlyTargets)
+    public virtual void Use(Character attacker, List<Character> hostileTargets, List<Character> friendlyTargets, List<HexCell> affectedCells)
     {
         List<SkillcheckSystem.CombatOutcome> hostileOutcomes = new List<SkillcheckSystem.CombatOutcome>();
         for (int i = 0; i < hostileTargets.Count; i++)
@@ -74,10 +77,10 @@ public abstract class Ability
         {
             friendlyOutcomes.Add(SkillcheckSystem.CombatOutcome.NormalHit);
         }
-        Use(attacker, hostileTargets, hostileOutcomes, friendlyTargets, friendlyOutcomes);
+        Use(attacker, hostileTargets, hostileOutcomes, friendlyTargets, friendlyOutcomes, affectedCells);
     }
 
-    public virtual void Use(Character attacker, List<Character> hostileTargets, List<SkillcheckSystem.CombatOutcome> hostileOutcomes, List<Character> friendlyTargets, List<SkillcheckSystem.CombatOutcome> friendlyOutcomes)
+    public virtual void Use(Character attacker, List<Character> hostileTargets, List<SkillcheckSystem.CombatOutcome> hostileOutcomes, List<Character> friendlyTargets, List<SkillcheckSystem.CombatOutcome> friendlyOutcomes, List<HexCell> affectedCells)
     {
         for (int i = 0; i < hostileTargets.Count; i++)
         {

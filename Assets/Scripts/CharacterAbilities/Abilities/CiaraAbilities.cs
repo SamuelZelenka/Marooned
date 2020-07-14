@@ -55,9 +55,7 @@ public class CutInTheKnee : Ability
 public class LethalDose : Ability
 {
     int abilityCost = 100;
-    int range = 0;
-    int normalDamage = 15;
-    int poisonedDamage = 30;
+    int damagePerPoison = 5;
 
     public LethalDose(int abilityIndex) : base(abilityIndex)
     {
@@ -65,7 +63,7 @@ public class LethalDose : Ability
         AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        effects.Add(new ConditionalDamage(normalDamage, poisonedDamage, true, true, Condition.Poisoned));
+        effects.Add(new StackDamage(damagePerPoison, true, true, Condition.Poisoned));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
     }
