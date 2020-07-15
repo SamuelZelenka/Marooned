@@ -17,6 +17,7 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] CameraEffect cameraEffect = null;
     [SerializeField] float cameraLerpSpeed = 5;
     [Range(0, 100)] [SerializeField] float cameraSpeed = 0;
+    [SerializeField] bool isCombatCamera = false;
 
     [Header("Zoom")]
     [SerializeField] float zoomMin = 0;
@@ -66,7 +67,7 @@ public class InGameCamera : MonoBehaviour
     {
         HexGridController.OnActiveCharacterChanged -= SetCharacterTarget;
         HexGridController.OnActiveShipChanged -= SetShipTarget;
-        SkillcheckSystem.OnCrit += ShakeCameraFromCrit;
+        SkillcheckSystem.OnCrit -= ShakeCameraFromCrit;
     }
 
     public void SetCamera(Camera camera)

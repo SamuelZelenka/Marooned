@@ -6,15 +6,10 @@ public class CombatSystem : MonoBehaviour
     //Singleton included in Setup below
 
     [Header("References")]
-    public HexGrid hexGrid;
-    public Transform playerCharacterParent;
-    public Transform enemyCharacterParent;
+    [SerializeField] HexGrid hexGrid = null;
+    [SerializeField] Transform enemyCharacterParent = null;
 
-    public GameObject combatCanvas;
-    public GameObject mapView;
-    public GameObject combatView;
-    public CombatTurnSystem turnSystem;
-    public CombatUIController uiController;
+    [SerializeField] CombatTurnSystem turnSystem = null;
     [SerializeField] SkillcheckSystem skillcheckSystem = null;
 
     [Header("Setup")]
@@ -107,6 +102,7 @@ public class CombatSystem : MonoBehaviour
         CombatTurnSystem.OnTurnBegining += NewCharacterTurn;
         HexUnit.OnUnitMoved += UnitMoved;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
+        HexGridController.OnCellSelected += UseAbility;
     }
 
     private void OnDisable()
@@ -114,12 +110,12 @@ public class CombatSystem : MonoBehaviour
         CombatTurnSystem.OnTurnBegining -= NewCharacterTurn;
         HexUnit.OnUnitMoved -= UnitMoved;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
+        HexGridController.OnCellSelected -= UseAbility;
     }
 
     public void StartCombat()
     {
         OnCombatStart?.Invoke();
-        OpenCombatCanvas(true);
         SetUpCombat(0);
     }
 
@@ -130,7 +126,6 @@ public class CombatSystem : MonoBehaviour
 
         //Player characters
         allCharacters.AddRange(HexGridController.player.Crew);
-
 
         //Enemy characters
         AI aiController = new AI(debugEnemies, HexGridController.player.Crew);
@@ -150,13 +145,11 @@ public class CombatSystem : MonoBehaviour
             allCharacters.Add(spawnedCharacter);
         }
 
-
         foreach (Character character in allCharacters)
         {
             character.CombatSetup();
         }
 
-        uiController.UpdateAllCharacters();
         turnSystem.SetupNewCombat(allCharacters);
         turnSystem.StartCombat();
     }
@@ -173,7 +166,6 @@ public class CombatSystem : MonoBehaviour
             item.Location = hexGrid.GetCell(item.SavedShipLocation.coordinates);
             item.SavedShipLocation = item.Location;
         }
-        OpenCombatCanvas(false);
     }
 
     private void UnitMoved(HexUnit movedUnit)
@@ -278,9 +270,4 @@ public class CombatSystem : MonoBehaviour
     }
 
     public void EndActiveCharacterTurn() => turnSystem.EndActiveCharacterTurn();
-
-    private void OpenCombatCanvas(bool showCombat)
-    {
-        combatCanvas.SetActive(showCombat);
-    }
 }

@@ -5,11 +5,7 @@ using UnityEngine.EventSystems;
 public class PlayerInput : MonoBehaviour
 {
     Camera playerCamera;
-    public HexGrid terrainGrid;
-    public HexGrid shipGrid;
-    public CombatSystem combatSystem;
 
-    static bool combatModeActive = false;
     bool updatePathfinding = true;
 
     HexCell mouseHooverCell;
@@ -30,15 +26,11 @@ public class PlayerInput : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatSystem.OnCombatStart += StartCombatMode;
-        CombatSystem.OnCombatEnd += EndCombatMode;
         HexCell.OnHexCellHoover += DoMouseHooverCellSelection;
     }
 
     private void OnDisable()
     {
-        CombatSystem.OnCombatStart -= StartCombatMode;
-        CombatSystem.OnCombatEnd -= EndCombatMode;
         HexCell.OnHexCellHoover -= DoMouseHooverCellSelection;
     }
 
@@ -53,11 +45,6 @@ public class PlayerInput : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 HexGridController.SelectedCell = MouseHooverCell;
-                Debug.Log(mouseHooverCell);
-                if (combatModeActive)
-                {
-                    combatSystem.UseAbility(MouseHooverCell);
-                }
             }
             if (Input.GetKey(KeyCode.Mouse1))
             {
@@ -73,10 +60,7 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    void StartCombatMode() => combatModeActive = true;
-    void EndCombatMode() => combatModeActive = false;
     void DoMouseHooverCellSelection(HexCell cell) => MouseHooverCell = cell;
-
 
     #region Movement
     void DoPathfinding(HexCell hooverCell)
@@ -134,5 +118,4 @@ public class PlayerInput : MonoBehaviour
         }
     }
     #endregion
-
 }

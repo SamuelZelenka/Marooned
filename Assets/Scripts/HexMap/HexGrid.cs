@@ -465,6 +465,7 @@ public class HexGrid : MonoBehaviour
         {
             item.CalculateBitmask();
         }
+        Debug.Log("Map saved");
         return cells;
     }
 
@@ -476,6 +477,7 @@ public class HexGrid : MonoBehaviour
             cells[i].Load(map.cells[i], this);
         }
         ShowGameGrid(gameGridStatus);
+        Debug.Log("Map loaded");
     }
     #endregion
 }

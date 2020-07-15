@@ -45,11 +45,7 @@ public class Character : HexUnit
 
     public void CombatSetup() => characterData.ObjectInitialized();
 
-    public override void ShowUnitActive(bool status)
-    {
-        base.ShowUnitActive(status);
-        animatedArrow.SetActive(status);
-    }
+    
 
     #region Effects and abilities
     public bool IsStunned
@@ -185,7 +181,6 @@ public class Character : HexUnit
             case HexGridController.GridMode.Map:
                 break;
             case HexGridController.GridMode.Combat:
-                logMessage = new LogMessage();
                 if (!IsStunned)
                 {
                     remainingMovementPoints = defaultMovementPoints;
@@ -197,9 +192,16 @@ public class Character : HexUnit
                 }
                 break;
             case HexGridController.GridMode.Management:
+                remainingMovementPoints = int.MaxValue;
                 break;
         }
         base.MakeUnitActive();
+    }
+
+    public override void ShowUnitActive(bool status)
+    {
+        base.ShowUnitActive(status);
+        animatedArrow.SetActive(status);
     }
 
     public void TurnEnded()

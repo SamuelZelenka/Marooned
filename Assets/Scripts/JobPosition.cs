@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class JobPosition : MonoBehaviour
 {
-    public PlayerInput input;
     public CrewSimulation.ShipJob job;
     public CrewSimulation crewSimulation;
     public Image portrait;

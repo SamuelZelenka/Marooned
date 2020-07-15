@@ -9,24 +9,11 @@ public class HexMapEditor : MonoBehaviour
     public HexGrid hexGrid;
     public Text selectedHexesCoordinateText;
     public Text newMapSize;
-    public SpriteRenderer playerShip;
-    public SpriteRenderer enemyShip;
-    public SpriteRenderer landRight;
-    public SpriteRenderer fullLand;
 
     public Dropdown spawnAbleDropdown;
     public Toggle traversableToggle;
     public Button overrideConnectionButton;
     public Text infoMessagePanel;
-
-    public enum EditorVisuals { ShipToShip, ShipToLand, LandOnly }
-    [Header("Graphics")]
-    public EditorVisuals editorVisuals;
-    public Sprite playerShipSprite;
-    public Sprite enemyShipSprite;
-    public Sprite landRightSprite;
-    public Sprite fullLandSprite;
-
 
     [Header("Key commands")]
     public KeyCode toggleTraversable = KeyCode.T;
@@ -198,40 +185,6 @@ public class HexMapEditor : MonoBehaviour
         }
     }
     #endregion
-
-    public void UpdateSprites()
-    {
-        playerShip.enabled = false;
-        enemyShip.enabled = false;
-        landRight.enabled = false;
-        fullLand.enabled = false;
-        playerShip.sprite = null;
-        enemyShip.sprite = null;
-        landRight.sprite = null;
-        fullLand.sprite = null;
-
-        switch (editorVisuals)
-        {
-            case EditorVisuals.ShipToShip:
-                playerShip.sprite = playerShipSprite;
-                enemyShip.sprite = enemyShipSprite;
-                playerShip.enabled = true;
-                enemyShip.enabled = true;
-                break;
-            case EditorVisuals.ShipToLand:
-                playerShip.sprite = playerShipSprite;
-                landRight.sprite = landRightSprite;
-                playerShip.enabled = true;
-                landRight.enabled = true;
-                break;
-            case EditorVisuals.LandOnly:
-                fullLand.sprite = fullLandSprite;
-                fullLand.enabled = true;
-                break;
-        }
-
-        DisplayMessage("Sprites updated");
-    }
 
     private void DisplayMessage(string message)
     {

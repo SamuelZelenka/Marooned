@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Player
 {
@@ -34,10 +33,6 @@ public class Player
         this.Ship = ship;
         IsHuman = humanControlled;
         this.crewSimulation = null;
-        if (IsHuman)
-        {
-            Debug.LogWarning("Human player is set up with missing ship job system");
-        }
     }
 
     public void StartNewTurn()
@@ -57,25 +52,8 @@ public class Player
     private void StartManagementMode()
     {
         HexGridController.CurrentMode = HexGridController.GridMode.Management;
-        if (crewSimulation)
-        {
-            crewSimulation.NewTurnSimulation();
-        }
-        else
-        {
-            Debug.LogWarning("Missing ship job system");
-        }
+        crewSimulation.NewTurnSimulation();
     }
-
-    //public void RunCrewSimulation()
-    //{
-    //    crewSimulation.RunJobSimulation();
-    //}
-
-    //private void StartMapMovement()
-    //{
-
-    //}
 
     public IEnumerator PerformAutomaticTurn()
     {

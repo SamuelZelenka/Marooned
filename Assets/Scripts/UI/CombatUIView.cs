@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
-public class CombatUIController : MonoBehaviour
+
+public class CombatUIView : MonoBehaviour
 {
     [Header("Player Party")]
     [SerializeField] List<PartyMember> partyMembers = null;
@@ -28,7 +30,7 @@ public class CombatUIController : MonoBehaviour
     {
         HexUnit.OnUnitMoved += UnitMoved;
         HexGridController.OnCellSelected += CellSelected;
-        CombatTurnSystem.OnTurnEnding += TurnStarted;
+        CombatTurnSystem.OnTurnBegining += TurnStarted;
         CharacterData.OnEffectChanged += UpdateAllCharacters;
         CharacterData.OnResourceChanged += UpdateAllCharacters;
         CharacterData.OnStatChanged += UpdateAllCharacters;
@@ -37,15 +39,16 @@ public class CombatUIController : MonoBehaviour
     {
         HexUnit.OnUnitMoved -= UnitMoved;
         HexGridController.OnCellSelected -= CellSelected;
-        CombatTurnSystem.OnTurnEnding -= TurnStarted;
+        CombatTurnSystem.OnTurnBegining -= TurnStarted;
         CharacterData.OnEffectChanged -= UpdateAllCharacters;
         CharacterData.OnResourceChanged -= UpdateAllCharacters;
         CharacterData.OnStatChanged -= UpdateAllCharacters;
-
     }
 
-    public void UpdateTimeline(List<Character> turnOrder)
+    private void UpdateTimeline()
     {
+        List<Character> turnOrder = CombatTurnSystem.TurnOrder.ToList();
+
         currentCharacter.UpdatePortrait(HexGridController.ActiveCharacter);
         for (int i = 0; i < turnOrder.Count; i++)
         {
@@ -59,7 +62,7 @@ public class CombatUIController : MonoBehaviour
             }
         }
     }
-    public void UpdateAllCharacters()
+    private void UpdateAllCharacters()
     {
         foreach (PartyMember member in partyMembers)
         {
@@ -93,5 +96,9 @@ public class CombatUIController : MonoBehaviour
     }
     private void UnitMoved(HexUnit unit) => UpdateAllCharacters();
     private void CellSelected(HexCell cell) => UpdateAllCharacters();
-    private void TurnStarted(Character character) => UpdateAllCharacters();
+    private void TurnStarted(Character character)
+    {
+        UpdateAllCharacters();
+        UpdateTimeline();
+    }
 }

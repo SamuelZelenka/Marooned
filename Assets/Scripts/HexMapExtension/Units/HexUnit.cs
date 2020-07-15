@@ -72,12 +72,26 @@ public abstract class HexUnit : MonoBehaviour
 
     public virtual void MakeUnitActive()
     {
+        logMessage = new LogMessage();
         ShowUnitActive(true);
     }
 
     public void MakeUnitInactive()
     {
         ShowUnitActive(false);
+    }
+
+    public virtual void ShowUnitActive(bool status)
+    {
+        Location.ShowHighlight(status, HexCell.HighlightType.ActiveCell);
+
+        ShowReachableCells(false);
+
+        if (status)
+        {
+            CalculateReachableCells();
+            ShowReachableCells(true);
+        }
     }
 
     public void ValidateLocation() => transform.localPosition = location.Position;
@@ -98,18 +112,7 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
-    public virtual void ShowUnitActive(bool status)
-    {
-        Location.ShowHighlight(status, HexCell.HighlightType.ActiveCell);
-
-        ShowReachableCells(false);
-
-        if (status)
-        {
-            CalculateReachableCells();
-            ShowReachableCells(true);
-        }
-    }
+    
 
     public abstract IEnumerator PerformAutomaticTurn();
 

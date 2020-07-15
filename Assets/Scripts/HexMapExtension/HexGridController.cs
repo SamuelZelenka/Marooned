@@ -47,15 +47,7 @@ public class HexGridController : MonoBehaviour
             }
             if (currentMode == GridMode.Management) //Exception to regular rule on turnorders. In management mode the active unit can be selected just by selecting a cell
             {
-                if (ActiveCharacter)
-                {
-                    ActiveCharacter.MakeUnitInactive();
-                }
                 ActiveCharacter = SelectedCharacter;
-                if (ActiveCharacter)
-                {
-                    ActiveCharacter.MakeUnitActive(); 
-                }
             }
             OnCellSelected?.Invoke(value);
         }
@@ -78,11 +70,19 @@ public class HexGridController : MonoBehaviour
         get => activeCharacter;
         set
         {
-            if (value == activeCharacter)
+            if (value == ActiveCharacter)
             {
                 return;
             }
+            if (ActiveCharacter)
+            {
+                ActiveCharacter.MakeUnitInactive();
+            }
             activeCharacter = value;
+            if (ActiveCharacter)
+            {
+                ActiveCharacter.MakeUnitActive();
+            }
             OnActiveCharacterChanged?.Invoke(value);
         }
     }
