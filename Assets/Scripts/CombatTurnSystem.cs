@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 
 public class CombatTurnSystem : MonoBehaviour
 {
@@ -10,20 +8,10 @@ public class CombatTurnSystem : MonoBehaviour
     public static CharacterHandler OnTurnEnding;
     public static CharacterHandler OnTurnBegining;
 
-    public CombatUIController uIController;
-
-    Queue<Character> turnOrder;
-
-    private void OnEnable()
+    public static Queue<Character> TurnOrder
     {
-        //Subscribe
-        OnTurnEnding += ChangeActiveCharacter;
-    }
-
-    private void OnDisable()
-    {
-        //Un-subscribe
-        OnTurnEnding -= ChangeActiveCharacter;
+        private set;
+        get;
     }
 
     /// <summary>
@@ -32,7 +20,7 @@ public class CombatTurnSystem : MonoBehaviour
     /// <param name="allCharacters"></param>
     public void SetupNewCombat(List<Character> allCharacters)
     {
-        turnOrder = new Queue<Character>();
+        TurnOrder = new Queue<Character>();
         CharacterInitiative[] characterInitiatives = new CharacterInitiative[allCharacters.Count];
         for (int i = 0; i < allCharacters.Count; i++)
         {
@@ -44,7 +32,7 @@ public class CombatTurnSystem : MonoBehaviour
 
         for (int i = 0; i < characterInitiatives.Length; i++)
         {
-            turnOrder.Enqueue(characterInitiatives[i].character);
+            TurnOrder.Enqueue(characterInitiatives[i].character);
             Debug.Log(characterInitiatives[i].initiative);
         }
     }
@@ -78,42 +66,25 @@ public class CombatTurnSystem : MonoBehaviour
     //Called from UI to end player character turn or when an ability is used
     public void EndActiveCharacterTurn()
     {
-        HexGridController.ActiveCharacter.TurnEnded();
         OnTurnEnding?.Invoke(HexGridController.ActiveCharacter);
-    }
-
-    //Subscribed method to change turn when one character is declared done with its turn
-    private void ChangeActiveCharacter(Character lastCharacter)
-    {
-        turnOrder.Enqueue(lastCharacter);
+        HexGridController.ActiveCharacter.TurnEnded();
+        TurnOrder.Enqueue(HexGridController.ActiveCharacter);
         StartNextTurn();
     }
 
     //Starting the turn for the character in the first position in the queue
     private void StartNextTurn()
     {
-        //De-select last active character
-        if (HexGridController.ActiveCharacter)
-        {
-            HexGridController.ActiveCharacter.ShowUnitActive(false);
-        }
-        HexGridController.ActiveCharacter = turnOrder.Dequeue();
-        if (!HexGridController.SelectedCharacter)
-        {
-            HexGridController.SelectedCell = HexGridController.ActiveCharacter.Location;
-        }
+        HexGridController.ActiveCharacter = TurnOrder.Dequeue();
         Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.characterName);
 
         OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);
 
-        HexGridController.ActiveCharacter.StartNewTurn();
         if (!HexGridController.ActiveCharacter.playerControlled)
         {
             StartCoroutine(HexGridController.ActiveCharacter.PerformAutomaticTurn());
         }
-        uIController.UpdateTimeline(turnOrder.ToList());
     }
-
 
     //Private class
     class CharacterInitiative : IComparable

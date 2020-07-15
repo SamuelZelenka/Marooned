@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CrewSimulation : MonoBehaviour
 {
@@ -25,6 +24,7 @@ public class CrewSimulation : MonoBehaviour
 
     public enum ShipJob { Helm, Sail, Spotter, Clean, Shanty, Kitchen, MedBay, Shipwright, Cannons, None }
     [SerializeField] JobPosition[] jobs = new JobPosition[9];
+    [SerializeField] UnassignedCrewController unassignedCrewController = null;
 
     public void NewTurnSimulation()
     {
@@ -56,7 +56,7 @@ public class CrewSimulation : MonoBehaviour
 
         //Muteny
 
-        HexGridController.player.Ship.StartNewTurn();
+        HexGridController.player.Ship.MakeUnitActive();
     }
 
 
@@ -177,11 +177,11 @@ public class CrewSimulation : MonoBehaviour
                 newCharacter.characterData.ShipJob = job;
                 break;
         }
-
+        unassignedCrewController.UpdateUnassignedCharacterList();
         Debug.Log(newCharacter.characterData.characterName + " set to job: " + job.ToString());
     }
 
-    private void RemoveCharacterFromItsJob(Character characterToRemove, ShipJob job)
+    public void RemoveCharacterFromItsJob(Character characterToRemove, ShipJob job)
     {
         switch (job)
         {
@@ -198,7 +198,9 @@ public class CrewSimulation : MonoBehaviour
                 characterToRemove.characterData.ShipJob = ShipJob.None;
                 break;
         }
-
+        unassignedCrewController.UpdateUnassignedCharacterList();
         Debug.Log(characterToRemove.characterData.characterName + " removed from it's job");
     }
+
+
 }

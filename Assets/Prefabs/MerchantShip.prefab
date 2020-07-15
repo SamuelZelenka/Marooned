@@ -68,7 +68,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2019508797
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 14c59f06f3237f1419843b8c9dab36ab, type: 3}
   m_Color: {r: 1, g: 0.3726415, b: 0.3726415, a: 1}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 196459072341208081}
-  - component: {fileID: 4841003658517972659}
+  - component: {fileID: 6092528759528069180}
   m_Layer: 0
   m_Name: MerchantShip
   m_TagString: Untagged
@@ -113,7 +113,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4841003658517972659
+--- !u!114 &6092528759528069180
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,15 +122,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7037202640776116866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d70dce7c13dad7240bdf491c365d9993, type: 3}
+  m_Script: {fileID: 11500000, guid: d0ac978a48c49aa44a2b4f9bff5bdb55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remainingMovementPoints: 5
+  remainingMovementPoints: 0
   defaultMovementPoints: 5
   oceanMovementCost: 1
   landMovementCost: 1
   playerControlled: 0
   myGrid: {fileID: 0}
-  pathfinding: {fileID: 0}
   currentVisionRange: 0
   defaultVisionRange: 0

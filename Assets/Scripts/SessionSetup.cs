@@ -9,6 +9,7 @@ public class SessionSetup : MonoBehaviour
     public HexGrid shipGrid;
     public Transform shipTransform;
     public Transform playerCrewParent;
+    public TerrainMap terrainMap;
 
     public int mapCellCountX = 20, mapCellCountY = 15;
 
@@ -20,9 +21,8 @@ public class SessionSetup : MonoBehaviour
     public CombatSystem combatSystem;
 
     [Header("AI setup")]
-    public GameObject aiPrefab;
-    public Ship aiMerchantShip;
-    public int numberOfMerchantShips = 5;
+
+    public int numberOfMerchantRoutes = 5;
 
     // Start is called before the first frame update
     void Start() => ConfirmSetup();
@@ -31,17 +31,13 @@ public class SessionSetup : MonoBehaviour
     public void ConfirmSetup()
     {
         terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true, true, true);
+        terrainMap.Setup(terrainGrid, numberOfMerchantRoutes);
         shipGrid.Load(playerStartingGridMap, true);
 
         terrainGrid.SetCameraBoundriesToMatchHexGrid();
         shipGrid.SetCameraBoundriesToMatchHexGrid();
 
         CreateHumanPlayer();
-
-        for (int i = 0; i < numberOfMerchantShips; i++)
-        {
-            CreateMerchantPlayer();
-        }
 
         MapTurnSystem.instance.DoFirstTurn();
     }
@@ -52,7 +48,7 @@ public class SessionSetup : MonoBehaviour
         Ship newShip = Instantiate(playerStarterShip);
         newShip.transform.SetParent(shipTransform);
 
-        terrainGrid.AddUnit(newShip, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        terrainGrid.AddUnit(newShip, terrainMap.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         combatSystem.managementMap = playerStartingGridMap;
 
@@ -69,18 +65,5 @@ public class SessionSetup : MonoBehaviour
         HexGridController.player = newPlayer;
     }
 
-    //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller
-    private void CreateMerchantPlayer()
-    {
-        Transform aiTransform = Instantiate(aiPrefab).transform;
-        aiTransform.SetParent(shipTransform);
-
-        Ship newShip = Instantiate(aiMerchantShip);
-        newShip.transform.SetParent(aiTransform);
-
-        terrainGrid.AddUnit(newShip, terrainGrid.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), false);
-
-        Player newMerchantPlayer = new Player(newShip, false);
-        MapTurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
-    }
+    
 }

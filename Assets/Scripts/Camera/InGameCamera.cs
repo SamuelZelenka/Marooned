@@ -3,7 +3,7 @@ public class InGameCamera : MonoBehaviour
 {
     enum Directions { Up, Left, Down, Right }
 
-    [SerializeField] Camera instance = null;
+    [SerializeField] Camera activeCamera = null;
     [SerializeField] bool edgeMovement = true;
 
     [Header("Scene")]
@@ -17,6 +17,7 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] CameraEffect cameraEffect = null;
     [SerializeField] float cameraLerpSpeed = 5;
     [Range(0, 100)] [SerializeField] float cameraSpeed = 0;
+    [SerializeField] bool isCombatCamera = false;
 
     [Header("Zoom")]
     [SerializeField] float zoomMin = 0;
@@ -25,13 +26,7 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] float zoomSpeed = 1;
     [Range(1, 10)] [SerializeField] float zoomSpeedScale = 1;
 
-    public delegate void CameraTrackHandler(Transform transform);
-    public static CameraTrackHandler OnSelectedCharacter;
-
-    public delegate void CameraShakeHandler(float intensity, float duration);
-    public static CameraShakeHandler OnShakeEffect;
-
-    CameraTransform newCameraTransform = new CameraTransform();
+    CameraTransform newCameraTransform;
 
     Vector3 mouseDownPos = new Vector3();
     Vector3 mouseUpPos = new Vector3();
@@ -40,13 +35,14 @@ public class InGameCamera : MonoBehaviour
 
     [Header("Tracking")]
     bool isTracking = false;
-    float detectRange = 0.5f;
-    [SerializeField] Vector3 currentTrackingPoint = new Vector3();
+    //float detectRange = 0.5f;
+    //Unused /Simon
+    Transform trackingTransform;
 
 
     private void Start()
     {
-        newCameraTransform = new CameraTransform(instance);
+        newCameraTransform = new CameraTransform(activeCamera);
 
         if (minPosTranform != null && maxPosTransform != null)
         {
@@ -63,18 +59,22 @@ public class InGameCamera : MonoBehaviour
     }
     private void OnEnable()
     {
-        OnSelectedCharacter += SetTarget;
-        OnShakeEffect += CameraShake;
+        HexGridController.OnActiveCharacterChanged += SetCharacterTarget;
+        HexGridController.OnActiveShipChanged += SetShipTarget;
+        SkillcheckSystem.OnCrit += ShakeCameraFromCrit;
     }
     private void OnDisable()
     {
-        OnSelectedCharacter -= SetTarget;
-        OnShakeEffect -= CameraShake;
+        HexGridController.OnActiveCharacterChanged -= SetCharacterTarget;
+        HexGridController.OnActiveShipChanged -= SetShipTarget;
+        SkillcheckSystem.OnCrit -= ShakeCameraFromCrit;
     }
+
     public void SetCamera(Camera camera)
     {
-        instance = camera;
+        activeCamera = camera;
     }
+
     void InputHandler()
     {
         //Zoom
@@ -86,12 +86,12 @@ public class InGameCamera : MonoBehaviour
         //Middle Mouse Movement
         if (Input.GetMouseButtonDown(2))
         {
-            mouseDownPos = instance.ScreenToWorldPoint(Input.mousePosition);
+            mouseDownPos = activeCamera.ScreenToWorldPoint(Input.mousePosition);
             isTracking = false;
         }
         if (Input.GetMouseButton(2))
         {
-            mouseUpPos = instance.ScreenToWorldPoint(Input.mousePosition);
+            mouseUpPos = activeCamera.ScreenToWorldPoint(Input.mousePosition);
             newCameraTransform.cameraPosition = transform.localPosition + mouseDownPos - mouseUpPos;
         }
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
@@ -115,7 +115,7 @@ public class InGameCamera : MonoBehaviour
             if (isButtonPressed)
             {
                 isTracking = false;
-                float zoomScale = instance.orthographicSize * zoomSpeedScale / zoomMax;
+                float zoomScale = activeCamera.orthographicSize * zoomSpeedScale / zoomMax;
                 switch (direction)
                 {
                     case Directions.Up:
@@ -136,15 +136,16 @@ public class InGameCamera : MonoBehaviour
             }
         }
     }
-    public void UpdatePosition()
+
+    void UpdatePosition()
     {
         //Apply zoom
         newCameraTransform.cameraSize = Mathf.Clamp(newCameraTransform.cameraSize, zoomMin, zoomMax);
-        instance.orthographicSize = Mathf.Lerp(instance.orthographicSize, newCameraTransform.cameraSize, zoomLerpSpeed * Time.deltaTime);
+        activeCamera.orthographicSize = Mathf.Lerp(activeCamera.orthographicSize, newCameraTransform.cameraSize, zoomLerpSpeed * Time.deltaTime);
 
         //Apply movement
-        float halfScreenWidth = instance.ScreenToWorldPoint(new Vector3(instance.scaledPixelWidth, 0, 0)).x - transform.localPosition.x;
-        float halfScreenHeight = instance.ScreenToWorldPoint(new Vector3(0, instance.scaledPixelHeight, 0)).y - transform.localPosition.y;
+        float halfScreenWidth = activeCamera.ScreenToWorldPoint(new Vector3(activeCamera.scaledPixelWidth, 0, 0)).x - transform.localPosition.x;
+        float halfScreenHeight = activeCamera.ScreenToWorldPoint(new Vector3(0, activeCamera.scaledPixelHeight, 0)).y - transform.localPosition.y;
         newCameraTransform.cameraPosition.x = Mathf.Clamp(newCameraTransform.cameraPosition.x, minPos.x + halfScreenWidth, maxPos.x - halfScreenWidth);
         newCameraTransform.cameraPosition.y = Mathf.Clamp(newCameraTransform.cameraPosition.y, minPos.y + halfScreenHeight, maxPos.y - halfScreenHeight);
         newCameraTransform.cameraPosition.z = -5;
@@ -158,40 +159,60 @@ public class InGameCamera : MonoBehaviour
     {
         if (isTracking)
         {
-            IsPointReached();
-            if (currentTrackingPoint == null)
+            //IsPointReached();
+            //This part was not used for anything
+            //Simon Voss
+
+            if (trackingTransform == null)
             {
                 isTracking = false;
                 return;
             }
             else
             {
-                newCameraTransform.cameraPosition = currentTrackingPoint;
+                newCameraTransform.cameraPosition = trackingTransform.position;
             }
         }
-        bool IsPointReached()
-        {
-            if (Vector2.Distance(instance.transform.position, newCameraTransform.cameraPosition) < detectRange)
-            {
-                Debug.Log("reached");
-                return true;
-            }
-            return false;
-        }
+        //bool IsPointReached()
+        //{
+        //    if (Vector2.Distance(activeCamera.transform.position, newCameraTransform.cameraPosition) < detectRange)
+        //    {
+        //        Debug.Log("reached");
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
+        //This part was not used for anything
+        //Simon Voss
     }
+
     public void ToggleTracking()
     {
         isTracking = !isTracking;
     }
-    public void SetTarget(Transform trackPos)
+
+    void SetCharacterTarget(Character character)
     {
-        currentTrackingPoint = trackPos.position;
-        isTracking = true;
+        if (character != null)
+        {
+            trackingTransform = character.transform;
+            isTracking = true;
+        }
+    }
+    void SetShipTarget(Ship ship)
+    {
+        if (ship != null)
+        {
+            trackingTransform = ship.transform;
+            isTracking = true;
+        }
     }
     #endregion
-    public void CameraShake(float intensity, float duration)
+
+    void ShakeCameraFromCrit()
     {
-        cameraEffect.ApplyEffect(intensity, duration, CameraEffect.Effect.Shake);
+        cameraEffect.ApplyEffect(0.5f, 0.2f, CameraEffect.Effect.Shake);
     }
     protected struct CameraTransform
     {
