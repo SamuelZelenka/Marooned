@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abda27a350148534c8abfb9c80243f49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instance: {fileID: 866738384862604101}
+  activeCamera: {fileID: 866738384862604101}
   edgeMovement: 1
   minPosTranform: {fileID: 0}
   maxPosTransform: {fileID: 0}
@@ -58,7 +58,6 @@ MonoBehaviour:
   zoomLerpSpeed: 5
   zoomSpeed: 1
   zoomSpeedScale: 10
-  currentTrackingPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &866738384862604102
 GameObject:
   m_ObjectHideFlags: 0

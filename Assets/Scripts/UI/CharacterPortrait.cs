@@ -25,7 +25,7 @@ public class CharacterPortrait : MonoBehaviour
         }
         else
         {
-            InGameCamera.OnSelectedCharacter?.Invoke(character.transform);
+            HexGridController.SelectedCell = character.Location;
         }
     }
     public void UpdatePortrait(Character character)

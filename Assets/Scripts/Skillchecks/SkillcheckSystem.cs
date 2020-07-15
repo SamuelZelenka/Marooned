@@ -12,6 +12,9 @@ public class SkillcheckSystem : MonoBehaviour
     public delegate void CombatOutcomeHandler(List<CombatOutcome> hostileOutcomes, List<CombatOutcome> friendlyOutcomes);
     public CombatOutcomeHandler OnCombatOutcomesDecided;
 
+    public delegate void SkillcheckSystemHandler();
+    public static event SkillcheckSystemHandler OnCrit;
+
     [Header("References")]
     [SerializeField] GameObject parent = null;
     [SerializeField] SkillcheckContester abilityUserSkillcheckSystem = null;
@@ -164,7 +167,7 @@ public class SkillcheckSystem : MonoBehaviour
         CombatOutcome attackerOutcome = CombatOutcome.NormalHit;
         if (userSuccesses == NUMBEROFCOINS) //All successes = crit always
         {
-            InGameCamera.OnShakeEffect?.Invoke(0.5f, 0.2f);
+            OnCrit?.Invoke();
             attackerOutcome = CombatOutcome.Critical;
         }
         else if (userSuccesses == 0) //All misses = miss always
