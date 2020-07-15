@@ -63,20 +63,9 @@ public class HexCell : MonoBehaviour
     #region Terrain and Features
     public bool IsLand { get; set; }
     public bool IsOcean { get => !IsLand; }
-
+    public bool IsShore { get => IsLand && Bitmask >= 0 && Bitmask <= 62; }
     public bool HasHarbor { get; set; }
-
-    private int bitmask;
-    public int Bitmask
-    {
-        get => bitmask;
-        private set
-        {
-            bitmask = value;
-            myGrid.SetTerrainCellVisual(this);
-        }
-    }
-
+    public int Bitmask { get; set; }
     public void CalculateBitmask()
     {
         if (IsOcean)

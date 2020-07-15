@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4330,7 +4330,8 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4994165448186472206, guid: e157d8ff8e421fe4489e6cbe413d1e39, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e157d8ff8e421fe4489e6cbe413d1e39, type: 3}
 --- !u!1 &730801245 stripped
 GameObject:
@@ -4558,6 +4559,7 @@ MonoBehaviour:
   shipGrid: {fileID: 730801249}
   shipTransform: {fileID: 1961655817}
   playerCrewParent: {fileID: 730801247}
+  terrainMap: {fileID: 947070602}
   mapCellCountX: 60
   mapCellCountY: 30
   playerStarterShip: {fileID: 4841003658517972659, guid: 9ac5c2b212baf2646b21d9c1350e9c35,
@@ -4569,11 +4571,7 @@ MonoBehaviour:
   - {fileID: 930899063425889352, guid: a73b69d9578b57d40a958af6a8495e37, type: 3}
   - {fileID: 5767702583924690790, guid: 57fe4cb9e37d16f4fa76c2012f0978a1, type: 3}
   combatSystem: {fileID: 730801246}
-  aiPrefab: {fileID: 4439904320964768413, guid: 069b902a3055d304882a80a85444ac75,
-    type: 3}
-  aiMerchantShip: {fileID: 4841003658517972659, guid: f1e7905e4deb4bb49b4972068cbbf14c,
-    type: 3}
-  numberOfMerchantShips: 5
+  numberOfMerchantRoutes: 5
 --- !u!4 &847568173
 Transform:
   m_ObjectHideFlags: 0
@@ -4598,6 +4596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 947070601}
   - component: {fileID: 947070600}
+  - component: {fileID: 947070602}
   m_Layer: 0
   m_Name: HexGrid Terrain
   m_TagString: Untagged
@@ -4621,10 +4620,33 @@ MonoBehaviour:
     type: 3}
   noiseSource: {fileID: 2800000, guid: 7b02620f95cc73744844a03ae96354e9, type: 3}
   cameraController: {fileID: 792935553}
-  worldMap: 1
   seed: 1234
-  terrainTilemap: {fileID: 1694248158}
-  featuresTilemap: {fileID: 1538971791}
+--- !u!4 &947070601
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947070599}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1095709089}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &947070602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947070599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2b52e9d77cf034d834958462d699f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   edgeTiles:
   - {fileID: 11400000, guid: 16ea320fd37456140a364cc2066db10b, type: 2}
   - {fileID: 11400000, guid: 0b0cd10da9c051746bb92ea6d470521b, type: 2}
@@ -4689,16 +4711,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1a394eaea725c1e46ac27e846ac1d1c1, type: 2}
   - {fileID: 11400000, guid: 2723e9e9aae7fdd43a22c98485d6b06e, type: 2}
   - {fileID: 11400000, guid: 61183a94e8b6f26489dc71464221fd6e, type: 2}
+  - {fileID: 11400000, guid: b61fe05e15e1b5f45b21029c2bca50db, type: 2}
   oceanTiles:
   - {fileID: 11400000, guid: fd6b6f8e2191e2846a8d61134dd6fd11, type: 2}
   landTiles:
-  - {fileID: 11400000, guid: cb6e64efa4096e143b9302876f2d4141, type: 2}
-  - {fileID: 11400000, guid: 0aff67644cbf2ac4e9e68ef8fe0ceda7, type: 2}
-  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
-  - {fileID: 11400000, guid: cc4b8590d5a3f7647a1b851c5b8afd4b, type: 2}
-  - {fileID: 11400000, guid: f4dfdfb898fa687459a1322b940ea571, type: 2}
   - {fileID: 11400000, guid: 52fd1b5137d2d0a478db4cfe24ddc1da, type: 2}
-  - {fileID: 11400000, guid: b61fe05e15e1b5f45b21029c2bca50db, type: 2}
   harborTiles:
   - {fileID: 11400000, guid: 61287d9f78b96e4499799c00e2ecf550, type: 2}
   - {fileID: 11400000, guid: 6023dcdb59dc6ca438571531a9a462f5, type: 2}
@@ -4706,20 +4723,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 946a453557043d242ad4bc15c60cc584, type: 2}
   - {fileID: 11400000, guid: a0be43d133fabc547a500b5359d7757c, type: 2}
   - {fileID: 11400000, guid: 029188240b679e74f8ad3db8615ddb51, type: 2}
---- !u!4 &947070601
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 947070599}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1095709089}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  terrainTilemap: {fileID: 1694248158}
+  featuresTilemap: {fileID: 1538971791}
+  shipParent: {fileID: 1961655817}
+  aiMerchantShip: {fileID: 6092528759528069180, guid: f1e7905e4deb4bb49b4972068cbbf14c,
+    type: 3}
 --- !u!1 &1063391410
 GameObject:
   m_ObjectHideFlags: 0
@@ -4867,7 +4875,7 @@ GameObject:
   - component: {fileID: 1253425779}
   - component: {fileID: 1253425780}
   m_Layer: 0
-  m_Name: Grid Map Tilemap
+  m_Name: Visual MapGrid Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

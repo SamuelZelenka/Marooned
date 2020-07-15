@@ -1,60 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Ship : HexUnit
+public class MerchantShip : Ship
 {
-    #region Stats
-    int hull = 25, maxHull = 25;
-    public int Hull
-    {
-        set
-        {
-            hull = Mathf.Min(maxHull, value);
-        }
-        get => hull;
-    }
-    float cleanliness = 1;
-    public float Cleanliness
-    {
-        get => cleanliness;
-        set
-        {
-            cleanliness = Mathf.Min(value, 1);
-        }
-    }
-    #endregion
+    TerrainMap terrainMap;
 
-    public override bool CanEnter(HexCell cell)
+    public void Setup(TerrainMap terrainMap)
     {
-        if (cell.Unit)
-        {
-            return false;
-        }
-        if (cell.IsLand)
-        {
-            if (!cell.HasHarbor)
-            {
-                return false;
-            }
-        }
-        return true;
+        this.terrainMap = terrainMap;
     }
 
-    public override void MakeUnitActive()
-    {
-        base.MakeUnitActive();
-        if (playerControlled)
-        {
-
-        }
-        else
-        {
-            remainingMovementPoints = defaultMovementPoints;
-        }
-    }
-
-    #region AI
     HexCell target;
     public override IEnumerator PerformAutomaticTurn()
     {
@@ -98,12 +54,11 @@ public class Ship : HexUnit
 
     private HexCell FindTarget()
     {
-        HexCell newTarget = Utility.ReturnRandom(myGrid.Harbors);
+        HexCell newTarget = Utility.ReturnRandom(terrainMap.Harbors);
         while (Location == newTarget)
         {
-            newTarget = Utility.ReturnRandom(myGrid.Harbors);
+            newTarget = Utility.ReturnRandom(terrainMap.Harbors);
         }
         return newTarget;
     }
-    #endregion
 }
