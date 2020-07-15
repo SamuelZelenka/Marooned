@@ -57,7 +57,7 @@ public class CrewSimulation : MonoBehaviour
 
         //Muteny
 
-        HexGridController.player.Ship.StartNewTurn();
+        HexGridController.player.Ship.MakeUnitActive();
     }
 
 

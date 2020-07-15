@@ -12,55 +12,6 @@ public class PlayerInput : MonoBehaviour
     static bool combatModeActive = false;
     bool updatePathfinding = true;
 
-    public delegate void UnitHandler(HexUnit unit);
-    public static UnitHandler OnUnitSelected;
-
-    //HexCell selectedCell;
-    //HexCell SelectedCell
-    //{
-    //    get => selectedCell;
-    //    set
-    //    {
-    //        selectedCell = value;
-    //        if (combatModeActive)
-    //        {
-    //            combatSystem.UseAbility(value);
-    //        }
-    //    }
-    //}
-    //HexUnit activeUnit;
-    //HexUnit ActiveUnit
-    //{
-    //    get => activeUnit;
-    //    set
-    //    {
-    //        //Old
-    //        if (activeUnit)
-    //        {
-    //            activeUnit.ShowUnitActive(false);
-    //        }
-    //        activeUnit = value;
-    //        //New
-    //        if (activeUnit)
-    //        {
-    //            activeUnit.ShowUnitActive(true);
-    //        }
-    //    }
-    //}
-    //static HexUnit selectedUnit;
-    //public static HexUnit SelectedUnit
-    //{
-    //    get => selectedUnit;
-    //    set
-    //    {
-    //        selectedUnit = value;
-    //        if (value != null && !combatModeActive && value.playerControlled)
-    //        {
-    //            ActiveUnit = value;
-    //        }
-    //        OnUnitSelected?.Invoke(value);
-    //    }
-    //}
     HexCell mouseHooverCell;
     HexCell MouseHooverCell
     {
@@ -93,6 +44,10 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if (Input.anyKey)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))

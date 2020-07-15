@@ -50,7 +50,7 @@ public class Player
         }
         else
         {
-            Ship.StartNewTurn();
+            Ship.MakeUnitActive();
         }
     }
 

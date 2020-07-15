@@ -178,18 +178,28 @@ public class Character : HexUnit
         return true;
     }
 
-    public override void StartNewTurn()
+    public override void MakeUnitActive()
     {
-        if (!IsStunned)
+        switch (HexGridController.CurrentMode)
         {
-            remainingMovementPoints = defaultMovementPoints;
-            characterData.Energy.CurrentValue += CharacterData.DEFAULTENERGYREGEN;
+            case HexGridController.GridMode.Map:
+                break;
+            case HexGridController.GridMode.Combat:
+                logMessage = new LogMessage();
+                if (!IsStunned)
+                {
+                    remainingMovementPoints = defaultMovementPoints;
+                    characterData.Energy.CurrentValue += CharacterData.DEFAULTENERGYREGEN;
+                }
+                else
+                {
+                    remainingMovementPoints = 0;
+                }
+                break;
+            case HexGridController.GridMode.Management:
+                break;
         }
-        else
-        {
-            remainingMovementPoints = 0;
-        }
-        base.StartNewTurn();
+        base.MakeUnitActive();
     }
 
     public void TurnEnded()

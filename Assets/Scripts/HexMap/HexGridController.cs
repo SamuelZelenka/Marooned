@@ -36,6 +36,10 @@ public class HexGridController : MonoBehaviour
         get => selectedCell;
         set
         {
+            if (value == selectedCell)
+            {
+                return;
+            }
             selectedCell = value;
             if (selectedCell)
             {
@@ -45,22 +49,39 @@ public class HexGridController : MonoBehaviour
             {
                 if (ActiveCharacter)
                 {
-                    ActiveCharacter.EndTurn();
+                    ActiveCharacter.MakeUnitInactive();
                 }
                 ActiveCharacter = SelectedCharacter;
                 if (ActiveCharacter)
                 {
-                    ActiveCharacter.StartNewTurn(); 
+                    ActiveCharacter.MakeUnitActive(); 
                 }
             }
             OnCellSelected?.Invoke(value);
         }
+    }
+    public static Character SelectedCharacter
+    {
+        private set
+        {
+            if (value == selectedCharacter)
+            {
+                return;
+            }
+            selectedCharacter = value;
+            OnCharacterSelected?.Invoke(value);
+        }
+        get => selectedCharacter;
     }
     public static Character ActiveCharacter
     {
         get => activeCharacter;
         set
         {
+            if (value == activeCharacter)
+            {
+                return;
+            }
             activeCharacter = value;
             OnActiveCharacterChanged?.Invoke(value);
         }
@@ -70,6 +91,10 @@ public class HexGridController : MonoBehaviour
         get => activeShip;
         set
         {
+            if (value == activeShip)
+            {
+                return;
+            }
             if (ActiveShip)
             {
                 ActiveShip.ShowUnitActive(false);
@@ -83,15 +108,7 @@ public class HexGridController : MonoBehaviour
         }
     }
 
-    public static Character SelectedCharacter
-    {
-        private set
-        {
-            selectedCharacter = value;
-            OnCharacterSelected?.Invoke(value);
-        }
-        get => selectedCharacter;
-    }
+    
 
     public void StartMapMode() => CurrentMode = GridMode.Map;
     public void StartManagementMode() => CurrentMode = GridMode.Management;

@@ -106,7 +106,7 @@ public class CombatTurnSystem : MonoBehaviour
 
         OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);
 
-        HexGridController.ActiveCharacter.StartNewTurn();
+        HexGridController.ActiveCharacter.MakeUnitActive();
         if (!HexGridController.ActiveCharacter.playerControlled)
         {
             StartCoroutine(HexGridController.ActiveCharacter.PerformAutomaticTurn());

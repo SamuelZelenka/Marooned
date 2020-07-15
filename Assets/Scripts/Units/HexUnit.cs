@@ -70,13 +70,12 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
-    public virtual void StartNewTurn()
+    public virtual void MakeUnitActive()
     {
-        logMessage = new LogMessage();
         ShowUnitActive(true);
     }
 
-    public void EndTurn()
+    public void MakeUnitInactive()
     {
         ShowUnitActive(false);
     }

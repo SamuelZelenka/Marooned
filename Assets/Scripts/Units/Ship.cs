@@ -41,9 +41,9 @@ public class Ship : HexUnit
         return true;
     }
 
-    public override void StartNewTurn()
+    public override void MakeUnitActive()
     {
-        base.StartNewTurn();
+        base.MakeUnitActive();
         if (playerControlled)
         {
 
