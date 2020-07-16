@@ -22,10 +22,11 @@ public class CharacterSelection : MonoBehaviour
 
     public void UpdateUI(Character character)
     {
-        if (portrait != null)
+        if (!character)
         {
-            portrait.UpdatePortrait(character);
+            character = HexGridController.ActiveCharacter;
         }
+        portrait.UpdatePortrait(character);
         characterName.text = character.characterData.characterName;
         strength.text = $"STR: {character.characterData.Strength}";
         stamina.text = $"STA: {character.characterData.Stamina}";

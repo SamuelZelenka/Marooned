@@ -89,10 +89,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinFace: {fileID: 3381104733087101914}
-  winSprite: {fileID: 21300000, guid: 4bbb10d0a0e870e4395ce7194862eaae, type: 3}
-  lossSprite: {fileID: 4843393401301733221, guid: e8983668ed68f5f41b4772feb50b6d84,
-    type: 3}
-  undecidedSprite: {fileID: 21300000, guid: fccc6a2da15f3fa43b9456a3b5b08064, type: 3}
+  winSprite: {fileID: 21300000, guid: 80af665ded0837349bdd92fc137a1a88, type: 3}
+  lossSprite: {fileID: 21300000, guid: 2efb6ba73aef19542a746d2a1e23729f, type: 3}
+  undecidedSprite: {fileID: 21300000, guid: 80af665ded0837349bdd92fc137a1a88, type: 3}
 --- !u!1 &1888181486193472042
 GameObject:
   m_ObjectHideFlags: 0

@@ -162,7 +162,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3166590889499333817}
   - component: {fileID: 4446128866727445256}
-  - component: {fileID: 7371556455933414421}
   - component: {fileID: 2936931091020715970}
   m_Layer: 5
   m_Name: SkillcheckPanel
@@ -204,35 +203,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2863578252928562051}
   m_CullTransparentMesh: 0
---- !u!114 &7371556455933414421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2863578252928562051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2936931091020715970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +225,7 @@ MonoBehaviour:
   outcomeText: {fileID: 8540793969946286761}
   portraitA: {fileID: 7792581558926998963}
   portraitB: {fileID: 2136267420439128443}
+  done: 0
 --- !u!1 &3137474968637600457
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +314,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7343959174699666396}
   - component: {fileID: 4452828856341246254}
-  - component: {fileID: 955024680703626767}
   - component: {fileID: 8153987426600660133}
   m_Layer: 5
   m_Name: Coins
@@ -383,35 +353,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4270196140607003768}
   m_CullTransparentMesh: 0
---- !u!114 &955024680703626767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4270196140607003768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &8153987426600660133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,12 +798,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f729041b5e123342b98a951af716d25, type: 3}
---- !u!224 &7114984489952997487 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2685550686760033879, guid: 0f729041b5e123342b98a951af716d25,
-    type: 3}
-  m_PrefabInstance: {fileID: 5186315725587656248}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1938835255472295750 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6706245537190027646, guid: 0f729041b5e123342b98a951af716d25,
@@ -875,6 +810,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66add5ab259ca484b87b0b2eefeb67cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &7114984489952997487 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2685550686760033879, guid: 0f729041b5e123342b98a951af716d25,
+    type: 3}
+  m_PrefabInstance: {fileID: 5186315725587656248}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7832162034497692660
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -77,6 +77,7 @@ public class CombatUIView : MonoBehaviour
         }
         if (HexGridController.ActiveCharacter != null)
         {
+            selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
             activeCharacter.UpdateUI(HexGridController.ActiveCharacter);
             abilityUI.UpdateUI();
         }
