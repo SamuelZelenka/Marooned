@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d6811d491018c4abe3a085e0c9a7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  labelCanvas: {fileID: 8949144967351757767}
   label: {fileID: 24787815959018822}
   gameGrid: {fileID: 55810862409288041}
   editorGrid: {fileID: 1115501688563494256}
@@ -1016,7 +1017,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7061202686360214029
 RectTransform:
   m_ObjectHideFlags: 0

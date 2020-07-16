@@ -60,12 +60,14 @@ public class InGameCamera : MonoBehaviour
     private void OnEnable()
     {
         HexGridController.OnActiveCharacterChanged += SetCharacterTarget;
+        HexGridController.OnCharacterSelected += SetCharacterTarget;
         HexGridController.OnActiveShipChanged += SetShipTarget;
         SkillcheckSystem.OnCrit += ShakeCameraFromCrit;
     }
     private void OnDisable()
     {
         HexGridController.OnActiveCharacterChanged -= SetCharacterTarget;
+        HexGridController.OnCharacterSelected -= SetCharacterTarget;
         HexGridController.OnActiveShipChanged -= SetShipTarget;
         SkillcheckSystem.OnCrit -= ShakeCameraFromCrit;
     }

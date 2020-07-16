@@ -6,7 +6,10 @@ public class HexCell : MonoBehaviour
 {
     public enum HighlightType { ActiveCell, Target, PathfindingEnd, AbilityAffected, ValidMoveInteraction, ValidCombatInteraction }
 
+    [Header("Canvas and Text")]
+    public GameObject labelCanvas;
     public Text label;
+
     [Header("Grids")]
     public SpriteRenderer gameGrid;
     public SpriteRenderer editorGrid;
@@ -188,7 +191,11 @@ public class HexCell : MonoBehaviour
     }
 
     #region Grid, Highlights and Labels
-    public void SetLabel(string text) => label.text = text;
+    public void SetLabel(string text)
+    {
+        label.text = text;
+        labelCanvas.SetActive(text != "" && text != null);
+    }
     public void ShowUI(bool status) => label.enabled = status;
 
     public void ShowGameOutline(bool status)
