@@ -23,6 +23,8 @@ public class MapTurnSystem : MonoBehaviour
     int activeIndex = 0;
      
     public void AddPlayerToTurnOrder(Player player) => turnOrder.Add(player);
+    public void AddPlayerToFirstPositionInTurnOrder(Player player) => turnOrder.Insert(0, player);
+
 
     public void DoFirstTurn() => DoTurn(turnOrder[0]);
 

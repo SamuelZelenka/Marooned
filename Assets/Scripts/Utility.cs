@@ -2,6 +2,9 @@
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using System;
+using System.Linq;
+using Random = UnityEngine.Random;
 
 public static class Utility
 {
@@ -22,7 +25,7 @@ public static class Utility
         int count = list.Count;
         for (var i = 0; i < count - 1; ++i)
         {
-            int r = UnityEngine.Random.Range(i, count);
+            int r = Random.Range(i, count);
             T tmp = list[i];
             list[i] = list[r];
             list[r] = tmp;
@@ -34,7 +37,7 @@ public static class Utility
     {
         if (a != null && b != null)
         {
-            if (Random.Range(0, 100) > 50)
+            if ( Random.Range(0, 100) > 50)
             {
                 return a;
             }
@@ -67,6 +70,38 @@ public static class Utility
         return default;
     }
 
+    public static IList<T> GetListVariableWithConditions<T>(this IList<T> outList, IList<T> inList, params Func<T, bool>[] conditions)
+    {
+        foreach (var item in inList)
+        {
+            bool flag = true;
+            foreach (var con in conditions)
+            {
+                if (!con.Invoke(item))
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+            {
+                outList.Add(item);
+            }
+        }
+        return outList;
+    }
+
+    public static T GetRandomVariableWithConditions<T>(this IList<T> inList, params Func<T, bool>[] conditions)
+    {
+        IList<T> passedItems = new List<T>().GetListVariableWithConditions<T>(inList, conditions);
+        return passedItems[Random.Range(0, passedItems.Count)];
+    }
+
+    public static T GetVariableWithConditions<T>(this IList<T> inList, Func<IList<T>, int> index, params Func<T, bool>[] conditions)
+    {
+        IList<T> passedItems = new List<T>().GetListVariableWithConditions<T>(inList, conditions);
+        return passedItems[index.Invoke(passedItems)];
+    }
 
     /// <summary>
     //	This makes it easy to create, name and place unique new ScriptableObject asset files.

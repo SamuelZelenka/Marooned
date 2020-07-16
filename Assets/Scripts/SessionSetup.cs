@@ -1,17 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SessionSetup : MonoBehaviour
 {
     [Header("Map and references")]
-    public HexGrid terrainGrid;
+    public HexGrid worldGrid;
     public HexGrid shipGrid;
     public Transform shipTransform;
     public Transform playerCrewParent;
-    public TerrainMap terrainMap;
-
-    public int mapCellCountX = 20, mapCellCountY = 15;
+    public WorldController worldController;
 
     [Header("Player setup")]
     public Ship playerStarterShip;
@@ -20,9 +16,7 @@ public class SessionSetup : MonoBehaviour
     public Character[] startingCharacters;
     public CombatSystem combatSystem;
 
-    [Header("AI setup")]
-
-    public int numberOfMerchantRoutes = 5;
+    public SetupData setupData;
 
     // Start is called before the first frame update
     void Start() => ConfirmSetup();
@@ -30,15 +24,14 @@ public class SessionSetup : MonoBehaviour
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
     {
-        terrainGrid.CreateMap(mapCellCountX, mapCellCountY, true, true, true);
-        terrainMap.Setup(terrainGrid, numberOfMerchantRoutes);
+        worldGrid.CreateMap(setupData.mapCellCountX, setupData.mapCellCountY, true, true, true);
+        worldController.Setup(worldGrid, setupData);
         shipGrid.Load(playerStartingGridMap, true);
 
-        terrainGrid.SetCameraBoundriesToMatchHexGrid();
+        worldGrid.SetCameraBoundriesToMatchHexGrid();
         shipGrid.SetCameraBoundriesToMatchHexGrid();
 
         CreateHumanPlayer();
-
         MapTurnSystem.instance.DoFirstTurn();
     }
 
@@ -48,12 +41,12 @@ public class SessionSetup : MonoBehaviour
         Ship newShip = Instantiate(playerStarterShip);
         newShip.transform.SetParent(shipTransform);
 
-        terrainGrid.AddUnit(newShip, terrainMap.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        worldGrid.AddUnit(newShip, worldController.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
 
         combatSystem.managementMap = playerStartingGridMap;
 
         Player newPlayer = new Player(newShip, true, playerCrewSimulation);
-        MapTurnSystem.instance.AddPlayerToTurnOrder(newPlayer);
+        MapTurnSystem.instance.AddPlayerToFirstPositionInTurnOrder(newPlayer);
 
         for (int i = 0; i < startingCharacters.Length; i++)
         {
@@ -64,6 +57,17 @@ public class SessionSetup : MonoBehaviour
         }
         HexGridController.player = newPlayer;
     }
+}
 
-    
+[System.Serializable]
+public class SetupData
+{
+    public int mapCellCountX = 20, mapCellCountY = 15;
+    public int numberOfMerchantRoutes = 5;
+    public int merchantRouteMinLength = 10;
+    public int merchantRouteMaxLength = 20;
+    public int merchantRouteMinHarbors = 2;
+    public int merchantRouteMaxHarbors = 4;
+    public float newLandmassChance = 0.1f;
+    public float landByLandChance = 0.25f;
 }

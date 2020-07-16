@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 public static class CellFinder
 {
@@ -9,9 +10,15 @@ public static class CellFinder
         return validCells;
     }
 
+    //NEW IS ALWAYS BETTER : TODO EXCHANGE OLD FOR THIS
+    public static List<HexCell> GetCellsWithCondition(HexGrid hexGrid, params Func<HexCell, bool>[] conditions)
+    {
+        return hexGrid.GetAllCellsWithCondition(conditions);
+    }
+
     public static List<HexCell> GetAllCells(HexGrid hexGrid, bool traversable, bool hasUnit)
     {
-        return hexGrid.GetAllCells(traversable, hasUnit);
+        return hexGrid.GetAllCellsWithCondition((c) => c.Traversable == traversable, (c) => c.Unit == hasUnit);
     }
 
     public static List<HexCell> GetCellsInAllLines(HexCell fromCell, bool traversable, bool hasUnit, int range, int rangeAfterFirstHit)

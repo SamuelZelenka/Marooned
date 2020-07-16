@@ -26,8 +26,50 @@ public class HexCell : MonoBehaviour
 
     public HexCoordinates coordinates;
     public HexGrid myGrid;
+    Landmass landmass;
+    public Landmass Landmass
+    {
+        get => landmass;
+        set
+        {
+            if (value == landmass) //Helps to ignore already set pieces, avoids stack overflow
+            {
+                return;
+            }
+            if (landmass != null)
+            {
+                landmass.landCells.Remove(this);
+            }
+            landmass = value;
+            if (landmass != null)
+            {
+                landmass.landCells.Add(this);
+                List<HexCell> landNeighbors = GetNeighbors(false, false, true, false, false);
+                foreach (var item in landNeighbors)
+                {
+                    item.Landmass = value;
+                }
+            }
+        }
+    }
+    public PointOfInterest PointOfInterest { get; set; }
 
-    public HexUnit Unit { get; set; }
+    HexUnit unit;
+    public HexUnit Unit
+    {
+        set
+        {
+            unit = value;
+            if (value && value.playerControlled)
+            {
+                if (PointOfInterest != null)
+                {
+                    PointOfInterest.InteractWith();
+                }
+            }
+        }
+        get => unit;
+    }
     bool traversable = false;
     public bool Traversable
     {
@@ -60,6 +102,7 @@ public class HexCell : MonoBehaviour
 
     public bool showNeighborGizmos = true;
 
+    //DELEGATES
     public delegate void HexCellHandler(HexCell cell);
     public static HexCellHandler OnHexCellHoover;
 

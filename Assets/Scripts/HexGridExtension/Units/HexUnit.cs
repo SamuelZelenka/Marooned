@@ -118,7 +118,7 @@ public abstract class HexUnit : MonoBehaviour
 
     public IEnumerator Travel(List<HexCell> path)
     {
-        if (!IsMoving)
+        if (!IsMoving && path.Count > 1)
         {
             Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
             pathToTravel = path;
@@ -187,7 +187,7 @@ public abstract class HexUnit : MonoBehaviour
 
             yield return null;
         }
-        Location = pathToTravel[pathToTravel.Count - 1];
+        Location = pathToTravel[pathToTravel.Count - 1]; //Set new location
         transform.localPosition = location.Position;
         pathToTravel = null; //Clear the list
     }

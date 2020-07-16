@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class HexGrid : MonoBehaviour
 {
@@ -169,23 +170,45 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public List<HexCell> GetAllCells(bool traversable, bool hasUnit)
+    public List<HexCell> GetAllCellsWithCondition(params Func<HexCell, bool>[] conditions)
     {
         List<HexCell> foundCells = new List<HexCell>();
-        foreach (var item in Cells)
+        foreach (var cell in Cells)
         {
-            if (traversable && !item.Traversable)
+            bool canBeAdded = true;
+            foreach (var condition in conditions)
             {
-                continue;
+                if (!condition.Invoke(cell))
+                {
+                    canBeAdded = false;
+                    break;
+                }
             }
-            if (hasUnit && item.Unit == null)
+            if(canBeAdded)
             {
-                continue;
+                foundCells.Add(cell);
             }
-            foundCells.Add(item);
         }
         return foundCells;
     }
+
+    //public List<HexCell> GetAllCells(bool traversable, bool hasUnit)
+    //{
+    //    List<HexCell> foundCells = new List<HexCell>();
+    //    foreach (var item in Cells)
+    //    {
+    //        if (traversable && !item.Traversable)
+    //        {
+    //            continue;
+    //        }
+    //        if (hasUnit && item.Unit == null)
+    //        {
+    //            continue;
+    //        }
+    //        foundCells.Add(item);
+    //    }
+    //    return foundCells;
+    //}
 
     public HexCell GetRandomFreeCell()
     {
@@ -276,7 +299,7 @@ public class HexGrid : MonoBehaviour
     {
         Units.Remove(unit);
         unit.Location.Unit = null;
-        unit.Die();
+        unit.Despawn();
     }
     #endregion
 

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class MerchantShip : Ship
 {
-    TerrainMap terrainMap;
+    MerchantRoute route;
+    int routeIndex = 0;
 
-    public void Setup(TerrainMap terrainMap)
+    public void Setup(MerchantRoute route)
     {
-        this.terrainMap = terrainMap;
+        this.route = route;
     }
 
     HexCell target;
@@ -43,22 +44,18 @@ public class MerchantShip : Ship
         if (Pathfinding.HasPath)
         {
             yield return Travel(Pathfinding.GetReachablePath(this, out int cost));
-            remainingMovementPoints -= cost;
             Pathfinding.ClearPath();
         }
         if (Location == target)
         {
+            routeIndex++;
+            if (routeIndex >= route.RouteStops.Length)
+            {
+                routeIndex = 0;
+            }
             target = null;
         }
     }
 
-    private HexCell FindTarget()
-    {
-        HexCell newTarget = Utility.ReturnRandom(terrainMap.Harbors);
-        while (Location == newTarget)
-        {
-            newTarget = Utility.ReturnRandom(terrainMap.Harbors);
-        }
-        return newTarget;
-    }
+    private HexCell FindTarget() => route.RouteStops[routeIndex];
 }
