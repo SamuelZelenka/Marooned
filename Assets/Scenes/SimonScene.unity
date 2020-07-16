@@ -4938,7 +4938,7 @@ MonoBehaviour:
   shipParent: {fileID: 1961655817}
   aiMerchantShip: {fileID: 6092528759528069180, guid: f1e7905e4deb4bb49b4972068cbbf14c,
     type: 3}
-  worldUIView: {fileID: 0}
+  worldUIView: {fileID: 1948685328}
 --- !u!1 &1018160994
 GameObject:
   m_ObjectHideFlags: 0
@@ -6245,6 +6245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   harborPanel: {fileID: 1749686797}
+  harborTitleText: {fileID: 940667597}
 --- !u!1 &1961655816
 GameObject:
   m_ObjectHideFlags: 0
