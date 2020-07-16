@@ -112,25 +112,28 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
-    
+
 
     public abstract IEnumerator PerformAutomaticTurn();
 
     public IEnumerator Travel(List<HexCell> path)
     {
-        Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
-        pathToTravel = path;
-        remainingMovementPoints -= path.Count - 1; //TODO CHANGE TO PATH COST
-        if (path.Count - 1 > 1)
+        if (!IsMoving)
         {
-            logMessage.AddLine($"Moved {path.Count - 1} steps.");
+            Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
+            pathToTravel = path;
+            remainingMovementPoints -= path.Count - 1; //TODO CHANGE TO PATH COST
+            if (path.Count - 1 > 1)
+            {
+                logMessage.AddLine($"Moved {path.Count - 1} steps.");
+            }
+            else
+            {
+                logMessage.AddLine($"Moved 1 step.");
+            }
+            yield return StartCoroutine(TravelPath());
+            Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
         }
-        else
-        {
-            logMessage.AddLine($"Moved 1 step.");
-        }
-        yield return StartCoroutine(TravelPath());
-        Location.ShowHighlight(true, HexCell.HighlightType.ActiveCell);
     }
 
     IEnumerator TravelPath()
