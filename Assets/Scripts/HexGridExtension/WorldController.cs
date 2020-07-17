@@ -171,17 +171,22 @@ public class WorldController : MonoBehaviour
         {
             HexCell harborCell = Utility.ReturnRandom(landmass.GetShores());
             landmass.harbor = harborCell;
-            AddHarbor(harborCell);
+            AddHarbor(harborCell, setupData);
         }
     }
 
-    void AddHarbor(HexCell cell)
+    void AddHarbor(HexCell cell, SetupData setupData)
     {
         Vector3Int tilemapPosition = HexCoordinates.CoordinatesToTilemapCoordinates(cell.coordinates);
 
         cell.HasHarbor = true;
         Harbors.Add(cell);
-        cell.PointOfInterest = new Harbor("DEBUG HARBOR NAME", worldUIView.EnablePOIButton);
+        string harborName = setupData.islandNames[0];
+        if (setupData.islandNames.Count > 1)
+        {
+            setupData.islandNames.RemoveAt(0);
+        }
+        cell.PointOfInterest = new Harbor(harborName, worldUIView.EnablePOIButton);
 
         List<HexDirection> openwaterConnections = new List<HexDirection>();
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)

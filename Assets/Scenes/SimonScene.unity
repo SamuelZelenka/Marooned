@@ -4444,14 +4444,40 @@ MonoBehaviour:
     seed: 0
     mapCellCountX: 50
     mapCellCountY: 30
-    numberOfMerchantRoutes: 8
+    numberOfMerchantRoutes: 2
     merchantRouteMinLength: 10
     merchantRouteMaxLength: 20
     merchantRouteMinHarbors: 2
     merchantRouteMaxHarbors: 4
     newLandmassChance: 0.05
-    landByLandChance: 0.4
+    landByLandChance: 0.3
     landMassMaxSize: 25
+    islandNames:
+    - Silvermoon Piers
+    - Broken Reef Harbor
+    - Riverfall Wharf
+    - The Landing Of Brisside
+    - Forwick Wharf
+    - Clarebiens Port
+    - Winterfall Landing
+    - Hunter Harbor
+    - Nottingstone
+    - Hurricane Peaks
+    - Baymouth
+    - The Wharf of Stoneworth
+    - The Port Of Holydurn
+    - Bolder Peak
+    - Oceanview
+    - el Escollo Tormentoso
+    - la Puerto Grande
+    - "el Enclave de Girosti\xE1n"
+    - "la Pen\xEDnsula de \xC8bano"
+    - "la Isla Diab\xF3lica"
+    - "l'\xCEle N\xE9glig\xE9e"
+    - "le R\xE9cif \xC9ternel"
+    - "l'\xCEle du Chamur"
+    - "l'\xCEle du Bourl\xE8s"
+    - l'Atoll de Marinne
 --- !u!4 &847568173
 Transform:
   m_ObjectHideFlags: 0

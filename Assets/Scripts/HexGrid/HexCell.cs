@@ -125,7 +125,14 @@ public class HexCell : MonoBehaviour
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
         {
             HexCell neighbor = GetNeighbor(d);
-            if (neighbor && neighbor.IsLand)
+            if (neighbor)
+            {
+                if (neighbor.IsLand || !neighbor.Traversable)
+                {
+                    index += bitValue;
+                }
+            }
+            else
             {
                 index += bitValue;
             }

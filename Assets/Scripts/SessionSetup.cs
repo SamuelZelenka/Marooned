@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class SessionSetup : MonoBehaviour
 {
@@ -79,4 +80,5 @@ public class SetupData
     public float newLandmassChance = 0.1f;
     public float landByLandChance = 0.25f;
     public int landMassMaxSize = 15;
+    public List<string> islandNames = new List<string>(1);
 }
