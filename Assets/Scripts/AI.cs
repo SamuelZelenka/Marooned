@@ -39,7 +39,7 @@ public class AI
             {
                 continue;
             }
-            foreach (var targetCell in ability.targeting.GetValidTargets(activeCharacter.Location))
+            foreach (var targetCell in ability.targeting.GetValidTargetCells(activeCharacter.Location, true))
             {
                 possibleActions.Add(new ActionGroup(activeCharacter.Location, targetCell, ActionGroup.ActionChoice.AbilityOnly, ability));
             }
@@ -59,7 +59,7 @@ public class AI
                 {
                     continue;
                 }
-                foreach (var targetCell in ability.targeting.GetValidTargets(moveToCell))
+                foreach (var targetCell in ability.targeting.GetValidTargetCells(moveToCell, true))
                 {
                     possibleActions.Add(new ActionGroup(moveToCell, targetCell, ActionGroup.ActionChoice.WalkAndAbility, ability));
                 }

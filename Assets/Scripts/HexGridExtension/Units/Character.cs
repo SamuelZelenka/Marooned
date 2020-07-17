@@ -139,7 +139,7 @@ public class Character : HexUnit
 
     public Ability SelectAbility(int abilityIndex, out List<HexCell> possibleTargets)
     {
-        possibleTargets = Abilities[abilityIndex].targeting.GetValidTargets(Location);
+        possibleTargets = Abilities[abilityIndex].targeting.GetValidTargetCells(Location, true);
         return Abilities[abilityIndex];
     }
 
@@ -149,7 +149,7 @@ public class Character : HexUnit
         {
             throw new System.ArgumentException("Selected ability not part of characters abilities. In " + characterData.characterName + " - " + ability.ToString());
         }
-        possibleTargets = ability.targeting.GetValidTargets(Location);
+        possibleTargets = ability.targeting.GetValidTargetCells(Location, true);
         return ability;
     }
     #endregion

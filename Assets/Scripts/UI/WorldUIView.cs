@@ -5,12 +5,39 @@ using UnityEngine.UI;
 
 public class WorldUIView : MonoBehaviour
 {
-    public GameObject harborPanel;
-    public Text harborTitleText;
+    public GameObject poiPanel;
+    public Text poiTextTitle;
+    public GameObject openPOIButton;
 
-    public void ShowHarbor(PointOfInterest pointOfInterest)
+    private PointOfInterest latestPOI;
+
+    private void OnEnable()
     {
-        harborPanel.SetActive(true);
-        harborTitleText.text = pointOfInterest.name;
+        HexUnit.OnUnitBeganMove += DisablePOIButton;
+    }
+
+    private void OnDisable()
+    {
+        HexUnit.OnUnitBeganMove -= DisablePOIButton;
+    }
+
+    public void EnablePOIButton(PointOfInterest pointOfInterest)
+    {
+        openPOIButton.SetActive(true);
+        latestPOI = pointOfInterest;
+    }
+
+    public void DisablePOIButton(HexUnit unitMoved)
+    {
+        if (unitMoved.playerControlled)
+        {
+            openPOIButton.SetActive(false);
+        }
+    }
+
+    public void OpenPOI()
+    {
+        poiPanel.SetActive(true);
+        poiTextTitle.text = latestPOI.name;
     }
 }

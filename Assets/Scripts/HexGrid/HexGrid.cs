@@ -9,10 +9,8 @@ public class HexGrid : MonoBehaviour
 
     [Header("References")]
     public HexCell cellPrefab;
-    public Texture2D noiseSource;
     public InGameCamera cameraController;
 
-    public int seed;
     
     public HexCell[] Cells { private set; get; }
     public List<HexUnit> Units { get; private set; }
@@ -21,24 +19,12 @@ public class HexGrid : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!HexMetrics.noiseSource)
-        {
-            HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
-        }
-
         ShowGameGrid(gameGridStatus);
     }
 
     void Awake()
     {
         Units = new List<HexUnit>();
-
-        if (!HexMetrics.noiseSource)
-        {
-            HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
-        }
     }
 
     public bool CreateMap(int x, int y, bool newMap, bool defaultTraversable, bool destroyUnits)

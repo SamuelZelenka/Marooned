@@ -90,7 +90,8 @@ public class WorldController : MonoBehaviour
         //LAND OR OCEAN
         foreach (HexCell cell in hexGrid.Cells)
         {
-            List<HexCell> neighborLandTiles = cell.GetNeighbors(false, false, true, false, false);
+            List<HexCell> neighborLandTiles = new List<HexCell>();
+            neighborLandTiles.PopulateListWithMatchingConditions(cell.Neighbors, (c) => c.IsLand == true);
             if (neighborLandTiles.Count == 0)
             {
                 bool isNewLand = setupData.newLandmassChance > HexMetrics.SampleHashGrid(cell.Position).a;
@@ -105,11 +106,46 @@ public class WorldController : MonoBehaviour
             else
             {
                 bool isLand = setupData.landByLandChance * neighborLandTiles.Count > HexMetrics.SampleHashGrid(cell.Position).a;
+
+                //Add all nearby landmasses to list
+                List<Landmass> neighboringLandmasses = new List<Landmass>();
+                foreach (var landCell in neighborLandTiles)
+                {
+                    if (neighboringLandmasses.Contains(landCell.Landmass))
+                    {
+                        continue;
+                    }
+                    neighboringLandmasses.Add(landCell.Landmass);
+                }
+                //Get size of all nearby landmasses
+                int totalSize = 0;
+                foreach (var landmass in neighboringLandmasses)
+                {
+                    totalSize += landmass.landCells.Count;
+                }
+                //If exceeding maximum landmasssize after conversion to land (and combining any landmasses previously not connected, then abort
+                if (totalSize + 1 > setupData.landMassMaxSize)
+                {
+                    isLand = false;
+                }
+
                 cell.IsLand = isLand;
                 if (isLand)
                 {
                     cell.Landmass = neighborLandTiles[0].Landmass;
                 }
+            }
+        }
+
+        //SET HEXES SURROUNDED BY LAND AS LAND
+        foreach (HexCell cell in hexGrid.Cells)
+        {
+            List<HexCell> neighborLandTiles = new List<HexCell>();
+            neighborLandTiles.PopulateListWithMatchingConditions(cell.Neighbors, (c) => c.IsLand == true);
+            if (neighborLandTiles.Count == 6)
+            {
+                cell.IsLand = true;
+                cell.Landmass = neighborLandTiles[0].Landmass;
             }
         }
 
@@ -145,7 +181,7 @@ public class WorldController : MonoBehaviour
 
         cell.HasHarbor = true;
         Harbors.Add(cell);
-        cell.PointOfInterest = new Harbor("Testharbor", worldUIView.ShowHarbor); 
+        cell.PointOfInterest = new Harbor("DEBUG HARBOR NAME", worldUIView.EnablePOIButton);
 
         List<HexDirection> openwaterConnections = new List<HexDirection>();
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)

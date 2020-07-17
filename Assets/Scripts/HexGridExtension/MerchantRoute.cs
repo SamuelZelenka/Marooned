@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MerchantRoute
 {
-    const int SPAWNRANGE = 5;
+    const int SPAWNRANGE = 1;
 
     public HexCell[] RouteStops
     {
@@ -22,7 +22,7 @@ public class MerchantRoute
         List<HexCell> cellsToTest = new List<HexCell>();
         foreach (HexCell harbor in RouteStops)
         {
-            cellsToTest.AddRange(Pathfinding.GetCellsWithinRange(harbor, SPAWNRANGE, true));
+            cellsToTest.AddRange(Pathfinding.GetCellsWithinRange(harbor, SPAWNRANGE, (c) => c.Traversable == true, (c) => c.IsOcean == true, (c) => c.IsFree == true));
         }
         while (cellsToTest.Count > 0)
         {

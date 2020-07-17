@@ -50,7 +50,8 @@ public class ActiveHexObject : HexObject
         {
             return;
         }
-        List<HexCell> cells = Location.GetNeighbors(true, false, false, false, true);
+        List<HexCell> cells = new List<HexCell>();
+        cells.PopulateListWithMatchingConditions(Location.Neighbors, (c) => c.Traversable == true, (c) => c.Unit != null);
 
         foreach (HexCell item in cells)
         {

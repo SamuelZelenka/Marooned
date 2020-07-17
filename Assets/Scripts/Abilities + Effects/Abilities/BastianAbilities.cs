@@ -29,7 +29,7 @@ public class GrabAndPull : Ability
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         effects.Add(new Displace(true, 1, true, true));
-        targeting = new SingleTargetRangeLine(range);
+        targeting = new SingleTargetRangeLine(range, true);
         base.SetDescriptionFromEffects();
     }
 }
