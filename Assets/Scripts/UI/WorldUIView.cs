@@ -5,29 +5,34 @@ using UnityEngine.UI;
 
 public class WorldUIView : MonoBehaviour
 {
-    public GameObject poiPanel;
-    public Text poiTextTitle;
-    public GameObject openPOIButton;
-
-    private PointOfInterest latestPOI;
+    
 
     private void OnEnable()
     {
-        HexUnit.OnUnitBeganMove += DisablePOIButton;
+        HexUnit.OnUnitBeganMove += DisablePOIInteraction;
+        HexUnit.OnUnitBeganMove += DisableCannonInteraction;
+        HexUnit.OnUnitBeganMove += DisableBoardingInteraction;
     }
 
     private void OnDisable()
     {
-        HexUnit.OnUnitBeganMove -= DisablePOIButton;
+        HexUnit.OnUnitBeganMove -= DisablePOIInteraction;
+        HexUnit.OnUnitBeganMove -= DisableCannonInteraction;
+        HexUnit.OnUnitBeganMove -= DisableBoardingInteraction;
     }
 
-    public void EnablePOIButton(PointOfInterest pointOfInterest)
+    #region POI
+    private PointOfInterest latestPOI;
+    public GameObject poiPanel;
+    public Text poiTextTitle;
+    public GameObject openPOIButton;
+    public void EnablePOIInteraction(PointOfInterest pointOfInterest)
     {
         openPOIButton.SetActive(true);
         latestPOI = pointOfInterest;
     }
 
-    public void DisablePOIButton(HexUnit unitMoved)
+    private void DisablePOIInteraction(HexUnit unitMoved)
     {
         if (unitMoved.playerControlled)
         {
@@ -40,4 +45,30 @@ public class WorldUIView : MonoBehaviour
         poiPanel.SetActive(true);
         poiTextTitle.text = latestPOI.name;
     }
+    #endregion
+
+    #region ShipToShip
+    public GameObject shootCannonButton;
+    public GameObject boardShipButton;
+
+    public void EnableBoardingInteraction()
+    {
+        boardShipButton.SetActive(true);
+    }
+
+    private void DisableBoardingInteraction(HexUnit unitMoved)
+    {
+        boardShipButton.SetActive(false);
+    }
+
+    public void EnableCannonInteraction()
+    {
+        shootCannonButton.SetActive(true);
+    }
+
+    private void DisableCannonInteraction(HexUnit unitMoved)
+    {
+        shootCannonButton.SetActive(false);
+    }
+    #endregion
 }

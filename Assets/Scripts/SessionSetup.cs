@@ -49,7 +49,7 @@ public class SessionSetup : MonoBehaviour
         Ship newShip = Instantiate(playerStarterShip);
         newShip.transform.SetParent(shipTransform);
 
-        worldGrid.AddUnit(newShip, worldController.GetRandomFreeHarbor(), HexDirectionExtension.ReturnRandomDirection(), true);
+        worldGrid.AddUnit(newShip, worldController.PlayerSpawnPosition, HexDirectionExtension.ReturnRandomDirection(), true);
 
         combatSystem.managementMap = playerStartingGridMap;
 

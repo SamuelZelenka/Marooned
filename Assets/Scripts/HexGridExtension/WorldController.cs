@@ -9,6 +9,7 @@ public class WorldController : MonoBehaviour
     MerchantRoute[] merchantRoutes;
     public List<HexCell> Harbors { private set; get; }
     public List<Landmass> Landmasses { private set; get; }
+    public HexCell PlayerSpawnPosition { private set; get; }
 
     [Header("Visuals")]
     public TileBase[] edgeTiles;
@@ -43,7 +44,7 @@ public class WorldController : MonoBehaviour
             int tries = 0;
 
             //Find harbors for route
-            HexCell startHarbor = GetRandomFreeHarbor();
+            HexCell startHarbor = Utility.ReturnRandomElementWithCondition(Harbors, (h) => h.Unit != null);
             setupShip.Location = startHarbor;
 
             int numberOfHarbors = Random.Range(setupData.merchantRouteMinHarbors, setupData.merchantRouteMaxHarbors + 1);
@@ -83,6 +84,9 @@ public class WorldController : MonoBehaviour
 
         //Remove Temporary Ship
         hexGrid.RemoveUnit(setupShip);
+
+        //Set player spawn position
+        PlayerSpawnPosition = Utility.ReturnRandom(CellFinder.GetCellsWithinRange(Harbors[0], 1, (c) => c.Traversable == true, (c) => c.Unit == null, (c) => c.IsOcean == true));
     }
 
     void CreateMap(SetupData setupData)
@@ -186,7 +190,7 @@ public class WorldController : MonoBehaviour
         {
             setupData.islandNames.RemoveAt(0);
         }
-        cell.PointOfInterest = new Harbor(harborName, worldUIView.EnablePOIButton);
+        cell.PointOfInterest = new Harbor(harborName, worldUIView.EnablePOIInteraction);
 
         List<HexDirection> openwaterConnections = new List<HexDirection>();
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
@@ -227,27 +231,6 @@ public class WorldController : MonoBehaviour
         }
 
         terrainTilemap.SetTile(tilemapPosition, tile);
-    }
-
-    public HexCell GetRandomFreeHarbor()
-    {
-        HexCell cell = null;
-
-        List<HexCell> cellsToTest = new List<HexCell>();
-        cellsToTest.AddRange(Harbors);
-
-        while (cellsToTest.Count > 0)
-        {
-            cell = Utility.ReturnRandom(cellsToTest);
-
-            if (cell != null && cell.Unit == null && cell.Traversable)
-            {
-                return cell;
-            }
-            cellsToTest.Remove(cell);
-        }
-        Debug.LogWarning("Could not find a free cell of the requested spawntype");
-        return null;
     }
 
     public HexCell GetRandomHarborWithinRange(Ship ship, int minDistance, int maxDistance)
