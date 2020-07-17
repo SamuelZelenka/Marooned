@@ -2,7 +2,7 @@
 
 public abstract class TargetType
 {
-    public abstract List<HexCell> GetValidTargets(HexCell fromCell);
+    public abstract List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable);
     public abstract List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell);
     public void GetAffectedCharacters(Character abilityUser, HexCell fromCell, HexCell targetCell, out List<Character> enemies, out List<Character> friendlies)
     {
@@ -34,9 +34,9 @@ public class SingleTargetAdjacent : TargetType
     {
         this.withUnit = withUnit;
     }
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
-        return CellFinder.GetAllAdjacent(fromCell, true, !withUnit, withUnit);
+        return CellFinder.GetAllAdjacentCells(fromCell, (c) => c.Traversable == true);
     }
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
@@ -48,9 +48,9 @@ public class SingleTargetAdjacent : TargetType
 
 public class SwipeAdjacent : TargetType
 {
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
-        return CellFinder.GetAllAdjacent(fromCell, true, false, false);
+        return CellFinder.GetAllAdjacentCells(fromCell, (c) => c.Traversable == true);
     }
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
@@ -59,12 +59,12 @@ public class SwipeAdjacent : TargetType
 
         //Sides
         HexDirection dirToSelected = HexDirectionExtension.GetDirectionToNeighbor(fromCell, targetCell);
-        HexCell previousCell = fromCell.GetNeighbor(dirToSelected.Previous(), true, false, false, false, false);
+        HexCell previousCell = Utility.TestVariableAgainstConditions(fromCell.GetNeighbor(dirToSelected.Previous()), (c) => c.Traversable == true);
         if (previousCell)
         {
             affectedCells.Add(previousCell);
         }
-        HexCell nextCell = fromCell.GetNeighbor(dirToSelected.Next(), true, false, false, false, false);
+        HexCell nextCell = Utility.TestVariableAgainstConditions(fromCell.GetNeighbor(dirToSelected.Next()), (c) => c.Traversable == true);
         if (nextCell)
         {
             affectedCells.Add(nextCell);
@@ -75,9 +75,9 @@ public class SwipeAdjacent : TargetType
 
 public class AnySingleTarget : TargetType
 {
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
-        return CellFinder.GetAllCells(fromCell.myGrid, true, true);
+        return CellFinder.GetAllCells(fromCell.myGrid, (c) => c.Traversable == true);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
@@ -96,9 +96,9 @@ public class SingleTargetRanged : TargetType
         this.range = range;
     }
 
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
-        return CellFinder.GetCellsWithinRange(fromCell, range, true, true);
+        return CellFinder.GetCellsWithinRange(fromCell, range, (c) => c.Traversable == true);
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
@@ -112,14 +112,23 @@ public class SingleTargetRanged : TargetType
 public class SingleTargetRangeLine : TargetType
 {
     int range;
-    public SingleTargetRangeLine(int range)
+    bool targetBlockedByFirstUnit;
+    public SingleTargetRangeLine(int range, bool targetBlockedByFirstUnit)
     {
         this.range = range;
+        this.targetBlockedByFirstUnit = targetBlockedByFirstUnit;
     }
 
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
-        return CellFinder.GetCellsInAllLines(fromCell, true, true, range, 0);
+        if (interactable && targetBlockedByFirstUnit)
+        {
+            return CellFinder.GetFirstCellInAllLines(fromCell, range, (c) => c.Traversable == true, (c) => c.Unit != null);
+        }
+        else
+        {
+            return CellFinder.GetFirstCellInAllLines(fromCell, range, (c) => c.Traversable == true);
+        }
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
@@ -134,22 +143,32 @@ public class CollateralRangeLine : TargetType
 {
     int range;
     int rangeAfterFirstHit;
-    public CollateralRangeLine(int range, int rangeAfterFirstHit)
+    bool targetBlockedByFirstUnit;
+    public CollateralRangeLine(int range, int rangeAfterFirstHit, bool targetBlockedByFirstUnit)
     {
         this.range = range;
         this.rangeAfterFirstHit = rangeAfterFirstHit;
+        this.targetBlockedByFirstUnit = targetBlockedByFirstUnit;
     }
 
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
-        return CellFinder.GetCellsInAllLines(fromCell, true, true, range, 0);
+        if (interactable && targetBlockedByFirstUnit)
+        {
+            return CellFinder.GetFirstCellInAllLines(fromCell, range, (c) => c.Traversable == true, (c) => c.Unit != null);
+        }
+        else
+        {
+            return CellFinder.GetFirstCellInAllLines(fromCell, range, (c) => c.Traversable == true);
+        }
     }
 
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
         List<HexCell> affectedCells = new List<HexCell>();
         HexDirection directionToTarget = HexDirectionExtension.GetDirectionTo(fromCell, targetCell);
-        affectedCells.AddRange(CellFinder.GetCellsInDirection(fromCell, directionToTarget, true, true, range, rangeAfterFirstHit));
+        affectedCells.Add(targetCell);
+        affectedCells.AddRange(CellFinder.GetAllCellsInLine(fromCell, directionToTarget, rangeAfterFirstHit, (c) => c.Traversable == true));
         return affectedCells;
     }
 }
@@ -167,7 +186,7 @@ public class AOE : TargetType
         this.selfOriginating = selfOriginating;
     }
 
-    public override List<HexCell> GetValidTargets(HexCell fromCell)
+    public override List<HexCell> GetValidTargetCells(HexCell fromCell, bool interactable)
     {
         List<HexCell> validCells = new List<HexCell>();
         if (selfOriginating)
@@ -176,7 +195,7 @@ public class AOE : TargetType
         }
         else
         {
-            validCells.AddRange(CellFinder.GetCellsWithinRange(fromCell, range, true, true));
+            validCells.AddRange(CellFinder.GetCellsWithinRange(fromCell, range, (c) => c.Traversable == true));
         }
         return validCells;
     }
@@ -184,7 +203,7 @@ public class AOE : TargetType
     public override List<HexCell> GetAffectedCells(HexCell fromCell, HexCell targetCell)
     {
         List<HexCell> affectedCells = new List<HexCell>();
-        affectedCells.AddRange(CellFinder.GetCellsWithinRange(targetCell, aoeRange, true, false));
+        affectedCells.AddRange(CellFinder.GetCellsWithinRange(targetCell, aoeRange, (c) => c.Traversable == true));
         affectedCells.Add(targetCell);
         return affectedCells;
     }

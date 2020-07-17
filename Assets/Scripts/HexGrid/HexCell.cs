@@ -44,7 +44,8 @@ public class HexCell : MonoBehaviour
             if (landmass != null)
             {
                 landmass.landCells.Add(this);
-                List<HexCell> landNeighbors = GetNeighbors(false, false, true, false, false);
+                List<HexCell> landNeighbors = new List<HexCell>();
+                landNeighbors.PopulateListWithMatchingConditions(Neighbors, (c) => c.IsLand == true);
                 foreach (var item in landNeighbors)
                 {
                     item.Landmass = value;
@@ -136,67 +137,67 @@ public class HexCell : MonoBehaviour
 
     #region Neighbors
     [SerializeField]
-    HexCell[] neighbors = null;
+    public HexCell[] Neighbors { get; } = new HexCell[6];
 
     public HexCell GetNeighbor(HexDirection direction)
     {
-        return neighbors[(int)direction];
-    }
-
-    public HexCell GetNeighbor(HexDirection direction, bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded, bool unitNeeded)
-    {
-        HexCell neighbor = GetNeighbor(direction);
-        if (neighbor == null)
-        {
-            return null;
-        }
-        if (traversableNeeded && !neighbor.Traversable)
-        {
-            return null;
-        }
-        if (freeNeeded && neighbor.Unit != null)
-        {
-            return null;
-        }
-        if (landNeeded && !neighbor.IsLand)
-        {
-            return null;
-        }
-        if (oceanNeeded && !neighbor.IsOcean)
-        {
-            return null;
-        }
-        if (unitNeeded && !neighbor.Unit)
-        {
-            return null;
-        }
-        return neighbor;
-    }
-
-    public List<HexCell> GetNeighbors(bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded, bool unitNeeded)
-    {
-        List<HexCell> allNeighbors = new List<HexCell>();
-        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-        {
-            HexCell neighbor = GetNeighbor(d, traversableNeeded, freeNeeded, landNeeded, oceanNeeded, unitNeeded);
-            if (neighbor != null)
-            {
-                allNeighbors.Add(neighbor);
-            }
-        }
-        return allNeighbors;
+        return Neighbors[(int)direction];
     }
 
     public void SetNeighbor(HexDirection direction, HexCell cell)
     {
-        HexCell neighbor = neighbors[(int)direction]; //Old neighbor
+        HexCell neighbor = Neighbors[(int)direction]; //Old neighbor
         if (neighbor)
         {
-            neighbor.neighbors[(int)direction.Opposite()] = null;
+            neighbor.Neighbors[(int)direction.Opposite()] = null;
         }
-        neighbors[(int)direction] = cell;
-        cell.neighbors[(int)direction.Opposite()] = this;
+        Neighbors[(int)direction] = cell;
+        cell.Neighbors[(int)direction.Opposite()] = this;
     }
+
+    //public HexCell GetNeighbor(HexDirection direction, params Func<HexCell, bool>[] conditions)
+    //{
+    //    HexCell neighbor = GetNeighbor(direction);
+    //    if (neighbor == null)
+    //    {
+    //        return null;
+    //    }
+    //    if (traversableNeeded && !neighbor.Traversable)
+    //    {
+    //        return null;
+    //    }
+    //    if (freeNeeded && neighbor.Unit != null)
+    //    {
+    //        return null;
+    //    }
+    //    if (landNeeded && !neighbor.IsLand)
+    //    {
+    //        return null;
+    //    }
+    //    if (oceanNeeded && !neighbor.IsOcean)
+    //    {
+    //        return null;
+    //    }
+    //    if (unitNeeded && !neighbor.Unit)
+    //    {
+    //        return null;
+    //    }
+    //    return neighbor;
+    //}
+
+    //public List<HexCell> GetNeighbors(bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded, bool unitNeeded)
+    //{
+    //    List<HexCell> allNeighbors = new List<HexCell>();
+    //    for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+    //    {
+    //        HexCell neighbor = GetNeighbor(d, traversableNeeded, freeNeeded, landNeeded, oceanNeeded, unitNeeded);
+    //        if (neighbor != null)
+    //        {
+    //            allNeighbors.Add(neighbor);
+    //        }
+    //    }
+    //    return allNeighbors;
+    //}
     #endregion
 
     #region Pathfinding

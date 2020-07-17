@@ -14,7 +14,7 @@ public class Quickdraw : Ability
         HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         effects.Add(new Damage(damage, true, true));
-        targeting = new CollateralRangeLine(range, rangeAfterFirstHit);
+        targeting = new CollateralRangeLine(range, rangeAfterFirstHit, true);
         base.SetDescriptionFromEffects();
     }
 }
@@ -51,7 +51,7 @@ public class Shockwave : Ability
         FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
         effects.Add(new Damage(damage, true, true));
         effects.Add(new Displace(false, 1, true, true));
-        targeting = new SingleTargetRangeLine(range);
+        targeting = new SingleTargetRangeLine(range, false);
         base.SetDescriptionFromEffects();
     }
 }

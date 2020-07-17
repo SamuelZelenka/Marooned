@@ -1,7 +1,7 @@
 ﻿public abstract class PointOfInterest
 {
     public delegate void PointOfInterestHandler(PointOfInterest pointOfInterest);
-    public PointOfInterestHandler OnInteractedWith;
+    public event PointOfInterestHandler OnInteractedWith;
 
     public string name;
 

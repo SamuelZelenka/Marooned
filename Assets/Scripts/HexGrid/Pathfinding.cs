@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public static class Pathfinding
 {
@@ -290,7 +291,7 @@ public static class Pathfinding
     /// <param name="fromCell"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public static List<HexCell> GetCellsWithinRange(HexCell fromCell, int range, bool traversableRequirement)
+    public static List<HexCell> GetCellsWithinRange(HexCell fromCell, int range, params Func<HexCell, bool>[] conditions)
     {
         ClearPath();
         //New unit == Clear old pathfinding
@@ -327,11 +328,8 @@ public static class Pathfinding
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = current.GetNeighbor(d);
+                neighbor = Utility.TestVariableAgainstConditions(neighbor, conditions);
                 if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
-                {
-                    continue;
-                }
-                if (traversableRequirement && !neighbor.Traversable)
                 {
                     continue;
                 }

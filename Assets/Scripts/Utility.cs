@@ -37,7 +37,7 @@ public static class Utility
     {
         if (a != null && b != null)
         {
-            if ( Random.Range(0, 100) > 50)
+            if (Random.Range(0, 100) > 50)
             {
                 return a;
             }
@@ -70,10 +70,36 @@ public static class Utility
         return default;
     }
 
-    public static IList<T> GetListVariableWithConditions<T>(this IList<T> outList, IList<T> inList, params Func<T, bool>[] conditions)
+    public static T TestVariableAgainstConditions<T>(T variable, params Func<T, bool>[] conditions)
+    {
+        if (variable == null)
+        {
+            return default(T);
+        }
+        bool flag = true;
+        foreach (var con in conditions)
+        {
+            if (!con.Invoke(variable))
+            {
+                flag = false;
+                break;
+            }
+        }
+        if (flag)
+        {
+            return variable;
+        }
+        return default(T);
+    }
+
+    public static IList<T> PopulateListWithMatchingConditions<T>(this IList<T> outList, IList<T> inList, params Func<T, bool>[] conditions)
     {
         foreach (var item in inList)
         {
+            if (item == null)
+            {
+                continue;
+            }
             bool flag = true;
             foreach (var con in conditions)
             {
@@ -91,16 +117,23 @@ public static class Utility
         return outList;
     }
 
-    public static T GetRandomVariableWithConditions<T>(this IList<T> inList, params Func<T, bool>[] conditions)
+    public static T ReturnRandomElementWithCondition<T>(this IList<T> inList, params Func<T, bool>[] conditions)
     {
-        IList<T> passedItems = new List<T>().GetListVariableWithConditions<T>(inList, conditions);
+        IList<T> passedItems = new List<T>().PopulateListWithMatchingConditions(inList, conditions);
         return passedItems[Random.Range(0, passedItems.Count)];
     }
 
-    public static T GetVariableWithConditions<T>(this IList<T> inList, Func<IList<T>, int> index, params Func<T, bool>[] conditions)
+    public static T ReturnElementWithCondition<T>(this IList<T> inList, Func<IList<T>, int> index, params Func<T, bool>[] conditions)
     {
-        IList<T> passedItems = new List<T>().GetListVariableWithConditions<T>(inList, conditions);
-        return passedItems[index.Invoke(passedItems)];
+        IList<T> passedItems = new List<T>().PopulateListWithMatchingConditions(inList, conditions);
+        if (passedItems.Count > 0)
+        {
+            return passedItems[index.Invoke(passedItems)];
+        }
+        else
+        {
+            return default(T);
+        }
     }
 
     /// <summary>
