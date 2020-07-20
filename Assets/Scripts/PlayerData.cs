@@ -14,6 +14,13 @@ public class PlayerData
 [System.Serializable]
 public class ShipData
 {
+    public const int WOOLDEFAULTVALUE = 1;
+    public const int TOBACCODEFAULTVALUE = 2;
+    public const int COFFEEDEFAULTVALUE = 3;
+    public const int SILKDEFAULTVALUE = 5;
+    public const int ORESDEFAULTVALUE = 10;
+
+
     public Resource Wool { get; private set; } = new Resource("Wool", 5);
     public Resource Tobacco { get; private set; } = new Resource("Tobacco", 2);
     public Resource Coffee { get; private set; } = new Resource("Coffee", 0);
