@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class WorldUIView : MonoBehaviour
 {
-    
-
     private void OnEnable()
     {
         HexUnit.OnUnitBeganMove += DisablePOIInteraction;
@@ -22,7 +20,7 @@ public class WorldUIView : MonoBehaviour
     }
 
     #region POI
-    private PointOfInterest latestPOI;
+    PointOfInterest latestPOI;
     public GameObject poiPanel;
     public Text poiTextTitle;
     public GameObject openPOIButton;
@@ -48,11 +46,15 @@ public class WorldUIView : MonoBehaviour
     #endregion
 
     #region ShipToShip
+
     public GameObject shootCannonButton;
     public GameObject boardShipButton;
+    List<Ship> cannonShootShips;
+    List<Ship> boardingShips;
 
-    public void EnableBoardingInteraction()
+    public void EnableBoardingInteraction(List<Ship> cannonShootShips)
     {
+        this.cannonShootShips = cannonShootShips;
         boardShipButton.SetActive(true);
     }
 
@@ -61,8 +63,9 @@ public class WorldUIView : MonoBehaviour
         boardShipButton.SetActive(false);
     }
 
-    public void EnableCannonInteraction()
+    public void EnableCannonInteraction(List<Ship> boardingShips)
     {
+        this.boardingShips = boardingShips;
         shootCannonButton.SetActive(true);
     }
 

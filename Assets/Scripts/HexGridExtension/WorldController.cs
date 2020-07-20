@@ -26,6 +26,17 @@ public class WorldController : MonoBehaviour
     [Header("Misc References")]
     [SerializeField] WorldUIView worldUIView = null;
 
+
+    private void OnEnable()
+    {
+        HexUnit.OnUnitMoved += CheckPlayerShipMove;
+    }
+
+    private void OnDisable()
+    {
+        HexUnit.OnUnitMoved -= CheckPlayerShipMove;
+    }
+
     public void Setup(HexGrid hexGrid, SetupData setupData)
     {
         this.hexGrid = hexGrid;
@@ -86,7 +97,7 @@ public class WorldController : MonoBehaviour
         hexGrid.RemoveUnit(setupShip);
 
         //Set player spawn position
-        PlayerSpawnPosition = Utility.ReturnRandom(CellFinder.GetCellsWithinRange(Harbors[0], 1, (c) => c.Traversable == true, (c) => c.Unit == null, (c) => c.IsOcean == true));
+        PlayerSpawnPosition = Utility.ReturnRandom(CellFinder.GetCellsWithinRange(Harbors[0], 2, (c) => c.Traversable == true, (c) => c.Unit == null, (c) => c.IsOcean == true));
     }
 
     void CreateMap(SetupData setupData)
@@ -268,5 +279,42 @@ public class WorldController : MonoBehaviour
 
         Player newMerchantPlayer = new Player(newShip, false);
         MapTurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
+    }
+
+    private void CheckPlayerShipMove(HexUnit unitMoved)
+    {
+        if (unitMoved.playerControlled)
+        {
+            //Cannon range
+            int cannonRange = 2;
+            List<HexCell> cellsWithinCannonRange = CellFinder.GetCellsWithinRange(unitMoved.Location, cannonRange, (c) => c.Unit != null);
+            List<Ship> cannonShootShips = new List<Ship>();
+            foreach (var item in cellsWithinCannonRange)
+            {
+                if (item.Unit is Ship)
+                {
+                    cannonShootShips.Add(item.Unit as Ship);
+                }
+            }
+            if (cannonShootShips.Count > 0)
+            {
+                worldUIView.EnableCannonInteraction(cannonShootShips);
+            }
+
+            //Boarding range
+            List<HexCell> cellsWithUnitsToBoard = CellFinder.GetAllAdjacentCells(unitMoved.Location, (c) => c.Unit != null);
+            List<Ship> boardingShips = new List<Ship>();
+            foreach (var item in cellsWithUnitsToBoard)
+            {
+                if (item.Unit is Ship)
+                {
+                    boardingShips.Add(item.Unit as Ship);
+                }
+            }
+            if (boardingShips.Count > 0)
+            {
+                worldUIView.EnableBoardingInteraction(boardingShips);
+            }
+        }
     }
 }

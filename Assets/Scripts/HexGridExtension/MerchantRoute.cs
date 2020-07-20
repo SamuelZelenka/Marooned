@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MerchantRoute
 {
-    const int SPAWNRANGE = 1;
+    const int SPAWNRANGE = 2;
 
     public HexCell[] RouteStops
     {

@@ -26,10 +26,11 @@ public class SessionSetup : MonoBehaviour
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
     {
+        setupData.SetSeed();
         if (!HexMetrics.noiseSource)
         {
             HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(setupData.seed);
+            HexMetrics.InitializeHashGrid(setupData.Seed);
         }
 
         worldGrid.CreateMap(setupData.mapCellCountX, setupData.mapCellCountY, true, true, true);
@@ -70,7 +71,9 @@ public class SessionSetup : MonoBehaviour
 [System.Serializable]
 public class SetupData
 {
-    public int seed;
+    const int SEEDMAXCHARS = 10;
+    public int Seed { get; private set; }
+    public string stringSeed; 
     public int mapCellCountX = 20, mapCellCountY = 15;
     public int numberOfMerchantRoutes = 5;
     public int merchantRouteMinLength = 10;
@@ -81,4 +84,13 @@ public class SetupData
     public float landByLandChance = 0.25f;
     public int landMassMaxSize = 15;
     public List<string> islandNames = new List<string>(1);
+
+    public void SetSeed()
+    {
+        char[] chars = stringSeed.ToCharArray();
+        for (int i = 0; i < chars.Length && i < SEEDMAXCHARS; i++)
+        {
+            Seed += chars[i].GetHashCode();
+        }
+    }
 }
