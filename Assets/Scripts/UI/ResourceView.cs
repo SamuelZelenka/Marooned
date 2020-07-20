@@ -8,16 +8,24 @@ public class ResourceView : MonoBehaviour
     [SerializeField] Text interactNumber = null;
     [SerializeField] Slider slider = null;
     [SerializeField] Button interactableActionButton = null;
+    int valuePerItem;
+    [SerializeField] Text valuePerItemText = null;
+    [SerializeField] string interactableButtonMainText = "Sell";
+    [SerializeField] Text interactableButtonText = null;
 
-    public void Setup(ShipData.Resource resource, bool showButtonsAndSliders)
+
+    public void Setup(ShipData.Resource resource, bool showButtonsAndSliders, int valuePerItem)
     {
         interactNumber.text = "0";
+        this.valuePerItem = valuePerItem;
+        this.valuePerItemText.text = "£" + valuePerItem.ToString();
+
         if (showButtonsAndSliders)
         {
             slider.maxValue = resource.value;
-            slider.value = 0;
             slider.interactable = resource.value > 0;
-            interactableActionButton.interactable = false;
+            ChangeSelectedValue(0f);
+            slider.value = 0f;
         }
     }
 
@@ -26,8 +34,8 @@ public class ResourceView : MonoBehaviour
     public void ChangeSelectedValue(float dynamicFloat)
     {
         int number = Mathf.RoundToInt(dynamicFloat);
-        slider.value = number;
         interactNumber.text = number.ToString();
         interactableActionButton.interactable = number > 0;
+        interactableButtonText.text = interactableButtonMainText + " (£" + (valuePerItem * number).ToString() + ")";
     }
 }

@@ -34,6 +34,7 @@ public class Player
     {
         Crew = new List<Character>();
         this.Ship = ship;
+        ship.Setup(new ShipData());
         IsHuman = humanControlled;
         this.crewSimulation = null;
     }

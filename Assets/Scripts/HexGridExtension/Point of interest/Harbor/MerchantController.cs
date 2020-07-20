@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MerchantController : MonoBehaviour
 {
     [SerializeField] ResourceView[] resources = null;
+    [SerializeField] Text sellAllButtonText = null;
     public Harbor myHarbor;
 
     public void Setup()
@@ -13,35 +15,48 @@ public class MerchantController : MonoBehaviour
         {
             UpdateUI((ResourceType)i);
         }
+        SetSellAllButtontext();
     }
 
     void UpdateUI(ResourceType resourceType)
     {
         ShipData playerShipData = HexGridController.player.PlayerData.ShipData;
-        resources[(int)resourceType].Setup(playerShipData.GetResource(resourceType), true);
+        resources[(int)resourceType].Setup(playerShipData.GetResource(resourceType), true, myHarbor.GetResourceValue(resourceType));
+        SetSellAllButtontext();
     }
 
-    void SellResource(ResourceType resourceType)
+    void SellResource(ResourceType resourceType, int numbersOfItemsToSell)
     {
         PlayerData playerData = HexGridController.player.PlayerData;
-
-        //Sell resource
-        int selectedNumber = Mathf.RoundToInt(resources[(int)resourceType].GetSliderValue());
-        playerData.ShipData.GetResource(resourceType).value -= selectedNumber; //Remove from player
-        playerData.Gold += selectedNumber * myHarbor.GetResourceValue(resourceType);
+        playerData.ShipData.GetResource(resourceType).value -= numbersOfItemsToSell; //Remove from player
+        playerData.Gold += numbersOfItemsToSell * myHarbor.GetResourceValue(resourceType);
         Debug.Log(playerData.Gold.ToString());
         UpdateUI(resourceType);
     }
 
     //Button call
-    public void SellResource(int resourceIndex) => SellResource((ResourceType)resourceIndex);
+    public void SellResource(int resourceIndex) => SellResource((ResourceType)resourceIndex, Mathf.RoundToInt(resources[resourceIndex].GetSliderValue()));
 
     //Button call
     public void SellAllResources()
     {
+        ShipData playerShipData = HexGridController.player.PlayerData.ShipData;
         for (int i = 0; i < (int)ResourceType.MAX; i++)
         {
-            SellResource(i);
+            ResourceType resourceType = (ResourceType)i;
+            int numbers = playerShipData.GetResource(resourceType).value;
+            SellResource(resourceType, numbers);
         }
+    }
+
+    void SetSellAllButtontext()
+    {
+        ShipData playerShipData = HexGridController.player.PlayerData.ShipData;
+        int totalValue = 0;
+        for (int i = 0; i < (int)ResourceType.MAX; i++)
+        {
+            totalValue += playerShipData.GetResource((ResourceType)i).value * myHarbor.GetResourceValue((ResourceType)i);
+        }
+        sellAllButtonText.text = $"Sell All (£{totalValue.ToString()})";
     }
 }
