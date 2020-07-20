@@ -7,6 +7,7 @@ public class Player
     public Ship Ship { get; private set; }
     public bool IsHuman { get; private set; }
     CrewSimulation crewSimulation;
+    public PlayerData PlayerData { get; private set; }
 
     /// <summary>
     /// Creates a human controlled player
@@ -16,8 +17,10 @@ public class Player
     /// <param name="crewSimulation"></param>
     public Player(Ship ship, bool humanControlled, CrewSimulation crewSimulation)
     {
+        PlayerData = new PlayerData();
         Crew = new List<Character>();
         this.Ship = ship;
+        ship.Setup(PlayerData.ShipData);
         IsHuman = humanControlled;
         this.crewSimulation = crewSimulation;
     }

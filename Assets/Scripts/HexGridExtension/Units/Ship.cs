@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 public class Ship : HexUnit
 {
-    public delegate void ShipHandler();
-    public event ShipHandler OnShipBoarded;
+    public delegate void ShipInteractionHandler(Ship thisShip, Ship otherShip);
+    public event ShipInteractionHandler OnShipBoarded;
 
     [SerializeField] ShipViewer shipViewer = null;
     public ShipViewer ShipViewer { get => shipViewer; }
 
-    ShipData shipData = new ShipData();
+    public ShipData ShipData { get; protected set; }
+
     #region Stats
     int hull = 25, maxHull = 25;
     public int Hull
@@ -55,12 +56,12 @@ public class Ship : HexUnit
     public bool IsOverStorageLimit()
     {
         int tonnage = 0;
-        tonnage += shipData.Wool.value;
-        tonnage += shipData.Tobacco.value;
-        tonnage += shipData.Coffee.value;
-        tonnage += shipData.Silk.value;
-        tonnage += shipData.Ores.value;
-        return tonnage > shipData.maxTonnage;
+        tonnage += ShipData.Wool.value;
+        tonnage += ShipData.Tobacco.value;
+        tonnage += ShipData.Coffee.value;
+        tonnage += ShipData.Silk.value;
+        tonnage += ShipData.Ores.value;
+        return tonnage > ShipData.maxTonnage;
     }
     #endregion
 
@@ -155,6 +156,11 @@ public class Ship : HexUnit
     
     #endregion
 
+    public void Setup(ShipData shipData)
+    {
+        ShipData = shipData;
+    }
+
     public override bool CanEnter(HexCell cell)
     {
         if (cell.Unit)
@@ -240,8 +246,8 @@ public class Ship : HexUnit
     {
         Board(HexGridController.player.Ship);
     }
-    public void Board(Ship ship)
+    public void Board(Ship boardedBy)
     {
-        OnShipBoarded?.Invoke();
+        OnShipBoarded?.Invoke(this, boardedBy);
     }
 }

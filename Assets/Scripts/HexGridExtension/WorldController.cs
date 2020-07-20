@@ -262,8 +262,8 @@ public class WorldController : MonoBehaviour
     {
         MerchantShip newShip = Instantiate(aiMerchantShip);
         newShip.transform.SetParent(shipParent);
-
         newShip.Setup(route);
+
         //Delegates
         newShip.OnShipBoarded += worldUIView.OpenBoardingView;
 

@@ -4,22 +4,44 @@ using UnityEngine;
 
 public class MerchantController : MonoBehaviour
 {
-    [SerializeField] MerchantResource[] resourceObjects;
-    Harbor myHarbor;
+    [SerializeField] ResourceView[] resources = null;
+    public Harbor myHarbor;
 
-    void UpdateUI(/* INSERT RESOURCE ENUM */)
+    public void Setup()
     {
-        for (int i = 0; i < resourceObjects.Length; i++)
+        for (int i = 0; i < resources.Length; i++)
         {
-            resourceObjects[i].UpdateUI(myHarbor.merchantData);
+            UpdateUI((ResourceType)i);
         }
     }
-    void SellResource(/* INSERT RESOURCE ENUM */)
+
+    void UpdateUI(ResourceType resourceType)
     {
-        UpdateUI();
+        ShipData playerShipData = HexGridController.player.PlayerData.ShipData;
+        resources[(int)resourceType].Setup(playerShipData.GetResource(resourceType), true);
     }
-    void SellAll(/* INSERT RESOURCE ENUM */)
+
+    void SellResource(ResourceType resourceType)
     {
-        SellResource(/* INSERT RESOURCE ENUM */);
+        PlayerData playerData = HexGridController.player.PlayerData;
+
+        //Sell resource
+        int selectedNumber = Mathf.RoundToInt(resources[(int)resourceType].GetSliderValue());
+        playerData.ShipData.GetResource(resourceType).value -= selectedNumber; //Remove from player
+        playerData.Gold += selectedNumber * myHarbor.GetResourceValue(resourceType);
+        Debug.Log(playerData.Gold.ToString());
+        UpdateUI(resourceType);
+    }
+
+    //Button call
+    public void SellResource(int resourceIndex) => SellResource((ResourceType)resourceIndex);
+
+    //Button call
+    public void SellAllResources()
+    {
+        for (int i = 0; i < (int)ResourceType.MAX; i++)
+        {
+            SellResource(i);
+        }
     }
 }

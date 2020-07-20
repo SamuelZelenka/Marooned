@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class WorldUIView : MonoBehaviour
 {
     [SerializeField] GameObject poiPanel = null;
-    [SerializeField] Text poiTextTitle = null;
+    [SerializeField] HarborView harborView = null;
     [SerializeField] GameObject openPOIButton = null;
     [SerializeField] GameObject boardingPanel = null;
+    [SerializeField] ShipInspectView shipInspectView = null;
 
     private void OnEnable()
     {
@@ -32,26 +33,30 @@ public class WorldUIView : MonoBehaviour
 
     private void DisablePOIInteraction(HexUnit unitMoved)
     {
-        if (unitMoved.playerControlled)
-        {
-            openPOIButton.SetActive(false);
-        }
+        openPOIButton.SetActive(false);
     }
 
     public void OpenPOI()
     {
         poiPanel.SetActive(true);
-        poiTextTitle.text = latestPOI.name;
+        switch (latestPOI.MyType)
+        {
+            case PointOfInterest.Type.Harbor:
+                harborView.Setup(latestPOI as Harbor);
+                break;
+        }
     }
     #endregion
 
-    public void OpenBoardingView() => boardingPanel.SetActive(true);
+    public void OpenBoardingView(Ship boardedShip, Ship boardedByShip)
+    {
+        boardingPanel.SetActive(true);
+        //Display Resources for the boarded ship
+        shipInspectView.Setup(boardedShip.ShipData);
+    }
 
     private void CloseBoardingView(HexUnit unitMoved)
     {
-        if (unitMoved.playerControlled)
-        {
-            boardingPanel.SetActive(false);
-        }
+        boardingPanel.SetActive(false);
     }
 }
