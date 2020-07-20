@@ -91,10 +91,10 @@ public class CrewSimulation : MonoBehaviour
                 }
                 break;
             case ShipJob.Spotter:
-                playerShip.currentVisionRange = playerShip.defaultVisionRange;
+                playerShip.CurrentVisionRange = playerShip.defaultVisionRange;
                 if (positionFilled)
                 {
-                    playerShip.currentVisionRange += spotterVision;
+                    playerShip.CurrentVisionRange += spotterVision;
                 }
                 break;
             case ShipJob.Clean:

@@ -21,8 +21,6 @@ public abstract class HexUnit : MonoBehaviour
     public bool playerControlled;
     public HexGrid myGrid;
 
-    public int currentVisionRange, defaultVisionRange;
-
     public bool IsMoving
     {
         get => pathToTravel != null && pathToTravel.Count > 0;
@@ -48,6 +46,7 @@ public abstract class HexUnit : MonoBehaviour
                 ShowReachableCells(true);
             }
             OnUnitMoved?.Invoke(this);
+            CheckInteractableCells();
         }
     }
 
@@ -193,6 +192,8 @@ public abstract class HexUnit : MonoBehaviour
         transform.localPosition = location.Position;
         pathToTravel = null; //Clear the list
     }
+
+    protected virtual void CheckInteractableCells() { }
 
     public void Despawn()
     {

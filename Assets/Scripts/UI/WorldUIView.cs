@@ -5,25 +5,25 @@ using UnityEngine.UI;
 
 public class WorldUIView : MonoBehaviour
 {
+    [SerializeField] GameObject poiPanel = null;
+    [SerializeField] Text poiTextTitle = null;
+    [SerializeField] GameObject openPOIButton = null;
+    [SerializeField] GameObject boardingPanel = null;
+
     private void OnEnable()
     {
         HexUnit.OnUnitBeganMove += DisablePOIInteraction;
-        HexUnit.OnUnitBeganMove += DisableCannonInteraction;
-        HexUnit.OnUnitBeganMove += DisableBoardingInteraction;
+        HexUnit.OnUnitBeganMove += CloseBoardingView;
     }
 
     private void OnDisable()
     {
         HexUnit.OnUnitBeganMove -= DisablePOIInteraction;
-        HexUnit.OnUnitBeganMove -= DisableCannonInteraction;
-        HexUnit.OnUnitBeganMove -= DisableBoardingInteraction;
+        HexUnit.OnUnitBeganMove -= CloseBoardingView;
     }
 
     #region POI
     PointOfInterest latestPOI;
-    public GameObject poiPanel;
-    public Text poiTextTitle;
-    public GameObject openPOIButton;
     public void EnablePOIInteraction(PointOfInterest pointOfInterest)
     {
         openPOIButton.SetActive(true);
@@ -45,33 +45,13 @@ public class WorldUIView : MonoBehaviour
     }
     #endregion
 
-    #region ShipToShip
+    public void OpenBoardingView() => boardingPanel.SetActive(true);
 
-    public GameObject shootCannonButton;
-    public GameObject boardShipButton;
-    List<Ship> cannonShootShips;
-    List<Ship> boardingShips;
-
-    public void EnableBoardingInteraction(List<Ship> cannonShootShips)
+    private void CloseBoardingView(HexUnit unitMoved)
     {
-        this.cannonShootShips = cannonShootShips;
-        boardShipButton.SetActive(true);
+        if (unitMoved.playerControlled)
+        {
+            boardingPanel.SetActive(false);
+        }
     }
-
-    private void DisableBoardingInteraction(HexUnit unitMoved)
-    {
-        boardShipButton.SetActive(false);
-    }
-
-    public void EnableCannonInteraction(List<Ship> boardingShips)
-    {
-        this.boardingShips = boardingShips;
-        shootCannonButton.SetActive(true);
-    }
-
-    private void DisableCannonInteraction(HexUnit unitMoved)
-    {
-        shootCannonButton.SetActive(false);
-    }
-    #endregion
 }
