@@ -345,7 +345,9 @@ MonoBehaviour:
   terrainTilemap: {fileID: 9168233259446616549}
   featuresTilemap: {fileID: 9168233258662114740}
   shipParent: {fileID: 9168233259177120562}
-  aiMerchantShip: {fileID: 6092528759528069180, guid: f1e7905e4deb4bb49b4972068cbbf14c,
+  merchantShip: {fileID: 6092528759528069180, guid: f1e7905e4deb4bb49b4972068cbbf14c,
+    type: 3}
+  redcoatShip: {fileID: 4672618326803284631, guid: 28823dfdebec3f9478d175cd3c13ca2b,
     type: 3}
   worldUIView: {fileID: 9168233259189303595}
 --- !u!1 &9168233258662114741

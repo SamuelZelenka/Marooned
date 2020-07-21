@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class MerchantShip : Ship
 {
-    MerchantRoute route;
+    Route route;
     int routeIndex = 0;
 
-    public void Setup(MerchantRoute route)
+    public void Setup(Route route)
     {
         this.route = route;
     }
@@ -17,29 +17,35 @@ public class MerchantShip : Ship
     {
         if (target)
         {
-            Debug.Log("Moving from" + Location.coordinates + " to " + target.coordinates);
+            //Debug.Log("Moving from" + Location.coordinates + " to " + target.coordinates);
             yield return MoveToTarget();
         }
         else
         {
             target = FindTarget();
-            Debug.Log("AI Finding path from " + Location.coordinates.ToString() + " to " + target.coordinates.ToString());
+            //Debug.Log("AI Finding path from " + Location.coordinates.ToString() + " to " + target.coordinates.ToString());
             yield return MoveToTarget();
         }
     }
 
+    const int maxSearchRange = 4;
     IEnumerator MoveToTarget()
     {
         Pathfinding.FindPath(Location, target, this, playerControlled);
-        int tries = 0;
-        while (!Pathfinding.HasPath && tries < 100) //Target unreachable
+        int searchRange = 1;
+        while (!Pathfinding.HasPath && searchRange <= maxSearchRange)
         {
-            HexCell adjacentToTarget = target.GetNeighbor(HexDirectionExtension.ReturnRandomDirection());
-            if (adjacentToTarget)
+            Debug.Log("Checking alternative path with merchant");
+            List<HexCell> alternativeTargetCells = CellFinder.GetCellsWithinRange(target, searchRange, (c) => c.Traversable == true, (c) => c.IsFree);
+            foreach (var item in alternativeTargetCells)
             {
-                Pathfinding.FindPath(Location, adjacentToTarget, this, playerControlled);
+                Pathfinding.FindPath(Location, item, this, playerControlled);
+                if (Pathfinding.HasPath)
+                {
+                    break;
+                }
             }
-            tries++;
+            searchRange *= 2;
         }
         if (Pathfinding.HasPath)
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MerchantRoute
+public class Route
 {
     const int SPAWNRANGE = 2;
 
@@ -12,17 +12,17 @@ public class MerchantRoute
         private set;
     }
 
-    public MerchantRoute(HexCell[] harborCells)
+    public Route(HexCell[] stops)
     {
-        RouteStops = harborCells;
+        RouteStops = stops;
     }
 
     public HexCell GetSpawnableLocation()
     {
         List<HexCell> cellsToTest = new List<HexCell>();
-        foreach (HexCell harbor in RouteStops)
+        foreach (HexCell stop in RouteStops)
         {
-            cellsToTest.AddRange(Pathfinding.GetCellsWithinRange(harbor, SPAWNRANGE, (c) => c.Traversable == true, (c) => c.IsOcean == true, (c) => c.IsFree == true));
+            cellsToTest.AddRange(Pathfinding.GetCellsWithinRange(stop, SPAWNRANGE, (c) => c.Traversable == true, (c) => c.IsOcean == true, (c) => c.IsFree == true));
         }
         while (cellsToTest.Count > 0)
         {

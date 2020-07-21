@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class WorldController : MonoBehaviour
 {
     HexGrid hexGrid;
-    MerchantRoute[] merchantRoutes;
+    Route[] merchantRoutes;
     public List<HexCell> Harbors { private set; get; }
     public List<Landmass> Landmasses { private set; get; }
     public HexCell PlayerSpawnPosition { private set; get; }
@@ -19,9 +19,10 @@ public class WorldController : MonoBehaviour
     public Tilemap terrainTilemap;
     public Tilemap featuresTilemap;
 
-    [Header("Merchants and AI")]
+    [Header("Ships and AI")]
     [SerializeField] Transform shipParent = null;
-    [SerializeField] MerchantShip aiMerchantShip = null;
+    [SerializeField] MerchantShip merchantShip = null;
+    [SerializeField] PatrolShip redcoatShip = null;
 
     [Header("Misc References")]
     [SerializeField] WorldUIView worldUIView = null;
@@ -29,14 +30,14 @@ public class WorldController : MonoBehaviour
     public void Setup(HexGrid hexGrid, SetupData setupData)
     {
         this.hexGrid = hexGrid;
-        merchantRoutes = new MerchantRoute[setupData.numberOfMerchantRoutes];
+        merchantRoutes = new Route[setupData.numberOfMerchantRoutes];
         Harbors = new List<HexCell>();
         Landmasses = new List<Landmass>();
 
         CreateMap(setupData);
 
         //Add temporary ship to do pathfinding and finding harbors
-        MerchantShip setupShip = Instantiate(aiMerchantShip.gameObject).GetComponent<MerchantShip>();
+        MerchantShip setupShip = Instantiate(merchantShip.gameObject).GetComponent<MerchantShip>();
         hexGrid.AddUnit(setupShip, Harbors[0], false);
 
         for (int i = 0; i < merchantRoutes.Length; i++)
@@ -76,10 +77,13 @@ public class WorldController : MonoBehaviour
             }
 
             //Create route between harbors
-            merchantRoutes[i] = new MerchantRoute(harbors.ToArray());
+            merchantRoutes[i] = new Route(harbors.ToArray());
 
             //Spawn a Merchant ship on the new route
             CreateMerchantPlayer(merchantRoutes[i]);
+
+            //Spawn a Redcoat patrolship on the new route
+            CreateRedcoatPlayer(merchantRoutes[i]);
         }
 
         //Remove Temporary Ship
@@ -257,10 +261,10 @@ public class WorldController : MonoBehaviour
         return null;
     }
 
-    //Creates an AI controlled merchant player from a prefab and spawns a ship and adds it to the controller
-    private void CreateMerchantPlayer(MerchantRoute route)
+    //Creates an AI controlled merchant player with a ship and adds it to controllers
+    private void CreateMerchantPlayer(Route route)
     {
-        MerchantShip newShip = Instantiate(aiMerchantShip);
+        MerchantShip newShip = Instantiate(merchantShip);
         newShip.transform.SetParent(shipParent);
         newShip.Setup(route);
 
@@ -272,5 +276,37 @@ public class WorldController : MonoBehaviour
 
         Player newMerchantPlayer = new Player(newShip, false);
         MapTurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
+    }
+
+    //Creates an AI controlled Redcoat player with a ship and adds it to controllers
+    private void CreateRedcoatPlayer(Route route)
+    {
+        PatrolShip newShip = Instantiate(redcoatShip);
+        newShip.transform.SetParent(shipParent);
+        newShip.Setup(route);
+
+        //Delegates
+        newShip.OnShipBoarded += worldUIView.OpenBoardingView;
+        newShip.OnShipInspected += worldUIView.OpenInspectView;
+
+        hexGrid.AddUnit(newShip, route.GetSpawnableLocation(), HexDirectionExtension.ReturnRandomDirection(), false);
+
+        Player newRedcoatPlayer = new Player(newShip, false);
+        MapTurnSystem.instance.AddPlayerToTurnOrder(newRedcoatPlayer);
+    }
+
+    public static readonly int[] BOUNTYLEVELTHRESHOLDS = new int[] { 1, 20, 40, 60, 80, 100 };
+    public static readonly int[] BOUNTYLEVELVISION = new int[] { 1, 2, 2, 3, int.MaxValue, int.MaxValue};
+    public static int PlayerBountyVisionRange(int bountyLevel)
+    {
+        int vision = 0;
+        for (int i = 0; i < BOUNTYLEVELTHRESHOLDS.Length; i++)
+        {
+            if (bountyLevel >= BOUNTYLEVELTHRESHOLDS[i])
+            {
+                vision = BOUNTYLEVELVISION[i];
+            }
+        }
+        return vision;
     }
 }

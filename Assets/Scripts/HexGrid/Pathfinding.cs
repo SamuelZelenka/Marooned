@@ -40,7 +40,6 @@ public static class Pathfinding
     static bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
         searchFrontierPhase += 2;
-        Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
@@ -217,7 +216,6 @@ public static class Pathfinding
         List<HexCell> reachableCells = new List<HexCell>();
 
         searchFrontierPhase += 2;
-        Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
@@ -306,7 +304,6 @@ public static class Pathfinding
         List<HexCell> cellsInRange = new List<HexCell>();
 
         searchFrontierPhase += 2;
-        Debug.Log("Searchfrontier phase is " + searchFrontierPhase.ToString());
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
