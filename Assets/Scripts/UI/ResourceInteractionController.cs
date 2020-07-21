@@ -10,17 +10,18 @@ public class ResourceInteractionController : MonoBehaviour
     [SerializeField] ResourceView[] resources = null;
     [SerializeField] GameObject[] interactButtonObjects = null;
     [SerializeField] Text interactButtonText = null;
+    [SerializeField] Text totalValueText = null;
     Harbor myHarbor;
     ShipData activeShipData = null;
 
     private void OnEnable()
     {
-        ResourceView.OnSliderValueChanged += SetInteractButtonText;
+        ResourceView.OnSliderValueChanged += SetTexts;
     }
 
     private void OnDisable()
     {
-        ResourceView.OnSliderValueChanged -= SetInteractButtonText;
+        ResourceView.OnSliderValueChanged -= SetTexts;
     }
 
     /// <summary>
@@ -35,7 +36,7 @@ public class ResourceInteractionController : MonoBehaviour
         {
             UpdateUI((ResourceType)i, true);
         }
-        SetInteractButtonText();
+        SetTexts();
     }
 
     /// <summary>
@@ -55,7 +56,7 @@ public class ResourceInteractionController : MonoBehaviour
         {
             UpdateUI((ResourceType)i, boarding);
         }
-        SetInteractButtonText();
+        SetTexts();
     }
 
     void UpdateUI(ResourceType resourceType, bool interactable)
@@ -69,7 +70,7 @@ public class ResourceInteractionController : MonoBehaviour
                 resources[(int)resourceType].Setup(activeShipData.GetResource(resourceType), interactable, ShipData.GetDefaultValue(resourceType));
                 break;
         }
-        SetInteractButtonText();
+        SetTexts();
     }
 
     //Button call
@@ -81,9 +82,10 @@ public class ResourceInteractionController : MonoBehaviour
         }
     }
 
-    void SetInteractButtonText()
+    void SetTexts()
     {
         int totalValue = 0;
+        int totalSelectedValue = 0;
         for (int i = 0; i < resources.Length; i++)
         {
             ResourceType resourceType = (ResourceType)i;
@@ -100,19 +102,22 @@ public class ResourceInteractionController : MonoBehaviour
                     break;
             }
 
-            totalValue += Mathf.RoundToInt(resources[i].GetSliderValue()) * valueOfItem;
+            totalValue += activeShipData.GetResource(resourceType).Value * valueOfItem;
+            totalSelectedValue += Mathf.RoundToInt(resources[i].GetSliderValue()) * valueOfItem;
         }
 
         switch (mode)
         {
             case Mode.Merchant:
-                interactButtonText.text = $"Sell Marked Items (£{totalValue.ToString()})";
+                interactButtonText.text = $"Sell Marked Items (£{totalSelectedValue.ToString()})";
                 break;
             case Mode.Boarding:
-                interactButtonText.text = $"Steal Marked Items (£{totalValue.ToString()})";
+                interactButtonText.text = $"Steal Marked Items (£{totalSelectedValue.ToString()})";
                 break;
         }
+        totalValueText.text = $"Total Value: {totalValue}";
     }
+
 
     #region Merchant
     void SellResource(ResourceType resourceType, int numbersOfItemsToSell)

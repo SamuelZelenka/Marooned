@@ -8,6 +8,7 @@ public class ResourceView : MonoBehaviour
     [SerializeField] Text numberText = null;
     [SerializeField] Slider slider = null;
     int valuePerItem;
+    int maxNumber;
     [SerializeField] Text valuePerItemText = null;
 
     public delegate void ResourceViewHandler();
@@ -15,7 +16,8 @@ public class ResourceView : MonoBehaviour
 
     public void Setup(ShipData.Resource resource, bool showButtonsAndSliders, int valuePerItem)
     {
-        numberText.text = showButtonsAndSliders ? "0" : resource.Value.ToString();
+        maxNumber = resource.Value;
+        numberText.text = showButtonsAndSliders ? $"0 / {maxNumber}" : resource.Value.ToString();
         this.valuePerItem = valuePerItem;
         this.valuePerItemText.text = "£" + valuePerItem.ToString();
 
@@ -36,7 +38,7 @@ public class ResourceView : MonoBehaviour
     public void ChangeSelectedValue(float dynamicFloat)
     {
         int number = Mathf.RoundToInt(dynamicFloat);
-        numberText.text = number.ToString();
+        numberText.text = $"{number.ToString()} / {maxNumber}";
         OnSliderValueChanged?.Invoke();
     }
 }
