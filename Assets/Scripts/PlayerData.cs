@@ -12,8 +12,6 @@ public class PlayerData
     public DataHandler OnGoldChanged;
 
     List<CharacterData> characters;
-    public ShipData ShipData { get; private set; } = new ShipData();
-
     public ResourceInventory Resources { get; private set; } = new ResourceInventory();
     int gold;
     public int Gold {
