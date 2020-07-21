@@ -13,7 +13,7 @@ public class PlayerData
 
     List<CharacterData> characters;
     public ShipData ShipData { get; private set; } = new ShipData();
-    int gold;
+    int gold = 22;
     public int Gold {
         get { return gold; }
         set

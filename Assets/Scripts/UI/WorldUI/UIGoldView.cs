@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class UIBountyLevelView : MonoBehaviour
+public class UIGoldView : MonoBehaviour
 {
-    [SerializeField] Bar bountyLevel;
+    [SerializeField] Text gold;
     private void OnDisable()
     {
         if (HexGridController.player != null)
@@ -16,12 +19,11 @@ public class UIBountyLevelView : MonoBehaviour
         if (HexGridController.player != null)
         {
             HexGridController.player.PlayerData.OnBountyChanged += UpdateUI;
-            bountyLevel.SetMaxValue(PlayerData.MAXBOUNTYLEVEL);
             UpdateUI();
         }
     }
     void UpdateUI()
     {
-        bountyLevel.SetCurrentValue(HexGridController.player.PlayerData.BountyLevel);
+        gold.text = HexGridController.player.PlayerData.Gold.ToString();
     }
 }
