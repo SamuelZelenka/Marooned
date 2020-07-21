@@ -12,7 +12,7 @@ public class PlayerData
     public DataHandler OnGoldChanged;
 
     List<CharacterData> characters;
-    public ShipData ShipData { get; private set; } = new ShipData();
+    public ResourceInventory Resources { get; private set; } = new ResourceInventory();
     int gold;
     public int Gold {
         get { return gold; }
@@ -35,7 +35,7 @@ public class PlayerData
 }
 
 [System.Serializable]
-public class ShipData
+public class ResourceInventory
 {
     public const int WOOLDEFAULTVALUE = 1;
     public const int TOBACCODEFAULTVALUE = 2;
@@ -60,53 +60,27 @@ public class ShipData
         }
         return int.MinValue;
     }
-    public Resource WoolResource { get; set; } = new Resource("Wool", 5);
-    public Resource TobaccoResource { get; set; } = new Resource("Tobacco", 2);
-    public Resource CoffeeResource { get; set; } = new Resource("Coffee", 0);
-    public Resource SilkResource { get; set; } = new Resource("Silk", 0);
-    public Resource OresResource { get; set; } = new Resource("Ores", 0);
+    public Resource Wool { get; set; } = new Resource("Wool", 5);
+    public Resource Tobacco { get; set; } = new Resource("Tobacco", 2);
+    public Resource Coffee { get; set; } = new Resource("Coffee", 0);
+    public Resource Silk { get; set; } = new Resource("Silk", 0);
+    public Resource Ores { get; set; } = new Resource("Ores", 0);
     public Resource GetResource(ResourceType resourceType)
     {
         switch (resourceType)
         {
             case ResourceType.Wool:
-                return WoolResource;
+                return Wool;
             case ResourceType.Tobacco:
-                return TobaccoResource;
+                return Tobacco;
             case ResourceType.Coffee:
-                return CoffeeResource;
+                return Coffee;
             case ResourceType.Silk:
-                return SilkResource;
+                return Silk;
             case ResourceType.Ores:
-                return OresResource;
+                return Ores;
         }
         return null;
     }
     public int maxTonnage = 60;
-    public class Resource
-    {
-        public delegate void ResourceHandler(Resource resource);
-        public ResourceHandler OnResourceChanged;
-
-        string name;
-        int value;
-        public int Value
-        {
-            get { return value; }
-            set
-            {
-                this.value = value;
-                OnResourceChanged?.Invoke(this);
-            }
-        }
-        public Resource(string name, int value)
-        {
-            this.name = name;
-            this.value = value;
-        }
-        public override string ToString()
-        {
-            return name;
-        }
-    }
 }

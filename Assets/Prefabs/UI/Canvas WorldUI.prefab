@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 1
-  resources:
+  resourceViewers:
   - {fileID: 8987623106081515456}
   - {fileID: 4468933410834730998}
   - {fileID: 1019378867935640231}
@@ -2948,13 +2948,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  resources:
+  resourceViewers:
   - {fileID: 2031682188449311142}
   - {fileID: 8117905864015011937}
   - {fileID: 4943636186858826409}
   - {fileID: 4800094176577289089}
   - {fileID: 3084740141676350583}
-  interactButtonObjects: []
+  interactButtonObjects:
+  - {fileID: 8172990398166978625}
+  - {fileID: 5557497951646672971}
   interactButtonText: {fileID: 3221078272483888338}
   totalValueText: {fileID: 7465920469034836149}
 --- !u!114 &7171430553652315498
@@ -3540,6 +3542,11 @@ PrefabInstance:
       propertyPath: interactableButtonMainText
       value: Steal
       objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
       propertyPath: m_Text
@@ -3741,6 +3748,11 @@ PrefabInstance:
         type: 3}
       propertyPath: interactableButtonMainText
       value: Steal
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
@@ -3944,6 +3956,11 @@ PrefabInstance:
       propertyPath: interactableButtonMainText
       value: Steal
       objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
       propertyPath: m_Text
@@ -4141,6 +4158,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Resource (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
       propertyPath: m_Text
@@ -4337,6 +4359,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Resource
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
@@ -4576,6 +4603,31 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6520954855293006964, guid: 74439a0ec3f8f94468452922400019ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6807729302773379412, guid: 74439a0ec3f8f94468452922400019ca,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6931037122918094701, guid: 74439a0ec3f8f94468452922400019ca,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6931037122918094701, guid: 74439a0ec3f8f94468452922400019ca,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6931037122918094701, guid: 74439a0ec3f8f94468452922400019ca,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6931037122918094701, guid: 74439a0ec3f8f94468452922400019ca,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -4885,6 +4937,11 @@ PrefabInstance:
       propertyPath: interactableButtonMainText
       value: Steal
       objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
       propertyPath: m_Text
@@ -5087,6 +5144,11 @@ PrefabInstance:
       propertyPath: interactableButtonMainText
       value: Steal
       objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
       propertyPath: m_Text
@@ -5278,6 +5340,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Resource (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
@@ -5601,6 +5668,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Resource (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}
       propertyPath: m_Text
@@ -5797,6 +5869,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Resource (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143934407257553480, guid: 6801ccf97b98b494d8f641cef4219849,
+        type: 3}
+      propertyPath: resourceType
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4672790256697184928, guid: 6801ccf97b98b494d8f641cef4219849,
         type: 3}

@@ -11,8 +11,6 @@ public class Ship : HexUnit
     [SerializeField] ShipViewer shipViewer = null;
     public ShipViewer ShipViewer { get => shipViewer; }
 
-    public ShipData ShipData { get; protected set; }
-
     #region Stats
     int hull = 25, maxHull = 25;
     public int Hull
@@ -54,15 +52,16 @@ public class Ship : HexUnit
     #endregion
 
     #region Resources
+    public ResourceInventory ResourceInventory { get => myPlayer.PlayerData.Resources; }
     public bool IsOverStorageLimit()
     {
         int tonnage = 0;
-        tonnage += ShipData.WoolResource.Value;
-        tonnage += ShipData.TobaccoResource.Value;
-        tonnage += ShipData.CoffeeResource.Value;
-        tonnage += ShipData.SilkResource.Value;
-        tonnage += ShipData.OresResource.Value;
-        return tonnage > ShipData.maxTonnage;
+        tonnage += myPlayer.PlayerData.Resources.Wool.Value;
+        tonnage += myPlayer.PlayerData.Resources.Tobacco.Value;
+        tonnage += myPlayer.PlayerData.Resources.Coffee.Value;
+        tonnage += myPlayer.PlayerData.Resources.Silk.Value;
+        tonnage += myPlayer.PlayerData.Resources.Ores.Value;
+        return tonnage > myPlayer.PlayerData.Resources.maxTonnage;
     }
     #endregion
 
@@ -156,11 +155,6 @@ public class Ship : HexUnit
     }
     
     #endregion
-
-    public void Setup(ShipData shipData)
-    {
-        ShipData = shipData;
-    }
 
     public override bool CanEnter(HexCell cell)
     {

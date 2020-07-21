@@ -6,22 +6,22 @@ using UnityEngine.UI;
 public class ResourceInteractionController : MonoBehaviour
 {
     public enum Mode { Merchant, Boarding }
-    [SerializeField] Mode mode;
-    [SerializeField] ResourceView[] resources = null;
+    [SerializeField] Mode mode = Mode.Merchant;
+    [SerializeField] InteractableResourceView[] resourceViewers = null;
     [SerializeField] GameObject[] interactButtonObjects = null;
     [SerializeField] Text interactButtonText = null;
     [SerializeField] Text totalValueText = null;
     Harbor myHarbor;
-    ShipData activeShipData = null;
+    ResourceInventory activeShipInventory = null;
 
     private void OnEnable()
     {
-        ResourceView.OnSliderValueChanged += SetTexts;
+        InteractableResourceView.OnSliderValueChanged += SetTexts;
     }
 
     private void OnDisable()
     {
-        ResourceView.OnSliderValueChanged -= SetTexts;
+        InteractableResourceView.OnSliderValueChanged -= SetTexts;
     }
 
     /// <summary>
@@ -30,11 +30,11 @@ public class ResourceInteractionController : MonoBehaviour
     /// <param name="myHarbor"></param>
     public void Setup(Harbor myHarbor)
     {
-        this.activeShipData = HexGridController.player.PlayerData.ShipData;
+        this.activeShipInventory = HexGridController.player.PlayerData.Resources;
         this.myHarbor = myHarbor;
-        for (int i = 0; i < resources.Length; i++)
+        foreach (InteractableResourceView viewer in resourceViewers)
         {
-            UpdateUI((ResourceType)i, true);
+            UpdateUI(viewer.ResourceType, true);
         }
         SetTexts();
     }
@@ -42,19 +42,19 @@ public class ResourceInteractionController : MonoBehaviour
     /// <summary>
     /// Used to setup for boarding or inspecting other ships
     /// </summary>
-    /// <param name="inspectedShip"></param>
+    /// <param name="inspectedShipInventory"></param>
     /// <param name="boarding"></param>
-    public void Setup(ShipData inspectedShip, bool boarding)
+    public void Setup(ResourceInventory inspectedShipInventory, bool boarding)
     {
-        foreach (var item in interactButtonObjects)
+        foreach (var button in interactButtonObjects)
         {
-            item.SetActive(boarding);
+            button.SetActive(boarding);
         }
 
-        this.activeShipData = inspectedShip;
-        for (int i = 0; i < resources.Length; i++)
+        this.activeShipInventory = inspectedShipInventory;
+        foreach (var item in resourceViewers)
         {
-            UpdateUI((ResourceType)i, boarding);
+            UpdateUI(item.ResourceType, boarding);
         }
         SetTexts();
     }
@@ -64,10 +64,10 @@ public class ResourceInteractionController : MonoBehaviour
         switch (mode)
         {
             case Mode.Merchant:
-                resources[(int)resourceType].Setup(activeShipData.GetResource(resourceType), interactable, myHarbor.GetResourceValue(resourceType));
+                resourceViewers[(int)resourceType].Setup(activeShipInventory.GetResource(resourceType), interactable, myHarbor.GetResourceValue(resourceType));
                 break;
             case Mode.Boarding:
-                resources[(int)resourceType].Setup(activeShipData.GetResource(resourceType), interactable, ShipData.GetDefaultValue(resourceType));
+                resourceViewers[(int)resourceType].Setup(activeShipInventory.GetResource(resourceType), interactable, ResourceInventory.GetDefaultValue(resourceType));
                 break;
         }
         SetTexts();
@@ -76,7 +76,7 @@ public class ResourceInteractionController : MonoBehaviour
     //Button call
     public void SetAllSlidersToMax()
     {
-        foreach (var item in resources)
+        foreach (var item in resourceViewers)
         {
             item.ChangeSliderToMax();
         }
@@ -86,7 +86,7 @@ public class ResourceInteractionController : MonoBehaviour
     {
         int totalValue = 0;
         int totalSelectedValue = 0;
-        for (int i = 0; i < resources.Length; i++)
+        for (int i = 0; i < resourceViewers.Length; i++)
         {
             ResourceType resourceType = (ResourceType)i;
 
@@ -98,12 +98,12 @@ public class ResourceInteractionController : MonoBehaviour
                     valueOfItem = myHarbor.GetResourceValue(resourceType);
                     break;
                 case Mode.Boarding:
-                    valueOfItem = ShipData.GetDefaultValue(resourceType);
+                    valueOfItem = ResourceInventory.GetDefaultValue(resourceType);
                     break;
             }
 
-            totalValue += activeShipData.GetResource(resourceType).Value * valueOfItem;
-            totalSelectedValue += Mathf.RoundToInt(resources[i].GetSliderValue()) * valueOfItem;
+            totalValue += activeShipInventory.GetResource(resourceType).Value * valueOfItem;
+            totalSelectedValue += Mathf.RoundToInt(resourceViewers[i].GetSliderValue()) * valueOfItem;
         }
 
         switch (mode)
@@ -123,7 +123,7 @@ public class ResourceInteractionController : MonoBehaviour
     void SellResource(ResourceType resourceType, int numbersOfItemsToSell)
     {
         PlayerData playerData = HexGridController.player.PlayerData;
-        playerData.ShipData.GetResource(resourceType).Value -= numbersOfItemsToSell; //Remove from player
+        playerData.Resources.GetResource(resourceType).Value -= numbersOfItemsToSell; //Remove from player
         playerData.Gold += numbersOfItemsToSell * myHarbor.GetResourceValue(resourceType);
         UpdateUI(resourceType, true);
     }
@@ -131,10 +131,10 @@ public class ResourceInteractionController : MonoBehaviour
     //Button call
     public void SellMarkedResources()
     {
-        for (int i = 0; i < resources.Length; i++)
+        for (int i = 0; i < resourceViewers.Length; i++)
         {
             ResourceType resourceType = (ResourceType)i;
-            int numberOfItems = Mathf.RoundToInt(resources[i].GetSliderValue());
+            int numberOfItems = Mathf.RoundToInt(resourceViewers[i].GetSliderValue());
             SellResource(resourceType, numberOfItems);
         }
     }
@@ -144,18 +144,18 @@ public class ResourceInteractionController : MonoBehaviour
     void StealResource(ResourceType resourceType, int numberOfItemsToSteal)
     {
         PlayerData playerData = HexGridController.player.PlayerData;
-        activeShipData.GetResource(resourceType).Value -= numberOfItemsToSteal; //Take from boarded ship
-        playerData.ShipData.GetResource(resourceType).Value += numberOfItemsToSteal; //Give to player
+        activeShipInventory.GetResource(resourceType).Value -= numberOfItemsToSteal; //Take from boarded ship
+        playerData.Resources.GetResource(resourceType).Value += numberOfItemsToSteal; //Give to player
         UpdateUI(resourceType, true);
     }
 
     //Button call
     public void StealMarkedResources()
     {
-        for (int i = 0; i < resources.Length; i++)
+        for (int i = 0; i < resourceViewers.Length; i++)
         {
             ResourceType resourceType = (ResourceType)i;
-            int numberOfItems = Mathf.RoundToInt(resources[i].GetSliderValue());
+            int numberOfItems = Mathf.RoundToInt(resourceViewers[i].GetSliderValue());
             StealResource(resourceType, numberOfItems);
         }
     }

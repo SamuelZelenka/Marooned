@@ -4,12 +4,12 @@ using UnityEngine.UI;
 public class UIResourceView : MonoBehaviour
 {
     [SerializeField] Text resourceNumber = null;
-    [SerializeField] ResourceType resourceType;
+    [SerializeField] ResourceType resourceType = ResourceType.MAX;
     private void OnDisable()
     {
         if (HexGridController.player != null)
         {
-            HexGridController.player.PlayerData.ShipData.GetResource(resourceType).OnResourceChanged -= UpdateUI;
+            HexGridController.player.PlayerData.Resources.GetResource(resourceType).OnResourceChanged -= UpdateUI;
         }
     }
 
@@ -17,13 +17,13 @@ public class UIResourceView : MonoBehaviour
     {
         if (HexGridController.player != null)
         {
-            ShipData.Resource resource = HexGridController.player.PlayerData.ShipData.GetResource(resourceType);
+            Resource resource = HexGridController.player.PlayerData.Resources.GetResource(resourceType);
             resource.OnResourceChanged += UpdateUI;
             UpdateUI(resource);
         }
     }
     
-    void UpdateUI(ShipData.Resource resource)
+    void UpdateUI(Resource resource)
     {
         resourceNumber.text = resource.Value.ToString();
     }

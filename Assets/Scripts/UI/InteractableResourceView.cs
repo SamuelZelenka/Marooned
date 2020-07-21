@@ -1,20 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ResourceView : MonoBehaviour
+public class InteractableResourceView : MonoBehaviour
 {
     [SerializeField] Text numberText = null;
     [SerializeField] Slider slider = null;
     int valuePerItem;
     int maxNumber;
     [SerializeField] Text valuePerItemText = null;
+    [SerializeField] ResourceType resourceType = ResourceType.MAX; 
 
     public delegate void ResourceViewHandler();
     public static ResourceViewHandler OnSliderValueChanged;
 
-    public void Setup(ShipData.Resource resource, bool showButtonsAndSliders, int valuePerItem)
+    public void Setup(Resource resource, bool showButtonsAndSliders, int valuePerItem)
     {
         maxNumber = resource.Value;
         numberText.text = showButtonsAndSliders ? $"0 / {maxNumber}" : resource.Value.ToString();
@@ -30,6 +29,8 @@ public class ResourceView : MonoBehaviour
             slider.value = 0f;
         }
     }
+
+    public ResourceType ResourceType { get => resourceType; }
 
     public void ChangeSliderToMax() => slider.value = slider.maxValue;
 
