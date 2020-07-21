@@ -23,7 +23,7 @@ public class PlayerData
         }
     }
 
-    int bountyLevel = 12;
+    int bountyLevel;
     public int BountyLevel
     {
         get { return bountyLevel; }
