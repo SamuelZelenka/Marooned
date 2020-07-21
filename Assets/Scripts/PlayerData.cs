@@ -6,9 +6,25 @@ public enum ResourceType { Wool, Tobacco, Coffee, Silk, Ores, MAX = 5 }
 [System.Serializable]
 public class PlayerData
 {
+
+    public const int MAXBOUNTYLEVEL = 100;
+
+    public delegate void BountyLevelHandler();
+    public BountyLevelHandler OnBountyChanged;
     List<CharacterData> characters;
     public ShipData ShipData { get; private set; } = new ShipData();
     public int Gold { get; set; }
+
+
+    int bountyLevel = 12;
+    public int BountyLevel 
+    {
+        get { return bountyLevel; }
+        set { 
+            OnBountyChanged?.Invoke();
+            bountyLevel = value;
+        }
+    }
 }
 
 [System.Serializable]
