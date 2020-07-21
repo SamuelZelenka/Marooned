@@ -20,6 +20,12 @@ public abstract class HexUnit : MonoBehaviour
 
     public bool playerControlled;
     public HexGrid myGrid;
+    public Player myPlayer;
+
+    public void Setup(Player myPlayer)
+    {
+        this.myPlayer = myPlayer;
+    }
 
     public bool IsMoving
     {

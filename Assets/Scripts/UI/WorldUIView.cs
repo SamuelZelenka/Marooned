@@ -52,13 +52,13 @@ public class WorldUIView : MonoBehaviour
     {
         shipInspectPanel.SetActive(true);
         //Display Resources for the boarded ship
-        shipInspectController.Setup(boardedShip.ShipData, true);
+        shipInspectController.Setup(boardedShip.ResourceInventory, true);
     }
 
     public void OpenInspectView(Ship inspectedShip, Ship otherShip)
     {
         shipInspectPanel.SetActive(true);
-        shipInspectController.Setup(inspectedShip.ShipData, false);
+        shipInspectController.Setup(inspectedShip.ResourceInventory, false);
     }
 
     private void CloseBoardingView(HexUnit unitMoved)

@@ -20,7 +20,7 @@ public class Player
         PlayerData = new PlayerData();
         Crew = new List<Character>();
         this.Ship = ship;
-        ship.Setup(PlayerData.ShipData);
+        ship.Setup(this);
         IsHuman = humanControlled;
         this.crewSimulation = crewSimulation;
     }
@@ -32,9 +32,10 @@ public class Player
     /// <param name="humanControlled"></param>
     public Player(Ship ship, bool humanControlled = false)
     {
+        PlayerData = new PlayerData();
         Crew = new List<Character>();
         this.Ship = ship;
-        ship.Setup(new ShipData());
+        ship.Setup(this);
         IsHuman = humanControlled;
         this.crewSimulation = null;
     }
