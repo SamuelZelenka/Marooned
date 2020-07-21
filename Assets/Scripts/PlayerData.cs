@@ -7,12 +7,21 @@ public class PlayerData
 {
     public const int MAXBOUNTYLEVEL = 100;
 
-    public delegate void BountyLevelHandler();
-    public BountyLevelHandler OnBountyChanged;
+    public delegate void DataHandler();
+    public DataHandler OnBountyChanged;
+    public DataHandler OnGoldChanged;
 
     List<CharacterData> characters;
     public ShipData ShipData { get; private set; } = new ShipData();
-    public int Gold { get; set; }
+    int gold;
+    public int Gold {
+        get { return gold; }
+        set
+        {
+            OnGoldChanged?.Invoke();
+            gold = value;
+        }
+    }
 
     int bountyLevel = 12;
     public int BountyLevel 
