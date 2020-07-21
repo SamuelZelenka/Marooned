@@ -5,21 +5,23 @@ using UnityEngine.UI;
 
 public class ResourceView : MonoBehaviour
 {
-    [SerializeField] Text interactNumber = null;
+    [SerializeField] Text numberText = null;
     [SerializeField] Slider slider = null;
-    [SerializeField] Button interactableActionButton = null;
     int valuePerItem;
+    int maxNumber;
     [SerializeField] Text valuePerItemText = null;
-    [SerializeField] string interactableButtonMainText = "Sell";
-    [SerializeField] Text interactableButtonText = null;
 
+    public delegate void ResourceViewHandler();
+    public static ResourceViewHandler OnSliderValueChanged;
 
     public void Setup(ShipData.Resource resource, bool showButtonsAndSliders, int valuePerItem)
     {
-        interactNumber.text = "0";
+        maxNumber = resource.Value;
+        numberText.text = showButtonsAndSliders ? $"0 / {maxNumber}" : resource.Value.ToString();
         this.valuePerItem = valuePerItem;
         this.valuePerItemText.text = "£" + valuePerItem.ToString();
 
+        slider.gameObject.SetActive(showButtonsAndSliders);
         if (showButtonsAndSliders)
         {
             slider.maxValue = resource.Value;
@@ -29,13 +31,14 @@ public class ResourceView : MonoBehaviour
         }
     }
 
+    public void ChangeSliderToMax() => slider.value = slider.maxValue;
+
     public float GetSliderValue() => slider.value;
 
     public void ChangeSelectedValue(float dynamicFloat)
     {
         int number = Mathf.RoundToInt(dynamicFloat);
-        interactNumber.text = number.ToString();
-        interactableActionButton.interactable = number > 0;
-        interactableButtonText.text = interactableButtonMainText + " (£" + (valuePerItem * number).ToString() + ")";
+        numberText.text = $"{number.ToString()} / {maxNumber}";
+        OnSliderValueChanged?.Invoke();
     }
 }

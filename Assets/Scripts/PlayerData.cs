@@ -36,6 +36,24 @@ public class ShipData
     public const int SILKDEFAULTVALUE = 5;
     public const int ORESDEFAULTVALUE = 10;
 
+    public static int GetDefaultValue(ResourceType resourceType)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Wool:
+                return WOOLDEFAULTVALUE;
+            case ResourceType.Tobacco:
+                return TOBACCODEFAULTVALUE;
+            case ResourceType.Coffee:
+                return COFFEEDEFAULTVALUE;
+            case ResourceType.Silk:
+                return SILKDEFAULTVALUE;
+            case ResourceType.Ores:
+                return ORESDEFAULTVALUE;
+        }
+        return int.MinValue;
+    }
+
     public Resource WoolResource { get; set; } = new Resource("Wool", 5);
     public Resource TobaccoResource { get; set; } = new Resource("Tobacco", 2);
     public Resource CoffeeResource { get; set; } = new Resource("Coffee", 0);

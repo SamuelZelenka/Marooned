@@ -266,6 +266,7 @@ public class WorldController : MonoBehaviour
 
         //Delegates
         newShip.OnShipBoarded += worldUIView.OpenBoardingView;
+        newShip.OnShipInspected += worldUIView.OpenInspectView;
 
         hexGrid.AddUnit(newShip, route.GetSpawnableLocation(), HexDirectionExtension.ReturnRandomDirection(), false);
 

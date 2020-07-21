@@ -9,8 +9,7 @@ public class WorldUIView : MonoBehaviour
     [SerializeField] HarborView harborView = null;
     [SerializeField] GameObject openPOIButton = null;
     [SerializeField] GameObject shipInspectPanel = null;
-    [SerializeField] ShipInspectView shipInspectView = null;
-    [SerializeField] BoardingController boardingController = null;
+    [SerializeField] ResourceInteractionController shipInspectController = null;
 
     private void OnEnable()
     {
@@ -53,8 +52,13 @@ public class WorldUIView : MonoBehaviour
     {
         shipInspectPanel.SetActive(true);
         //Display Resources for the boarded ship
-        shipInspectView.Setup(boardedShip.ShipData, true);
-        boardingController.Setup(boardedShip.ShipData);
+        shipInspectController.Setup(boardedShip.ShipData, true);
+    }
+
+    public void OpenInspectView(Ship inspectedShip, Ship otherShip)
+    {
+        shipInspectPanel.SetActive(true);
+        shipInspectController.Setup(inspectedShip.ShipData, false);
     }
 
     private void CloseBoardingView(HexUnit unitMoved)

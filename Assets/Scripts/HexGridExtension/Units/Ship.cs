@@ -6,6 +6,7 @@ public class Ship : HexUnit
 {
     public delegate void ShipInteractionHandler(Ship thisShip, Ship otherShip);
     public event ShipInteractionHandler OnShipBoarded;
+    public event ShipInteractionHandler OnShipInspected;
 
     [SerializeField] ShipViewer shipViewer = null;
     public ShipViewer ShipViewer { get => shipViewer; }
@@ -242,12 +243,7 @@ public class Ship : HexUnit
         ShipsWithinBoardingRange = ships;
     }
 
-    public void PlayerBoard()
-    {
-        Board(HexGridController.player.Ship);
-    }
-    public void Board(Ship boardedBy)
-    {
-        OnShipBoarded?.Invoke(this, boardedBy);
-    }
+    public void InspectShip() => OnShipInspected?.Invoke(this, null);
+    public void PlayerBoard() => Board(HexGridController.player.Ship);
+    public void Board(Ship boardedBy) => OnShipBoarded?.Invoke(this, boardedBy);
 }
