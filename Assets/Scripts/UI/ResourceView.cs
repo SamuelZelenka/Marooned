@@ -22,8 +22,8 @@ public class ResourceView : MonoBehaviour
 
         if (showButtonsAndSliders)
         {
-            slider.maxValue = resource.value;
-            slider.interactable = resource.value > 0;
+            slider.maxValue = resource.Value;
+            slider.interactable = resource.Value > 0;
             ChangeSelectedValue(0f);
             slider.value = 0f;
         }

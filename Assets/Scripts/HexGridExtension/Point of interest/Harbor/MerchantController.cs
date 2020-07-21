@@ -28,7 +28,7 @@ public class MerchantController : MonoBehaviour
     void SellResource(ResourceType resourceType, int numbersOfItemsToSell)
     {
         PlayerData playerData = HexGridController.player.PlayerData;
-        playerData.ShipData.GetResource(resourceType).value -= numbersOfItemsToSell; //Remove from player
+        playerData.ShipData.GetResource(resourceType).Value -= numbersOfItemsToSell; //Remove from player
         playerData.Gold += numbersOfItemsToSell * myHarbor.GetResourceValue(resourceType);
         Debug.Log(playerData.Gold.ToString());
         UpdateUI(resourceType);
@@ -44,7 +44,7 @@ public class MerchantController : MonoBehaviour
         for (int i = 0; i < (int)ResourceType.MAX; i++)
         {
             ResourceType resourceType = (ResourceType)i;
-            int numbers = playerShipData.GetResource(resourceType).value;
+            int numbers = playerShipData.GetResource(resourceType).Value;
             SellResource(resourceType, numbers);
         }
     }
@@ -55,7 +55,7 @@ public class MerchantController : MonoBehaviour
         int totalValue = 0;
         for (int i = 0; i < (int)ResourceType.MAX; i++)
         {
-            totalValue += playerShipData.GetResource((ResourceType)i).value * myHarbor.GetResourceValue((ResourceType)i);
+            totalValue += playerShipData.GetResource((ResourceType)i).Value * myHarbor.GetResourceValue((ResourceType)i);
         }
         sellAllButtonText.text = $"Sell All (£{totalValue.ToString()})";
     }

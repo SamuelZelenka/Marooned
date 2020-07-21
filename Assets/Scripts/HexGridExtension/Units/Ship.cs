@@ -56,11 +56,11 @@ public class Ship : HexUnit
     public bool IsOverStorageLimit()
     {
         int tonnage = 0;
-        tonnage += ShipData.Wool.value;
-        tonnage += ShipData.Tobacco.value;
-        tonnage += ShipData.Coffee.value;
-        tonnage += ShipData.Silk.value;
-        tonnage += ShipData.Ores.value;
+        tonnage += ShipData.WoolResource.Value;
+        tonnage += ShipData.TobaccoResource.Value;
+        tonnage += ShipData.CoffeeResource.Value;
+        tonnage += ShipData.SilkResource.Value;
+        tonnage += ShipData.OresResource.Value;
         return tonnage > ShipData.maxTonnage;
     }
     #endregion

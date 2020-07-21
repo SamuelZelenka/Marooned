@@ -21,8 +21,8 @@ public class BoardingController : MonoBehaviour
     void StealResource(ResourceType resourceType, int numberOfItemsToSteal)
     {
         PlayerData playerData = HexGridController.player.PlayerData;
-        boardedShip.GetResource(resourceType).value -= numberOfItemsToSteal; //Take from boarded ship
-        playerData.ShipData.GetResource(resourceType).value += numberOfItemsToSteal; //Give to player
+        boardedShip.GetResource(resourceType).Value -= numberOfItemsToSteal; //Take from boarded ship
+        playerData.ShipData.GetResource(resourceType).Value += numberOfItemsToSteal; //Give to player
         UpdateUI();
     }
 
@@ -35,7 +35,7 @@ public class BoardingController : MonoBehaviour
         for (int i = 0; i < (int)ResourceType.MAX; i++)
         {
             ResourceType resourceType = (ResourceType)i;
-            int numbers = boardedShip.GetResource(resourceType).value;
+            int numbers = boardedShip.GetResource(resourceType).Value;
             StealResource(resourceType, numbers);
         }
     }

@@ -20,41 +20,144 @@ public class ShipData
     public const int SILKDEFAULTVALUE = 5;
     public const int ORESDEFAULTVALUE = 10;
 
-
-    public Resource Wool { get; private set; } = new Resource("Wool", 5);
-    public Resource Tobacco { get; private set; } = new Resource("Tobacco", 2);
-    public Resource Coffee { get; private set; } = new Resource("Coffee", 0);
-    public Resource Silk { get; private set; } = new Resource("Silk", 0);
-    public Resource Ores { get; private set; } = new Resource("Ores", 0);
+    public Resource WoolResource { get; set; } = new Wool(5);
+    public Resource TobaccoResource { get; set; } = new Tobacco(2);
+    public Resource CoffeeResource { get; set; } = new Coffee(0);
+    public Resource SilkResource { get; set; } = new Silk(0);
+    public Resource OresResource { get; set; } = new Ores(0);
     public Resource GetResource(ResourceType resourceType)
     {
         switch (resourceType)
         {
             case ResourceType.Wool:
-                return Wool;
+                return WoolResource;
             case ResourceType.Tobacco:
-                return Tobacco;
+                return TobaccoResource;
             case ResourceType.Coffee:
-                return Coffee;
+                return CoffeeResource;
             case ResourceType.Silk:
-                return Silk;
+                return SilkResource;
             case ResourceType.Ores:
-                return Ores;
+                return OresResource;
         }
         return null;
     }
 
     public int maxTonnage = 60;
 
-    public class Resource
+    public abstract class Resource
     {
-        public string resourceName;
-        public int value;
+        public delegate void ResourceHandler();
 
-        public Resource(string resourceName, int value)
+        public static ResourceHandler OnWoolChanged;
+        public static ResourceHandler OnTobaccoChanged;
+        public static ResourceHandler OnCoffeeChanged;
+        public static ResourceHandler OnSilkChanged;
+        public static ResourceHandler OnOresChanged;
+
+        protected int value;
+        public abstract int Value { get; set; }
+        public abstract void OnValueChanged();
+    }
+    public class Wool : Resource
+    {
+        public override int Value
         {
-            this.resourceName = resourceName;
+            get { return value; }
+            set
+            {
+                this.value = value;
+                OnValueChanged();
+            }
+        }
+        public Wool(int value)
+        {
             this.value = value;
+        }
+        public override void OnValueChanged()
+        {
+            OnWoolChanged?.Invoke();
+        }
+    }
+   
+    public class Tobacco : Resource
+    {
+        public override int Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
+                OnValueChanged();
+            }
+        }
+        public Tobacco(int value)
+        {
+            this.value = value;
+        }
+        public override void OnValueChanged()
+        {
+            OnTobaccoChanged?.Invoke();
+        }
+    }
+    public class Coffee : Resource
+    {
+        public override int Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
+                OnValueChanged();
+            }
+        }
+        public Coffee(int value)
+        {
+            this.value = value;
+        }
+        public override void OnValueChanged()
+        {
+            OnCoffeeChanged?.Invoke();
+        }
+    }
+    public class Silk : Resource
+    {
+        public override int Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
+                OnValueChanged();
+            }
+        }
+        public Silk(int value)
+        {
+            this.value = value;
+        }
+        public override void OnValueChanged()
+        {
+            OnSilkChanged?.Invoke();
+        }
+    }
+    public class Ores : Resource
+    {
+        public override int Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
+                OnValueChanged();
+            }
+        }
+        public Ores(int value)
+        {
+            this.value = value;
+        }
+        public override void OnValueChanged()
+        {
+            OnOresChanged?.Invoke();
         }
     }
 }

@@ -40,7 +40,7 @@ public class ShipInspectView : MonoBehaviour
             }
 
             ShipData.Resource resource = shipData.GetResource(resourceType);
-            int numberOfUnits = resource.value;
+            int numberOfUnits = resource.Value;
             totalValue += numberOfUnits * defaultValue;
 
             resources[i].Setup(resource, interactable, defaultValue);
