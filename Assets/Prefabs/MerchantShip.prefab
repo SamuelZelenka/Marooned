@@ -902,7 +902,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3081400107268696243}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6092528759528069180}
+        m_MethodName: InspectShip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6767395293246349295
 GameObject:
   m_ObjectHideFlags: 0

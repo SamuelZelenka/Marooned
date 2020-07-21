@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class HarborView : MonoBehaviour
 {
     [SerializeField] Text poiTextTitle = null;
-    [SerializeField] MerchantController merchantController = null;
+    [SerializeField] ResourceInteractionController merchantController = null;
 
     public void Setup(Harbor harbor)
     {
         poiTextTitle.text = harbor.name;
-        merchantController.myHarbor = harbor;
+        merchantController.Setup(harbor);
     }
 }
