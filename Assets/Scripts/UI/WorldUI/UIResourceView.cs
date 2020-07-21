@@ -4,61 +4,27 @@ using UnityEngine.UI;
 public class UIResourceView : MonoBehaviour
 {
     [SerializeField] Text resourceNumber = null;
-    ResourceType resourceType;
+    [SerializeField] ResourceType resourceType;
     private void OnDisable()
     {
-        switch (resourceType)
+        if (HexGridController.player != null)
         {
-            case ResourceType.Wool:
-                ShipData.Resource.OnWoolChanged -= UpdateUI;
-                break;
-            case ResourceType.Tobacco:
-                ShipData.Resource.OnTobaccoChanged -= UpdateUI;
-                break;
-            case ResourceType.Coffee:
-                ShipData.Resource.OnCoffeeChanged -= UpdateUI;
-                break;
-            case ResourceType.Silk:
-                ShipData.Resource.OnSilkChanged -= UpdateUI;
-                break;
-            case ResourceType.Ores:
-                ShipData.Resource.OnOresChanged -= UpdateUI;
-                break;
-            case ResourceType.MAX:
-                break;
-            default:
-                break;
+            HexGridController.player.PlayerData.ShipData.GetResource(resourceType).OnResourceChanged -= UpdateUI;
         }
     }
-    public void Setup(ResourceType resourceType)
+
+    private void OnEnable()
     {
-        this.resourceType = resourceType;
-        switch (resourceType)
+        if (HexGridController.player != null)
         {
-            case ResourceType.Wool:
-                ShipData.Resource.OnWoolChanged += UpdateUI;
-                break;
-            case ResourceType.Tobacco:
-                ShipData.Resource.OnTobaccoChanged += UpdateUI;
-                break;
-            case ResourceType.Coffee:
-                ShipData.Resource.OnCoffeeChanged += UpdateUI;
-                break;
-            case ResourceType.Silk:
-                ShipData.Resource.OnSilkChanged += UpdateUI;
-                break;
-            case ResourceType.Ores:
-                ShipData.Resource.OnOresChanged += UpdateUI;
-                break;
-            case ResourceType.MAX:
-                break;
-            default:
-                break;
+            ShipData.Resource resource = HexGridController.player.PlayerData.ShipData.GetResource(resourceType);
+            resource.OnResourceChanged += UpdateUI;
+            UpdateUI(resource);
         }
-        UpdateUI();
     }
-    public void UpdateUI()
+    
+    void UpdateUI(ShipData.Resource resource)
     {
-        resourceNumber.text = HexGridController.player.PlayerData.ShipData.GetResource(resourceType).Value.ToString();
+        resourceNumber.text = resource.Value.ToString();
     }
 }

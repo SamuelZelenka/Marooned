@@ -20,11 +20,11 @@ public class ShipData
     public const int SILKDEFAULTVALUE = 5;
     public const int ORESDEFAULTVALUE = 10;
 
-    public Resource WoolResource { get; set; } = new Wool(5);
-    public Resource TobaccoResource { get; set; } = new Tobacco(2);
-    public Resource CoffeeResource { get; set; } = new Coffee(0);
-    public Resource SilkResource { get; set; } = new Silk(0);
-    public Resource OresResource { get; set; } = new Ores(0);
+    public Resource WoolResource { get; set; } = new Resource("Wool", 5);
+    public Resource TobaccoResource { get; set; } = new Resource("Tobacco", 2);
+    public Resource CoffeeResource { get; set; } = new Resource("Coffee", 0);
+    public Resource SilkResource { get; set; } = new Resource("Silk", 0);
+    public Resource OresResource { get; set; } = new Resource("Ores", 0);
     public Resource GetResource(ResourceType resourceType)
     {
         switch (resourceType)
@@ -45,119 +45,144 @@ public class ShipData
 
     public int maxTonnage = 60;
 
-    public abstract class Resource
+    public /*abstract*/ class Resource
     {
-        public delegate void ResourceHandler();
+        public delegate void ResourceHandler(Resource resource);
+        public ResourceHandler OnResourceChanged;
 
-        public static ResourceHandler OnWoolChanged;
-        public static ResourceHandler OnTobaccoChanged;
-        public static ResourceHandler OnCoffeeChanged;
-        public static ResourceHandler OnSilkChanged;
-        public static ResourceHandler OnOresChanged;
+        string name;
+        int value;
+        public int Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
+                OnResourceChanged?.Invoke(this);
+            }
+        }
+        public Resource(string name, int value)
+        {
+            this.name = name;
+            this.value = value;
+        }
 
-        protected int value;
-        public abstract int Value { get; set; }
-        public abstract void OnValueChanged();
+        public override string ToString()
+        {
+            return name;
+        }
+
+        //public static ResourceHandler OnWoolChanged;
+        //public static ResourceHandler OnTobaccoChanged;
+        //public static ResourceHandler OnCoffeeChanged;
+        //public static ResourceHandler OnSilkChanged;
+        //public static ResourceHandler OnOresChanged;
+
+        //protected int value;
+        //public abstract int Value { get; set; }
+        //public abstract void OnValueChanged();
     }
-    public class Wool : Resource
-    {
-        public override int Value
-        {
-            get { return value; }
-            set
-            {
-                this.value = value;
-                OnValueChanged();
-            }
-        }
-        public Wool(int value)
-        {
-            this.value = value;
-        }
-        public override void OnValueChanged()
-        {
-            OnWoolChanged?.Invoke();
-        }
-    }
-   
-    public class Tobacco : Resource
-    {
-        public override int Value
-        {
-            get { return value; }
-            set
-            {
-                this.value = value;
-                OnValueChanged();
-            }
-        }
-        public Tobacco(int value)
-        {
-            this.value = value;
-        }
-        public override void OnValueChanged()
-        {
-            OnTobaccoChanged?.Invoke();
-        }
-    }
-    public class Coffee : Resource
-    {
-        public override int Value
-        {
-            get { return value; }
-            set
-            {
-                this.value = value;
-                OnValueChanged();
-            }
-        }
-        public Coffee(int value)
-        {
-            this.value = value;
-        }
-        public override void OnValueChanged()
-        {
-            OnCoffeeChanged?.Invoke();
-        }
-    }
-    public class Silk : Resource
-    {
-        public override int Value
-        {
-            get { return value; }
-            set
-            {
-                this.value = value;
-                OnValueChanged();
-            }
-        }
-        public Silk(int value)
-        {
-            this.value = value;
-        }
-        public override void OnValueChanged()
-        {
-            OnSilkChanged?.Invoke();
-        }
-    }
-    public class Ores : Resource
-    {
-        public override int Value
-        {
-            get { return value; }
-            set
-            {
-                this.value = value;
-                OnValueChanged();
-            }
-        }
-        public Ores(int value)
-        {
-            this.value = value;
-        }
-        public override void OnValueChanged()
-        {
-            OnOresChanged?.Invoke();
-        }
-    }
+    //public class Wool : Resource
+    //{
+    //    public ResourceHandler OnResourceChanged;
+
+    //    public override int Value
+    //    {
+    //        get { return value; }
+    //        set
+    //        {
+    //            this.value = value;
+    //            OnValueChanged();
+    //        }
+    //    }
+    //    public Wool(int value)
+    //    {
+    //        this.value = value;
+    //    }
+    //    public override void OnValueChanged()
+    //    {
+    //        OnResourceChanged?.Invoke();
+    //    }
+    //}
+
+    //public class Tobacco : Resource
+    //{
+    //    public override int Value
+    //    {
+    //        get { return value; }
+    //        set
+    //        {
+    //            this.value = value;
+    //            OnValueChanged();
+    //        }
+    //    }
+    //    public Tobacco(int value)
+    //    {
+    //        this.value = value;
+    //    }
+    //    public override void OnValueChanged()
+    //    {
+    //        OnTobaccoChanged?.Invoke();
+    //    }
+    //}
+    //public class Coffee : Resource
+    //{
+    //    public override int Value
+    //    {
+    //        get { return value; }
+    //        set
+    //        {
+    //            this.value = value;
+    //            OnValueChanged();
+    //        }
+    //    }
+    //    public Coffee(int value)
+    //    {
+    //        this.value = value;
+    //    }
+    //    public override void OnValueChanged()
+    //    {
+    //        OnCoffeeChanged?.Invoke();
+    //    }
+    //}
+    //public class Silk : Resource
+    //{
+    //    public override int Value
+    //    {
+    //        get { return value; }
+    //        set
+    //        {
+    //            this.value = value;
+    //            OnValueChanged();
+    //        }
+    //    }
+    //    public Silk(int value)
+    //    {
+    //        this.value = value;
+    //    }
+    //    public override void OnValueChanged()
+    //    {
+    //        OnSilkChanged?.Invoke();
+    //    }
+    //}
+    //public class Ores : Resource
+    //{
+    //    public override int Value
+    //    {
+    //        get { return value; }
+    //        set
+    //        {
+    //            this.value = value;
+    //            OnValueChanged();
+    //        }
+    //    }
+    //    public Ores(int value)
+    //    {
+    //        this.value = value;
+    //    }
+    //    public override void OnValueChanged()
+    //    {
+    //        OnOresChanged?.Invoke();
+    //    }
+    //}
 }
