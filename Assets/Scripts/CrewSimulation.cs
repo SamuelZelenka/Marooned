@@ -118,7 +118,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.Kitchen:
                 if (positionFilled)
                 {
-                    jobs[(int)job].characterOnJob.characterData.Hunger.CurrentValue += kitchenHunger;
+                    jobs[(int)job].CharacterOnJob.characterData.Hunger.CurrentValue += kitchenHunger;
                     //Consume raw food
                 }
                 //Open Split window
@@ -130,7 +130,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.MedBay:
                 if (positionFilled)
                 {
-                    jobs[(int)job].characterOnJob.characterData.Vitality.CurrentValue += medbayVitality;
+                    jobs[(int)job].CharacterOnJob.characterData.Vitality.CurrentValue += medbayVitality;
                     //Consume medicine
                 }
                 //Open Split window
@@ -168,7 +168,7 @@ public class CrewSimulation : MonoBehaviour
             case ShipJob.MedBay:
             case ShipJob.Shipwright:
             case ShipJob.Cannons:
-                Character oldCharacter = jobs[(int)job].characterOnJob;
+                Character oldCharacter = jobs[(int)job].CharacterOnJob;
                 if (oldCharacter)
                 {
                     RemoveCharacterFromItsJob(oldCharacter, job);

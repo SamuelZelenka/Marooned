@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIGoldView : MonoBehaviour
 {
-    [SerializeField] Text gold;
+    [SerializeField] Text gold = null;
     private void OnDisable()
     {
         if (HexGridController.player != null)

@@ -4,7 +4,7 @@ using UnityEngine;
 public class ActiveHexObject : HexObject
 {
     public enum EffectType { Healing}
-    [SerializeField] EffectType effectType;
+    [SerializeField] EffectType effectType = EffectType.Healing;
     int changePerTurn;
     Character endOfTurnConnectedCharacter;
 

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class AbilityUIController : MonoBehaviour
 {
     [SerializeField] List<AbilityUI> abilityUIObjects = new List<AbilityUI>();
-    [SerializeField] GameObject disableOverlay;
-    [SerializeField] Text disableText;
+    [SerializeField] GameObject disableOverlay = null;
+    [SerializeField] Text disableText = null;
 
 
     // Update is called once per frame

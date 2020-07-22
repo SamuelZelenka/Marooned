@@ -17,7 +17,7 @@ public class InGameCamera : MonoBehaviour
     [SerializeField] CameraEffect cameraEffect = null;
     [SerializeField] float cameraLerpSpeed = 5;
     [Range(0, 100)] [SerializeField] float cameraSpeed = 0;
-    [SerializeField] bool isCombatCamera = false;
+    //[SerializeField] bool isCombatCamera = false; //NOT USED
 
     [Header("Zoom")]
     [SerializeField] float zoomMin = 0;

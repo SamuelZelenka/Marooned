@@ -2,7 +2,7 @@
 
 public class UIBountyLevelView : MonoBehaviour
 {
-    [SerializeField] Bar bountyLevel;
+    [SerializeField] Bar bountyLevel = null;
     private void OnDisable()
     {
         if (HexGridController.player != null)

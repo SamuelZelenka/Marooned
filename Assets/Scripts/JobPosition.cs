@@ -4,29 +4,29 @@ using UnityEngine.UI;
 public class JobPosition : MonoBehaviour
 {
     public CrewSimulation.ShipJob job;
-    public CrewSimulation crewSimulation;
-    public Image portrait;
-    public Sprite defaultPortrait = null;
+    [SerializeField] CrewSimulation crewSimulation = null;
+    [SerializeField] Image portrait = null;
+    [SerializeField] Sprite defaultPortrait = null;
 
-    public Character characterOnJob;
+    public Character CharacterOnJob { get; private set; }
 
-    [SerializeField] CrewJobDisplay crewJobDisplay;
+    [SerializeField] CrewJobDisplay crewJobDisplay = null;
 
     public bool HasCharacter
     {
-        get => characterOnJob != null;
+        get => CharacterOnJob != null;
     }
 
     public void RemoveCharacter()
     {
-        characterOnJob = null;
+        CharacterOnJob = null;
         portrait.sprite = defaultPortrait;
     }
 
     public void SetCharacterToJob(Character newCharacter)
     {
         crewJobDisplay.character = newCharacter;
-        characterOnJob = newCharacter;
+        CharacterOnJob = newCharacter;
         portrait.sprite = newCharacter.characterData.portrait;
     }
 
@@ -34,7 +34,7 @@ public class JobPosition : MonoBehaviour
     public void ClickDetected()
     {
         Character selectedCharacter = HexGridController.SelectedCharacter;
-        if (!characterOnJob)
+        if (!CharacterOnJob)
         {
             if (selectedCharacter && selectedCharacter.characterData.ShipJob == CrewSimulation.ShipJob.None)
             {
@@ -43,7 +43,7 @@ public class JobPosition : MonoBehaviour
         }
         else
         {
-            crewSimulation.RemoveCharacterFromItsJob(characterOnJob, job);
+            crewSimulation.RemoveCharacterFromItsJob(CharacterOnJob, job);
         }
     }
 }
