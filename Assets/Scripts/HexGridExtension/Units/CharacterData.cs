@@ -2,12 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine;
 
 public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy}
+public enum CharacterResourceType {Vitality, Energy, Hunger, Hygiene, Loyalty, XP }
+
 
 [Serializable]
 public class CharacterData
 {
+    public int ID;
+
     public delegate void CharacterDataHandler();
     public static event CharacterDataHandler OnResourceChanged;
     public static event CharacterDataHandler OnStatChanged;
@@ -21,10 +26,6 @@ public class CharacterData
 
     public const int DEFAULTENERGYREGEN = 20;
 
-    #region Visuals
-    public Sprite portrait = null;
-    #endregion
-
     //Resources
     public Resource Vitality { get; private set; } = new Resource("Vitality", 30, 30);
     public Resource Energy { get; private set; } = new Resource("Energy", 100, 100);
@@ -32,6 +33,27 @@ public class CharacterData
     public Resource Hygiene { get; private set; } = new Resource("Hygiene", 100, 100);
     public Resource Loyalty { get; private set; } = new Resource("Loyalty", 50, 100);
     public Resource XP { get; private set; } = new Resource("XP", 0, 10);
+
+    public Resource GetResource(CharacterResourceType resourceType)
+    {
+        switch (resourceType)
+        {
+            case CharacterResourceType.Vitality:
+                return Vitality;
+            case CharacterResourceType.Energy:
+                return Energy;
+            case CharacterResourceType.Hunger:
+                return Hunger;
+            case CharacterResourceType.Hygiene:
+                return Hygiene;
+            case CharacterResourceType.Loyalty:
+                return Loyalty;
+            case CharacterResourceType.XP:
+                return XP;
+            default:
+                return null;
+        }
+    }
 
     //Stats
     public Stat Strength { get; private set; } = new Stat("Strength", 1);
@@ -51,6 +73,7 @@ public class CharacterData
         }
         return int.MinValue;
     }
+
     public Stat GetStat(CharacterStatType statType)
     {
         switch (statType)

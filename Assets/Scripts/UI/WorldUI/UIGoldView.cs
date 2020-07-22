@@ -10,7 +10,7 @@ public class UIGoldView : MonoBehaviour
     {
         if (HexGridController.player != null)
         {
-            HexGridController.player.PlayerData.OnBountyChanged -= UpdateUI;
+            HexGridController.player.PlayerData.OnGoldChanged -= UpdateUI;
         }
     }
 
@@ -18,7 +18,7 @@ public class UIGoldView : MonoBehaviour
     {
         if (HexGridController.player != null)
         {
-            HexGridController.player.PlayerData.OnBountyChanged += UpdateUI;
+            HexGridController.player.PlayerData.OnGoldChanged += UpdateUI;
             UpdateUI();
         }
     }

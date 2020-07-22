@@ -32,7 +32,7 @@ public class SkillcheckSystem : MonoBehaviour
     {
         parent.SetActive(true);
 
-        abilityUserSkillcheckSystem.SetupSkillcheck(GetStatValue(abilityUser, abilityUserSkillcheck), abilityUser.characterData.portrait);
+        abilityUserSkillcheckSystem.SetupSkillcheck(GetStatValue(abilityUser, abilityUserSkillcheck), abilityUser.portrait);
 
         //Hide all defenders
         foreach (var item in hostileSkillcheckSystems)
@@ -47,13 +47,13 @@ public class SkillcheckSystem : MonoBehaviour
         for (int i = 0; i < hostileTargets.Count; i++)
         {
             hostileSkillcheckSystems[i].gameObject.SetActive(true);
-            hostileSkillcheckSystems[i].SetupSkillcheck(GetStatValue(hostileTargets[i], hostileDodgeSkillcheck), hostileTargets[i].characterData.portrait);
+            hostileSkillcheckSystems[i].SetupSkillcheck(GetStatValue(hostileTargets[i], hostileDodgeSkillcheck), hostileTargets[i].portrait);
         }
 
         for (int i = 0; i < friendlyTargets.Count; i++)
         {
             friendlySkillcheckSystems[i].gameObject.SetActive(true);
-            friendlySkillcheckSystems[i].SetupSkillcheck(GetStatValue(friendlyTargets[i], friendlyDodgeSkillcheck), friendlyTargets[i].characterData.portrait);
+            friendlySkillcheckSystems[i].SetupSkillcheck(GetStatValue(friendlyTargets[i], friendlyDodgeSkillcheck), friendlyTargets[i].portrait);
         }
 
         StartCoroutine(PerformContestedSkillcheck(hostileTargets.Count, friendlyTargets.Count));

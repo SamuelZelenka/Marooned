@@ -31,7 +31,7 @@ public class DistributionShare : MonoBehaviour
         this.transform.localScale = new Vector3(1, 1, 1);
         this.character = character;
         characterName.text = character.characterData.characterName;
-        characterPortrait.sprite = character.characterData.portrait;
+        characterPortrait.sprite = character.portrait;
 
         //Share values
         this.totalShare = totalShare;

@@ -31,7 +31,7 @@ public class CharacterPortrait : MonoBehaviour
     public void UpdatePortrait(Character character)
     {
         this.character = character;
-        profileImage.sprite = character.characterData.portrait;
+        profileImage.sprite = character.portrait;
     }
     private void Update()
     {

@@ -27,7 +27,7 @@ public class JobPosition : MonoBehaviour
     {
         crewJobDisplay.character = newCharacter;
         CharacterOnJob = newCharacter;
-        portrait.sprite = newCharacter.characterData.portrait;
+        portrait.sprite = newCharacter.portrait;
     }
 
     //Input from the UI-system when a character is placed on a job

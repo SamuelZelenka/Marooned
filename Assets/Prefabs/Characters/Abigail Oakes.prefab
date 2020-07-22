@@ -482,13 +482,13 @@ MonoBehaviour:
   landMovementCost: 1
   playerControlled: 0
   myGrid: {fileID: 0}
-  currentVisionRange: 0
-  defaultVisionRange: 0
   characterData:
+    ID: 3
     characterName: Abigail Oakes
-    portrait: {fileID: 0}
   animatedArrow: {fileID: 800652676508173865}
   overHeadUI: {fileID: 8918270303014118050}
+  portrait: {fileID: 6840277151286653622, guid: 70bf407a427250147898d79df59dab57,
+    type: 3}
   tauntedBy: []
   abilityID: 1e0000001f0000002000000021000000
 --- !u!1 &4060792261137100083

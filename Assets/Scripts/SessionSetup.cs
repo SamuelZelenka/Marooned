@@ -84,6 +84,9 @@ public class SetupData
     public float landByLandChance = 0.25f;
     public int landMassMaxSize = 15;
     public List<string> islandNames = new List<string>(1);
+    public float harborMerchantChance = 0.9f;
+    public float harborTavernChance = 0.6f;
+
 
     public void SetSeed()
     {

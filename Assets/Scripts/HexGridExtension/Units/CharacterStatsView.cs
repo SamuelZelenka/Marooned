@@ -57,6 +57,6 @@ public class CharacterStatsView : MonoBehaviour
         hunger.value = 5;
         hygiene.value = 5;
         loyalty.text = $"{0}";
-        Portrait = character.characterData.portrait;
+        Portrait = character.portrait;
     }
 }

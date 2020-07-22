@@ -9,7 +9,9 @@ public class Character : HexUnit
     public GameObject animatedArrow;
     public CharacterOverHeadUI overHeadUI;
 
-    
+    #region Visuals
+    public Sprite portrait = null;
+    #endregion
 
     //Used for storing locations on the player ship
     HexCell savedShipLocation;

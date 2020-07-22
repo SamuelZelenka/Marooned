@@ -32,8 +32,7 @@ public class Bar : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Trying to call on an disabled bar");
-            Debug.LogWarning("This was called on" + gameObject.transform + "/" + gameObject.transform.parent + "/" + gameObject.transform.parent.parent);
+            slider.value = newValue;
         }
     }
 

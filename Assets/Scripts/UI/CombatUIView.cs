@@ -64,13 +64,6 @@ public class CombatUIView : MonoBehaviour
     }
     private void UpdateAllCharacters()
     {
-        foreach (PartyMember member in partyMembers)
-        {
-            if (member.character != null)
-            {
-                member.UpdateUI();
-            }
-        }
         if (HexGridController.SelectedCharacter)
         {
             selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
@@ -85,13 +78,19 @@ public class CombatUIView : MonoBehaviour
         {
             partyTransform.GetChild(i).gameObject.SetActive(true);
             partyMembers[i].SetCharacter(HexGridController.player.Crew[i]);
-            partyMembers[i].UpdateUI();
         }
         if (partyTransform.childCount > HexGridController.player.Crew.Count)
         {
             for (int j = HexGridController.player.Crew.Count; j < partyTransform.childCount; j++)
             {
                 partyTransform.GetChild(j).gameObject.SetActive(false);
+            }
+        }
+        foreach (PartyMember member in partyMembers)
+        {
+            if (member.character != null)
+            {
+                member.UpdateUI(CharacterResourceType.Vitality, CharacterResourceType.Loyalty, CharacterResourceType.Energy);
             }
         }
     }

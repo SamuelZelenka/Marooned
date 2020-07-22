@@ -27,7 +27,7 @@ public class UnassignedCrewController : MonoBehaviour
             for (int i = 0; i < unassignedCharacters.Count; i++)
             {
                 string effectDescription = unassignedCharacters[i].characterData.characterName;
-                Sprite characterPortrait = unassignedCharacters[i].characterData.portrait;
+                Sprite characterPortrait = unassignedCharacters[i].portrait;
                 unassignedCharacterImages[i].character = unassignedCharacters[i];
                 unassignedCharacterImages[i].UpdateUI(effectDescription, characterPortrait);
             }

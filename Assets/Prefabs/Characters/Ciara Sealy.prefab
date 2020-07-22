@@ -482,13 +482,12 @@ MonoBehaviour:
   landMovementCost: 1
   playerControlled: 0
   myGrid: {fileID: 0}
-  currentVisionRange: 0
-  defaultVisionRange: 0
   characterData:
+    ID: 1
     characterName: Ciara Sealy
-    portrait: {fileID: 0}
   animatedArrow: {fileID: 800652676508173865}
   overHeadUI: {fileID: 8918270303014118050}
+  portrait: {fileID: 0}
   tauntedBy: []
   abilityID: 0a0000000b0000000c0000000d000000
 --- !u!1 &4060792261137100083

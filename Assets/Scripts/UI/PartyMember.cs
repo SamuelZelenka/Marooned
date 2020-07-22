@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PartyMember : MonoBehaviour
 {
+    public delegate void CharacterHandler(Character character);
+    public CharacterHandler OnButtonClick;
 
     public Character character;
     [SerializeField] Text characterName = null;
     [SerializeField] CharacterPortrait portraitImage = null;
     [SerializeField] Image activeBorder = null;
-    [SerializeField] Bar vitality = null;
-    [SerializeField] Bar loyalty = null;
-    [SerializeField] Bar energy = null;
+    [SerializeField] Bar[] bars = null;
     [SerializeField] MouseHoverImage prefab = null ;
     [SerializeField] Transform effectParent = null;
 
@@ -23,19 +25,22 @@ public class PartyMember : MonoBehaviour
         this.character = character;
     }
 
-
-
-    public void UpdateUI()
+    public void UpdateUI(params CharacterResourceType[] characterResourceTypes)
     {
         characterName.text = character.characterData.characterName;
         portraitImage.UpdatePortrait(character);
+        foreach (var bar in bars)
+        {
+            bar.gameObject.SetActive(false);
+        }
 
-        vitality.SetCurrentValue(character.characterData.Vitality.CurrentValue);
-        vitality.SetMaxValue(character.characterData.Vitality.maxValue);
-        loyalty.SetCurrentValue(character.characterData.Loyalty.CurrentValue);
-        loyalty.SetMaxValue(character.characterData.Loyalty.maxValue);
-        energy.SetCurrentValue(character.characterData.Energy.CurrentValue);
-        energy.SetMaxValue(character.characterData.Energy.maxValue);
+        for (int i = 0; i < characterResourceTypes.Length && i < bars.Length; i++)
+        {
+            bars[i].gameObject.SetActive(true);
+            CharacterData.Resource resource = character.characterData.GetResource(characterResourceTypes[i]);
+            bars[i].SetMaxValue(resource.maxValue);
+            bars[i].SetCurrentValue(resource.CurrentValue);
+        }
 
         if (HexGridController.ActiveCharacter == character)
         {
@@ -76,5 +81,10 @@ public class PartyMember : MonoBehaviour
             }
             return activeEffects.Count == character.characterData.activeEffects.Count;
         }
+    }
+
+    public void OnClick()
+    {
+        OnButtonClick?.Invoke(character);
     }
 }

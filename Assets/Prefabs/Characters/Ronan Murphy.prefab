@@ -67,13 +67,12 @@ MonoBehaviour:
   landMovementCost: 1
   playerControlled: 1
   myGrid: {fileID: 0}
-  currentVisionRange: 0
-  defaultVisionRange: 0
   characterData:
+    ID: 2
     characterName: Ronan Murphy
-    portrait: {fileID: 21300000, guid: 553e848fa3924cb489bbfe8201661169, type: 3}
   animatedArrow: {fileID: 8042087030329334697}
   overHeadUI: {fileID: 2252724792775966498}
+  portrait: {fileID: 93355526717144439, guid: be8a12de38aefe64aa1101a0de1572b4, type: 3}
   tauntedBy: []
   abilityID: 14000000150000001600000017000000
 --- !u!1 &590610478290757181
