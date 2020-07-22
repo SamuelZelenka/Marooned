@@ -27,7 +27,7 @@ public class PartyMember : MonoBehaviour
 
     public void UpdateUI(params CharacterResourceType[] characterResourceTypes)
     {
-        characterName.text = character.characterData.characterName;
+        characterName.text = character.characterData.CharacterName;
         portraitImage.UpdatePortrait(character);
         foreach (var bar in bars)
         {

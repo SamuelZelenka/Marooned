@@ -21,8 +21,6 @@ public class Harbor : PointOfInterest
         this.hasMerchant = hasMerchant;
         this.hasTavern = hasTavern;
         foodCost = UnityEngine.Random.Range(5, 15);
-
-        //this.RecruitableCharacters = recruitableCharacters;
     }
     #region Merchant
     public MerchantData merchantData; //TEMP (NOT ALL HARBORS HAVE MERCHANTS
@@ -59,26 +57,36 @@ public class Harbor : PointOfInterest
     int foodAmount = 10;
     int foodHeal = 2;
 
-    public List<RecruitableCharacter> RecruitableCharacters { get; private set; }
+    public RecruitableCharacter recruitableCharacter { get; set; }
 
-    public bool IsRecruitable(int characterIndex)
+    public bool IsRecruitable(out int cost)
     {
-       return HexGridController.player.PlayerData.Gold >= RecruitableCharacters[characterIndex].Cost;
+        if (recruitableCharacter == null)
+        {
+            cost = int.MaxValue;
+            return false;
+        }
+        cost = recruitableCharacter.Cost;
+        return HexGridController.player.PlayerData.Gold >= recruitableCharacter.Cost;
     }
 
-    public Character RecruitCharacter(int characterIndex)
+    public bool CanBuyFood(out int foodCost)
     {
-        Character recruitedCharacter = RecruitableCharacters[characterIndex].Character;
-        HexGridController.player.PlayerData.Gold -= RecruitableCharacters[characterIndex].Cost;
+        foodCost = this.foodCost;
+        return HexGridController.player.PlayerData.Gold >= foodCost;
+    }
+
+    public void RecruitCharacter()
+    {
+        Character recruitedCharacter = recruitableCharacter.Character;
+        HexGridController.player.PlayerData.Gold -= recruitableCharacter.Cost;
         HexGridController.player.Crew.Add(recruitedCharacter);
-        RecruitableCharacters.RemoveAt(characterIndex);
+        recruitableCharacter = null;
         OnHarborChanged?.Invoke(this);
-        return recruitedCharacter;
     }
 
-    public struct RecruitableCharacter
+    public class RecruitableCharacter
     {
-
         public int Cost { get; private set; }
         public Character Character { get; private set; }
 

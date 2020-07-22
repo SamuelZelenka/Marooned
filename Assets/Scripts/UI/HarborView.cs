@@ -5,17 +5,43 @@ using UnityEngine.UI;
 
 public class HarborView : MonoBehaviour
 {
-    [SerializeField] Text poiTextTitle = null;
+    [Header("Misc references")]
     [SerializeField] ResourceInteractionController merchantController = null;
-    [SerializeField] PartyMember[] partyMembers = null;
-    [SerializeField] Transform partyTransform = null;
 
+    [Header("Main panel")]
+    [SerializeField] Text poiTextTitle = null;
     [SerializeField] GameObject tavernButton = null;
     [SerializeField] GameObject merchantButton = null;
 
+    [Header("Tavern")]
+    [SerializeField] PartyMember[] partyMembers = null;
+    [SerializeField] Transform partyTransform = null;
+    [SerializeField] CharacterDetailsView[] recruitablePirateStatsViews = null;
+    [SerializeField] GameObject[] recruitCharacterObjects = null;
+    [SerializeField] Button[] tavernFeedButtons = null;
+    [SerializeField] Button tavernRecruitButton = null;
+
+
+    Harbor latestHarbor;
+
+    private void OnDisable()
+    {
+        if (latestHarbor != null)
+        {
+            foreach (var partyMember in partyMembers)
+            {
+                partyMember.OnButtonClick -= latestHarbor.FeedCharacter;
+                partyMember.OnButtonClick -= UpdateTavernCrew;
+            }
+            latestHarbor.OnHarborChanged -= HarborUpdated;
+            HexGridController.player.PlayerData.OnGoldChanged -= UpdateTavernButtonStatuses;
+        }
+        latestHarbor = null;
+    }
 
     public void Setup(Harbor harbor)
     {
+        latestHarbor = harbor;
         poiTextTitle.text = harbor.name;
         merchantController.Setup(harbor);
         tavernButton.SetActive(harbor.hasTavern);
@@ -32,11 +58,21 @@ public class HarborView : MonoBehaviour
                 partyMember.OnButtonClick += harbor.FeedCharacter;
                 partyMember.OnButtonClick += UpdateTavernCrew;
             }
+            harbor.OnHarborChanged += HarborUpdated;
+            HexGridController.player.PlayerData.OnGoldChanged += UpdateTavernButtonStatuses;
+
             UpdateTavernCrew(null);
+            UpdateTavernRecruitable();
+            UpdateTavernButtonStatuses();
         }
     }
 
-    public void UpdateTavernCrew(Character character)
+    private void HarborUpdated(Harbor harbor)
+    {
+        UpdateTavernRecruitable();
+    }
+
+    private void UpdateTavernCrew(Character character)
     {
         SyncPortraitCount();
         foreach (var partyMember in partyMembers)
@@ -63,4 +99,30 @@ public class HarborView : MonoBehaviour
             }
         }
     }
+
+    private void UpdateTavernRecruitable()
+    {
+        foreach (var item in recruitCharacterObjects)
+        {
+            item.SetActive(latestHarbor.recruitableCharacter != null);
+        }
+        if (latestHarbor.recruitableCharacter != null)
+        {
+            foreach (var item in recruitablePirateStatsViews)
+            {
+                item.UpdateValues(latestHarbor.recruitableCharacter.Character);
+            }
+        }
+    }
+
+    private void UpdateTavernButtonStatuses()
+    {
+        foreach (var item in tavernFeedButtons)
+        {
+            item.interactable = latestHarbor.CanBuyFood(out int foodCost);
+        }
+        tavernRecruitButton.interactable = latestHarbor.IsRecruitable(out int characterCost);
+    }
+
+    public void RecruitCharacter() => latestHarbor.RecruitCharacter();
 }

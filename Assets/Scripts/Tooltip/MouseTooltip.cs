@@ -68,7 +68,6 @@ public class MouseTooltip : MonoBehaviour
             return;
         }
 
-        gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
         animator.SetTrigger("FadeIn");
@@ -97,7 +96,6 @@ public class MouseTooltip : MonoBehaviour
     private void Hide()
     {
         animator.SetTrigger("FadeOut");
-        gameObject.SetActive(false);
     }
 
     public static void SetUpToolTip(ColorText textColor, string message) => instance.SetUp(textColor, message);

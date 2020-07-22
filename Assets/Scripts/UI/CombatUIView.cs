@@ -12,11 +12,11 @@ public class CombatUIView : MonoBehaviour
     [SerializeField] Transform partyTransform = null;
 
     [Header("Selected Character")]
-    [SerializeField] CharacterSelection selectedCharacter = null;
-    [SerializeField] AbilityUIController abilityUI = null;
+    [SerializeField] CharacterDetailsView selectedCharacter = null;
 
     [Header("Active Character")]
-    [SerializeField] CharacterSelection activeCharacter = null;
+    [SerializeField] CharacterDetailsView activeCharacter = null;
+    [SerializeField] AbilityUIController abilityUI = null;
 
     [Header("Timeline")]
     [SerializeField] CharacterPortrait currentCharacter = null;
@@ -66,12 +66,11 @@ public class CombatUIView : MonoBehaviour
     {
         if (HexGridController.SelectedCharacter)
         {
-            selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
+            selectedCharacter.UpdateValues(HexGridController.SelectedCharacter);
         }
         if (HexGridController.ActiveCharacter != null)
         {
-            selectedCharacter.UpdateUI(HexGridController.SelectedCharacter);
-            activeCharacter.UpdateUI(HexGridController.ActiveCharacter);
+            activeCharacter.UpdateValues(HexGridController.ActiveCharacter);
             abilityUI.UpdateUI();
         }
         for (int i = 0; i < HexGridController.player.Crew.Count; i++)

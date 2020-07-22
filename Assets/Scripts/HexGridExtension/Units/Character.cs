@@ -149,7 +149,7 @@ public class Character : HexUnit
     {
         if (!Abilities.Contains(ability))
         {
-            throw new System.ArgumentException("Selected ability not part of characters abilities. In " + characterData.characterName + " - " + ability.ToString());
+            throw new System.ArgumentException("Selected ability not part of characters abilities. In " + characterData.CharacterName + " - " + ability.ToString());
         }
         possibleTargets = ability.targeting.GetValidTargetCells(Location, true);
         return ability;

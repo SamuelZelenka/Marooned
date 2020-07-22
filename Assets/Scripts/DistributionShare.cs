@@ -30,7 +30,7 @@ public class DistributionShare : MonoBehaviour
         //Setup
         this.transform.localScale = new Vector3(1, 1, 1);
         this.character = character;
-        characterName.text = character.characterData.characterName;
+        characterName.text = character.characterData.CharacterName;
         characterPortrait.sprite = character.portrait;
 
         //Share values

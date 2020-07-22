@@ -11,8 +11,8 @@ public class PlayerData
     public DataHandler OnBountyChanged;
     public DataHandler OnGoldChanged;
 
-    public List<CharacterData> AliveCharacters { get; private set; }
-    public List<CharacterData> DeadCharacters { get; private set; }
+    public List<CharacterData> AliveCharacters { get; private set; } = new List<CharacterData>();
+    public List<CharacterData> DeadCharacters { get; private set; } = new List<CharacterData>();
     public ResourceInventory Resources { get; private set; } = new ResourceInventory();
     int gold;
     public int Gold {

@@ -76,7 +76,7 @@ public class CombatTurnSystem : MonoBehaviour
     private void StartNextTurn()
     {
         HexGridController.ActiveCharacter = TurnOrder.Dequeue();
-        Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.characterName);
+        Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.CharacterName);
 
         OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);
 

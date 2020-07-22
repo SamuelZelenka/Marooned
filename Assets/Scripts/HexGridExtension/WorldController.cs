@@ -34,9 +34,22 @@ public class WorldController : MonoBehaviour
     [SerializeField] WorldUIView worldUIView = null;
     [SerializeField] WorldSetup worldSetup = null;
     [SerializeField] List<Character> allCharacters = null;
+    [SerializeField] MapTurnSystem turnSystem = null;
 
-   public void Setup(HexGrid hexGrid, SetupData setupData)
+    private void OnEnable()
     {
+        turnSystem.OnWeekEnded += ChangeCharactersInTaverns;
+    }
+
+    private void OnDisable()
+    {
+        turnSystem.OnWeekEnded -= ChangeCharactersInTaverns;
+    }
+
+    public void Setup(HexGrid hexGrid, SetupData setupData)
+    {
+        turnSystem.OnFirstTurnStarted += ChangeCharactersInTaverns;
+
         this.hexGrid = hexGrid;
         MerchantRoutes = new Route[setupData.numberOfMerchantRoutes];
         HarborCells = new List<HexCell>();
@@ -53,8 +66,8 @@ public class WorldController : MonoBehaviour
         }
         //Set player spawn position
         PlayerSpawnPosition = Utility.ReturnRandom(CellFinder.GetCellsWithinRange(HarborCells[0], 2, (c) => c.Traversable == true, (c) => c.Unit == null, (c) => c.IsOcean == true));
-
     }
+
     public HexCell GetRandomHarborWithinRange(Ship ship, int minDistance, int maxDistance)
     {
         HexCell cell = null;
@@ -130,6 +143,7 @@ public class WorldController : MonoBehaviour
 
     void ChangeCharactersInTaverns()
     {
+        Debug.Log("Characters in taverns changed locations");
         Player player = HexGridController.player;
         List<Harbor.RecruitableCharacter> recruitableCharacters = new List<Harbor.RecruitableCharacter>();
         List<Harbor> harborsWithTavern = new List<Harbor>();
@@ -168,10 +182,8 @@ public class WorldController : MonoBehaviour
         foreach (var character in recruitableCharacters)
         {
             Harbor harbor = Utility.ReturnRandom(harborsWithTavern);
-            harbor.RecruitableCharacters.Clear();
-            harbor.RecruitableCharacters.Add(character);
+            harbor.recruitableCharacter = character;
             harborsWithTavern.Remove(harbor);
         }
-
     }
 }

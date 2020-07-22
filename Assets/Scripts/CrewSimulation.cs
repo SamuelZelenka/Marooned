@@ -178,7 +178,7 @@ public class CrewSimulation : MonoBehaviour
                 break;
         }
         unassignedCrewController.UpdateUnassignedCharacterList();
-        Debug.Log(newCharacter.characterData.characterName + " set to job: " + job.ToString());
+        Debug.Log(newCharacter.characterData.CharacterName + " set to job: " + job.ToString());
     }
 
     public void RemoveCharacterFromItsJob(Character characterToRemove, ShipJob job)
@@ -199,7 +199,7 @@ public class CrewSimulation : MonoBehaviour
                 break;
         }
         unassignedCrewController.UpdateUnassignedCharacterList();
-        Debug.Log(characterToRemove.characterData.characterName + " removed from it's job");
+        Debug.Log(characterToRemove.characterData.CharacterName + " removed from it's job");
     }
 
 

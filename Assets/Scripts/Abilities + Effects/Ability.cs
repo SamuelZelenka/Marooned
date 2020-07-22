@@ -129,21 +129,21 @@ public abstract class Ability
                 {
                     if (i == targets.Count - 1)
                     {
-                        targetsToString += $"and {targets[i].characterData.characterName}.";
+                        targetsToString += $"and {targets[i].characterData.CharacterName}.";
                     }
                     else if (i == targets.Count - 2)
                     {
-                        targetsToString += $"{targets[i].characterData.characterName} ";
+                        targetsToString += $"{targets[i].characterData.CharacterName} ";
                     }
                     else
                     {
-                        targetsToString += $"{targets[i].characterData.characterName}, ";
+                        targetsToString += $"{targets[i].characterData.CharacterName}, ";
                     }
                 }
             }
             else
             {
-                targetsToString = $"{targets[0].characterData.characterName}.";
+                targetsToString = $"{targets[0].characterData.CharacterName}.";
             }
         }
         else

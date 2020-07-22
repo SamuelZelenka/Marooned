@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 4875204857178523651}
   - component: {fileID: 4875204857178523649}
   - component: {fileID: 4875204857178523650}
+  - component: {fileID: 7641836494450408719}
   m_Layer: 5
   m_Name: MouseTooltip
   m_TagString: Untagged
@@ -221,7 +222,7 @@ Animator:
   m_GameObject: {fileID: 4875204857178523676}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ac4a88e16af6dc04293889face530ae9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -230,3 +231,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!225 &7641836494450408719
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4875204857178523676}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
