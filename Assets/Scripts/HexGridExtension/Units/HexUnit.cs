@@ -18,6 +18,10 @@ public abstract class HexUnit : MonoBehaviour
     List<HexCell> pathToTravel;
     List<HexCell> reachableCells = new List<HexCell>(); public List<HexCell> ReachableCells { get => reachableCells; }
 
+    [Header("Visuals")]
+    [SerializeField] SpriteRenderer unitRenderer = null;
+    [SerializeField] Sprite[] unitSprites = new Sprite[3];
+
     public bool playerControlled;
     public HexGrid myGrid;
     public Player myPlayer;
@@ -64,6 +68,16 @@ public abstract class HexUnit : MonoBehaviour
         {
             orientation = value;
             //Change sprite
+            if (unitRenderer && unitSprites != null && unitSprites.Length == 3)
+            {
+                unitRenderer.flipX = value >= HexDirection.SW;
+                int index = (int)value;
+                if (value >= HexDirection.SW)
+                {
+                    index -= 3;
+                }
+                unitRenderer.sprite = unitSprites[index];
+            }
         }
     }
 

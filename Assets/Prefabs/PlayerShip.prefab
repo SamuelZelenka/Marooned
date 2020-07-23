@@ -68,10 +68,10 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2019508797
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 14c59f06f3237f1419843b8c9dab36ab, type: 3}
-  m_Color: {r: 0.4009434, g: 0.47453034, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 1c9e622e7446de047b1662c3c324d8ca, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -129,8 +129,11 @@ MonoBehaviour:
   defaultMovementPoints: 5
   oceanMovementCost: 1
   landMovementCost: 1
+  unitRenderer: {fileID: 5460013567181183452}
+  unitSprites:
+  - {fileID: 21300000, guid: 71d4b69604911534db35a85f080e8b88, type: 3}
+  - {fileID: 21300000, guid: 1c9e622e7446de047b1662c3c324d8ca, type: 3}
+  - {fileID: 21300000, guid: ef3e6079e5a4f3744b6e87b7c363fcef, type: 3}
   playerControlled: 0
   myGrid: {fileID: 0}
-  pathfinding: {fileID: 0}
-  currentVisionRange: 0
-  defaultVisionRange: 0
+  shipViewer: {fileID: 0}
