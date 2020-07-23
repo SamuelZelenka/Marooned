@@ -13,6 +13,7 @@ public class Bar : MonoBehaviour
     //Use this method to set the max value of the slider
     public void SetMaxValue(int value)
     {
+        StopAllCoroutines();
         if (value > 0)
         {
             slider.maxValue = value;
@@ -26,6 +27,7 @@ public class Bar : MonoBehaviour
     //Use this one to set the fill of the bar 
     public void SetCurrentValue(int newValue)
     {
+        StopAllCoroutines();
         if (this.gameObject.activeInHierarchy)
         {
             StartCoroutine(ChangeSliderValueOverTime(slider, newValue));

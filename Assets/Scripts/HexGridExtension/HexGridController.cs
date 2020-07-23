@@ -36,10 +36,6 @@ public class HexGridController : MonoBehaviour
         get => selectedCell;
         set
         {
-            if (value == selectedCell)
-            {
-                return;
-            }
             selectedCell = value;
             if (selectedCell)
             {

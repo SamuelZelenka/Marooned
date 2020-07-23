@@ -45,9 +45,7 @@ public class Character : HexUnit
         }
     }
 
-    public void CombatSetup() => characterData.ObjectInitialized();
-
-    
+    public void CombatSetup() => characterData.SendValuesToRequesters();
 
     #region Effects and abilities
     public bool IsStunned

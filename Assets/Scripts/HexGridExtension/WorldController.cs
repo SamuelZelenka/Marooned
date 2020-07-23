@@ -126,26 +126,13 @@ public class WorldController : MonoBehaviour
         MapTurnSystem.instance.AddPlayerToTurnOrder(newRedcoatPlayer);
     }
 
-    public static readonly int[] BOUNTYLEVELTHRESHOLDS = new int[] { 1, 20, 40, 60, 80, 100 };
-    public static readonly int[] BOUNTYLEVELVISION = new int[] { 1, 2, 2, 3, int.MaxValue, int.MaxValue};
-    public static int PlayerBountyVisionRange(int bountyLevel)
-    {
-        int vision = 0;
-        for (int i = 0; i < BOUNTYLEVELTHRESHOLDS.Length; i++)
-        {
-            if (bountyLevel >= BOUNTYLEVELTHRESHOLDS[i])
-            {
-                vision = BOUNTYLEVELVISION[i];
-            }
-        }
-        return vision;
-    }
+    public static readonly int[] BOUNTYLEVELVISION = new int[] { 0, 2, 2, 4, 4, 6, 6, 8, 8, 10};
 
     void ChangeCharactersInTaverns()
     {
         Debug.Log("Characters in taverns changed locations");
         Player player = HexGridController.player;
-        List<Harbor.RecruitableCharacter> recruitableCharacters = new List<Harbor.RecruitableCharacter>();
+        List<Character> recruitableCharacters = new List<Character>();
         List<Harbor> harborsWithTavern = new List<Harbor>();
         foreach (var harbor in Harbors)
         {
@@ -155,7 +142,6 @@ public class WorldController : MonoBehaviour
             }
         }
 
-        int cost = 100;
         foreach (var character in allCharacters)
         {
             bool isRecruitable = true;
@@ -175,7 +161,7 @@ public class WorldController : MonoBehaviour
             }
             if (isRecruitable)
             {
-                recruitableCharacters.Add(new Harbor.RecruitableCharacter(cost, character));
+                recruitableCharacters.Add(character);
             }
         }
 

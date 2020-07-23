@@ -168,7 +168,7 @@ public class CollateralRangeLine : TargetType
         List<HexCell> affectedCells = new List<HexCell>();
         HexDirection directionToTarget = HexDirectionExtension.GetDirectionTo(fromCell, targetCell);
         affectedCells.Add(targetCell);
-        affectedCells.AddRange(CellFinder.GetAllCellsInLine(fromCell, directionToTarget, rangeAfterFirstHit, (c) => c.Traversable == true));
+        affectedCells.AddRange(CellFinder.GetAllCellsInLine(targetCell, directionToTarget, rangeAfterFirstHit, (c) => c.Traversable == true));
         return affectedCells;
     }
 }

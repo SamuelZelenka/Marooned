@@ -99,6 +99,6 @@ public class DistributionShare : MonoBehaviour
 
     private float GetCharacterResourceAfterAdd()
     {
-        return Mathf.Min(character.characterData.Loyalty.maxValue, character.characterData.Loyalty.CurrentValue + Utility.FactorToPercentage(shareFactor) - equalSharePercentage);
+        return Mathf.Min(character.characterData.Loyalty.MaxValue, character.characterData.Loyalty.CurrentValue + Utility.FactorToPercentage(shareFactor) - equalSharePercentage);
     }
 }

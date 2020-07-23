@@ -110,7 +110,7 @@ public class HarborView : MonoBehaviour
         {
             foreach (var item in recruitablePirateStatsViews)
             {
-                item.UpdateValues(latestHarbor.recruitableCharacter.Character);
+                item.UpdateValues(latestHarbor.recruitableCharacter);
             }
         }
     }

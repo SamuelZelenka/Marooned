@@ -57,7 +57,7 @@ public class Harbor : PointOfInterest
     int foodAmount = 10;
     int foodHeal = 2;
 
-    public RecruitableCharacter recruitableCharacter { get; set; }
+    public Character recruitableCharacter { get; set; }
 
     public bool IsRecruitable(out int cost)
     {
@@ -66,8 +66,8 @@ public class Harbor : PointOfInterest
             cost = int.MaxValue;
             return false;
         }
-        cost = recruitableCharacter.Cost;
-        return HexGridController.player.PlayerData.Gold >= recruitableCharacter.Cost;
+        cost = recruitableCharacter.characterData.BountyLevel.CurrentValue;
+        return HexGridController.player.PlayerData.BountyLevel.CurrentValue >= recruitableCharacter.characterData.BountyLevel.CurrentValue;
     }
 
     public bool CanBuyFood(out int foodCost)
@@ -78,24 +78,12 @@ public class Harbor : PointOfInterest
 
     public void RecruitCharacter()
     {
-        Character recruitedCharacter = recruitableCharacter.Character;
-        HexGridController.player.PlayerData.Gold -= recruitableCharacter.Cost;
-        HexGridController.player.Crew.Add(recruitedCharacter);
+        Character recruitedCharacter = recruitableCharacter;
+        HexGridController.player.Crew.Add(recruitedCharacter); //TODO CALL METHOD TO SPAWN ON SHIP
         recruitableCharacter = null;
         OnHarborChanged?.Invoke(this);
     }
 
-    public class RecruitableCharacter
-    {
-        public int Cost { get; private set; }
-        public Character Character { get; private set; }
-
-        public RecruitableCharacter(int cost, Character character)
-        {
-            Cost = cost;
-            Character = character;
-        }
-    }
     public void FeedCharacter(Character character)
     {
         character.characterData.Hunger.CurrentValue += foodAmount;

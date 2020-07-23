@@ -3,18 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy, Bounty}
+public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy}
 public enum CharacterResourceType {Vitality, Loyalty, Energy, Hunger, Hygiene, XP }
 
 [Serializable]
 public class CharacterData
 {
     public int ID;
+    //[Range(1, 10)]
+    //public int startingLevel = 1;
+    public delegate void CharacterDataHandler(CharacterData characterData);
+    public delegate void CharacterDataValueHandler(int newValue);
 
-    public delegate void CharacterDataHandler();
-    public static event CharacterDataHandler OnResourceChanged;
-    public static event CharacterDataHandler OnStatChanged;
-    public static event CharacterDataHandler OnEffectChanged;
+    public event CharacterDataHandler OnCharacterDataInfoRequested;
+    public event CharacterDataHandler OnEffectChanged;
+    public event CharacterDataHandler OnAnyResourceChanged; 
 
     [SerializeField] string characterFirstName = "name";
     [SerializeField] string characterLastName = "namesson";
@@ -23,11 +26,9 @@ public class CharacterData
     {
         get
         {
-            return $"{characterFirstName} 'The {BOUNTYNAMES[Bounty.CurrentValue]}' {characterLastName}";  
+            return $"{characterFirstName} 'The {Bounty.BOUNTYNAMES[BountyLevel.CurrentValue]}' {characterLastName}";  
         }
     }
-    public static readonly string[] BOUNTYNAMES = new string[] {"Landlubber", "Cannonfodder", "Freebooter", "Seadog", "Skirmisher", "Bootyfinder", "Seasoned", "First mate", "Expert" ,"Legend"};
-    public static readonly int[] BOUNTYLEVELS = new int[] { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 };
 
     public List<TickEffect> activeEffects = new List<TickEffect>();
     public List<TickEffect> removedEffects = new List<TickEffect>();
@@ -42,6 +43,29 @@ public class CharacterData
     public Resource Hygiene { get; private set; } = new Resource("Hygiene", 100, 100);
     public Resource Loyalty { get; private set; } = new Resource("Loyalty", 50, 100);
     public Resource XP { get; private set; } = new Resource("XP", 0, 100);
+
+    //Stats
+    public Stat Strength { get; private set; } = new Stat("Strength", 1, 20);
+    public Stat Stamina { get; private set; } = new Stat("Stamina", 1, 20);
+    public Stat Constitution { get; private set; } = new Stat("Constitution", 1, 20);
+    public Stat Agility { get; private set; } = new Stat("Agility", 1, 20);
+    public Stat Toughness { get; private set; } = new Stat("Toughness", 1, 20);
+    public Stat Accuracy { get; private set; } = new Stat("Accuracy", 1, 20);
+
+    public Bounty BountyLevel { get; private set; } = new Bounty("Bounty", 1);
+
+
+
+    public CharacterData()
+    {
+        Vitality.OnResourceChanged += ResourceChanged;
+        Energy.OnResourceChanged += ResourceChanged;
+        Hunger.OnResourceChanged += ResourceChanged;
+        Hygiene.OnResourceChanged += ResourceChanged;
+        Loyalty.OnResourceChanged += ResourceChanged;
+        XP.OnResourceChanged += ResourceChanged;
+    }
+
 
     public Resource GetResource(CharacterResourceType resourceType)
     {
@@ -63,15 +87,6 @@ public class CharacterData
                 return null;
         }
     }
-
-    //Stats
-    public Stat Strength { get; private set; } = new Stat("Strength", 1, 20);
-    public Stat Stamina { get; private set; } = new Stat("Stamina", 1, 20);
-    public Stat Constitution { get; private set; } = new Stat("Constitution", 1, 20);
-    public Stat Agility { get; private set; } = new Stat("Agility", 1, 20);
-    public Stat Toughness { get; private set; } = new Stat("Toughness", 1, 20);
-    public Stat Accuracy { get; private set; } = new Stat("Accuracy", 1, 20);
-    public Stat Bounty { get; private set; } = new Stat("Bounty", 1, 10);
 
     public int GetStatValue(CharacterStatType statType)
     {
@@ -99,8 +114,6 @@ public class CharacterData
                 return Toughness;
             case CharacterStatType.Accuracy:
                 return Accuracy;
-            case CharacterStatType.Bounty:
-                return Bounty;
             default:
                 Debug.LogError("Stat not found");
                 return null;
@@ -110,7 +123,7 @@ public class CharacterData
     public void AddEffect(TickEffect effect)
     {
         activeEffects.Add(effect);
-        OnEffectChanged?.Invoke();
+        OnEffectChanged?.Invoke(this);
         Debug.Log(activeEffects.Count);
     }
 
@@ -120,7 +133,7 @@ public class CharacterData
         {
             activeEffects.Remove(effect);
             removedEffects.Add(effect);
-            OnEffectChanged?.Invoke();
+            OnEffectChanged?.Invoke(this);
         }
         else
         {
@@ -128,46 +141,52 @@ public class CharacterData
         }
     }
 
-    public void ObjectInitialized() => OnResourceChanged?.Invoke();
+    public void SendValuesToRequesters() => OnCharacterDataInfoRequested?.Invoke(this);
+    public void ResourceChanged(int newValue) => OnAnyResourceChanged(this);
+
 
     [Serializable]
     public class Resource
     {
+        public event CharacterDataValueHandler OnResourceChanged;
+
         const int MINRESOURCEVALUE = 0;
 
-        public string resourceName;
-        public int maxValue;
+        public string ResourceName { get; private set; }
+        public int MaxValue { get; private set; }
         int currentValue;
         public int CurrentValue
         {
             get => currentValue;
             set
             {
-                currentValue = Mathf.Clamp(value, MINRESOURCEVALUE, maxValue);
-                OnResourceChanged?.Invoke();
+                currentValue = Mathf.Clamp(value, MINRESOURCEVALUE, MaxValue);
+                OnResourceChanged?.Invoke(currentValue);
             }
         }
 
-        public string Percentage => Utility.FactorToPercentageText((float)currentValue / (float)maxValue);
+        public string Percentage => Utility.FactorToPercentageText((float)currentValue / (float)MaxValue);
 
         public Resource(string resourceName, int currentValue, int maxValue)
         {
-            this.resourceName = resourceName;
-            this.maxValue = maxValue;
+            this.ResourceName = resourceName;
+            this.MaxValue = maxValue;
             this.currentValue = currentValue;
         }
         public override string ToString()
         {
-            return $"{currentValue} / {maxValue}";
+            return $"{currentValue} / {MaxValue}";
         }
     }
     [Serializable]
     public class Stat
     {
+        public event CharacterDataValueHandler OnStatChanged;
+
         const int MINSTATVALUE = 1;
         int maxStatValue = 20;
 
-        public string statName;
+        public string StatName { get; private set; }
         private int currentValue;
         public int CurrentValue 
         {
@@ -175,7 +194,7 @@ public class CharacterData
             private set 
             {
                 currentValue = Mathf.Clamp(value, MINSTATVALUE, maxStatValue);
-                OnStatChanged?.Invoke(); 
+                OnStatChanged?.Invoke(currentValue); 
             }
         }
 
@@ -185,7 +204,7 @@ public class CharacterData
 
         public Stat(string statName, int currentValue, int maxValue)
         {
-            this.statName = statName;
+            this.StatName = statName;
             this.currentValue = currentValue;
             this.maxStatValue = maxValue;
         }
@@ -194,6 +213,5 @@ public class CharacterData
             return CurrentValue.ToString();
         }
     }
-
 }
 

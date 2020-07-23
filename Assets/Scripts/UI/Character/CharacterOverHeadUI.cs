@@ -15,53 +15,52 @@ public class CharacterOverHeadUI : MonoBehaviour
 
     private void OnEnable()
     {
-        CharacterData.OnResourceChanged += UpdateUI;
-        CombatTurnSystem.OnTurnEnding += UpdateUI;
-
+        character.characterData.OnAnyResourceChanged += UpdateUI;
+        character.characterData.OnEffectChanged += UpdateUI;
     }
     private void OnDisable()
     {
-        CharacterData.OnResourceChanged -= UpdateUI;
-        CombatTurnSystem.OnTurnEnding -= UpdateUI;
+        character.characterData.OnAnyResourceChanged -= UpdateUI;
+        character.characterData.OnEffectChanged -= UpdateUI;
     }
 
-    public void UpdateUI(Character character) => UpdateUI();
+    public void UpdateUI(Character characterToUpdate) => UpdateUI(characterToUpdate.characterData);
 
-    public void UpdateUI()
+    public void UpdateUI(CharacterData updatedData)
     {
-        vitality.SetCurrentValue(character.characterData.Vitality.CurrentValue);
-        vitality.SetMaxValue(character.characterData.Vitality.maxValue);
-        loyalty.SetCurrentValue(character.characterData.Loyalty.CurrentValue);
-        loyalty.SetMaxValue(character.characterData.Loyalty.maxValue);
+        vitality.SetMaxValue(updatedData.Vitality.MaxValue);
+        vitality.SetCurrentValue(updatedData.Vitality.CurrentValue);
+        loyalty.SetMaxValue(updatedData.Loyalty.MaxValue);
+        loyalty.SetCurrentValue(updatedData.Loyalty.CurrentValue);
 
         if (SyncEffectLists())
         {
-            for (int i = 0; i < character.characterData.activeEffects.Count; i++)
+            for (int i = 0; i < updatedData.activeEffects.Count; i++)
             {
-                string effectDescription = character.characterData.activeEffects[i].GetDescription();
-                Sprite effectSprite = character.characterData.activeEffects[i].EffectSprite;
+                string effectDescription = updatedData.activeEffects[i].GetDescription();
+                Sprite effectSprite = updatedData.activeEffects[i].EffectSprite;
                 activeEffects[i].UpdateUI(effectDescription, effectSprite);
             }
         }
 
         bool SyncEffectLists()
         {
-            if (activeEffects.Count < character.characterData.activeEffects.Count)
+            if (activeEffects.Count < updatedData.activeEffects.Count)
             {
-                while (activeEffects.Count < character.characterData.activeEffects.Count)
+                while (activeEffects.Count < updatedData.activeEffects.Count)
                 {
                     activeEffects.Add(Instantiate(prefab, effectParent));
                 }
             }
-            if (activeEffects.Count > character.characterData.activeEffects.Count)
+            if (activeEffects.Count > updatedData.activeEffects.Count)
             {
-                while (activeEffects.Count > character.characterData.activeEffects.Count)
+                while (activeEffects.Count > updatedData.activeEffects.Count)
                 {
                     Destroy(activeEffects[0].gameObject);
                     activeEffects.RemoveAt(0);
                 }
             }
-            return activeEffects.Count == character.characterData.activeEffects.Count;
+            return activeEffects.Count == updatedData.activeEffects.Count;
         }
     }
 }

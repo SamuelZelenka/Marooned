@@ -38,7 +38,7 @@ public class PartyMember : MonoBehaviour
         {
             bars[i].gameObject.SetActive(true);
             CharacterData.Resource resource = character.characterData.GetResource(characterResourceTypes[i]);
-            bars[i].SetMaxValue(resource.maxValue);
+            bars[i].SetMaxValue(resource.MaxValue);
             bars[i].SetCurrentValue(resource.CurrentValue);
         }
 

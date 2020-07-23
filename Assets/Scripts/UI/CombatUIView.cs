@@ -31,19 +31,22 @@ public class CombatUIView : MonoBehaviour
         HexUnit.OnUnitMoved += UnitMoved;
         HexGridController.OnCellSelected += CellSelected;
         CombatTurnSystem.OnTurnBegining += TurnStarted;
-        CharacterData.OnEffectChanged += UpdateAllCharacters;
-        CharacterData.OnResourceChanged += UpdateAllCharacters;
-        CharacterData.OnStatChanged += UpdateAllCharacters;
+        //CharacterData.OnEffectChanged += UpdateAllCharacters;
+        //CharacterData.OnResourceChanged += UpdateAllCharacters;
+        //CharacterData.OnStatChanged += UpdateAllCharacters;
     }
     private void OnDisable()
     {
         HexUnit.OnUnitMoved -= UnitMoved;
         HexGridController.OnCellSelected -= CellSelected;
         CombatTurnSystem.OnTurnBegining -= TurnStarted;
-        CharacterData.OnEffectChanged -= UpdateAllCharacters;
-        CharacterData.OnResourceChanged -= UpdateAllCharacters;
-        CharacterData.OnStatChanged -= UpdateAllCharacters;
+        //CharacterData.OnEffectChanged -= UpdateAllCharacters;
+        //CharacterData.OnResourceChanged -= UpdateAllCharacters;
+        //CharacterData.OnStatChanged -= UpdateAllCharacters;
     }
+    //INFO 
+    // UPDATING ALL CHARACTERS EVERY TIME ANY CHARACTER CHANGES ANY STAT SEEMS UNREASONABLE
+    //SIMON 
 
     private void UpdateTimeline()
     {

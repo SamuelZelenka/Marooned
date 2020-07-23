@@ -5,34 +5,24 @@ public enum ResourceType { Wool, Tobacco, Coffee, Silk, Ores, MAX = 5 }
 [System.Serializable]
 public class PlayerData
 {
-    public const int MAXBOUNTYLEVEL = 100;
-
     public delegate void DataHandler();
-    public DataHandler OnBountyChanged;
     public DataHandler OnGoldChanged;
 
     public List<CharacterData> AliveCharacters { get; private set; } = new List<CharacterData>();
     public List<CharacterData> DeadCharacters { get; private set; } = new List<CharacterData>();
     public ResourceInventory Resources { get; private set; } = new ResourceInventory();
     int gold;
-    public int Gold {
+    public int Gold
+    {
         get { return gold; }
         set
         {
-            OnGoldChanged?.Invoke();
             gold = value;
+            OnGoldChanged?.Invoke();
         }
     }
 
-    int bountyLevel;
-    public int BountyLevel
-    {
-        get { return bountyLevel; }
-        set {
-            OnBountyChanged?.Invoke();
-            bountyLevel = value;
-        }
-    }
+    public Bounty BountyLevel { get; private set; } = new Bounty("Bounty", 1);
 }
 
 [System.Serializable]

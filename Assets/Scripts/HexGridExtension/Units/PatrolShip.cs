@@ -17,7 +17,7 @@ public class PatrolShip : Ship
     public override IEnumerator PerformAutomaticTurn()
     {
         //Check for player
-        CurrentVisionRange = WorldController.PlayerBountyVisionRange(HexGridController.player.PlayerData.BountyLevel);
+        CurrentVisionRange = WorldController.BOUNTYLEVELVISION[HexGridController.player.PlayerData.BountyLevel.CurrentValue];
         Debug.Log($"Searching for player with a vision range of {CurrentVisionRange}");
         List<HexCell> playerControlledCells = CellFinder.GetCellsWithinRange(Location, CurrentVisionRange, (c) => c.Unit != null && c.Unit.playerControlled == true);
         if (playerControlledCells.Count > 1)

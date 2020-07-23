@@ -81,7 +81,7 @@ public abstract class TickEffect : Effect
             RemoveEffect(owner);
         }
         counter++;
-        owner.overHeadUI.UpdateUI();
+        owner.overHeadUI.UpdateUI(owner);
     }
     public virtual void RemoveEffect(Character owner)
     {

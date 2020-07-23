@@ -48,35 +48,35 @@ public class CharacterDetailsView : MonoBehaviour
 
         if (vitality)
         {
-            vitality.SetMaxValue(data.Vitality.maxValue);
+            vitality.SetMaxValue(data.Vitality.MaxValue);
             vitality.SetCurrentValue(data.Vitality.CurrentValue);
         }
         if (loyalty)
         {
-            loyalty.SetMaxValue(data.Loyalty.maxValue);
+            loyalty.SetMaxValue(data.Loyalty.MaxValue);
             loyalty.SetCurrentValue(data.Loyalty.CurrentValue);
         }
         if (energy)
         {
-            energy.SetMaxValue(data.Energy.maxValue);
+            energy.SetMaxValue(data.Energy.MaxValue);
             energy.SetCurrentValue(data.Energy.CurrentValue);
         }
         if (hunger)
         {
-            hunger.SetMaxValue(data.Hunger.maxValue);
+            hunger.SetMaxValue(data.Hunger.MaxValue);
             hunger.SetCurrentValue(data.Hunger.CurrentValue);
         }
         if (hygiene)
         {
-            hygiene.SetMaxValue(data.Hygiene.maxValue);
+            hygiene.SetMaxValue(data.Hygiene.MaxValue);
             hygiene.SetCurrentValue(data.Hygiene.CurrentValue);
         }
 
 
         if (bounty)
-            bounty.text = $"£ {CharacterData.BOUNTYLEVELS[data.Bounty.CurrentValue]}";
+            bounty.text = $"£ {Bounty.BOUNTYLEVELVALUES[data.BountyLevel.CurrentValue]}";
         if (bountyFill)
-            bountyFill.fillAmount = (float)data.XP.CurrentValue / (float)data.XP.maxValue;
+            bountyFill.fillAmount = (float)data.XP.CurrentValue / (float)data.XP.MaxValue;
 
         if (moves)
             moves.text = $"Moves: {character.remainingMovementPoints}";

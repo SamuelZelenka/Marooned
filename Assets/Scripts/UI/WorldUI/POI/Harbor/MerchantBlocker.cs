@@ -9,7 +9,7 @@ public class MerchantBlocker : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
-        if (HexGridController.player.PlayerData.BountyLevel == PlayerData.MAXBOUNTYLEVEL)
+        if (HexGridController.player.PlayerData.BountyLevel.CurrentValue == Bounty.MAXBOUNTYLEVEL)
         {
             gameObject.SetActive(true);
         }
