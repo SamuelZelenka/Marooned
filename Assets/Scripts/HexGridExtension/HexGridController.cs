@@ -9,6 +9,9 @@ public class HexGridController : MonoBehaviour
     static Character activeCharacter;
     static Ship activeShip;
     public static Player player;
+    public static HexGrid worldGrid;
+    public static HexGrid playerShipGrid;
+    public static Transform playerCrewParent = null;
 
     public delegate void CellHandler(HexCell cell);
     public static event CellHandler OnCellSelected;
@@ -104,7 +107,13 @@ public class HexGridController : MonoBehaviour
         }
     }
 
-    
+    public static void SpawnCharacterForPlayerCrew(Character character)
+    {
+        Character spawnedCharacter = Instantiate(character);
+        spawnedCharacter.transform.SetParent(playerCrewParent);
+        player.Crew.Add(spawnedCharacter);
+        playerShipGrid.AddUnit(spawnedCharacter, playerShipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);
+    }
 
     public void StartMapMode() => CurrentMode = GridMode.Map;
     public void StartManagementMode() => CurrentMode = GridMode.Management;

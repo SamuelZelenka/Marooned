@@ -79,7 +79,7 @@ public class Harbor : PointOfInterest
     public void RecruitCharacter()
     {
         Character recruitedCharacter = recruitableCharacter;
-        HexGridController.player.Crew.Add(recruitedCharacter); //TODO CALL METHOD TO SPAWN ON SHIP
+        HexGridController.SpawnCharacterForPlayerCrew(recruitedCharacter);
         recruitableCharacter = null;
         OnHarborChanged?.Invoke(this);
     }

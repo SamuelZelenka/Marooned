@@ -40,11 +40,15 @@ public class SessionSetup : MonoBehaviour
         worldGrid.SetCameraBoundriesToMatchHexGrid();
         shipGrid.SetCameraBoundriesToMatchHexGrid();
 
+        HexGridController.worldGrid = worldGrid;
+        HexGridController.playerShipGrid = shipGrid;
+        HexGridController.playerCrewParent = playerCrewParent;
+
         CreateHumanPlayer();
         MapTurnSystem.instance.DoFirstTurn();
     }
 
-    //Creates a player from a prefab and spawns a ship and adds it to the controller
+    //Creates a player from a prefab and spawns a ship, starting characters and adds them to controllers 
     private void CreateHumanPlayer()
     {
         Ship newShip = Instantiate(playerStarterShip);
@@ -59,10 +63,7 @@ public class SessionSetup : MonoBehaviour
 
         for (int i = 0; i < startingCharacters.Length; i++)
         {
-            Character character = Instantiate(startingCharacters[i]);
-            character.transform.SetParent(playerCrewParent);
-            newPlayer.Crew.Add(character);
-            shipGrid.AddUnit(character, shipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);
+            HexGridController.SpawnCharacterForPlayerCrew(startingCharacters[i]);
         }
         HexGridController.player = newPlayer;
     }
