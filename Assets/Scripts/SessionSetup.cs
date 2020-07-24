@@ -60,12 +60,12 @@ public class SessionSetup : MonoBehaviour
 
         Player newPlayer = new Player(newShip, true, playerCrewSimulation);
         MapTurnSystem.instance.AddPlayerToFirstPositionInTurnOrder(newPlayer);
+        HexGridController.player = newPlayer;
 
         for (int i = 0; i < startingCharacters.Length; i++)
         {
             HexGridController.SpawnCharacterForPlayerCrew(startingCharacters[i]);
         }
-        HexGridController.player = newPlayer;
     }
 }
 
