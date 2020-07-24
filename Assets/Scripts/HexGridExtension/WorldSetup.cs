@@ -8,17 +8,20 @@ public class WorldSetup : MonoBehaviour
     [Header("References")]
     [SerializeField] MerchantShip merchantShip = null;
     [SerializeField] WorldUIView worldUIView = null;
+    [SerializeField] Transform oceanSquareParent = null;
 
     [Header("Visuals")]
-    public TileBase[] edgeTiles;
-    public TileBase[] oceanTiles;
-    public TileBase[] landTiles;
-    public TileBase[] harborTiles;
-    public Tilemap terrainTilemap;
-    public Tilemap featuresTilemap;
+    [SerializeField] TileBase[] edgeTiles = null;
+    //[SerializeField] TileBase[] oceanTiles; //We do not use ocean tiles/hexes in this game for now
+    [SerializeField] TileBase[] landTiles = null;
+    [SerializeField] TileBase[] harborTiles = null;
+    [SerializeField] Tilemap terrainTilemap = null;
+    [SerializeField] Tilemap featuresTilemap = null;
+    [SerializeField] GameObject oceanSquarePrefab = null;
 
     public void Setup(HexGrid hexGrid, SetupData setupData, WorldController worldController)
     {
+        CreateWater(setupData);
         CreateMap(hexGrid, setupData, worldController);
 
         //Add temporary ship to do pathfinding and finding harbors
@@ -65,6 +68,21 @@ public class WorldSetup : MonoBehaviour
         }
         //Remove Temporary Ship
         hexGrid.RemoveUnit(setupShip);
+    }
+
+    const int EXTRAWATER = 2;
+    void CreateWater(SetupData setupData)
+    {
+        for (int i = -EXTRAWATER; i < setupData.mapCellCountX + EXTRAWATER; i++)
+        {
+            for (int j = -EXTRAWATER; j < setupData.mapCellCountY + EXTRAWATER; j++)
+            {
+                GameObject newOceanSquare = Instantiate(oceanSquarePrefab);
+                Vector2 position = new Vector2(i, j);
+                newOceanSquare.transform.SetParent(oceanSquareParent);
+                newOceanSquare.transform.position = position;
+            }
+        }
     }
 
     void CreateMap(HexGrid hexGrid,SetupData setupData, WorldController worldController)
@@ -205,7 +223,8 @@ public class WorldSetup : MonoBehaviour
         }
         else if (cell.IsOcean) //Ocean tile
         {
-            tile = Utility.ReturnRandom(oceanTiles);
+            //tile = Utility.ReturnRandom(oceanTiles); //For now ignore ocean tiles
+            tile = null;
         }
         else //If over 62 (full land tile with all neighbors also landtiles)
         {

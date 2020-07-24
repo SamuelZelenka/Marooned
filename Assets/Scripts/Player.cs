@@ -54,6 +54,8 @@ public class Player
         }
     }
 
+   
+
     private void StartManagementMode()
     {
         HexGridController.CurrentMode = HexGridController.GridMode.Management;

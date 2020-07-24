@@ -2503,6 +2503,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 336843501}
   m_CullTransparentMesh: 0
+--- !u!4 &461171509 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2192584783745916099, guid: a825c3239dd7b384d8ec072005443fa6,
+    type: 3}
+  m_PrefabInstance: {fileID: 764255650}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &497469739
 GameObject:
   m_ObjectHideFlags: 0
@@ -8049,6 +8055,7 @@ GameObject:
   - component: {fileID: 1769882216}
   - component: {fileID: 1769882215}
   - component: {fileID: 1769882217}
+  - component: {fileID: 1769882220}
   m_Layer: 0
   m_Name: Systems and Managers
   m_TagString: Untagged
@@ -8121,6 +8128,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1769882220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769882214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3651a07f535dbd4885c21e318137fb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapTurnSystem: {fileID: 1769882216}
 --- !u!1 &1891736603
 GameObject:
   m_ObjectHideFlags: 0
@@ -8271,7 +8291,7 @@ MonoBehaviour:
     stringSeed: 
     mapCellCountX: 30
     mapCellCountY: 20
-    numberOfMerchantRoutes: 6
+    numberOfMerchantRoutes: 2
     merchantRouteMinLength: 10
     merchantRouteMaxLength: 20
     merchantRouteMinHarbors: 2
@@ -8336,6 +8356,7 @@ MonoBehaviour:
   merchantShip: {fileID: 6092528759528069180, guid: f1e7905e4deb4bb49b4972068cbbf14c,
     type: 3}
   worldUIView: {fileID: 120974980}
+  oceanSquareParent: {fileID: 461171509}
   edgeTiles:
   - {fileID: 11400000, guid: 16ea320fd37456140a364cc2066db10b, type: 2}
   - {fileID: 11400000, guid: 0b0cd10da9c051746bb92ea6d470521b, type: 2}
@@ -8401,8 +8422,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2723e9e9aae7fdd43a22c98485d6b06e, type: 2}
   - {fileID: 11400000, guid: 61183a94e8b6f26489dc71464221fd6e, type: 2}
   - {fileID: 11400000, guid: b61fe05e15e1b5f45b21029c2bca50db, type: 2}
-  oceanTiles:
-  - {fileID: 11400000, guid: fd6b6f8e2191e2846a8d61134dd6fd11, type: 2}
   landTiles:
   - {fileID: 11400000, guid: 52fd1b5137d2d0a478db4cfe24ddc1da, type: 2}
   harborTiles:
@@ -8414,3 +8433,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 029188240b679e74f8ad3db8615ddb51, type: 2}
   terrainTilemap: {fileID: 598039212}
   featuresTilemap: {fileID: 205075098}
+  oceanSquarePrefab: {fileID: 5115304797245541931, guid: 9172770eb87073948bc6e016b6532495,
+    type: 3}

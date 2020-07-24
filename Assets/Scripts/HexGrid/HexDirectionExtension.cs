@@ -161,6 +161,6 @@ public static class HexDirectionExtension
 
     public static HexDirection ReturnRandomDirection()
     {
-        return (HexDirection)Random.Range((int)HexDirection.NE, (int)HexDirection.NW);
+        return (HexDirection)Random.Range((int)HexDirection.NE, (int)HexDirection.NW + 1);
     }
 }
