@@ -4555,6 +4555,10 @@ PrefabInstance:
       propertyPath: skillcheckSystem
       value: 
       objectReference: {fileID: 171760275}
+    - target: {fileID: 1542911766, guid: e157d8ff8e421fe4489e6cbe413d1e39, type: 3}
+      propertyPath: hexGridController
+      value: 
+      objectReference: {fileID: 1769882215}
     - target: {fileID: 26427549791606255, guid: e157d8ff8e421fe4489e6cbe413d1e39,
         type: 3}
       propertyPath: m_AnchorMin.y
