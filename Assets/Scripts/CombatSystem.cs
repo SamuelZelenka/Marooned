@@ -10,6 +10,7 @@ public class CombatSystem : MonoBehaviour
     [SerializeField] Transform enemyCharacterParent = null;
 
     [SerializeField] CombatTurnSystem turnSystem = null;
+    [SerializeField] HexGridController hexGridController = null;
     [SerializeField] SkillcheckSystem skillcheckSystem = null;
 
     [Header("Setup")]
@@ -113,36 +114,65 @@ public class CombatSystem : MonoBehaviour
         HexGridController.OnCellSelected -= UseAbility;
     }
 
-    public void StartCombat()
+    public void StartCombat(Player defender, Player attacker)
     {
         OnCombatStart?.Invoke();
-        SetUpCombat(0);
+        hexGridController.StartCombatMode();
+        SetUpCombat(0, defender, attacker);
     }
 
-    private void SetUpCombat(int size)
+    private void SetUpCombat(int size, Player defender, Player attacker)
     {
         hexGrid.Load(battleMaps[size], false);
         List<Character> allCharacters = new List<Character>();
 
-        //Player characters
-        allCharacters.AddRange(HexGridController.player.Crew);
+        bool playerIsDefending = defender.IsHuman;
 
-        //Enemy characters
-        AI aiController = new AI(debugEnemies, HexGridController.player.Crew);
-        foreach (Character charactersToSpawn in debugEnemies)
+        if (playerIsDefending)
         {
-            //Instantiate enemies
-            Character spawnedCharacter = Instantiate(charactersToSpawn);
-            spawnedCharacter.transform.SetParent(enemyCharacterParent);
+            //Player characters
+            allCharacters.AddRange(defender.Crew);
+            //Enemy controlled characters
+            AI aiController = new AI(attacker.Crew, defender.Crew);
+            foreach (Character charactersToSpawn in attacker.Crew)
+            {
+                //Instantiate enemies
+                Character spawnedCharacter = Instantiate(charactersToSpawn);
+                spawnedCharacter.transform.SetParent(enemyCharacterParent);
 
-            spawnedCharacter.myGrid = hexGrid;
-            spawnedCharacter.SetAI(aiController);
+                spawnedCharacter.myGrid = hexGrid;
+                spawnedCharacter.SetAI(aiController);
 
-            //Add character to grid
-            hexGrid.AddUnit(spawnedCharacter, hexGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.AnyEnemy), false);
+                //Add character to grid
+                HexCell validCell = hexGrid.Cells.ReturnRandomElementWithCondition((c) => c.IsFree == true, (c) => c.TypeOfSpawnPos == HexCell.SpawnType.AnyEnemy);
+                hexGrid.AddUnit(spawnedCharacter, validCell, false);
 
-            //Add character to list of all characters involved in combat
-            allCharacters.Add(spawnedCharacter);
+                //Add character to list of all characters involved in combat
+                allCharacters.Add(spawnedCharacter);
+            }
+        }
+        else
+        {
+            //Player characters
+            allCharacters.AddRange(attacker.Crew);
+            //Enemy controlled characters
+            AI aiController = new AI(defender.Crew, attacker.Crew);
+            foreach (Character charactersToSpawn in defender.Crew)
+            {
+                //Instantiate enemies
+                Character spawnedCharacter = Instantiate(charactersToSpawn);
+                spawnedCharacter.transform.SetParent(enemyCharacterParent);
+
+                spawnedCharacter.myGrid = hexGrid;
+                spawnedCharacter.SetAI(aiController);
+
+                //Add character to grid
+                HexCell validCell = hexGrid.Cells.ReturnRandomElementWithCondition((c) => c.IsFree == true, (c) => c.TypeOfSpawnPos == HexCell.SpawnType.AnyEnemy);
+                hexGrid.AddUnit(spawnedCharacter, validCell, false);
+
+                //Add character to list of all characters involved in combat
+                allCharacters.Add(spawnedCharacter);
+            }
         }
 
         foreach (Character character in allCharacters)

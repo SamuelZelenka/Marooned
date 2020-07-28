@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Ship : HexUnit
 {
-    public delegate void ShipInteractionHandler(Ship thisShip, Ship otherShip);
+    public delegate void ShipInteractionHandler(Player thisPlayer, Player otherPlayer);
     public event ShipInteractionHandler OnShipBoarded;
     public event ShipInteractionHandler OnShipInspected;
 
@@ -52,7 +52,6 @@ public class Ship : HexUnit
     #endregion
 
     #region Resources
-    public ResourceInventory ResourceInventory { get => myPlayer.PlayerData.Resources; }
     public bool IsOverStorageLimit()
     {
         int tonnage = 0;
@@ -180,7 +179,7 @@ public class Ship : HexUnit
         {
             if (IsOverStorageLimit())
             {
-                remainingMovementPoints /= 2;
+                remainingMovementPoints = Mathf.RoundToInt((float)remainingMovementPoints / 2);
             }
         }
         else
@@ -237,7 +236,7 @@ public class Ship : HexUnit
         ShipsWithinBoardingRange = ships;
     }
 
-    public void InspectShip() => OnShipInspected?.Invoke(this, null);
-    public void PlayerBoard() => Board(HexGridController.player.Ship);
-    public void Board(Ship boardedBy) => OnShipBoarded?.Invoke(this, boardedBy);
+    public void InspectShip() => OnShipInspected?.Invoke(myPlayer, HexGridController.player);
+    public void PlayerBoard() => Board(HexGridController.player);
+    public void Board(Player boardedBy) => OnShipBoarded?.Invoke(myPlayer, boardedBy);
 }

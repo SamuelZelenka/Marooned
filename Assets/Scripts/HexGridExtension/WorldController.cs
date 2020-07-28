@@ -33,9 +33,11 @@ public class WorldController : MonoBehaviour
 
     [Header("Misc References")]
     [SerializeField] WorldUIView worldUIView = null;
+    [SerializeField] CombatSystem combatSystem = null;
     [SerializeField] WorldSetup worldSetup = null;
-    [SerializeField] List<Character> allCharacters = null;
     [SerializeField] MapTurnSystem turnSystem = null;
+
+    [SerializeField] List<Character> allCharacters = null;
 
     private void OnEnable()
     {
@@ -120,7 +122,7 @@ public class WorldController : MonoBehaviour
         newShip.Setup(route);
 
         //Delegates
-        newShip.OnShipBoarded += worldUIView.OpenBoardingView;
+        newShip.OnShipBoarded += combatSystem.StartCombat;
         newShip.OnShipInspected += worldUIView.OpenInspectView;
 
         hexGrid.AddUnit(newShip, route.GetSpawnableLocation(), HexDirectionExtension.ReturnRandomDirection(), false);

@@ -48,17 +48,17 @@ public class WorldUIView : MonoBehaviour
     }
     #endregion
 
-    public void OpenBoardingView(Ship boardedShip, Ship boardedByShip)
+    public void OpenBoardingView(Player boardedPlayer, Player boardedByPlayer)
     {
         shipInspectPanel.SetActive(true);
         //Display Resources for the boarded ship
-        shipInspectController.Setup(boardedShip.ResourceInventory, true);
+        shipInspectController.Setup(boardedPlayer.PlayerData.Resources, true);
     }
 
-    public void OpenInspectView(Ship inspectedShip, Ship otherShip)
+    public void OpenInspectView(Player inspectedPlayer, Player inspectingPlayer)
     {
         shipInspectPanel.SetActive(true);
-        shipInspectController.Setup(inspectedShip.ResourceInventory, false);
+        shipInspectController.Setup(inspectedPlayer.PlayerData.Resources, false);
     }
 
     private void CloseBoardingView(HexUnit unitMoved)

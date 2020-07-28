@@ -112,7 +112,8 @@ public class HexGridController : MonoBehaviour
         Character spawnedCharacter = Instantiate(character);
         spawnedCharacter.transform.SetParent(playerCrewParent);
         player.Crew.Add(spawnedCharacter);
-        playerShipGrid.AddUnit(spawnedCharacter, playerShipGrid.GetFreeCellForCharacterSpawn(HexCell.SpawnType.Player), true);
+        HexCell validCell = playerShipGrid.Cells.ReturnRandomElementWithCondition((c) => c.IsFree == true, (c) => c.TypeOfSpawnPos == HexCell.SpawnType.Player);
+        playerShipGrid.AddUnit(spawnedCharacter, validCell, true);
     }
 
     public void StartMapMode() => CurrentMode = GridMode.Map;
