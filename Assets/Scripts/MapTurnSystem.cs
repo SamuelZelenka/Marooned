@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MapTurnSystem : MonoBehaviour
 {
+    [SerializeField] WorldController worldController = null;
+
     int day = 0;
     public int Day
     {
@@ -57,7 +59,6 @@ public class MapTurnSystem : MonoBehaviour
     public void AddPlayerToTurnOrder(Player player) => turnOrder.Add(player);
     public void AddPlayerToFirstPositionInTurnOrder(Player player) => turnOrder.Insert(0, player);
 
-
     public void DoFirstTurn()
     {
         OnFirstTurnStarted?.Invoke();
@@ -84,7 +85,8 @@ public class MapTurnSystem : MonoBehaviour
 
         if (!activePlayer.IsHuman)
         {
-            StartCoroutine(activePlayer.PerformAutomaticTurn());
+            int visionRange = worldController.GetVisionRange(HexGridController.player.PlayerData);
+            StartCoroutine(activePlayer.PerformAutomaticTurn(visionRange));
         }
     }
 }

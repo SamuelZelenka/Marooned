@@ -13,17 +13,15 @@ public class MerchantShip : Ship
     }
 
     HexCell target;
-    public override IEnumerator PerformAutomaticTurn()
+    public override IEnumerator PerformAutomaticTurn(int visionRange) //TODO: Vision range used to avoid playership
     {
         if (target)
         {
-            //Debug.Log("Moving from" + Location.coordinates + " to " + target.coordinates);
             yield return MoveToTarget();
         }
         else
         {
             target = FindTarget();
-            //Debug.Log("AI Finding path from " + Location.coordinates.ToString() + " to " + target.coordinates.ToString());
             yield return MoveToTarget();
         }
     }

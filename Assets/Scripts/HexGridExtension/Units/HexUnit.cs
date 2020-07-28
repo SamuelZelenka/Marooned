@@ -72,9 +72,17 @@ public abstract class HexUnit : MonoBehaviour
             {
                 unitRenderer.flipX = value >= HexDirection.SW;
                 int index = (int)value;
-                if (value >= HexDirection.SW)
+                if (value == HexDirection.SW)
                 {
-                    index -= 3;
+                    index = (int) HexDirection.SE;
+                }
+                else if (value == HexDirection.W)
+                {
+                    index = (int)HexDirection.E;
+                }
+                else if (value == HexDirection.NW)
+                {
+                    index = (int)HexDirection.NE;
                 }
                 unitRenderer.sprite = unitSprites[index];
             }
@@ -134,7 +142,7 @@ public abstract class HexUnit : MonoBehaviour
 
 
 
-    public abstract IEnumerator PerformAutomaticTurn();
+    public abstract IEnumerator PerformAutomaticTurn(int visionRange);
 
     public IEnumerator Travel(List<HexCell> path)
     {

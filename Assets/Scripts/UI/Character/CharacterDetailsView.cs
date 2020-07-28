@@ -74,9 +74,9 @@ public class CharacterDetailsView : MonoBehaviour
 
 
         if (bounty)
-            bounty.text = $"£ {Bounty.BOUNTYLEVELVALUES[data.BountyLevel.CurrentValue]}";
+            bounty.text = data.BountyLevel.ToString();
         if (bountyFill)
-            bountyFill.fillAmount = (float)data.XP.CurrentValue / (float)data.XP.MaxValue;
+            bountyFill.fillAmount = (float)data.BountyLevel.XP / (float)data.BountyLevel.XPLevelUpRequirement;
 
         if (moves)
             moves.text = $"Moves: {character.remainingMovementPoints}";

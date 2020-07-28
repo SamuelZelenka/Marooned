@@ -215,7 +215,7 @@ public class Character : HexUnit
     AI aiController;
     ActionGroup nextAction;
     //HexCell target;
-    public override IEnumerator PerformAutomaticTurn()
+    public override IEnumerator PerformAutomaticTurn(int visionRange) //Visionrange is not used by characters
     {
         //Do turn
         CombatTurnSystem.OnTurnBegining?.Invoke(this);

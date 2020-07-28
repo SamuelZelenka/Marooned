@@ -62,9 +62,9 @@ public class Player
         crewSimulation.NewTurnSimulation();
     }
 
-    public IEnumerator PerformAutomaticTurn()
+    public IEnumerator PerformAutomaticTurn(int visionRange)
     {
-        yield return Ship.PerformAutomaticTurn();
+        yield return Ship.PerformAutomaticTurn(visionRange);
         MapTurnSystem.instance.EndTurn();
     }
 }

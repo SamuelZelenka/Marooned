@@ -82,7 +82,7 @@ public class CombatTurnSystem : MonoBehaviour
 
         if (!HexGridController.ActiveCharacter.playerControlled)
         {
-            StartCoroutine(HexGridController.ActiveCharacter.PerformAutomaticTurn());
+            StartCoroutine(HexGridController.ActiveCharacter.PerformAutomaticTurn(0));
         }
     }
 

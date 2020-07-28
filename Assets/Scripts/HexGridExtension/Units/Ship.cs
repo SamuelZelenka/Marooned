@@ -189,7 +189,7 @@ public class Ship : HexUnit
         }
     }
 
-    public override IEnumerator PerformAutomaticTurn()
+    public override IEnumerator PerformAutomaticTurn(int visionRange)
     {
         throw new System.NotImplementedException();
     }

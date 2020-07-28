@@ -4,6 +4,7 @@ using UnityEngine;
 public class WorldController : MonoBehaviour
 {
     HexGrid hexGrid;
+    DifficultySettings difficultySettings;
     public Route[] MerchantRoutes { private set; get; }
     public List<Harbor> Harbors
     {
@@ -51,6 +52,8 @@ public class WorldController : MonoBehaviour
         turnSystem.OnFirstTurnStarted += ChangeCharactersInTaverns;
 
         this.hexGrid = hexGrid;
+        difficultySettings = setupData.difficultySettings;
+
         MerchantRoutes = new Route[setupData.numberOfMerchantRoutes];
         HarborCells = new List<HexCell>();
         Landmasses = new List<Landmass>();
@@ -126,7 +129,10 @@ public class WorldController : MonoBehaviour
         MapTurnSystem.instance.AddPlayerToTurnOrder(newRedcoatPlayer);
     }
 
-    public static readonly int[] BOUNTYLEVELVISION = new int[] { 0, 2, 2, 4, 4, 6, 6, 8, 8, 10};
+    public int GetVisionRange(PlayerData playerData)
+    {
+        return Mathf.FloorToInt((float) playerData.Bounty / difficultySettings.visionRangeToBounty);
+    }
 
     void ChangeCharactersInTaverns()
     {

@@ -72,9 +72,10 @@ public class SessionSetup : MonoBehaviour
 [System.Serializable]
 public class SetupData
 {
+    public DifficultySettings difficultySettings;
     const int SEEDMAXCHARS = 10;
     public int Seed { get; private set; }
-    public string stringSeed; 
+    public string stringSeed;
     public int mapCellCountX = 20, mapCellCountY = 15;
     public int numberOfMerchantRoutes = 5;
     public int merchantRouteMinLength = 10;
@@ -95,6 +96,12 @@ public class SetupData
         for (int i = 0; i < chars.Length && i < SEEDMAXCHARS; i++)
         {
             Seed += chars[i].GetHashCode();
+    
         }
     }
+}
+[System.Serializable]
+public class DifficultySettings
+{
+    public int visionRangeToBounty = 500;
 }

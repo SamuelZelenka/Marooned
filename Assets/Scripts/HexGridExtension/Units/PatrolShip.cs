@@ -14,10 +14,10 @@ public class PatrolShip : Ship
     }
 
     HexCell target;
-    public override IEnumerator PerformAutomaticTurn()
+    public override IEnumerator PerformAutomaticTurn(int visionRange)
     {
         //Check for player
-        CurrentVisionRange = WorldController.BOUNTYLEVELVISION[HexGridController.player.PlayerData.BountyLevel.CurrentValue];
+        CurrentVisionRange = visionRange;
         Debug.Log($"Searching for player with a vision range of {CurrentVisionRange}");
         List<HexCell> playerControlledCells = CellFinder.GetCellsWithinRange(Location, CurrentVisionRange, (c) => c.Unit != null && c.Unit.playerControlled == true);
         if (playerControlledCells.Count > 1)

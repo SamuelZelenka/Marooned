@@ -8087,6 +8087,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3decccf8ec786e48afc0a3e2e405425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldController: {fileID: 764255654}
 --- !u!114 &1769882217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8288,7 +8289,9 @@ MonoBehaviour:
   - {fileID: 5767702583924690790, guid: 57fe4cb9e37d16f4fa76c2012f0978a1, type: 3}
   combatSystem: {fileID: 1651773938}
   setupData:
-    stringSeed: 
+    difficultySettings:
+      visionRangeToBounty: 500
+    stringSeed: test
     mapCellCountX: 30
     mapCellCountY: 20
     numberOfMerchantRoutes: 2
@@ -8358,7 +8361,6 @@ MonoBehaviour:
   worldUIView: {fileID: 120974980}
   oceanSquareParent: {fileID: 461171509}
   edgeTiles:
-  - {fileID: 11400000, guid: 16ea320fd37456140a364cc2066db10b, type: 2}
   - {fileID: 11400000, guid: 0b0cd10da9c051746bb92ea6d470521b, type: 2}
   - {fileID: 11400000, guid: 5bf0abfce34600a4d9b9635172978c0e, type: 2}
   - {fileID: 11400000, guid: 6e9b0dff7e2a57d4fae7bd008044d1de, type: 2}
@@ -8421,7 +8423,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1a394eaea725c1e46ac27e846ac1d1c1, type: 2}
   - {fileID: 11400000, guid: 2723e9e9aae7fdd43a22c98485d6b06e, type: 2}
   - {fileID: 11400000, guid: 61183a94e8b6f26489dc71464221fd6e, type: 2}
-  - {fileID: 11400000, guid: b61fe05e15e1b5f45b21029c2bca50db, type: 2}
   landTiles:
   - {fileID: 11400000, guid: 52fd1b5137d2d0a478db4cfe24ddc1da, type: 2}
   harborTiles:

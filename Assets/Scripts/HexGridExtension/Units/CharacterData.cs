@@ -3,30 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy}
-public enum CharacterResourceType {Vitality, Loyalty, Energy, Hunger, Hygiene, XP }
+public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy }
+public enum CharacterResourceType { Vitality, Loyalty, Energy, Hunger, Hygiene}
 
 [Serializable]
 public class CharacterData
 {
-    public int ID;
-    //[Range(1, 10)]
-    //public int startingLevel = 1;
+
     public delegate void CharacterDataHandler(CharacterData characterData);
     public delegate void CharacterDataValueHandler(int newValue);
 
     public event CharacterDataHandler OnCharacterDataInfoRequested;
     public event CharacterDataHandler OnEffectChanged;
-    public event CharacterDataHandler OnAnyResourceChanged; 
+    public event CharacterDataHandler OnAnyResourceChanged;
 
+    [Header("Setup")]
+    public int ID;
     [SerializeField] string characterFirstName = "name";
     [SerializeField] string characterLastName = "namesson";
+
+    [SerializeField] public readonly int recruitBountyDemand = 100;
+
+    [SerializeField] readonly int STARTSTRENGTH = 1;
+    [SerializeField] readonly int STARTSTAMINA = 1;
+    [SerializeField] readonly int STARTCONSTITUTION = 1;
+    [SerializeField] readonly int STARTAGILITY = 1;
+    [SerializeField] readonly int STARTTOUGHNESS = 1;
+    [SerializeField] readonly int STARTACCURACY = 1;
 
     public string CharacterName
     {
         get
         {
-            return $"{characterFirstName} 'The {Bounty.BOUNTYNAMES[BountyLevel.CurrentValue]}' {characterLastName}";  
+            //return $"{characterFirstName} 'The {BountyLevel.BOUNTYNAMES[BountyLevel.Level]}' {characterLastName}";  
+            return $"{characterFirstName} {characterLastName}";
         }
     }
 
@@ -42,28 +52,33 @@ public class CharacterData
     public Resource Hunger { get; private set; } = new Resource("Hunger", 100, 100);
     public Resource Hygiene { get; private set; } = new Resource("Hygiene", 100, 100);
     public Resource Loyalty { get; private set; } = new Resource("Loyalty", 50, 100);
-    public Resource XP { get; private set; } = new Resource("XP", 0, 100);
 
     //Stats
-    public Stat Strength { get; private set; } = new Stat("Strength", 1, 20);
-    public Stat Stamina { get; private set; } = new Stat("Stamina", 1, 20);
-    public Stat Constitution { get; private set; } = new Stat("Constitution", 1, 20);
-    public Stat Agility { get; private set; } = new Stat("Agility", 1, 20);
-    public Stat Toughness { get; private set; } = new Stat("Toughness", 1, 20);
-    public Stat Accuracy { get; private set; } = new Stat("Accuracy", 1, 20);
+    public Stat Strength { get; private set; }
+    public Stat Stamina { get; private set; }
+    public Stat Constitution { get; private set; }
+    public Stat Agility { get; private set; }
+    public Stat Toughness { get; private set; }
+    public Stat Accuracy { get; private set; }
 
-    public Bounty BountyLevel { get; private set; } = new Bounty("Bounty", 1);
+    public Level BountyLevel { get; private set; } = new Level(1);
 
 
 
     public CharacterData()
     {
+        Strength = new Stat("Strength", STARTSTRENGTH, 20);
+        Stamina = new Stat("Stamina", STARTSTAMINA, 20);
+        Constitution = new Stat("Constitution", STARTCONSTITUTION, 20);
+        Agility = new Stat("Agility", STARTAGILITY, 20);
+        Toughness = new Stat("Toughness", STARTTOUGHNESS, 20);
+        Accuracy = new Stat("Accuracy", STARTACCURACY, 20);
+
         Vitality.OnResourceChanged += ResourceChanged;
         Energy.OnResourceChanged += ResourceChanged;
         Hunger.OnResourceChanged += ResourceChanged;
         Hygiene.OnResourceChanged += ResourceChanged;
         Loyalty.OnResourceChanged += ResourceChanged;
-        XP.OnResourceChanged += ResourceChanged;
     }
 
 
@@ -81,8 +96,6 @@ public class CharacterData
                 return Hygiene;
             case CharacterResourceType.Loyalty:
                 return Loyalty;
-            case CharacterResourceType.XP:
-                return XP;
             default:
                 return null;
         }
@@ -144,7 +157,6 @@ public class CharacterData
     public void SendValuesToRequesters() => OnCharacterDataInfoRequested?.Invoke(this);
     public void ResourceChanged(int newValue) => OnAnyResourceChanged(this);
 
-
     [Serializable]
     public class Resource
     {
@@ -188,13 +200,13 @@ public class CharacterData
 
         public string StatName { get; private set; }
         private int currentValue;
-        public int CurrentValue 
+        public int CurrentValue
         {
             get => currentValue;
-            private set 
+            private set
             {
                 currentValue = Mathf.Clamp(value, MINSTATVALUE, maxStatValue);
-                OnStatChanged?.Invoke(currentValue); 
+                OnStatChanged?.Invoke(currentValue);
             }
         }
 

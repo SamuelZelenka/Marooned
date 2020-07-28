@@ -22,7 +22,18 @@ public class PlayerData
         }
     }
 
-    public Bounty BountyLevel { get; private set; } = new Bounty("Bounty", 1);
+    public int Bounty
+    {
+        get
+        {
+            int combinedValue = 0;
+            foreach (var item in AliveCharacters)
+            {
+                combinedValue += item.BountyLevel.Bounty;
+            }
+            return combinedValue;
+        }
+    }
 }
 
 [System.Serializable]

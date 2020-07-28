@@ -66,8 +66,8 @@ public class Harbor : PointOfInterest
             cost = int.MaxValue;
             return false;
         }
-        cost = recruitableCharacter.characterData.BountyLevel.CurrentValue;
-        return HexGridController.player.PlayerData.BountyLevel.CurrentValue >= recruitableCharacter.characterData.BountyLevel.CurrentValue;
+        cost = recruitableCharacter.characterData.recruitBountyDemand;
+        return HexGridController.player.PlayerData.Bounty >= cost;
     }
 
     public bool CanBuyFood(out int foodCost)
