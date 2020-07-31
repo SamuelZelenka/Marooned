@@ -83,6 +83,8 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
+    bool awaitingSkillcheckSystem = false;
+
     #region Singleton
     public static CombatSystem instance;
     private void Awake()
@@ -221,6 +223,10 @@ public class CombatSystem : MonoBehaviour
 
     private void MarkCellsAndCharactersToBeAffected(HexCell targetCell)
     {
+        if (awaitingSkillcheckSystem)
+        {
+            return;
+        }
         if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(targetCell))
         {
             AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, targetCell);
@@ -231,6 +237,10 @@ public class CombatSystem : MonoBehaviour
     //Called from the UI when a player selects an ability
     public void SelectAbility(int selection)
     {
+        if (awaitingSkillcheckSystem)
+        {
+            return;
+        }
         if (HexGridController.ActiveCharacter.IsStunned)
         {
             return;
@@ -244,6 +254,10 @@ public class CombatSystem : MonoBehaviour
     //Used by the AI when called from the character
     public void SelectAbility(Ability selection)
     {
+        if (awaitingSkillcheckSystem)
+        {
+            return;
+        }
         ResetSelections();
         selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityName);
@@ -252,6 +266,10 @@ public class CombatSystem : MonoBehaviour
 
     public void UseAbility(HexCell selectedCellForTarget)
     {
+        if (awaitingSkillcheckSystem)
+        {
+            return;
+        }
         Character abilityUser = HexGridController.ActiveCharacter;
 
         if (abilityUser == null)
@@ -272,6 +290,7 @@ public class CombatSystem : MonoBehaviour
                 }
                 else //Requires skillchecks
                 {
+                    awaitingSkillcheckSystem = true;
                     skillcheckSystem.OnCombatOutcomesDecided += ResolveAbilityOutcomes;
                     skillcheckSystem.StartContestedSkillcheck(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters,
                         selectedAbility.AbilityuserHitSkillcheck, selectedAbility.HostileDodgeSkillcheck, selectedAbility.FriendlyDodgeSkillcheck);
@@ -294,6 +313,7 @@ public class CombatSystem : MonoBehaviour
         skillcheckSystem.OnCombatOutcomesDecided -= ResolveAbilityOutcomes;
         selectedAbility.Use(HexGridController.ActiveCharacter, hostileAbilityAffectedCharacters, hostileOutcomes, friendlyAbilityAffectedCharacters, friendlyOutcomes, AbilityAffectedHexes);
         PostAbilityCalculations();
+        awaitingSkillcheckSystem = false;
     }
 
     private void PostAbilityCalculations()
