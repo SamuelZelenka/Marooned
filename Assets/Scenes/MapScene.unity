@@ -4208,6 +4208,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
         type: 3}
+      propertyPath: playableCharacters.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: redcoatCharacters.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
       propertyPath: worldSetup
       value: 
       objectReference: {fileID: 2022307761}
@@ -4221,6 +4231,42 @@ PrefabInstance:
       propertyPath: combatSystem
       value: 
       objectReference: {fileID: 1651773938}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: playableCharacters.Array.data[0]
+      value: 
+      objectReference: {fileID: 7973137243245126025, guid: 890e24ba843b2bc438ff2ffdf678cf76,
+        type: 3}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: playableCharacters.Array.data[1]
+      value: 
+      objectReference: {fileID: 930899063425889352, guid: a73b69d9578b57d40a958af6a8495e37,
+        type: 3}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: playableCharacters.Array.data[2]
+      value: 
+      objectReference: {fileID: 7973137243245126025, guid: 5dcb22fbb37da2640a46e6cc5580f3d5,
+        type: 3}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: playableCharacters.Array.data[3]
+      value: 
+      objectReference: {fileID: 7973137243245126025, guid: 1d44e0af9eb64ae4e926706aae53861d,
+        type: 3}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: playableCharacters.Array.data[4]
+      value: 
+      objectReference: {fileID: 5767702583924690790, guid: 57fe4cb9e37d16f4fa76c2012f0978a1,
+        type: 3}
+    - target: {fileID: 9168233258179349425, guid: a825c3239dd7b384d8ec072005443fa6,
+        type: 3}
+      propertyPath: redcoatCharacters.Array.data[0]
+      value: 
+      objectReference: {fileID: 435603174573623444, guid: 51d7771ff06815d4ba9c5809ca9336da,
+        type: 3}
     - target: {fileID: 9168233258368595994, guid: a825c3239dd7b384d8ec072005443fa6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4983,6 +5029,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028457623151427463, guid: e157d8ff8e421fe4489e6cbe413d1e39,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1121865983448528060, guid: e157d8ff8e421fe4489e6cbe413d1e39,
         type: 3}
@@ -8299,7 +8350,10 @@ MonoBehaviour:
   combatSystem: {fileID: 1651773938}
   setupData:
     difficultySettings:
-      visionRangeToBounty: 500
+      bountyToVisionRange: 500
+      bountyToCrewSize: 1000
+      minimumCharacters: 2
+      maximumCharacters: 10
     stringSeed: test
     mapCellCountX: 30
     mapCellCountY: 20
