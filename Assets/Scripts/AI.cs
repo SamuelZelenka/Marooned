@@ -98,22 +98,27 @@ public class AI
             }
 
             //Check number of targets
-            int targets = 0;
+            int enemyTargets = 0;
+            int friendlyTargets = 0;
             List<HexCell> affectedCells = actionGroup.abilityToUse.targeting.GetAffectedCells(actionGroup.cellToEndTurnOn, actionGroup.cellAbilityTarget);
             foreach (HexCell cell in affectedCells)
             {
                 Character potentialEnemy = cell.Unit as Character;
                 if (potentialEnemy != null && enemies.Contains(potentialEnemy))
                 {
-                    targets++;
+                    enemyTargets++;
+                }
+                if (potentialEnemy == null && myCharacters.Contains(potentialEnemy))
+                {
+                    friendlyTargets++;
                 }
             }
 
             //Score
-            if (targets > 0)
+            if (enemyTargets > 0)
             {
-                score = actionGroup.abilityToUse.cost;
-                score *= targets;
+                score = actionGroup.abilityToUse.cost * enemyTargets;
+                score -= actionGroup.abilityToUse.cost * friendlyTargets;
                 score = isTargettingTauntingCharacter ? score * 2 : score;
             }
             else
