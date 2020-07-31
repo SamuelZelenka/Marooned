@@ -12,7 +12,6 @@ public class WorldSetup : MonoBehaviour
 
     [Header("Visuals")]
     [SerializeField] TileBase[] edgeTiles = null;
-    //[SerializeField] TileBase[] oceanTiles; //We do not use ocean tiles/hexes in this game for now
     [SerializeField] TileBase[] landTiles = null;
     [SerializeField] TileBase[] harborTiles = null;
     [SerializeField] Tilemap terrainTilemap = null;
@@ -70,7 +69,7 @@ public class WorldSetup : MonoBehaviour
         hexGrid.RemoveUnit(setupShip);
     }
 
-    const int EXTRAWATER = 2;
+    const int EXTRAWATER = 3;
     void CreateWater(SetupData setupData)
     {
         for (int i = -EXTRAWATER; i < setupData.mapCellCountX + EXTRAWATER; i++)
@@ -233,5 +232,4 @@ public class WorldSetup : MonoBehaviour
 
         terrainTilemap.SetTile(tilemapPosition, tile);
     }
-
 }
