@@ -68,7 +68,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2019508797
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1c9e622e7446de047b1662c3c324d8ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -125,10 +125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d70dce7c13dad7240bdf491c365d9993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  remainingMovementPoints: 5
-  defaultMovementPoints: 5
-  oceanMovementCost: 1
-  landMovementCost: 1
+  remainingMovementPoints: 20
+  defaultMovementPoints: 20
+  oceanMovementCost: 5
+  landMovementCost: 5
   unitRenderer: {fileID: 5460013567181183452}
   unitSprites:
   - {fileID: 21300000, guid: 71d4b69604911534db35a85f080e8b88, type: 3}

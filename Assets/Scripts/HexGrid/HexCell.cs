@@ -157,50 +157,6 @@ public class HexCell : MonoBehaviour
         Neighbors[(int)direction] = cell;
         cell.Neighbors[(int)direction.Opposite()] = this;
     }
-
-    //public HexCell GetNeighbor(HexDirection direction, params Func<HexCell, bool>[] conditions)
-    //{
-    //    HexCell neighbor = GetNeighbor(direction);
-    //    if (neighbor == null)
-    //    {
-    //        return null;
-    //    }
-    //    if (traversableNeeded && !neighbor.Traversable)
-    //    {
-    //        return null;
-    //    }
-    //    if (freeNeeded && neighbor.Unit != null)
-    //    {
-    //        return null;
-    //    }
-    //    if (landNeeded && !neighbor.IsLand)
-    //    {
-    //        return null;
-    //    }
-    //    if (oceanNeeded && !neighbor.IsOcean)
-    //    {
-    //        return null;
-    //    }
-    //    if (unitNeeded && !neighbor.Unit)
-    //    {
-    //        return null;
-    //    }
-    //    return neighbor;
-    //}
-
-    //public List<HexCell> GetNeighbors(bool traversableNeeded, bool freeNeeded, bool landNeeded, bool oceanNeeded, bool unitNeeded)
-    //{
-    //    List<HexCell> allNeighbors = new List<HexCell>();
-    //    for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-    //    {
-    //        HexCell neighbor = GetNeighbor(d, traversableNeeded, freeNeeded, landNeeded, oceanNeeded, unitNeeded);
-    //        if (neighbor != null)
-    //        {
-    //            allNeighbors.Add(neighbor);
-    //        }
-    //    }
-    //    return allNeighbors;
-    //}
     #endregion
 
     #region Pathfinding
@@ -223,10 +179,19 @@ public class HexCell : MonoBehaviour
     }
     public HexCell NextWithSamePriority { get; set; }
     public int SearchPhase { get; set; } // 0 = not been reached | 1 = currently in searchfrontier | 2 = has been reached and taken out from frontier
-
-    public int MovementCostPenalty { get; set; } //The hex individual cost
+   
     public int MovementCost { get; set; } //The total cost to move here by a single unit now searching
     public HexCell PathFrom { get; set; }
+    public int BaseEnterModifier { private get; set; }
+    public int GetHexEnterMovementModifier(HexDirection directionToMove, HexUnit unit)
+    {
+        int modifier = BaseEnterModifier;
+        if (unit is Ship)
+        {
+            return modifier + OceanController.GetOceanMovementModifier(directionToMove);
+        }
+        return modifier;
+    }
     #endregion
 
     public Vector3 Position

@@ -4,10 +4,16 @@ public class OceanController : MonoBehaviour
 {
     [SerializeField] MapTurnSystem mapTurnSystem = null;
 
-    public static HexDirection WindDirection { get; private set; }
-    public static WindStrength Wind { get; private set; }
-    public enum WindStrength { Dead, Calm, Windy, Storm }
-    public static float[] windSpeeds = new float[] { 0.01f, 0.1f, 0.3f, 0.6f };
+    enum WindStrength { Dead, Calm, Windy, Storm }
+    static HexDirection windDirection;
+    static WindStrength windStrength;
+    static readonly float[] windSpeeds = new float[] { 0.01f, 0.1f, 0.3f, 0.6f };
+
+    const int TAILWINDMOVEMENT = -1;
+    const int SIDEWINDMOVEMENT = 0;
+    const int HEADWINDMOVEMENT = 1;
+    static readonly int[] windStengthFactor = new int[] { 4, 1, 2, 4};
+    
 
     private void OnEnable()
     {
@@ -21,18 +27,6 @@ public class OceanController : MonoBehaviour
 
     private void Start() => RandomizeWeather();
 
-    //Debug
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RandomizeWeather();
-            }
-        }
-    }
-
     private void RandomizeWeather()
     {
         WindStrength windStrength = (WindStrength)Random.Range((int)WindStrength.Dead, (int)WindStrength.Storm + 1);
@@ -41,7 +35,7 @@ public class OceanController : MonoBehaviour
     }
 
 
-    public static void ChangeWindDirectionAndSpeed(HexDirection newDirection, WindStrength newWind)
+    private void ChangeWindDirectionAndSpeed(HexDirection newDirection, WindStrength newWindStrength)
     {
         Material ocean = Resources.Load<Material>("Materials/Water");
 
@@ -54,11 +48,34 @@ public class OceanController : MonoBehaviour
 
         ocean.EnableKeyword($"_WATERDIRECTION_{newDirection.ToString()}");
 
-        ocean.SetFloat("_Speed", windSpeeds[(int)newWind]);
+        ocean.SetFloat("_Speed", windSpeeds[(int)newWindStrength]);
 
-        Wind = newWind;
-        WindDirection = newDirection;
+        windStrength = newWindStrength;
+        windDirection = newDirection;
 
-        Debug.Log($"Wind is now {newWind} in the {newDirection} direction");
+        Debug.Log($"Wind is now {newWindStrength} in the {newDirection} direction");
+    }
+
+    public static int GetOceanMovementModifier(HexDirection directionToMove)
+    {
+        if (windStrength == WindStrength.Dead)
+        {
+            return windStengthFactor[0];
+        }
+        int modifier;
+
+        if (directionToMove == windDirection)
+        {
+            modifier = TAILWINDMOVEMENT * windStengthFactor[(int)windStrength];
+        }
+        else if (directionToMove == windDirection.Opposite())
+        {
+            modifier = HEADWINDMOVEMENT * windStengthFactor[(int)windStrength];
+        }
+        else
+        {
+            modifier = SIDEWINDMOVEMENT * windStengthFactor[(int)windStrength];
+        }
+        return modifier;
     }
 }

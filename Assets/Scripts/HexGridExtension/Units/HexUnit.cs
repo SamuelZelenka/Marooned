@@ -12,11 +12,12 @@ public abstract class HexUnit : MonoBehaviour
 
     [Header("Movement")]
     const float travelSpeed = 4f;
-    public int remainingMovementPoints = 0, defaultMovementPoints = 5;
-    public int oceanMovementCost = 1;
-    public int landMovementCost = 1;
+    public int remainingMovementPoints = 0, defaultMovementPoints = 10;
+    public int oceanMovementCost = 5;
+    public int landMovementCost = 5;
     List<HexCell> pathToTravel;
-    List<HexCell> reachableCells = new List<HexCell>(); public List<HexCell> ReachableCells { get => reachableCells; }
+
+    public List<HexCell> ReachableCells { get; private set; } = new List<HexCell>();
 
     [Header("Visuals")]
     [SerializeField] SpriteRenderer unitRenderer = null;
@@ -126,7 +127,7 @@ public abstract class HexUnit : MonoBehaviour
 
     public abstract bool CanEnter(HexCell cell);
 
-    private void CalculateReachableCells() => reachableCells = Pathfinding.GetAllReachableCells(Location, this);
+    private void CalculateReachableCells() => ReachableCells = Pathfinding.GetAllReachableCells(Location, this);
 
     private void ShowReachableCells(bool status)
     {
@@ -134,13 +135,11 @@ public abstract class HexUnit : MonoBehaviour
         {
             return;
         }
-        foreach (var item in reachableCells)
+        foreach (var item in ReachableCells)
         {
             item.ShowHighlight(status, HexCell.HighlightType.ValidMoveInteraction);
         }
     }
-
-
 
     public abstract IEnumerator PerformAutomaticTurn(int visionRange);
 
@@ -150,7 +149,7 @@ public abstract class HexUnit : MonoBehaviour
         {
             Location.ShowHighlight(false, HexCell.HighlightType.ActiveCell);
             pathToTravel = path;
-            remainingMovementPoints -= path.Count - 1; //TODO CHANGE TO PATH COST
+            remainingMovementPoints -= path[path.Count - 1].MovementCost;
             if (path.Count - 1 > 1)
             {
                 logMessage.AddLine($"Moved {path.Count - 1} steps.");

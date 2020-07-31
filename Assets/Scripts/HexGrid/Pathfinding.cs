@@ -87,7 +87,7 @@ public static class Pathfinding
                 int hexEnterCost = 0;
 
                 //Special condition costs here
-                hexEnterCost += neighbor.MovementCostPenalty;
+                hexEnterCost += neighbor.GetHexEnterMovementModifier(d, unit);
 
                 //Default cost
                 hexEnterCost += neighbor.IsOcean ? unit.oceanMovementCost : unit.landMovementCost;
@@ -256,7 +256,7 @@ public static class Pathfinding
                 int hexEnterCost = 0;
 
                 //Special condition costs here
-                hexEnterCost += neighbor.MovementCostPenalty;
+                hexEnterCost += neighbor.GetHexEnterMovementModifier(d, unit);
 
                 //Default cost
                 hexEnterCost += neighbor.IsOcean ? unit.oceanMovementCost : unit.landMovementCost;
@@ -334,7 +334,6 @@ public static class Pathfinding
                 int hexEnterCost = 0;
 
                 //Special condition costs here
-                hexEnterCost += neighbor.MovementCostPenalty;
 
                 //Default cost
                 hexEnterCost += 1;
