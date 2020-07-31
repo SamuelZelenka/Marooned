@@ -2215,6 +2215,7 @@ MonoBehaviour:
   hexGrid: {fileID: 4994165448592012843}
   enemyCharacterParent: {fileID: 4994165448073962438}
   turnSystem: {fileID: 1542911765}
+  hexGridController: {fileID: 0}
   skillcheckSystem: {fileID: 0}
   managementMap: {fileID: 0}
   battleMaps:
@@ -3934,6 +3935,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165448125440535}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 68c3a99a7d0de014194e76843741b775,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -4091,6 +4103,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165448125440535}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: eadfb53dc2859de4b8c584980acd4389,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -4248,6 +4271,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165448125440535}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1e7425324c3eb5441aaeeab1a01adafe,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -7135,6 +7169,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165447060519679}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 09251af97b1a0cf4c80414b019eee1f7,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -7292,6 +7337,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165447060519679}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7186d1596bf5c5f438d684068d1a4a70,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -7449,6 +7505,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165447060519679}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 05c3a861529ece24799192c89ad5ec65,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -7735,6 +7802,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165448125440535}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a0ad61648a6a99b4585186ae8ddc318b,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
@@ -7892,6 +7970,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165448125440535}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 985f618ffeaf150439d16b5b89775b3a,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 868631270776766288, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270897545864, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Name
@@ -8039,6 +8133,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4994165447060519679}
     m_Modifications:
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f6a19277f8a265943b9ae8d22ca14336,
+        type: 3}
+    - target: {fileID: 868631269871053972, guid: f1c20bba8935345419f625d16495ccbe,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 868631270084986960, guid: f1c20bba8935345419f625d16495ccbe,
         type: 3}
       propertyPath: m_Text
