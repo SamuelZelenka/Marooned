@@ -20,6 +20,7 @@ public class JobPosition : MonoBehaviour
     public void RemoveCharacter()
     {
         CharacterOnJob = null;
+        portrait.color = new Color(1,1,1,0);
         portrait.sprite = defaultPortrait;
     }
 
@@ -27,6 +28,7 @@ public class JobPosition : MonoBehaviour
     {
         crewJobDisplay.character = newCharacter;
         CharacterOnJob = newCharacter;
+        portrait.color = new Color(1, 1, 1, 1);
         portrait.sprite = newCharacter.portrait;
     }
 

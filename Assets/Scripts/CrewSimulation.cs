@@ -35,6 +35,7 @@ public class CrewSimulation : MonoBehaviour
     public void OpenSimulationWindows()
     {
         jobPanel.SetActive(true);
+        unassignedCrewController.UpdateUnassignedCharacterList();
     }
 
 
