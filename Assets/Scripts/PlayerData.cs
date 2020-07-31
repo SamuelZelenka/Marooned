@@ -7,6 +7,7 @@ public class PlayerData
 {
     public delegate void DataHandler();
     public DataHandler OnGoldChanged;
+    public DataHandler OnBountyChanged;
 
     public List<CharacterData> AliveCharacters { get; private set; } = new List<CharacterData>();
     public List<CharacterData> DeadCharacters { get; private set; } = new List<CharacterData>();
@@ -19,6 +20,29 @@ public class PlayerData
         {
             gold = value;
             OnGoldChanged?.Invoke();
+        }
+    }
+
+
+    int previousBountyChange;
+    public int PreviousBountyChange
+    {
+        get => previousBountyChange;
+        set
+        {
+            previousBountyChange = value;
+            OnBountyChanged?.Invoke();
+        }
+    }
+
+    int nextBountyChange;
+    public int NextBountyChange
+    {
+        get => nextBountyChange;
+        set
+        {
+            nextBountyChange = value;
+            OnBountyChanged?.Invoke();
         }
     }
 

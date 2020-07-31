@@ -137,15 +137,15 @@ public class WorldController : MonoBehaviour
 
     public int GetVisionRange(PlayerData playerData)
     {
-        return Mathf.FloorToInt((float) playerData.Bounty / difficultySettings.bountyToVisionRange);
+        return Mathf.FloorToInt((float) playerData.Bounty / difficultySettings.BountyToVisionRange);
     }
 
     public int GetCrewSize(PlayerData playerData)
     {
-        int crewSize = difficultySettings.minimumCharacters;
-        crewSize += Mathf.FloorToInt((float)playerData.Bounty / difficultySettings.bountyToCrewSize);
+        int crewSize = difficultySettings.minimumEnemyCrewSize;
+        crewSize += Mathf.FloorToInt((float)playerData.Bounty / difficultySettings.BountyToCrewSize);
 
-        return Mathf.Clamp(crewSize, difficultySettings.minimumCharacters, difficultySettings.maximumCharacters); ;
+        return Mathf.Clamp(crewSize, difficultySettings.minimumEnemyCrewSize, difficultySettings.maximumEnemyCrewSize); ;
     }
 
     void ChangeCharactersInTaverns()

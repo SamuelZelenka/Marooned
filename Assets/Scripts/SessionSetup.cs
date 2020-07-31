@@ -18,6 +18,9 @@ public class SessionSetup : MonoBehaviour
     public Character[] startingCharacters;
     public CombatSystem combatSystem;
 
+    public delegate void SessionSetupHandler();
+    public static event SessionSetupHandler OnPlayerCreated;
+
     public SetupData setupData;
 
     // Start is called before the first frame update
@@ -45,6 +48,7 @@ public class SessionSetup : MonoBehaviour
         HexGridController.playerCrewParent = playerCrewParent;
 
         CreateHumanPlayer();
+        OnPlayerCreated?.Invoke();
         MapTurnSystem.instance.DoFirstTurn();
     }
 
@@ -61,7 +65,7 @@ public class SessionSetup : MonoBehaviour
         Player newPlayer = new Player(newShip, true, playerCrewSimulation);
         MapTurnSystem.instance.AddPlayerToFirstPositionInTurnOrder(newPlayer);
         HexGridController.player = newPlayer;
-
+        newPlayer.PlayerData.NextBountyChange = setupData.difficultySettings.bountyChanges;
         for (int i = 0; i < startingCharacters.Length; i++)
         {
             HexGridController.SpawnCharacterForPlayerCrew(startingCharacters[i]);
@@ -96,18 +100,23 @@ public class SetupData
         for (int i = 0; i < chars.Length && i < SEEDMAXCHARS; i++)
         {
             Seed += chars[i].GetHashCode();
-    
+
         }
     }
 }
 [System.Serializable]
 public class DifficultySettings
 {
-    public int bountyToVisionRange = 500;
-    public int bountyToCrewSize = 1000;
+    public int bountyChanges = 500;
+    public int BountyToVisionRange
+    {
+        get => bountyChanges;
+    }
+    public int BountyToCrewSize
+    {
+        get => bountyChanges * 2;
+    }
 
-    public int minimumCharacters = 2;
-    public int maximumCharacters = 10;
-
-
+    public int minimumEnemyCrewSize = 2;
+    public int maximumEnemyCrewSize = 10;
 }
