@@ -110,13 +110,22 @@ public class AI
             }
 
             //Score
-            score = actionGroup.abilityToUse.cost;
-            score *= targets;
-            score = isTargettingTauntingCharacter ? score * 2 : score;
+            if (targets > 0)
+            {
+                score = actionGroup.abilityToUse.cost;
+                score *= targets;
+                score = isTargettingTauntingCharacter ? score * 2 : score;
+            }
+            else
+            {
+                score -= int.MinValue;
+            }
         }
         actionGroup.score = score;
     }
 }
+
+
 
 public class ActionGroup : IComparable
 {
