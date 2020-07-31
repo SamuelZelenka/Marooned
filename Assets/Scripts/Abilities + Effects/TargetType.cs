@@ -204,7 +204,6 @@ public class AOE : TargetType
     {
         List<HexCell> affectedCells = new List<HexCell>();
         affectedCells.AddRange(CellFinder.GetCellsWithinRange(targetCell, aoeRange, (c) => c.Traversable == true));
-        affectedCells.Add(targetCell);
         return affectedCells;
     }
 }

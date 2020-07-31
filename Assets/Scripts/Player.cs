@@ -30,10 +30,10 @@ public class Player
     /// </summary>
     /// <param name="ship"></param>
     /// <param name="humanControlled"></param>
-    public Player(Ship ship, bool humanControlled = false)
+    public Player(Ship ship, List<Character> crew, bool humanControlled = false)
     {
         PlayerData = new PlayerData();
-        Crew = new List<Character>();
+        Crew = crew;
         this.Ship = ship;
         ship.Setup(this);
         IsHuman = humanControlled;

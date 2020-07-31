@@ -103,5 +103,11 @@ public class SetupData
 [System.Serializable]
 public class DifficultySettings
 {
-    public int visionRangeToBounty = 500;
+    public int bountyToVisionRange = 500;
+    public int bountyToCrewSize = 1000;
+
+    public int minimumCharacters = 2;
+    public int maximumCharacters = 10;
+
+
 }

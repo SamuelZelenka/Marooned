@@ -113,7 +113,12 @@ public class CombatSystem : MonoBehaviour
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
         HexGridController.OnCellSelected -= UseAbility;
     }
-
+    #if UNITY_EDITOR
+    private void Update()
+    {
+        CheatInput();
+    }
+    #endif
     public void StartCombat(Player defender, Player attacker)
     {
         OnCombatStart?.Invoke();
@@ -300,4 +305,19 @@ public class CombatSystem : MonoBehaviour
     }
 
     public void EndActiveCharacterTurn() => turnSystem.EndActiveCharacterTurn();
+
+#region Cheats
+
+    void CheatInput()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && Input.GetKey(KeyCode.LeftShift))
+        {
+            HexGridController.ActiveCharacter.characterData.Energy.CurrentValue = HexGridController.ActiveCharacter.characterData.Energy.MaxValue;
+        }
+        if (Input.GetKeyDown(KeyCode.M) && Input.GetKey(KeyCode.LeftShift))
+        {
+            HexGridController.ActiveCharacter.remainingMovementPoints = HexGridController.ActiveCharacter.defaultMovementPoints;
+        }
+    }
+#endregion
 }

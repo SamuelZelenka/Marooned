@@ -22,7 +22,7 @@ public class CharacterData
     [SerializeField] string characterFirstName = "name";
     [SerializeField] string characterLastName = "namesson";
 
-    [SerializeField] public readonly int recruitBountyDemand = 100;
+    [SerializeField] public int recruitBountyDemand = 100;
 
     [SerializeField] readonly int STARTSTRENGTH = 1;
     [SerializeField] readonly int STARTSTAMINA = 1;

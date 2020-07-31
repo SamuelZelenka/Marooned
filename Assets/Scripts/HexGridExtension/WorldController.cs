@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor.Playables;
 using UnityEngine;
 
 public class WorldController : MonoBehaviour
@@ -37,21 +38,16 @@ public class WorldController : MonoBehaviour
     [SerializeField] WorldSetup worldSetup = null;
     [SerializeField] MapTurnSystem turnSystem = null;
 
-    [SerializeField] List<Character> allCharacters = null;
-
-    private void OnEnable()
-    {
-        turnSystem.OnWeekEnded += ChangeCharactersInTaverns;
-    }
-
-    private void OnDisable()
-    {
-        turnSystem.OnWeekEnded -= ChangeCharactersInTaverns;
-    }
+    [SerializeField] List<Character> playableCharacters = null;
+    [SerializeField] List<Character> redcoatCharacters = null;
 
     public void Setup(HexGrid hexGrid, SetupData setupData)
     {
         turnSystem.OnFirstTurnStarted += ChangeCharactersInTaverns;
+        turnSystem.OnFirstTurnStarted += SpawnShips;
+
+        turnSystem.OnWeekEnded += ChangeCharactersInTaverns;
+        turnSystem.OnWeekEnded += SpawnShips;
 
         this.hexGrid = hexGrid;
         difficultySettings = setupData.difficultySettings;
@@ -61,6 +57,11 @@ public class WorldController : MonoBehaviour
         Landmasses = new List<Landmass>();
         worldSetup.Setup(hexGrid, setupData, this);
 
+        //Set player spawn position
+        PlayerSpawnPosition = Utility.ReturnRandom(CellFinder.GetCellsWithinRange(HarborCells[0], 2, (c) => c.Traversable == true, (c) => c.Unit == null, (c) => c.IsOcean == true));
+    }
+    public void SpawnShips()
+    {
         foreach (var route in MerchantRoutes)
         {
             //Spawn a Merchant ship on the new route
@@ -69,10 +70,7 @@ public class WorldController : MonoBehaviour
             //Spawn a Redcoat patrolship on the new route
             CreateRedcoatPlayer(route);
         }
-        //Set player spawn position
-        PlayerSpawnPosition = Utility.ReturnRandom(CellFinder.GetCellsWithinRange(HarborCells[0], 2, (c) => c.Traversable == true, (c) => c.Unit == null, (c) => c.IsOcean == true));
     }
-
     public HexCell GetRandomHarborWithinRange(Ship ship, int minDistance, int maxDistance)
     {
         HexCell cell = null;
@@ -110,7 +108,7 @@ public class WorldController : MonoBehaviour
 
         hexGrid.AddUnit(newShip, route.GetSpawnableLocation(), HexDirectionExtension.ReturnRandomDirection(), false);
 
-        Player newMerchantPlayer = new Player(newShip, false);
+        Player newMerchantPlayer = new Player(newShip, null, false);
         MapTurnSystem.instance.AddPlayerToTurnOrder(newMerchantPlayer);
     }
 
@@ -127,13 +125,27 @@ public class WorldController : MonoBehaviour
 
         hexGrid.AddUnit(newShip, route.GetSpawnableLocation(), HexDirectionExtension.ReturnRandomDirection(), false);
 
-        Player newRedcoatPlayer = new Player(newShip, false);
+        List<Character> newCrew = new List<Character>();
+        for (int i = 0; i < GetCrewSize(HexGridController.player.PlayerData); i++)
+        {
+            newCrew.Add(Utility.ReturnRandom(redcoatCharacters));
+        }
+
+        Player newRedcoatPlayer = new Player(newShip, newCrew, false);
         MapTurnSystem.instance.AddPlayerToTurnOrder(newRedcoatPlayer);
     }
 
     public int GetVisionRange(PlayerData playerData)
     {
-        return Mathf.FloorToInt((float) playerData.Bounty / difficultySettings.visionRangeToBounty);
+        return Mathf.FloorToInt((float) playerData.Bounty / difficultySettings.bountyToVisionRange);
+    }
+
+    public int GetCrewSize(PlayerData playerData)
+    {
+        int crewSize = difficultySettings.minimumCharacters;
+        crewSize += Mathf.FloorToInt((float)playerData.Bounty / difficultySettings.bountyToCrewSize);
+
+        return Mathf.Clamp(crewSize, difficultySettings.minimumCharacters, difficultySettings.maximumCharacters); ;
     }
 
     void ChangeCharactersInTaverns()
@@ -150,7 +162,7 @@ public class WorldController : MonoBehaviour
             }
         }
 
-        foreach (var character in allCharacters)
+        foreach (var character in playableCharacters)
         {
             bool isRecruitable = true;
             for (int i = 0; i < player.Crew.Count; i++)
