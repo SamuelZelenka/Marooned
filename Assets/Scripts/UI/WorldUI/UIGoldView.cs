@@ -5,9 +5,9 @@ public class UIGoldView : MonoBehaviour
 {
     [SerializeField] Text gold = null;
 
-    void Setup()
+    void Setup(PlayerData playerData)
     {
-        HexGridController.player.PlayerData.OnGoldChanged += UpdateUI;
+        playerData.OnGoldChanged += UpdateUI;
         UpdateUI();
     }
 

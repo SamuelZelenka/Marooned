@@ -18,7 +18,7 @@ public class SessionSetup : MonoBehaviour
     public Character[] startingCharacters;
     public CombatSystem combatSystem;
 
-    public delegate void SessionSetupHandler();
+    public delegate void SessionSetupHandler(PlayerData playerdata);
     public static event SessionSetupHandler OnPlayerCreated;
 
     public SetupData setupData;
@@ -48,7 +48,7 @@ public class SessionSetup : MonoBehaviour
         HexGridController.playerCrewParent = playerCrewParent;
 
         CreateHumanPlayer();
-        OnPlayerCreated?.Invoke();
+        OnPlayerCreated?.Invoke(HexGridController.player.PlayerData);
         MapTurnSystem.instance.DoFirstTurn();
     }
 

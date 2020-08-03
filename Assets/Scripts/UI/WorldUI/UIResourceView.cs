@@ -18,12 +18,19 @@ public class UIResourceView : MonoBehaviour
     {
         if (HexGridController.player != null)
         {
-            Resource resource = HexGridController.player.PlayerData.Resources.GetResource(resourceType);
-            resource.OnResourceChanged += UpdateUI;
-            UpdateUI(resource);
+            Setup(HexGridController.player.PlayerData);
+        }
+        else
+        {
+            SessionSetup.OnPlayerCreated += Setup;
         }
     }
-
+    void Setup(PlayerData playerData)
+    {
+        Resource resource = playerData.Resources.GetResource(resourceType);
+        resource.OnResourceChanged += UpdateUI;
+        UpdateUI(resource);
+    }
     void UpdateUI(Resource resource)
     {
         resourceNumber.text = resource.Value.ToString();

@@ -5,9 +5,9 @@ public class BountyView : MonoBehaviour
     [SerializeField] ProgressBar bountyProgress = null;
 
 
-    void Setup()
+    void Setup(PlayerData playerdata)
     {
-        HexGridController.player.PlayerData.OnBountyChanged += UpdateUI;
+        playerdata.OnBountyChanged += UpdateUI;
         UpdateUI();
     }
 
