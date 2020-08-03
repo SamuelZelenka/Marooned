@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class UIResourceView : MonoBehaviour
@@ -22,7 +23,7 @@ public class UIResourceView : MonoBehaviour
             UpdateUI(resource);
         }
     }
-    
+
     void UpdateUI(Resource resource)
     {
         resourceNumber.text = resource.Value.ToString();

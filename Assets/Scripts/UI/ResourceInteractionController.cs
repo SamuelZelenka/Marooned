@@ -44,17 +44,17 @@ public class ResourceInteractionController : MonoBehaviour
     /// </summary>
     /// <param name="inspectedShipInventory"></param>
     /// <param name="boarding"></param>
-    public void Setup(ResourceInventory inspectedShipInventory, bool boarding)
+    public void Setup(ResourceInventory inspectedShipInventory, bool buttons, bool sliders)
     {
         foreach (var button in interactButtonObjects)
         {
-            button.SetActive(boarding);
+            button.SetActive(buttons);
         }
 
         this.activeShipInventory = inspectedShipInventory;
         foreach (var item in resourceViewers)
         {
-            UpdateUI(item.ResourceType, boarding);
+            UpdateUI(item.ResourceType, !buttons && !sliders);
         }
         SetTexts();
     }
@@ -112,7 +112,7 @@ public class ResourceInteractionController : MonoBehaviour
                 interactButtonText.text = $"Sell Marked Items (£{totalSelectedValue.ToString()})";
                 break;
             case Mode.Boarding:
-                interactButtonText.text = $"Steal Marked Items (£{totalSelectedValue.ToString()})";
+                interactButtonText.text = $"Steal All Items (£{totalValue.ToString()})";
                 break;
         }
         totalValueText.text = $"Total Value: {totalValue}";
@@ -141,12 +141,12 @@ public class ResourceInteractionController : MonoBehaviour
     #endregion
 
     #region Piracy
-    void StealResource(ResourceType resourceType, int numberOfItemsToSteal)
+    void StealResource(ResourceType resourceType, int numberOfItemsToSteal, bool showButtonsAndSliders)
     {
         PlayerData playerData = HexGridController.player.PlayerData;
         activeShipInventory.GetResource(resourceType).Value -= numberOfItemsToSteal; //Take from boarded ship
         playerData.Resources.GetResource(resourceType).Value += numberOfItemsToSteal; //Give to player
-        UpdateUI(resourceType, true);
+        UpdateUI(resourceType, showButtonsAndSliders);
     }
 
     //Button call
@@ -156,8 +156,17 @@ public class ResourceInteractionController : MonoBehaviour
         {
             ResourceType resourceType = (ResourceType)i;
             int numberOfItems = Mathf.RoundToInt(resourceViewers[i].GetSliderValue());
-            StealResource(resourceType, numberOfItems);
+            StealResource(resourceType, numberOfItems, true);
         }
     }
+
+    public void StealAllResources()
+    {
+        for (int i = 0; (ResourceType)i != ResourceType.MAX; i++)
+        {
+            StealResource((ResourceType)i, activeShipInventory.GetResource((ResourceType)i).Value, false);
+        }
+    }
+
     #endregion
 }
