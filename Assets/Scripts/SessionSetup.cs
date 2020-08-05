@@ -51,7 +51,7 @@ public class SessionSetup : MonoBehaviour
         CreateHumanPlayer();
         MapTurnSystem.instance.DoFirstTurn();
 
-        questController.GiveFirstQuest();
+        questController.GiveStartingQuest();
     }
 
     //Creates a player from a prefab and spawns a ship, starting characters and adds them to controllers 

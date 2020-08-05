@@ -66,7 +66,7 @@ public class PlayerData
     List<Quest> activeQuests = new List<Quest>();
     List<Quest> completedQuests = new List<Quest>();
     List<Quest> failedQuests = new List<Quest>();
-
+    public int mainQuestIndex = 0;
 
     public void AddQuest(Quest quest)
     {

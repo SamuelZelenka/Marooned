@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class QuestController : MonoBehaviour
 {
-    [SerializeField] LocationQuest startingQuest = null;
+    [SerializeField] TravelQuest startingQuest = null;
     [SerializeField] WorldController worldController = null;
     Player player;
 
-    [SerializeField] List<Quest> mainQuests = new List<Quest>(); 
+    [SerializeField] List<Quest> mainQuests = new List<Quest>();
 
     private void Awake()
     {
@@ -17,9 +17,23 @@ public class QuestController : MonoBehaviour
 
     void SetPlayer(Player player) => this.player = player;
 
-    public void GiveFirstQuest()
+    public void GiveStartingQuest()
     {
         startingQuest.Setup(player, worldController.HarborCells[0]);
+        startingQuest.OnQuestCompleted += GiveMainQuest;
         player.PlayerData.AddQuest(startingQuest);
+    }
+
+    private void GiveMainQuest()
+    {
+        if (mainQuests.Count > player.PlayerData.mainQuestIndex)
+        {
+            Quest questToGive = mainQuests[player.PlayerData.mainQuestIndex];
+
+            player.PlayerData.AddQuest(questToGive);
+        }
+
+        else
+            Debug.Log("Finished all quests");
     }
 }
