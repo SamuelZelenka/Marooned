@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public abstract class HexUnit : MonoBehaviour
 {
     public delegate void HexUnitUpdateHandler(HexUnit unit);
-    public static event HexUnitUpdateHandler OnUnitBeganMove;
-    public static event HexUnitUpdateHandler OnUnitMoved;
+    public static event HexUnitUpdateHandler OnAnyUnitBeganMove;
+    public static event HexUnitUpdateHandler OnAnyUnitMoved;
+    public event HexUnitUpdateHandler OnUnitMoved;
 
     public LogMessage logMessage;
 
@@ -56,6 +57,7 @@ public abstract class HexUnit : MonoBehaviour
                 CalculateReachableCells();
                 ShowReachableCells(true);
             }
+            OnAnyUnitMoved?.Invoke(this);
             OnUnitMoved?.Invoke(this);
             CheckInteractableCells();
         }
@@ -165,7 +167,7 @@ public abstract class HexUnit : MonoBehaviour
 
     IEnumerator TravelPath()
     {
-        OnUnitBeganMove?.Invoke(this); //TODO: Better position for this delegate call recommended
+        OnAnyUnitBeganMove?.Invoke(this); //TODO: Better position for this delegate call recommended
         float zPos = transform.localPosition.z;
         HexCell latestCell = pathToTravel[0];
 

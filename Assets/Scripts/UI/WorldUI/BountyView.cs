@@ -3,19 +3,20 @@
 public class BountyView : MonoBehaviour
 {
     [SerializeField] ProgressBar bountyProgress = null;
+    Player player;
 
-
-    void Setup(PlayerData playerdata)
+    void Setup(Player player)
     {
-        playerdata.OnBountyChanged += UpdateUI;
+        this.player = player;
+        player.PlayerData.OnBountyChanged += UpdateUI;
         UpdateUI();
     }
 
     private void OnEnable()
     {
-        if (HexGridController.player != null)
+        if (player != null)
         {
-            HexGridController.player.PlayerData.OnBountyChanged += UpdateUI;
+            player.PlayerData.OnBountyChanged += UpdateUI;
             UpdateUI();
         }
         else
@@ -25,14 +26,14 @@ public class BountyView : MonoBehaviour
     }
     private void OnDisable()
     {
-        if (HexGridController.player != null)
+        if (player != null)
         {
-            HexGridController.player.PlayerData.OnBountyChanged -= UpdateUI;
+            player.PlayerData.OnBountyChanged -= UpdateUI;
         }
     }
 
     void UpdateUI()
     {
-        bountyProgress.EnqueueChange(new ProgressBar.ProgressStatus(HexGridController.player.PlayerData.Bounty, HexGridController.player.PlayerData.NextBountyChange, HexGridController.player.PlayerData.PreviousBountyChange));
+        bountyProgress.EnqueueChange(new ProgressBar.ProgressStatus(player.PlayerData.Bounty, player.PlayerData.NextBountyChange, player.PlayerData.PreviousBountyChange));
     }
 }

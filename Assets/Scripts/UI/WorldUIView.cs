@@ -13,14 +13,14 @@ public class WorldUIView : MonoBehaviour
 
     private void OnEnable()
     {
-        HexUnit.OnUnitBeganMove += DisablePOIInteraction;
-        HexUnit.OnUnitBeganMove += CloseBoardingView;
+        HexUnit.OnAnyUnitBeganMove += DisablePOIInteraction;
+        HexUnit.OnAnyUnitBeganMove += CloseBoardingView;
     }
 
     private void OnDisable()
     {
-        HexUnit.OnUnitBeganMove -= DisablePOIInteraction;
-        HexUnit.OnUnitBeganMove -= CloseBoardingView;
+        HexUnit.OnAnyUnitBeganMove -= DisablePOIInteraction;
+        HexUnit.OnAnyUnitBeganMove -= CloseBoardingView;
     }
 
     #region POI

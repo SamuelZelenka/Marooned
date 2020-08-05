@@ -103,7 +103,7 @@ public class CombatSystem : MonoBehaviour
     private void OnEnable()
     {
         CombatTurnSystem.OnTurnBegining += NewCharacterTurn;
-        HexUnit.OnUnitMoved += UnitMoved;
+        HexUnit.OnAnyUnitMoved += UnitMoved;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
         HexGridController.OnCellSelected += UseAbility;
     }
@@ -111,7 +111,7 @@ public class CombatSystem : MonoBehaviour
     private void OnDisable()
     {
         CombatTurnSystem.OnTurnBegining -= NewCharacterTurn;
-        HexUnit.OnUnitMoved -= UnitMoved;
+        HexUnit.OnAnyUnitMoved -= UnitMoved;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
         HexGridController.OnCellSelected -= UseAbility;
     }

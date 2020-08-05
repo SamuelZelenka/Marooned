@@ -17,8 +17,9 @@ public class SessionSetup : MonoBehaviour
     public CrewSimulation playerCrewSimulation;
     public Character[] startingCharacters;
     public CombatSystem combatSystem;
+    public QuestController questController;
 
-    public delegate void SessionSetupHandler(PlayerData playerdata);
+    public delegate void SessionSetupHandler(Player player);
     public static event SessionSetupHandler OnPlayerCreated;
 
     public SetupData setupData;
@@ -48,8 +49,9 @@ public class SessionSetup : MonoBehaviour
         HexGridController.playerCrewParent = playerCrewParent;
 
         CreateHumanPlayer();
-        OnPlayerCreated?.Invoke(HexGridController.player.PlayerData);
         MapTurnSystem.instance.DoFirstTurn();
+
+        questController.GiveFirstQuest();
     }
 
     //Creates a player from a prefab and spawns a ship, starting characters and adds them to controllers 
@@ -70,6 +72,7 @@ public class SessionSetup : MonoBehaviour
         {
             HexGridController.SpawnCharacterForPlayerCrew(startingCharacters[i]);
         }
+        OnPlayerCreated?.Invoke(newPlayer);
     }
 }
 

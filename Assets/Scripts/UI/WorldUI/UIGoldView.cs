@@ -5,17 +5,19 @@ public class UIGoldView : MonoBehaviour
 {
     [SerializeField] Text gold = null;
 
-    void Setup(PlayerData playerData)
+    Player player;
+    void Setup(Player player)
     {
-        playerData.OnGoldChanged += UpdateUI;
+        this.player = player;
+        player.PlayerData.OnGoldChanged += UpdateUI;
         UpdateUI();
     }
 
     private void OnEnable()
     {
-        if (HexGridController.player != null)
+        if (player != null)
         {
-            HexGridController.player.PlayerData.OnGoldChanged += UpdateUI;
+            player.PlayerData.OnGoldChanged += UpdateUI;
             UpdateUI();
         }
         else
@@ -26,14 +28,14 @@ public class UIGoldView : MonoBehaviour
 
     private void OnDisable()
     {
-        if (HexGridController.player != null)
+        if (player != null)
         {
-            HexGridController.player.PlayerData.OnGoldChanged -= UpdateUI;
+            player.PlayerData.OnGoldChanged -= UpdateUI;
         }
     }
 
     void UpdateUI()
     {
-        gold.text = HexGridController.player.PlayerData.Gold.ToString();
+        gold.text = player.PlayerData.Gold.ToString();
     }
 }

@@ -28,7 +28,7 @@ public class CombatUIView : MonoBehaviour
 
     private void OnEnable()
     {
-        HexUnit.OnUnitMoved += UnitMoved;
+        HexUnit.OnAnyUnitMoved += UnitMoved;
         HexGridController.OnCellSelected += CellSelected;
         CombatTurnSystem.OnTurnBegining += TurnStarted;
         //CharacterData.OnEffectChanged += UpdateAllCharacters;
@@ -37,7 +37,7 @@ public class CombatUIView : MonoBehaviour
     }
     private void OnDisable()
     {
-        HexUnit.OnUnitMoved -= UnitMoved;
+        HexUnit.OnAnyUnitMoved -= UnitMoved;
         HexGridController.OnCellSelected -= CellSelected;
         CombatTurnSystem.OnTurnBegining -= TurnStarted;
         //CharacterData.OnEffectChanged -= UpdateAllCharacters;

@@ -8,6 +8,10 @@ public class PlayerData
     public delegate void DataHandler();
     public DataHandler OnGoldChanged;
     public DataHandler OnBountyChanged;
+    public delegate void QuestHandler(Quest quest);
+    public QuestHandler OnQuestAdded;
+    public QuestHandler OnQuestCompleted;
+    public QuestHandler OnQuestFailed;
 
     public List<CharacterData> AliveCharacters { get; private set; } = new List<CharacterData>();
     public List<CharacterData> DeadCharacters { get; private set; } = new List<CharacterData>();
@@ -56,6 +60,33 @@ public class PlayerData
                 combinedValue += item.BountyLevel.Bounty;
             }
             return combinedValue;
+        }
+    }
+
+    List<Quest> activeQuests = new List<Quest>();
+    List<Quest> completedQuests = new List<Quest>();
+    List<Quest> failedQuests = new List<Quest>();
+
+
+    public void AddQuest(Quest quest)
+    {
+        activeQuests.Add(quest);
+        quest.QuestStarted();
+        OnQuestAdded?.Invoke(quest);
+    }
+
+    public void RemoveQuest(Quest quest, bool completed)
+    {
+        activeQuests.Remove(quest);
+        if (completed)
+        {
+            completedQuests.Add(quest);
+            OnQuestCompleted?.Invoke(quest);
+        }
+        else
+        {
+            failedQuests.Add(quest);
+            OnQuestFailed?.Invoke(quest);
         }
     }
 }
