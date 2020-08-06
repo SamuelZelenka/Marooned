@@ -19,7 +19,7 @@ public class QuestController : MonoBehaviour
 
     public void GiveStartingQuest()
     {
-        startingQuest.Setup(player, worldController.HarborCells[0]);
+        startingQuest.Setup(player, worldController.HarborCells[0], worldController.Harbors[0].name);
         startingQuest.OnQuestCompleted += GiveMainQuest;
         player.PlayerData.AddQuest(startingQuest);
     }

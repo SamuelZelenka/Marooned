@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 4d949d5a57835ce4485c419cf417915a, type: 3}
   m_Name: Tutorial 1
   m_EditorClassIdentifier: Assembly-CSharp::LocationQuest
-  title: Reach Harbor
-  description: Sail to the closest harbor
-  status: 0
+  title: Sail to harbor
+  description: Travel to the NAME harbor
   messageOnActivated: 
   messageOnCompleted: 
   messageOnFailed: 
+  cellToReach: {fileID: 0}

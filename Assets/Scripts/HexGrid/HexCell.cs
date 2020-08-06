@@ -8,7 +8,9 @@ public class HexCell : MonoBehaviour
 
     [Header("Canvas and Text")]
     public GameObject labelCanvas;
-    public Text label;
+    public Text numberLabel;
+    public Text nameLabel;
+
 
     [Header("Grids")]
     public SpriteRenderer gameGrid;
@@ -53,7 +55,16 @@ public class HexCell : MonoBehaviour
             }
         }
     }
-    public PointOfInterest PointOfInterest { get; set; }
+    PointOfInterest pointOfInterest;
+    public PointOfInterest PointOfInterest
+    {
+        get => pointOfInterest;
+        set
+        {
+            pointOfInterest = value;
+            SetNameLabel(value.name);
+        }
+    }
 
     HexUnit unit;
     public HexUnit Unit
@@ -179,7 +190,7 @@ public class HexCell : MonoBehaviour
     }
     public HexCell NextWithSamePriority { get; set; }
     public int SearchPhase { get; set; } // 0 = not been reached | 1 = currently in searchfrontier | 2 = has been reached and taken out from frontier
-   
+
     public int MovementCost { get; set; } //The total cost to move here by a single unit now searching
     public HexCell PathFrom { get; set; }
     public int BaseEnterModifier { private get; set; }
@@ -203,12 +214,22 @@ public class HexCell : MonoBehaviour
     }
 
     #region Grid, Highlights and Labels
-    public void SetLabel(string text)
+    public void SetNumberLabel(string text)
     {
-        label.text = text;
-        labelCanvas.SetActive(text != "" && text != null);
+        numberLabel.text = text;
+        CheckCanvasActiveNeed();
     }
-    public void ShowUI(bool status) => label.enabled = status;
+    public void SetNameLabel(string text)
+    {
+        nameLabel.text = text;
+        CheckCanvasActiveNeed();
+    }
+    private void CheckCanvasActiveNeed() => labelCanvas.SetActive(numberLabel.text != "" || nameLabel.text != "");
+    public void ShowUI(bool status)
+    {
+        numberLabel.enabled = status;
+        nameLabel.enabled = status;
+    }
 
     public void ShowGameOutline(bool status)
     {

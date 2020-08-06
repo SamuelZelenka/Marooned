@@ -5,6 +5,7 @@ using UnityEditor;
 using System;
 using System.Linq;
 using Random = UnityEngine.Random;
+using System.Text.RegularExpressions;
 
 public static class Utility
 {
@@ -136,26 +137,13 @@ public static class Utility
         }
     }
 
+#if UNITY_EDITOR
     /// <summary>
     //	This makes it easy to create, name and place unique new ScriptableObject asset files.
     /// </summary>
     public static T CreateAsset<T>(string pathFolderName, string assetName) where T : ScriptableObject
     {
         T asset = ScriptableObject.CreateInstance<T>();
-
-        //string path = AssetDatabase.GetAssetPath(Selection.activeObject);
-        //if (path == "")
-        //{
-        //    path = "Assets";
-        //    if (pathFolderName != null)
-        //    {
-        //        path += "/" + pathFolderName;
-        //    }
-        //}
-        //else if (Path.GetExtension(path) != "")
-        //{
-        //    path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
-        //}
 
         string path = "Assets";
         if (pathFolderName != null)
@@ -182,6 +170,7 @@ public static class Utility
         Selection.activeObject = asset;
         return asset;
     }
+#endif
 
     public static float PercentageToFactor(int wholePercentage)
     {
@@ -197,5 +186,11 @@ public static class Utility
     {
         int percentage = FactorToPercentage(floatPercentage);
         return percentage.ToString() + "%";
+    }
+
+    public static string ReplaceWordInString(string originalString, string wordToReplace, string newWord)
+    {
+        string pattern = $@"\b{wordToReplace}\b";
+        return  Regex.Replace(originalString, pattern, newWord);
     }
 }

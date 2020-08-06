@@ -170,7 +170,7 @@ public static class Pathfinding
                     turn++;
                 }
                 //current.SetLabel(turn.ToString());
-                current.SetLabel(current.MovementCost.ToString());
+                current.SetNumberLabel(current.MovementCost.ToString());
                 current.ShowPathFrom(true, current.PathFrom);
                 current = current.PathFrom;
             }
@@ -186,7 +186,7 @@ public static class Pathfinding
             currentPathTo.ShowHighlight(false, HexCell.HighlightType.PathfindingEnd);
             while (current != currentPathFrom)
             {
-                current.SetLabel(null);
+                current.SetNumberLabel(null);
                 current.ShowPathFrom(false, current.PathFrom);
                 current = current.PathFrom;
             }
