@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -14,6 +13,7 @@ public class WorldSetup : MonoBehaviour
     [SerializeField] TileBase[] edgeTiles = null;
     [SerializeField] TileBase[] landTiles = null;
     [SerializeField] TileBase[] harborTiles = null;
+    [SerializeField] TileBase[] strongholdTiles = null;
     [SerializeField] Tilemap terrainTilemap = null;
     [SerializeField] Tilemap featuresTilemap = null;
     [SerializeField] GameObject oceanSquarePrefab = null;
@@ -84,7 +84,7 @@ public class WorldSetup : MonoBehaviour
         }
     }
 
-    void CreateMap(HexGrid hexGrid,SetupData setupData, WorldController worldController)
+    void CreateMap(HexGrid hexGrid, SetupData setupData, WorldController worldController)
     {
         //LAND OR OCEAN
         foreach (HexCell cell in hexGrid.Cells)
@@ -166,20 +166,52 @@ public class WorldSetup : MonoBehaviour
         }
 
         //HARBORS AND POINTS OF INTERESTS
+        for (int i = 0; i < worldController.Landmasses.Count; i++)
+        {
+            Landmass landmass = worldController.Landmasses[i];
+            HexCell poiCell = Utility.ReturnRandom(landmass.GetShores());
+            landmass.poiLocationCell = poiCell;
+            PointOfInterest.Type typeToSpawn = PointOfInterest.Type.Harbor;
+            if (HexMetrics.SampleHashGrid(poiCell.Position).c < setupData.strongholdSpawnChance)
+            {
+                typeToSpawn = PointOfInterest.Type.Stronghold;
+            }
+            landmass.TypeOfPOI = typeToSpawn;
+
+        }
+        int numberOfStrongholdsToSpawn = 0;
         foreach (Landmass landmass in worldController.Landmasses)
         {
-            HexCell harborCell = Utility.ReturnRandom(landmass.GetShores());
-            landmass.harbor = harborCell;
-            AddHarbor(harborCell, setupData, worldController);
+            if (landmass.TypeOfPOI == PointOfInterest.Type.Stronghold)
+                numberOfStrongholdsToSpawn++;
+        }
+        int remainingStrongholdsToSpawn = setupData.minNumberOfStrongholds - numberOfStrongholdsToSpawn;
+
+        while (remainingStrongholdsToSpawn > 0)
+        {
+            Landmass newPoiLandmass = Utility.ReturnRandomElementWithCondition(worldController.Landmasses, (landmass) => landmass.TypeOfPOI != PointOfInterest.Type.Stronghold);
+            newPoiLandmass.TypeOfPOI = PointOfInterest.Type.Stronghold;
+            remainingStrongholdsToSpawn--;
+        }
+        foreach (Landmass landmass in worldController.Landmasses)
+        {
+            switch (landmass.TypeOfPOI)
+            {
+                case PointOfInterest.Type.Harbor:
+                    worldController.Harbors.Add(AddHarbor(landmass.poiLocationCell, setupData));
+                    break;
+                case PointOfInterest.Type.Stronghold:
+                    worldController.Strongholds.Add(AddStronghold(landmass.poiLocationCell, setupData));
+                    break;
+            }
         }
     }
 
-    void AddHarbor(HexCell cell, SetupData setupData, WorldController worldController)
+    Harbor AddHarbor(HexCell cell, SetupData setupData)
     {
         Vector3Int tilemapPosition = HexCoordinates.CoordinatesToTilemapCoordinates(cell.coordinates);
 
         cell.HasHarbor = true;
-        worldController.HarborCells.Add(cell);
         string harborName = setupData.islandNames[0];
         if (setupData.islandNames.Count > 1)
         {
@@ -189,7 +221,8 @@ public class WorldSetup : MonoBehaviour
         bool hasTavern = setupData.harborTavernChance > HexMetrics.SampleHashGrid(cell.Position).b;
         bool hasMerchant = setupData.harborMerchantChance > HexMetrics.SampleHashGrid(cell.Position).c;
 
-        cell.PointOfInterest = new Harbor(harborName, worldUIView.EnablePOIInteraction, hasMerchant, hasTavern);
+        Harbor newHarbor = new Harbor(harborName, cell, worldUIView.EnablePOIInteraction, hasMerchant, hasTavern);
+        cell.PointOfInterest = newHarbor;
 
         List<HexDirection> openwaterConnections = new List<HexDirection>();
         for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
@@ -202,8 +235,37 @@ public class WorldSetup : MonoBehaviour
         }
         HexDirection dir = Utility.ReturnRandom(openwaterConnections);
         featuresTilemap.SetTile(tilemapPosition, harborTiles[(int)dir]);
+        return newHarbor;
     }
 
+    Stronghold AddStronghold(HexCell cell, SetupData setupData)
+    {
+        Vector3Int tilemapPosition = HexCoordinates.CoordinatesToTilemapCoordinates(cell.coordinates);
+
+        cell.HasStronghold = true;
+        string strongholdName = setupData.strongholdNames[0];
+        if (setupData.strongholdNames.Count > 1)
+        {
+            setupData.strongholdNames.RemoveAt(0);
+        }
+
+
+        Stronghold newStronghold = new Stronghold(strongholdName, cell, worldUIView.EnablePOIInteraction);
+        cell.PointOfInterest = newStronghold;
+
+        List<HexDirection> openwaterConnections = new List<HexDirection>();
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            HexCell neighbor = cell.GetNeighbor(d);
+            if (neighbor && neighbor.IsOcean)
+            {
+                openwaterConnections.Add(d);
+            }
+        }
+        HexDirection dir = Utility.ReturnRandom(openwaterConnections);
+        featuresTilemap.SetTile(tilemapPosition, strongholdTiles[(int)dir]);
+        return newStronghold;
+    }
 
     /// <summary>
     /// Paints terrain on the tilemap

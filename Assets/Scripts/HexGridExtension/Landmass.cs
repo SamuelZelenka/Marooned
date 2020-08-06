@@ -15,5 +15,6 @@ public class Landmass
         }
         return shores;
     }
-    public HexCell harbor;
+    public HexCell poiLocationCell;
+    public PointOfInterest.Type TypeOfPOI = PointOfInterest.Type.Harbor;
 }

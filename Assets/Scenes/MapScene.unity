@@ -6079,9 +6079,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c727377e512949ae679492423e87d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingQuest: {fileID: 11400000, guid: ecf97109257f84849b3fe6f837c4eece, type: 2}
   worldController: {fileID: 1380808281}
-  mainQuests: []
+  mainQuests:
+  - {fileID: 11400000, guid: ecf97109257f84849b3fe6f837c4eece, type: 2}
+  - {fileID: 11400000, guid: 20f666e4fd382e94485ff14bdec96541, type: 2}
 --- !u!114 &365780689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10899,6 +10900,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 946a453557043d242ad4bc15c60cc584, type: 2}
   - {fileID: 11400000, guid: a0be43d133fabc547a500b5359d7757c, type: 2}
   - {fileID: 11400000, guid: 029188240b679e74f8ad3db8615ddb51, type: 2}
+  strongholdTiles:
+  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
+  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
+  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
+  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
+  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
+  - {fileID: 11400000, guid: 5a1b490ae5212254c88f3c81090012c1, type: 2}
   terrainTilemap: {fileID: 1380808283}
   featuresTilemap: {fileID: 1380808282}
   oceanSquarePrefab: {fileID: 5115304797245541931, guid: 9172770eb87073948bc6e016b6532495,
@@ -10973,8 +10981,13 @@ MonoBehaviour:
     - "l'\xCEle du Chamur"
     - "l'\xCEle du Bourl\xE8s"
     - l'Atoll de Marinne
+    strongholdNames:
+    - Stone Cliff Fort
     harborMerchantChance: 0.9
     harborTavernChance: 0.6
+    minNumberOfStrongholds: 1
+    maxNumberOfStrongholds: 1
+    strongholdSpawnChance: 0.1
 --- !u!4 &1828964993
 Transform:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ Material:
   m_Name: Water
   m_Shader: {fileID: -6465566751694194690, guid: a086a3d4dbd0cf64b821d9b3c1846323,
     type: 3}
-  m_ShaderKeywords: ENUM_94CA77FF_NE ETC1_EXTERNAL_ALPHA SE _WATERDIRECTION_W _WaterDirection_E
+  m_ShaderKeywords: ENUM_94CA77FF_NE ETC1_EXTERNAL_ALPHA SE _WATERDIRECTION_NE _WaterDirection_E
     _WaterDirection_NE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -83,7 +83,7 @@ Material:
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 0.6
+    - _Speed: 0.1
     - _SrcBlend: 1
     - _Surface: 0
     - _WATERDIRECTION: 3

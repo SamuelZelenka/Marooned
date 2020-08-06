@@ -39,10 +39,14 @@ public class WorldUIView : MonoBehaviour
     public void OpenPOI()
     {
         poiPanel.SetActive(true);
+        latestPOI.InteractedWith();
         switch (latestPOI.MyType)
         {
             case PointOfInterest.Type.Harbor:
                 harborView.Setup(latestPOI as Harbor);
+                break;
+            case PointOfInterest.Type.Stronghold:
+                Debug.LogWarning("NOT IMPLEMENTED");
                 break;
         }
     }

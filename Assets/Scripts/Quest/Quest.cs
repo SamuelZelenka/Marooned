@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 
 public abstract class Quest : ScriptableObject
 {
     public string title;
-    public string description;
+    [SerializeField] string blueprintDescription = "";
+    [HideInInspector] public string description;
 
     public string messageOnActivated;
     public string messageOnCompleted;
@@ -12,9 +14,24 @@ public abstract class Quest : ScriptableObject
     public delegate void QuestHandler();
     public QuestHandler OnQuestCompleted;
 
+    public enum POIRequest { StartingHarbor, Stronghold}
+    [SerializeField] POIRequest request = POIRequest.StartingHarbor;
+    public POIRequest Request { get; private set; }
     protected Player player;
-    protected void Setup(Player player) => this.player = player;
+    protected PointOfInterest poi;
+    public virtual void Setup(Player player, PointOfInterest poi)
+    {
+        Request = request;
+        this.player = player;
+        this.poi = poi;
+        SetTravelPointName(poi.Name);
+    }
 
-    public abstract void QuestStarted();
-    protected abstract void CompleteQuest();
+    void SetTravelPointName(string locationName) => description = Utility.ReplaceWordInString(blueprintDescription, "NAME", locationName);
+
+
+    protected virtual void CompleteQuest()
+    {
+        player.PlayerData.RemoveQuest(this, true);
+    }
 }

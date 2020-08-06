@@ -11,7 +11,6 @@ public class HexCell : MonoBehaviour
     public Text numberLabel;
     public Text nameLabel;
 
-
     [Header("Grids")]
     public SpriteRenderer gameGrid;
     public SpriteRenderer editorGrid;
@@ -62,7 +61,7 @@ public class HexCell : MonoBehaviour
         set
         {
             pointOfInterest = value;
-            SetNameLabel(value.name);
+            SetNameLabel(value.Name);
         }
     }
 
@@ -76,7 +75,7 @@ public class HexCell : MonoBehaviour
             {
                 if (PointOfInterest != null)
                 {
-                    PointOfInterest.InteractWith();
+                    PointOfInterest.PlayableUnitArrived();
                 }
             }
         }
@@ -123,6 +122,7 @@ public class HexCell : MonoBehaviour
     public bool IsOcean { get => !IsLand; }
     public bool IsShore { get => IsLand && Bitmask >= 0 && Bitmask <= 62; }
     public bool HasHarbor { get; set; }
+    public bool HasStronghold { get; set; }
     public int Bitmask { get; set; }
     public void CalculateBitmask()
     {

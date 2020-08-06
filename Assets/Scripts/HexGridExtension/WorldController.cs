@@ -6,22 +6,21 @@ public class WorldController : MonoBehaviour
     HexGrid hexGrid;
     DifficultySettings difficultySettings;
     public Route[] MerchantRoutes { private set; get; }
-    public List<Harbor> Harbors
+    public List<Stronghold> Strongholds { get; private set; }
+    public List<Harbor> Harbors { get; private set; }
+
+    public List<HexCell> HarborCells
     {
         get
         {
-            List<Harbor> harbors = new List<Harbor>();
-            foreach (var harborCell in HarborCells)
+            List<HexCell> cells = new List<HexCell>();
+            foreach (var harbor in Harbors)
             {
-                if (harborCell.PointOfInterest is Harbor)
-                {
-                    harbors.Add(harborCell.PointOfInterest as Harbor);
-                }
+                cells.Add(harbor.Hexcell);
             }
-            return harbors;
+            return cells;
         }
     }
-    public List<HexCell> HarborCells { private set; get; }
 
     public List<Landmass> Landmasses { private set; get; }
     public HexCell PlayerSpawnPosition { private set; get; }
@@ -52,8 +51,9 @@ public class WorldController : MonoBehaviour
         difficultySettings = setupData.difficultySettings;
 
         MerchantRoutes = new Route[setupData.numberOfMerchantRoutes];
-        HarborCells = new List<HexCell>();
         Landmasses = new List<Landmass>();
+        Harbors = new List<Harbor>();
+        Strongholds = new List<Stronghold>();
         worldSetup.Setup(hexGrid, setupData, this);
 
         //Set player spawn position
@@ -136,7 +136,7 @@ public class WorldController : MonoBehaviour
 
     public int GetVisionRange(PlayerData playerData)
     {
-        return Mathf.FloorToInt((float) playerData.Bounty / difficultySettings.BountyToVisionRange);
+        return Mathf.FloorToInt((float)playerData.Bounty / difficultySettings.BountyToVisionRange);
     }
 
     public int GetCrewSize(PlayerData playerData)

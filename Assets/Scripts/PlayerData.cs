@@ -71,7 +71,6 @@ public class PlayerData
     public void AddQuest(Quest quest)
     {
         activeQuests.Add(quest);
-        quest.QuestStarted();
         OnQuestAdded?.Invoke(quest);
     }
 

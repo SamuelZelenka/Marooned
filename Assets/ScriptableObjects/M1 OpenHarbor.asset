@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d889e51589cd2714a854904917556444, type: 3}
+  m_Name: M1 OpenHarbor
+  m_EditorClassIdentifier: 
+  title: Raid the stronghold
+  blueprintDescription: Rumor has it a long lost relic has found its way to NAME.
+    Retrieve it
+  description: Legend says that a long lost relic has been found and been taken to
+    NAME. Retrieve it!
+  messageOnActivated: 
+  messageOnCompleted: 
+  messageOnFailed: 
+  request: 1

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class QuestController : MonoBehaviour
 {
-    [SerializeField] TravelQuest startingQuest = null;
     [SerializeField] WorldController worldController = null;
     Player player;
 
@@ -17,11 +17,10 @@ public class QuestController : MonoBehaviour
 
     void SetPlayer(Player player) => this.player = player;
 
-    public void GiveStartingQuest()
+    public void StartFirstMainQuest()
     {
-        startingQuest.Setup(player, worldController.HarborCells[0], worldController.Harbors[0].name);
-        startingQuest.OnQuestCompleted += GiveMainQuest;
-        player.PlayerData.AddQuest(startingQuest);
+        player.PlayerData.mainQuestIndex = 0;
+        GiveMainQuest();
     }
 
     private void GiveMainQuest()
@@ -29,11 +28,28 @@ public class QuestController : MonoBehaviour
         if (mainQuests.Count > player.PlayerData.mainQuestIndex)
         {
             Quest questToGive = mainQuests[player.PlayerData.mainQuestIndex];
-
+            PointOfInterest poi = null;
+            switch (questToGive.Request)
+            {
+                case Quest.POIRequest.StartingHarbor:
+                    poi = worldController.Harbors[0];
+                    break;
+                case Quest.POIRequest.Stronghold:
+                    poi = worldController.Strongholds[0];
+                    break;
+            }
+            questToGive.Setup(player, poi);
+            questToGive.OnQuestCompleted += MainQuestCompleted;
             player.PlayerData.AddQuest(questToGive);
         }
 
         else
             Debug.Log("Finished all quests");
+    }
+
+    private void MainQuestCompleted()
+    {
+        player.PlayerData.mainQuestIndex++;
+        GiveMainQuest();
     }
 }

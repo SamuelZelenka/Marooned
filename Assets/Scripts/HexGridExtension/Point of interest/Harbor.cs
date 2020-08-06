@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-
-public class Harbor : PointOfInterest
+﻿public class Harbor : PointOfInterest
 {
     public delegate void HarborHandler(Harbor harbor);
     public HarborHandler OnHarborChanged;
     public bool hasMerchant;
     public bool hasTavern;
 
-
-
-    public Harbor(string name, PointOfInterestHandler pointOfInterestHandler, bool hasMerchant, bool hasTavern) : base(name, pointOfInterestHandler, Type.Harbor)
+    public Harbor(string name, HexCell hexCell, PointOfInterestHandler pointOfInterestHandler, bool hasMerchant, bool hasTavern) : base(name, hexCell, pointOfInterestHandler, Type.Harbor)
     {
         //TEMP VALUES
         merchantData.woolValue = UnityEngine.Random.Range(1, 11);

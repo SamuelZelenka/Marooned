@@ -163,7 +163,7 @@ public class Ship : HexUnit
         }
         if (cell.IsLand)
         {
-            if (!cell.HasHarbor)
+            if (!cell.HasHarbor && !cell.HasStronghold)
             {
                 return false;
             }

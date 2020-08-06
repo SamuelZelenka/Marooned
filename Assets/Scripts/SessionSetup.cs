@@ -51,7 +51,7 @@ public class SessionSetup : MonoBehaviour
         CreateHumanPlayer();
         MapTurnSystem.instance.DoFirstTurn();
 
-        questController.GiveStartingQuest();
+        questController.StartFirstMainQuest();
     }
 
     //Creates a player from a prefab and spawns a ship, starting characters and adds them to controllers 
@@ -93,9 +93,12 @@ public class SetupData
     public float landByLandChance = 0.25f;
     public int landMassMaxSize = 15;
     public List<string> islandNames = new List<string>(1);
+    public List<string> strongholdNames = new List<string>(1);
     public float harborMerchantChance = 0.9f;
     public float harborTavernChance = 0.6f;
-
+    public int minNumberOfStrongholds = 1;
+    public int maxNumberOfStrongholds = 1;
+    public float strongholdSpawnChance = 0.1f;
 
     public void SetSeed()
     {

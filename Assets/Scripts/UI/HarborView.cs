@@ -42,7 +42,7 @@ public class HarborView : MonoBehaviour
     public void Setup(Harbor harbor)
     {
         latestHarbor = harbor;
-        poiTextTitle.text = harbor.name;
+        poiTextTitle.text = harbor.Name;
         merchantController.Setup(harbor);
         tavernButton.SetActive(harbor.hasTavern);
         merchantButton.SetActive(harbor.hasMerchant);
