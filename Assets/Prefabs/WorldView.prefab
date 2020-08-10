@@ -140,7 +140,7 @@ Tilemap:
       a: -0.0000000014313706}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -2, y: 0, z: 0}
   m_Size: {x: 11, y: 7, z: 1}
   m_TileAnchor: {x: 0, y: 0, z: 0}
@@ -199,7 +199,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 834985033
-  m_SortingLayer: 6
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -248,6 +248,7 @@ GameObject:
   - component: {fileID: 9168233258179349426}
   - component: {fileID: 9168233258179349427}
   - component: {fileID: 9168233258179349425}
+  - component: {fileID: 8269669866709162804}
   m_Layer: 0
   m_Name: HexGrid + WorldController
   m_TagString: Untagged
@@ -284,6 +285,7 @@ MonoBehaviour:
   cellPrefab: {fileID: 170003624449977040, guid: cfc035cbc32c5684db00e3a1af59b8d9,
     type: 3}
   cameraController: {fileID: 8303334150446593492}
+  fow: {fileID: 8269669866709162804}
 --- !u!114 &9168233258179349425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,14 +304,26 @@ MonoBehaviour:
   redcoatShip: {fileID: 4672618326803284631, guid: 28823dfdebec3f9478d175cd3c13ca2b,
     type: 3}
   worldUIView: {fileID: 9168233259189303595}
+  combatSystem: {fileID: 0}
   worldSetup: {fileID: 0}
-  allCharacters:
-  - {fileID: 7973137243245126025, guid: 890e24ba843b2bc438ff2ffdf678cf76, type: 3}
-  - {fileID: 930899063425889352, guid: a73b69d9578b57d40a958af6a8495e37, type: 3}
-  - {fileID: 7973137243245126025, guid: 5dcb22fbb37da2640a46e6cc5580f3d5, type: 3}
-  - {fileID: 7973137243245126025, guid: 1d44e0af9eb64ae4e926706aae53861d, type: 3}
-  - {fileID: 5767702583924690790, guid: 57fe4cb9e37d16f4fa76c2012f0978a1, type: 3}
   turnSystem: {fileID: 0}
+  playableCharacters: []
+  redcoatCharacters: []
+--- !u!114 &8269669866709162804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9168233258179349436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38806e6e193c4664eb60ebeaa854efca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fowTilemap: {fileID: 9168233257794653950}
+  hidden: {fileID: 11400000, guid: fd6b6f8e2191e2846a8d61134dd6fd11, type: 2}
+  viewed: {fileID: 11400000, guid: 931b33cb3a7319245b8daf441b736de7, type: 2}
 --- !u!1 &9168233258662114741
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +460,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1372933349
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -704,7 +718,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1372933349
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}

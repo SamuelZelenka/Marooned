@@ -9,6 +9,10 @@ public abstract class HexUnit : MonoBehaviour
     public static event HexUnitUpdateHandler OnAnyUnitMoved;
     public event HexUnitUpdateHandler OnUnitMoved;
 
+    public delegate void VisionHandler(List<HexCell> viewedCells);
+    public event VisionHandler OnNewCellsViewed;
+
+
     public LogMessage logMessage;
 
     [Header("Movement")]
@@ -63,6 +67,17 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
+    List<HexCell> visionCells;
+    protected List<HexCell> VisionCells
+    {
+        get => visionCells;
+        set
+        {
+            visionCells = value;
+            OnNewCellsViewed?.Invoke(visionCells);
+        }
+    }
+
     HexDirection orientation;
     public HexDirection Orientation
     {
@@ -91,6 +106,17 @@ public abstract class HexUnit : MonoBehaviour
             }
         }
     }
+
+    int currentVisionRange = 3;
+    public int CurrentVisionRange
+    {
+        get => currentVisionRange;
+        set
+        {
+            currentVisionRange = value;
+        }
+    }
+    public readonly int defaultVisionRange = 3;
 
     void OnEnable()
     {
@@ -222,7 +248,13 @@ public abstract class HexUnit : MonoBehaviour
         pathToTravel = null; //Clear the list
     }
 
-    protected virtual void CheckInteractableCells() { }
+    protected virtual void CheckInteractableCells() 
+    {
+        //Vision range
+        List<HexCell> hexCells = CellFinder.GetCellsWithinRange(Location, currentVisionRange);
+        hexCells.Add(location);
+        VisionCells = hexCells;
+    }
 
     public void Despawn()
     {

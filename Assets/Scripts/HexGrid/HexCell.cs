@@ -108,6 +108,8 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    public FOW.FOWMode FOWMode { get; set; }
+
     public enum SpawnType { Forbidden, Player, AnyEnemy, MeleeEnemy, SupportEnemy, RangedEnemy }
     public SpawnType TypeOfSpawnPos { get; set; }
 

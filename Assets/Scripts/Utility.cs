@@ -71,6 +71,21 @@ public static class Utility
         return default;
     }
 
+    public static T ReturnRandom<T>(List<T> list, int seed)
+    {
+        Random.State previousState = Random.state;
+        Random.InitState(seed);
+        if (list != null && list.Count > 0)
+        {
+            T element = list[Random.Range(0, list.Count)];
+            Random.state = previousState;
+            return element;
+        }
+        Random.state = previousState;
+        Debug.LogWarning("List empty");
+        return default;
+    }
+
     public static T TestVariableAgainstConditions<T>(T variable, params Func<T, bool>[] conditions)
     {
         if (variable == null)

@@ -169,7 +169,7 @@ public class WorldSetup : MonoBehaviour
         for (int i = 0; i < worldController.Landmasses.Count; i++)
         {
             Landmass landmass = worldController.Landmasses[i];
-            HexCell poiCell = Utility.ReturnRandom(landmass.GetShores());
+            HexCell poiCell = Utility.ReturnRandom(landmass.GetShores(), setupData.Seed);
             landmass.poiLocationCell = poiCell;
             PointOfInterest.Type typeToSpawn = PointOfInterest.Type.Harbor;
             if (HexMetrics.SampleHashGrid(poiCell.Position).c < setupData.strongholdSpawnChance)
@@ -177,7 +177,6 @@ public class WorldSetup : MonoBehaviour
                 typeToSpawn = PointOfInterest.Type.Stronghold;
             }
             landmass.TypeOfPOI = typeToSpawn;
-
         }
         int numberOfStrongholdsToSpawn = 0;
         foreach (Landmass landmass in worldController.Landmasses)
@@ -193,6 +192,7 @@ public class WorldSetup : MonoBehaviour
             newPoiLandmass.TypeOfPOI = PointOfInterest.Type.Stronghold;
             remainingStrongholdsToSpawn--;
         }
+        //Setup point of interests
         foreach (Landmass landmass in worldController.Landmasses)
         {
             switch (landmass.TypeOfPOI)
@@ -271,7 +271,7 @@ public class WorldSetup : MonoBehaviour
     /// Paints terrain on the tilemap
     /// </summary>
     /// <param name="cell"></param>
-    public void SetTerrainCellVisual(HexCell cell)
+    private void SetTerrainCellVisual(HexCell cell)
     {
         Vector3Int tilemapPosition = HexCoordinates.CoordinatesToTilemapCoordinates(cell.coordinates);
 

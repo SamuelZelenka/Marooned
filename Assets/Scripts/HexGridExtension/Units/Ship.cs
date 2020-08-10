@@ -39,16 +39,7 @@ public class Ship : HexUnit
             cannonRange = value;
         }
     }
-    int currentVisionRange = 3;
-    public int CurrentVisionRange
-    {
-        get => currentVisionRange;
-        set
-        {
-            currentVisionRange = value;
-        }
-    }
-    public readonly int defaultVisionRange = 3;
+    
     #endregion
 
     #region Resources
@@ -75,6 +66,10 @@ public class Ship : HexUnit
             {
                 foreach (var item in shipsWithinVisionRange)
                 {
+                    if (item == this)
+                    {
+                        continue;
+                    }
                     if (this.playerControlled)
                     {
                         item.ShipViewer.ShowViewPossible(false);
@@ -86,6 +81,10 @@ public class Ship : HexUnit
             {
                 foreach (var item in shipsWithinVisionRange)
                 {
+                    if (item == this)
+                    {
+                        continue;
+                    }
                     if (this.playerControlled)
                     {
                         item.ShipViewer.ShowViewPossible(true);
@@ -104,6 +103,10 @@ public class Ship : HexUnit
             {
                 foreach (var item in shipsWithinCannonRange)
                 {
+                    if (item == this)
+                    {
+                        continue;
+                    }
                     if (this.playerControlled)
                     {
                         item.ShipViewer.ShowShootingPossible(false);
@@ -115,6 +118,10 @@ public class Ship : HexUnit
             {
                 foreach (var item in shipsWithinCannonRange)
                 {
+                    if (item == this)
+                    {
+                        continue;
+                    }
                     if (this.playerControlled)
                     {
                         item.ShipViewer.ShowShootingPossible(true);
@@ -133,6 +140,10 @@ public class Ship : HexUnit
             {
                 foreach (var item in shipsWithinBoardingRange)
                 {
+                    if (item == this)
+                    {
+                        continue;
+                    }
                     if (this.playerControlled)
                     {
                         item.ShipViewer.ShowBoardingPossible(false);
@@ -144,6 +155,10 @@ public class Ship : HexUnit
             {
                 foreach (var item in shipsWithinBoardingRange)
                 {
+                    if (item == this)
+                    {
+                        continue;
+                    }
                     if (this.playerControlled)
                     {
                         item.ShipViewer.ShowBoardingPossible(true);
@@ -199,32 +214,32 @@ public class Ship : HexUnit
     /// <param name="shipMoved"></param>
     protected override void CheckInteractableCells()
     {
-        //Vision range
-        List<HexCell> visionCells = CellFinder.GetCellsWithinRange(Location, currentVisionRange);
+        base.CheckInteractableCells();
+        //Viewed units
         List<Ship> ships = new List<Ship>();
-        foreach (var item in visionCells)
+        foreach (var cell in VisionCells)
         {
-            if (item.Unit is Ship)
+            if (cell.Unit is Ship)
             {
-                ships.Add(item.Unit as Ship);
+                ships.Add(cell.Unit as Ship);
             }
         }
         ShipsWithinVisionRange = ships;
-        ships = new List<Ship>();
 
         //Cannon range
+        ships = new List<Ship>();
         List<HexCell> cannonCells = CellFinder.GetCellsWithinRange(Location, cannonRange, (c) => c.Unit != null);
-        foreach (var item in cannonCells)
+        foreach (var cell in cannonCells)
         {
-            if (item.Unit is Ship)
+            if (cell.Unit is Ship)
             {
-                ships.Add(item.Unit as Ship);
+                ships.Add(cell.Unit as Ship);
             }
         }
         ShipsWithinCannonRange = ships;
-        ships = new List<Ship>();
 
         //Boarding range
+        ships = new List<Ship>();
         List<HexCell> boardingCells = CellFinder.GetAllAdjacentCells(Location, (c) => c.Unit != null);
         foreach (var item in boardingCells)
         {

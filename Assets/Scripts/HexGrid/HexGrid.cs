@@ -10,8 +10,9 @@ public class HexGrid : MonoBehaviour
     [Header("References")]
     public HexCell cellPrefab;
     public InGameCamera cameraController;
+    public FOW fow;
 
-    
+
     public HexCell[] Cells { private set; get; }
     public List<HexUnit> Units { get; private set; }
 
@@ -42,6 +43,11 @@ public class HexGrid : MonoBehaviour
         if (!destroyUnits)
         {
             ReAddUnits(Units);
+        }
+
+        if (fow)
+        {
+            fow.SetupStart(this);
         }
 
         ShowGameGrid(gameGridStatus);
@@ -170,7 +176,7 @@ public class HexGrid : MonoBehaviour
                     break;
                 }
             }
-            if(canBeAdded)
+            if (canBeAdded)
             {
                 foundCells.Add(cell);
             }
