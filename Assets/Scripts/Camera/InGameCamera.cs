@@ -104,7 +104,7 @@ public class InGameCamera : MonoBehaviour
             MoveDirection(Directions.Down, Input.GetAxis("Vertical") < 0);
             MoveDirection(Directions.Up, Input.GetAxis("Vertical") > 0);
         }
-        else if (edgeMovement)
+        else if (PlayerPrefs.GetInt("MouseEdgeDetection") != 0)
         {
             //Edge detection
             MoveDirection(Directions.Right, Input.mousePosition.x > Screen.width - cursorDetectionRange);
