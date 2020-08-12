@@ -3,16 +3,25 @@
     public delegate void PointOfInterestHandler(PointOfInterest pointOfInterest);
     public event PointOfInterestHandler OnPlayableUnitArrived;
     public event PointOfInterestHandler OnInteractedWith;
+    public event PointOfInterestHandler OnIsKnownChanged;
+
 
     public string Name { get; private set; }
-    public bool isKnown;
+    bool isKnown;
+    public bool IsKnown {
+        get { return isKnown; }
+        set {
+            isKnown = value;
+            OnIsKnownChanged?.Invoke(this); 
+        }
+    }
 
     public HexCell Hexcell { private set; get; }
 
     public PointOfInterest(string name, HexCell hexCell, PointOfInterestHandler pointOfInterestHandler, Type type)
     {
         this.Name = name;
-        isKnown = false;
+        IsKnown = false;
         OnPlayableUnitArrived += pointOfInterestHandler;
         MyType = type;
         Hexcell = hexCell;
@@ -20,7 +29,7 @@
 
     public void PlayableUnitArrived()
     {
-        isKnown = true;
+        IsKnown = true;
         OnPlayableUnitArrived?.Invoke(this);
     }
     public void InteractedWith() => OnInteractedWith?.Invoke(this);

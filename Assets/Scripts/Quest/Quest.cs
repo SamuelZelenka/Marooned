@@ -24,6 +24,7 @@ public abstract class Quest : ScriptableObject
         Request = request;
         this.player = player;
         this.poi = poi;
+        poi.IsKnown = true;
         SetTravelPointName(poi.Name);
     }
 
