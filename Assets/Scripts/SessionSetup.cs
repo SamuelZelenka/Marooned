@@ -84,21 +84,20 @@ public class SetupData
     public int Seed { get; private set; }
     public string stringSeed;
     public int mapCellCountX = 20, mapCellCountY = 15;
-    public int numberOfMerchantRoutes = 5;
-    public int merchantRouteMinLength = 10;
-    public int merchantRouteMaxLength = 20;
-    public int merchantRouteMinHarbors = 2;
-    public int merchantRouteMaxHarbors = 4;
+    public int routes = 5;
+    public readonly int routeMinLength = 10;
+    public readonly int routeMaxLength = 20;
+    public readonly int routeMinStops = 2;
+    public readonly int routeMaxStops = 4;
     public float newLandmassChance = 0.1f;
     public float landByLandChance = 0.25f;
     public int landMassMaxSize = 15;
     public List<string> islandNames = new List<string>(1);
     public List<string> strongholdNames = new List<string>(1);
-    public float harborMerchantChance = 0.9f;
-    public float harborTavernChance = 0.6f;
-    public int minNumberOfStrongholds = 1;
-    public int maxNumberOfStrongholds = 1;
-    public float strongholdSpawnChance = 0.1f;
+    public readonly float harborMerchantChance = 0.9f;
+    public readonly float harborTavernChance = 0.6f;
+    public readonly int strongholdsToSpawn = 1;
+    public readonly float strongholdSpawnChance = 0.1f;
 
     public void SetSeed()
     {
@@ -113,6 +112,7 @@ public class SetupData
 [System.Serializable]
 public class DifficultySettings
 {
+    public string name;
     public int bountyChanges = 500;
     public int BountyToVisionRange
     {
@@ -125,4 +125,26 @@ public class DifficultySettings
 
     public int minimumEnemyCrewSize = 2;
     public int maximumEnemyCrewSize = 10;
+
+    public DifficultySettings(string name, int bountyChange, int minEnemyCrewSize, int maxEnemyCrewSize)
+    {
+        this.name = name;
+        this.bountyChanges = bountyChange;
+        this.minimumEnemyCrewSize = minEnemyCrewSize;
+        this.maximumEnemyCrewSize = maxEnemyCrewSize;
+    }
+}
+
+[System.Serializable]
+public class MapSize
+{
+    public string name;
+    public int xSize, ySize;
+
+    public MapSize(string name, int xSize, int ySize)
+    {
+        this.name = name;
+        this.xSize = xSize;
+        this.ySize = ySize;
+    }
 }

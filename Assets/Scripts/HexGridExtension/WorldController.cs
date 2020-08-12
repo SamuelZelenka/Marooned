@@ -50,7 +50,7 @@ public class WorldController : MonoBehaviour
         this.hexGrid = hexGrid;
         difficultySettings = setupData.difficultySettings;
 
-        MerchantRoutes = new Route[setupData.numberOfMerchantRoutes];
+        MerchantRoutes = new Route[setupData.routes];
         Landmasses = new List<Landmass>();
         Harbors = new List<Harbor>();
         Strongholds = new List<Stronghold>();

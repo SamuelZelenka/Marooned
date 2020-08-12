@@ -35,12 +35,12 @@ public class WorldSetup : MonoBehaviour
             HexCell startHarbor = Utility.ReturnRandomElementWithCondition(worldController.HarborCells, (h) => h.Unit != null);
             setupShip.Location = startHarbor;
 
-            int numberOfHarbors = Random.Range(setupData.merchantRouteMinHarbors, setupData.merchantRouteMaxHarbors + 1);
+            int numberOfHarbors = Random.Range(setupData.routeMinStops, setupData.routeMaxStops + 1);
             List<HexCell> harbors = new List<HexCell>(numberOfHarbors);
             harbors.Add(startHarbor);
             for (int j = 1; j < numberOfHarbors; j++)
             {
-                HexCell foundHarbor = worldController.GetRandomHarborWithinRange(setupShip, setupData.merchantRouteMinLength, setupData.merchantRouteMaxLength);
+                HexCell foundHarbor = worldController.GetRandomHarborWithinRange(setupShip, setupData.routeMinLength, setupData.routeMaxLength);
                 if (foundHarbor == null)
                 {
                     break;
@@ -53,7 +53,7 @@ public class WorldSetup : MonoBehaviour
                 Debug.Log("Did not find enough harbors to add to route, trying with a differnt start harbor");
                 i--;
                 tries++;
-                if (tries < setupData.numberOfMerchantRoutes * 2)
+                if (tries < setupData.routes * 2)
                 {
                     break;
                 }
@@ -166,26 +166,21 @@ public class WorldSetup : MonoBehaviour
         }
 
         //HARBORS AND POINTS OF INTERESTS
+        int strongholds = 0;
         for (int i = 0; i < worldController.Landmasses.Count; i++)
         {
             Landmass landmass = worldController.Landmasses[i];
             HexCell poiCell = Utility.ReturnRandom(landmass.GetShores(), setupData.Seed);
             landmass.poiLocationCell = poiCell;
             PointOfInterest.Type typeToSpawn = PointOfInterest.Type.Harbor;
-            if (HexMetrics.SampleHashGrid(poiCell.Position).c < setupData.strongholdSpawnChance)
+            if (HexMetrics.SampleHashGrid(poiCell.Position).c < setupData.strongholdSpawnChance && strongholds < setupData.strongholdsToSpawn)
             {
                 typeToSpawn = PointOfInterest.Type.Stronghold;
+                strongholds++;
             }
             landmass.TypeOfPOI = typeToSpawn;
         }
-        int numberOfStrongholdsToSpawn = 0;
-        foreach (Landmass landmass in worldController.Landmasses)
-        {
-            if (landmass.TypeOfPOI == PointOfInterest.Type.Stronghold)
-                numberOfStrongholdsToSpawn++;
-        }
-        int remainingStrongholdsToSpawn = setupData.minNumberOfStrongholds - numberOfStrongholdsToSpawn;
-
+        int remainingStrongholdsToSpawn = setupData.strongholdsToSpawn - strongholds;
         while (remainingStrongholdsToSpawn > 0)
         {
             Landmass newPoiLandmass = Utility.ReturnRandomElementWithCondition(worldController.Landmasses, (landmass) => landmass.TypeOfPOI != PointOfInterest.Type.Stronghold);
