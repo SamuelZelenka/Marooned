@@ -60,7 +60,9 @@ public class HexCell : MonoBehaviour
         get => pointOfInterest;
         set
         {
+            nameLabel.gameObject.SetActive(false);
             pointOfInterest = value;
+            pointOfInterest.OnPlayableUnitArrived += UpdatePOIUI;
             SetNameLabel(value.Name);
         }
     }
@@ -216,6 +218,12 @@ public class HexCell : MonoBehaviour
     }
 
     #region Grid, Highlights and Labels
+    
+    private void UpdatePOIUI(PointOfInterest poi)
+    {
+        if (poi.isKnown) nameLabel.gameObject.SetActive(true);
+        else nameLabel.gameObject.SetActive(false);
+    }
     public void SetNumberLabel(string text)
     {
         numberLabel.text = text;
