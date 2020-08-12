@@ -13,6 +13,9 @@ public class OceanController : MonoBehaviour
     const int SIDEWINDMOVEMENT = 0;
     const int HEADWINDMOVEMENT = 1;
     static readonly int[] windStengthFactor = new int[] { 4, 1, 2, 4};
+
+    public delegate void WindHandler(HexDirection windDirection, int windStrength);
+    public static WindHandler OnWindChanged;
     
 
     private void OnEnable()
@@ -52,6 +55,7 @@ public class OceanController : MonoBehaviour
 
         windStrength = newWindStrength;
         windDirection = newDirection;
+        OnWindChanged?.Invoke(newDirection, (int)newWindStrength);
 
         Debug.Log($"Wind is now {newWindStrength} in the {newDirection} direction");
     }
