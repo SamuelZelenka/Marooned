@@ -7,9 +7,10 @@
     public PoisonBlade(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Constitution;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Constitution;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Accuracy;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new Poison(poison, poisonDuration, true, true));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
@@ -25,9 +26,10 @@ public class SneakAttack : Ability
     public SneakAttack(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Accuracy;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new ConditionalDamage(normalDamage, stunnedDamage, true, true, Condition.Stunned));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
@@ -43,9 +45,10 @@ public class CutInTheKnee : Ability
     public CutInTheKnee(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Accuracy;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new StatDebuff(agilityDebuff, CharacterStatType.Agility, duration, true, true));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
@@ -60,9 +63,10 @@ public class LethalDose : Ability
     public LethalDose(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Accuracy;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new StackDamage(damagePerPoison, true, true, Condition.Poisoned));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();

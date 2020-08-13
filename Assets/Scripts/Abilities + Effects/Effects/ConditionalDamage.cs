@@ -13,7 +13,7 @@
     {
         return $"Dealing {normalDamage} damage to vitality. If target is {condition.ToString()} damage is increased to {conditionalDamage}";
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
@@ -21,11 +21,11 @@
 
             if (affectedByCondition)
             {
-                target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, conditionalDamage);
+                target.characterData.Vitality.CurrentValue -= GetModifiedValue(crit, conditionalDamage);
             }
             else
             {
-                target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, normalDamage);
+                target.characterData.Vitality.CurrentValue -= GetModifiedValue(crit, normalDamage);
             }
         }
     }

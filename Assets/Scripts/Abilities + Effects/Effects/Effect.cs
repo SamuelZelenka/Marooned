@@ -25,24 +25,13 @@ public abstract class Effect
         this.useOnFriendly = useOnFriendly;
     }
 
-    public abstract void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile);
+    public abstract void ApplyEffect(Character attacker, Character target, bool crit, bool hostile);
 
-    public static int GetModifiedValue(SkillcheckSystem.CombatOutcome outcome, int originalValue)
+    public static int GetModifiedValue(bool crit, int originalValue)
     {
-        switch (outcome)
-        {
-            case SkillcheckSystem.CombatOutcome.Miss:
-                return 0;
-            case SkillcheckSystem.CombatOutcome.Grace:
-                return Mathf.RoundToInt(originalValue * GRACEMODIFIER);
-            case SkillcheckSystem.CombatOutcome.NormalHit:
-                return originalValue;
-            case SkillcheckSystem.CombatOutcome.Critical:
-                return Mathf.RoundToInt(originalValue * CRITMODIFIER);
-            default:
-                Debug.Log("Missing outcome type");
-                return int.MinValue;
-        }
+
+        return crit ? Mathf.RoundToInt(originalValue * CRITMODIFIER) : originalValue;
+       
     }
     public abstract string GetDescription();
 
@@ -67,7 +56,7 @@ public abstract class TickEffect : Effect
         this.duration = duration;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
@@ -81,7 +70,7 @@ public abstract class TickEffect : Effect
             RemoveEffect(owner);
         }
         counter++;
-        owner.overHeadUI.UpdateUI(owner);
+        owner.overHeadUI.UpdateValues(owner);
     }
     public virtual void RemoveEffect(Character owner)
     {

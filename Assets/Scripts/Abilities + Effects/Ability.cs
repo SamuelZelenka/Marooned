@@ -38,17 +38,12 @@ public abstract class Ability
 
     public int cost;
 
-    public SkillcheckSystem.SkillcheckRequirement AbilityuserHitSkillcheck
+    public CharacterStatType FriendlyHitChanceSkillcheck
     {
         protected set;
         get;
     }
-    public SkillcheckSystem.SkillcheckRequirement HostileDodgeSkillcheck
-    {
-        protected set;
-        get;
-    }
-    public SkillcheckSystem.SkillcheckRequirement FriendlyDodgeSkillcheck
+    public CharacterStatType HostileHitChanceSkillcheck
     {
         protected set;
         get;
@@ -64,44 +59,14 @@ public abstract class Ability
         AbilitySprite = Resources.Load<Sprite>(path + "AbilityIcon" + abilityIndex);
     }
 
-    //No decided outcomes required (autohits)
-    public virtual void Use(Character attacker, List<Character> hostileTargets, List<Character> friendlyTargets, List<HexCell> affectedCells)
+    public virtual void Use(Character attacker, List<Character> hitTargets, List<Character> critTargets, List<HexCell> affectedCells)
     {
-        List<SkillcheckSystem.CombatOutcome> hostileOutcomes = new List<SkillcheckSystem.CombatOutcome>();
-        for (int i = 0; i < hostileTargets.Count; i++)
+        foreach (var target in hitTargets)
         {
-            hostileOutcomes.Add(SkillcheckSystem.CombatOutcome.NormalHit);
-        }
-        List<SkillcheckSystem.CombatOutcome> friendlyOutcomes = new List<SkillcheckSystem.CombatOutcome>();
-        for (int i = 0; i < friendlyTargets.Count; i++)
-        {
-            friendlyOutcomes.Add(SkillcheckSystem.CombatOutcome.NormalHit);
-        }
-        Use(attacker, hostileTargets, hostileOutcomes, friendlyTargets, friendlyOutcomes, affectedCells);
-    }
-
-    public virtual void Use(Character attacker, List<Character> hostileTargets, List<SkillcheckSystem.CombatOutcome> hostileOutcomes, List<Character> friendlyTargets, List<SkillcheckSystem.CombatOutcome> friendlyOutcomes, List<HexCell> affectedCells)
-    {
-        for (int i = 0; i < hostileTargets.Count; i++)
-        {
-            if (hostileOutcomes[i] == SkillcheckSystem.CombatOutcome.Miss)
-            {
-                continue;
-            }
+            bool isCrit = critTargets.Contains(target);
             foreach (var item in effects)
             {
-                item.ApplyEffect(attacker, hostileTargets[i], hostileOutcomes[i], true);
-            }
-        }
-        for (int i = 0; i < friendlyTargets.Count; i++)
-        {
-            if (friendlyOutcomes[i] == SkillcheckSystem.CombatOutcome.Miss)
-            {
-                continue;
-            }
-            foreach (var item in effects)
-            {
-                item.ApplyEffect(attacker, friendlyTargets[i], friendlyOutcomes[i], false);
+                item.ApplyEffect(attacker, target, isCrit, !attacker.isFriendlyTo(target));
             }
         }
     }

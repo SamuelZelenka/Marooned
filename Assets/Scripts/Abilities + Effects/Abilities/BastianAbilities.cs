@@ -7,9 +7,10 @@
     public ChainWhip(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Strength;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Strength;
+        HostileHitChanceSkillcheck = CharacterStatType.Strength;
+
         effects.Add(new Damage(damage, true, true));
         effects.Add(new LoyaltyDecrease(loyaltyDecrease, true, true));
         targeting = new SwipeAdjacent();
@@ -25,9 +26,10 @@ public class GrabAndPull : Ability
     public GrabAndPull(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Strength;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Strength;
+        HostileHitChanceSkillcheck = CharacterStatType.Strength;
+
         effects.Add(new Displace(true, 1, true, true));
         targeting = new SingleTargetRangeLine(range, true);
         base.SetDescriptionFromEffects();
@@ -43,9 +45,10 @@ public class Punch : Ability
     public Punch(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Strength;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Strength;
+        HostileHitChanceSkillcheck = CharacterStatType.Strength;
+
         effects.Add(new Damage(damage, true, true));
         effects.Add(new Stun(durationStun, true, true));
         targeting = new SingleTargetAdjacent();
@@ -63,9 +66,10 @@ public class WarCry : Ability
     public WarCry(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.Strength;
+
         effects.Add(new Taunt(durationTaunt));
         effects.Add(new LoyaltyIncrease(loyaltyIncrease, false, true));
         targeting = new AOE(0, buffrange, true);

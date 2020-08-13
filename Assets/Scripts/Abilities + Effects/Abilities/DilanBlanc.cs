@@ -8,9 +8,10 @@ public class Cleave : Ability
     public Cleave(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Strength;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Strength;
+        HostileHitChanceSkillcheck = CharacterStatType.Strength;
+
         effects.Add(new Damage(damage, true, true));
         targeting = new SwipeAdjacent();
         base.SetDescriptionFromEffects();
@@ -25,9 +26,10 @@ public class CarefulIncision : Ability
     public CarefulIncision(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.NONE;
+
         effects.Add(new Heal(heal, true, true));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
@@ -43,9 +45,10 @@ public class BadMedicine : Ability
     public BadMedicine(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.Accuracy;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new Poison(poison, duration, true, true));
         targeting = new SingleTargetAdjacent();
         base.SetDescriptionFromEffects();
@@ -63,9 +66,10 @@ public class TheGoodStuff : Ability
     public TheGoodStuff(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.None;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.NONE;
+
         specialEffect = new CreateObject(0);
         targeting = new SingleTargetAdjacent(false);
         base.SetDescriptionFromEffects();

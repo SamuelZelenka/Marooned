@@ -11,7 +11,7 @@ public class CombatSystem : MonoBehaviour
 
     [SerializeField] CombatTurnSystem turnSystem = null;
     [SerializeField] HexGridController hexGridController = null;
-    [SerializeField] SkillcheckSystem skillcheckSystem = null;
+
 
     [Header("Setup")]
     [HideInInspector]
@@ -82,8 +82,6 @@ public class CombatSystem : MonoBehaviour
             return allCharacters;
         }
     }
-
-    bool awaitingSkillcheckSystem = false;
 
     #region Singleton
     public static CombatSystem instance;
@@ -223,24 +221,30 @@ public class CombatSystem : MonoBehaviour
 
     private void MarkCellsAndCharactersToBeAffected(HexCell targetCell)
     {
-        if (awaitingSkillcheckSystem)
+        Character activeCharacter = HexGridController.ActiveCharacter;
+        if (selectedAbility != null && activeCharacter != null && ValidTargetHexes.Contains(targetCell))
         {
-            return;
-        }
-        if (selectedAbility != null && HexGridController.ActiveCharacter != null && ValidTargetHexes.Contains(targetCell))
-        {
-            AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(HexGridController.ActiveCharacter.Location, targetCell);
-            selectedAbility.targeting.GetAffectedCharacters(HexGridController.ActiveCharacter, HexGridController.ActiveCharacter.Location, targetCell, out hostileAbilityAffectedCharacters, out friendlyAbilityAffectedCharacters);
+            AbilityAffectedHexes = selectedAbility.targeting.GetAffectedCells(activeCharacter.Location, targetCell);
+            selectedAbility.targeting.GetAffectedCharacters(activeCharacter, activeCharacter.Location, targetCell, out hostileAbilityAffectedCharacters, out friendlyAbilityAffectedCharacters);
+
+            foreach (var character in hostileAbilityAffectedCharacters)
+            {
+                float hitchance = GetHitChance(activeCharacter, character, selectedAbility.HostileHitChanceSkillcheck);
+                string hitChanceString = Utility.FactorToPercentageText(hitchance);
+                character.overHeadUI.SetOverheadText(hitChanceString);
+            }
+            foreach (var character in friendlyAbilityAffectedCharacters)
+            {
+                float hitchance = GetHitChance(activeCharacter, character, selectedAbility.FriendlyHitChanceSkillcheck);
+                string hitChanceString = Utility.FactorToPercentageText(hitchance);
+                character.overHeadUI.SetOverheadText(hitChanceString);
+            }
         }
     }
 
     //Called from the UI when a player selects an ability
     public void SelectAbility(int selection)
     {
-        if (awaitingSkillcheckSystem)
-        {
-            return;
-        }
         if (HexGridController.ActiveCharacter.IsStunned)
         {
             return;
@@ -254,10 +258,6 @@ public class CombatSystem : MonoBehaviour
     //Used by the AI when called from the character
     public void SelectAbility(Ability selection)
     {
-        if (awaitingSkillcheckSystem)
-        {
-            return;
-        }
         ResetSelections();
         selectedAbility = HexGridController.ActiveCharacter.SelectAbility(selection, out List<HexCell> abilityTargetHexes);
         Debug.Log("Selected ability " + selectedAbility.abilityName);
@@ -266,10 +266,6 @@ public class CombatSystem : MonoBehaviour
 
     public void UseAbility(HexCell selectedCellForTarget)
     {
-        if (awaitingSkillcheckSystem)
-        {
-            return;
-        }
         Character abilityUser = HexGridController.ActiveCharacter;
 
         if (abilityUser == null)
@@ -282,19 +278,29 @@ public class CombatSystem : MonoBehaviour
             {
                 Debug.Log("Using ability " + selectedAbility.abilityName);
 
-                //Autohits
-                if (selectedAbility.AbilityuserHitSkillcheck == SkillcheckSystem.SkillcheckRequirement.None)
+
+                List<Character> charactersHit = new List<Character>();
+                List<Character> charactersCrit = new List<Character>();
+
+                foreach (var character in friendlyAbilityAffectedCharacters)
                 {
-                    selectedAbility.Use(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters, AbilityAffectedHexes);
-                    PostAbilityCalculations();
+                    if (Random.value < GetHitChance(abilityUser, character, selectedAbility.FriendlyHitChanceSkillcheck))
+                    {
+                        charactersHit.Add(character);
+                    }
                 }
-                else //Requires skillchecks
+
+                foreach (var character in hostileAbilityAffectedCharacters)
                 {
-                    awaitingSkillcheckSystem = true;
-                    skillcheckSystem.OnCombatOutcomesDecided += ResolveAbilityOutcomes;
-                    skillcheckSystem.StartContestedSkillcheck(abilityUser, hostileAbilityAffectedCharacters, friendlyAbilityAffectedCharacters,
-                        selectedAbility.AbilityuserHitSkillcheck, selectedAbility.HostileDodgeSkillcheck, selectedAbility.FriendlyDodgeSkillcheck);
+                    if (Random.value < GetHitChance(abilityUser, character, selectedAbility.HostileHitChanceSkillcheck))
+                    {
+                        charactersHit.Add(character);
+                    }
                 }
+
+
+                selectedAbility.Use(abilityUser, charactersHit, charactersCrit, AbilityAffectedHexes);
+                PostAbilityCalculations();
             }
             else
             {
@@ -307,15 +313,6 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-    //Required outcomes
-    private void ResolveAbilityOutcomes(List<SkillcheckSystem.CombatOutcome> hostileOutcomes, List<SkillcheckSystem.CombatOutcome> friendlyOutcomes)
-    {
-        skillcheckSystem.OnCombatOutcomesDecided -= ResolveAbilityOutcomes;
-        selectedAbility.Use(HexGridController.ActiveCharacter, hostileAbilityAffectedCharacters, hostileOutcomes, friendlyAbilityAffectedCharacters, friendlyOutcomes, AbilityAffectedHexes);
-        PostAbilityCalculations();
-        awaitingSkillcheckSystem = false;
-    }
-
     private void PostAbilityCalculations()
     {
         HexGridController.ActiveCharacter.characterData.Energy.CurrentValue -= selectedAbility.cost;
@@ -325,6 +322,19 @@ public class CombatSystem : MonoBehaviour
     }
 
     public void EndActiveCharacterTurn() => turnSystem.EndActiveCharacterTurn();
+
+    private float GetHitChance(Character attacker, Character defender, CharacterStatType attackerStatType)
+    {
+        if (attackerStatType == CharacterStatType.NONE)
+        {
+            return 1f;
+        }
+        float hitChance = 0.5f;
+
+        hitChance += attacker.characterData.GetStat(attackerStatType).CurrentValue * 0.1f;
+        hitChance -= defender.characterData.Agility.CurrentValue * 0.1f;
+        return hitChance;
+    }
 
 #region Cheats
 

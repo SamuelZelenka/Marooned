@@ -4,11 +4,11 @@
     public Taunt(int duration, bool useOnHostile = true, bool useOnFriendly = false) : base((int)EffectIndex.Taunt, useOnHostile, useOnFriendly, duration)
     {
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
-            base.ApplyEffect(attacker, target, outcome, hostile);
+            base.ApplyEffect(attacker, target, crit, hostile);
             tauntedBy = attacker;
             target.tauntedBy.Add(attacker);
         }

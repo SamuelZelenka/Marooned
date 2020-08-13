@@ -6,11 +6,11 @@
         this.amount = amount;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
-            target.characterData.Loyalty.CurrentValue -= GetModifiedValue(outcome, amount);
+            target.characterData.Loyalty.CurrentValue -= GetModifiedValue(crit, amount);
         }
     }
     public override string GetDescription()
@@ -27,11 +27,11 @@ public class LoyaltyIncrease : Effect
         this.amount = amount;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
-            target.characterData.Loyalty.CurrentValue += GetModifiedValue(outcome, amount);
+            target.characterData.Loyalty.CurrentValue += GetModifiedValue(crit, amount);
         }
     }
     public override string GetDescription()

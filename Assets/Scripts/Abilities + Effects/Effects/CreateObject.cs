@@ -20,5 +20,5 @@
         return ObjectSpawnSystem.instance.SpawnActiveObject(objectIndex, cell, changePerTurn, connectedCharacter);
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile) { }
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile) { }
 }

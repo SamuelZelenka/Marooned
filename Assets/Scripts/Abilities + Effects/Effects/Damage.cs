@@ -9,11 +9,11 @@
     {
         return $"Reduced {damage} vitality";
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
-            target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, damage);
+            target.characterData.Vitality.CurrentValue -= GetModifiedValue(crit, damage);
         }
     }
 }

@@ -8,11 +8,11 @@
         this.statType = statType;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
-            base.ApplyEffect(attacker, target, outcome, hostile);
+            base.ApplyEffect(attacker, target, crit, hostile);
             CharacterData.Stat stat = target.characterData.GetStat(statType);
             stat.IncreaseStat(buff);
         }
@@ -39,11 +39,11 @@ public class StatDebuff : TickEffect
         this.statType = statType;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
-            base.ApplyEffect(attacker, target, outcome, hostile);
+            base.ApplyEffect(attacker, target, crit, hostile);
             CharacterData.Stat stat = target.characterData.GetStat(statType);
             stat.DecreaseStat(debuff);
         }

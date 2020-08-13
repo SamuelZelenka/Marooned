@@ -8,9 +8,10 @@
     public GuitarString(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new Bleed(bleed, bleedDuration, true, false));
         effects.Add(new Heal(heal, false, true));
         targeting = new SingleTargetAdjacent();
@@ -31,9 +32,10 @@ public class FightSong : Ability
     public FightSong(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new StatBuff(accuracyBuff, CharacterStatType.Accuracy, buffDuration, false, true));
         effects.Add(new LoyaltyIncrease(loyaltyIncrease, false, true));
         effects.Add(new StatDebuff(accuracyDebuff, CharacterStatType.Accuracy, debuffDuration, true, false));
@@ -51,10 +53,11 @@ public class ToneDeafSinging : Ability
     public ToneDeafSinging(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        effects.Add(new LoyaltyDecrease(loyaltyDecrease, true, true));
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
+        effects.Add(new LoyaltyDecrease(loyaltyDecrease, true, false));
         targeting = new SingleTargetRanged(range);
         base.SetDescriptionFromEffects();
     }
@@ -70,9 +73,10 @@ public class RuleBritannia : Ability
     public RuleBritannia(int abilityIndex) : base(abilityIndex)
     {
         cost = abilityCost;
-        AbilityuserHitSkillcheck = SkillcheckSystem.SkillcheckRequirement.Accuracy;
-        HostileDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
-        FriendlyDodgeSkillcheck = SkillcheckSystem.SkillcheckRequirement.Agility;
+
+        FriendlyHitChanceSkillcheck = CharacterStatType.NONE;
+        HostileHitChanceSkillcheck = CharacterStatType.Accuracy;
+
         effects.Add(new Stun(duration, true, false));
         targeting = new AOE(range, aoeRange, true);
         base.SetDescriptionFromEffects();
