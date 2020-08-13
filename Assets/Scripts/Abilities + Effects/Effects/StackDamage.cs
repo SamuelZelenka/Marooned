@@ -11,7 +11,7 @@
     {
         return $"Dealing damage to a {condition.ToString()} character. The damage equals {damagePerStack} times the number of such effects";
     }
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {
@@ -21,7 +21,7 @@
 
             if (numberOfConditions > 0)
             {
-                target.characterData.Vitality.CurrentValue -= GetModifiedValue(outcome, damage);
+                target.characterData.Vitality.CurrentValue -= GetModifiedValue(crit, damage);
             }
         }
     }

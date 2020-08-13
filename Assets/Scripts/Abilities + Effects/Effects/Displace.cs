@@ -9,7 +9,7 @@
         this.hexes = hexes;
     }
 
-    public override void ApplyEffect(Character attacker, Character target, SkillcheckSystem.CombatOutcome outcome, bool hostile)
+    public override void ApplyEffect(Character attacker, Character target, bool crit, bool hostile)
     {
         if (IsValidEffectTarget(hostile))
         {

@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterOverHeadUI : MonoBehaviour
 {
     [SerializeField] Character character = null;
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar loyalty = null;
+    [SerializeField] Text overheadText = null;
 
     [SerializeField] MouseHoverImage prefab = null;
     [SerializeField] Transform effectParent = null;
@@ -15,18 +17,18 @@ public class CharacterOverHeadUI : MonoBehaviour
 
     private void OnEnable()
     {
-        character.characterData.OnAnyResourceChanged += UpdateUI;
-        character.characterData.OnEffectChanged += UpdateUI;
+        character.characterData.OnAnyResourceChanged += UpdateValues;
+        character.characterData.OnEffectChanged += UpdateValues;
     }
     private void OnDisable()
     {
-        character.characterData.OnAnyResourceChanged -= UpdateUI;
-        character.characterData.OnEffectChanged -= UpdateUI;
+        character.characterData.OnAnyResourceChanged -= UpdateValues;
+        character.characterData.OnEffectChanged -= UpdateValues;
     }
 
-    public void UpdateUI(Character characterToUpdate) => UpdateUI(characterToUpdate.characterData);
+    public void UpdateValues(Character characterToUpdate) => UpdateValues(characterToUpdate.characterData);
 
-    public void UpdateUI(CharacterData updatedData)
+    public void UpdateValues(CharacterData updatedData)
     {
         vitality.SetMaxValue(updatedData.Vitality.MaxValue);
         vitality.SetCurrentValue(updatedData.Vitality.CurrentValue);
@@ -63,4 +65,6 @@ public class CharacterOverHeadUI : MonoBehaviour
             return activeEffects.Count == updatedData.activeEffects.Count;
         }
     }
+
+    public void SetOverheadText(string text) => overheadText.text = text;
 }

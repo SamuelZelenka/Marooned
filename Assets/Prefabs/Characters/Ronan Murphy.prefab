@@ -61,6 +61,12 @@ MonoBehaviour:
     characterFirstName: Ronan
     characterLastName: Murphy
     recruitBountyDemand: 100
+    STARTSTRENGTH: 1
+    STARTSTAMINA: 1
+    STARTCONSTITUTION: 1
+    STARTAGILITY: 1
+    STARTTOUGHNESS: 1
+    STARTACCURACY: 1
   animatedArrow: {fileID: 8042087030329334697}
   overHeadUI: {fileID: 2252724792775966498}
   portrait: {fileID: 21300000, guid: 1e1e76a10c8cc8d42b3edf6e21c93994, type: 3}
@@ -134,6 +140,11 @@ PrefabInstance:
       propertyPath: character
       value: 
       objectReference: {fileID: 5767702583924690790}
+    - target: {fileID: 1561527214661319027, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: overheadText
+      value: 
+      objectReference: {fileID: 4349099963560506655}
     - target: {fileID: 4251196923280617641, guid: 7200afe5f297a1a4394daea4cc744c6c,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -271,6 +282,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4349099963560506655 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3941769693348393806, guid: 7200afe5f297a1a4394daea4cc744c6c,
+    type: 3}
+  m_PrefabInstance: {fileID: 786126594587379281}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2931651495699205795

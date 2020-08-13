@@ -405,6 +405,11 @@ PrefabInstance:
       propertyPath: character
       value: 
       objectReference: {fileID: 930899063425889352}
+    - target: {fileID: 1561527214661319027, guid: 7200afe5f297a1a4394daea4cc744c6c,
+        type: 3}
+      propertyPath: overheadText
+      value: 
+      objectReference: {fileID: 8489926293214305591}
     - target: {fileID: 1907115054334056003, guid: 7200afe5f297a1a4394daea4cc744c6c,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -837,5 +842,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8489926293214305591 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3941769693348393806, guid: 7200afe5f297a1a4394daea4cc744c6c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4855368984023264889}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

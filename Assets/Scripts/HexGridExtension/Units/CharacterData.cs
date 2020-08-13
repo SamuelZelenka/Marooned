@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy }
+public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy, NONE }
 public enum CharacterResourceType { Vitality, Loyalty, Energy, Hunger, Hygiene}
 
 [Serializable]
@@ -24,12 +24,12 @@ public class CharacterData
 
     [SerializeField] public int recruitBountyDemand = 100;
 
-    [SerializeField] readonly int STARTSTRENGTH = 1;
-    [SerializeField] readonly int STARTSTAMINA = 1;
-    [SerializeField] readonly int STARTCONSTITUTION = 1;
-    [SerializeField] readonly int STARTAGILITY = 1;
-    [SerializeField] readonly int STARTTOUGHNESS = 1;
-    [SerializeField] readonly int STARTACCURACY = 1;
+    [SerializeField] int STARTSTRENGTH = 1;
+    [SerializeField] int STARTSTAMINA = 1;
+    [SerializeField] int STARTCONSTITUTION = 1;
+    [SerializeField] int STARTAGILITY = 1;
+    [SerializeField] int STARTTOUGHNESS = 1;
+    [SerializeField] int STARTACCURACY = 1;
 
     public string CharacterName
     {
