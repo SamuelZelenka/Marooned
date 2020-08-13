@@ -30,6 +30,9 @@ public class SessionSetup : MonoBehaviour
     //Used to confirm the settings of the game session
     public void ConfirmSetup()
     {
+        SetupData newOrLoadedSession = SessionSetupTransfer.GetSetupDataAndDestroyInstance();
+        if (newOrLoadedSession != null)
+            setupData = newOrLoadedSession;
         setupData.SetSeed();
         if (!HexMetrics.noiseSource)
         {

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1746,6 +1746,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 840225323}
+        m_MethodName: SaveSetup
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &737748678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2415,6 +2426,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96791b9388387a143a1cbdcf0eab7836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  setupData:
+    difficultySettings:
+      name: 
+      bountyChanges: 0
+      minimumEnemyCrewSize: 0
+      maximumEnemyCrewSize: 0
+    stringSeed: 
+    mapCellCountX: 20
+    mapCellCountY: 15
+    routes: 5
+    newLandmassChance: 0.1
+    landByLandChance: 0.25
+    landMassMaxSize: 15
+    islandNames:
+    - Silvermoon Piers
+    - Broken Reef Harbor
+    - Riverfall Wharf
+    - The Landing Of Brisside
+    - Forwick Wharf
+    - Clarebiens Port
+    - Winterfall Landing
+    - Hunter Harbor
+    - Nottingstone
+    - Hurricane Peaks
+    - Baymouth
+    - The Wharf of Stoneworth
+    - The Port Of Holydurn
+    - Bolder Peak
+    - Oceanview
+    - el Escollo Tormentoso
+    - la Puerto Grande
+    - "el Enclave de Girosti\xE1n"
+    - "la Pen\xEDnsula de \xC8bano"
+    - "la Isla Diab\xF3lica"
+    - "l'\xCEle N\xE9glig\xE9e"
+    - "le R\xE9cif \xC9ternel"
+    - "l'\xCEle du Chamur"
+    - "l'\xCEle du Bourl\xE8s"
+    - l'Atoll de Marinne
+    strongholdNames:
+    - Stone Cliff Fort
   mapSizes:
   - name: Small
     xSize: 20

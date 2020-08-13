@@ -5,7 +5,7 @@ using UnityEngine;
 public class MainMenuSystem : MonoBehaviour
 {
     #region NewGame
-    SetupData setupData = new SetupData();
+    [SerializeField] SetupData setupData = new SetupData();
 
     public MapSize[] mapSizes = new MapSize[] { new MapSize("Small", 20, 15), new MapSize("Medium", 30, 20), new MapSize("Large", 40, 25) };
     public DifficultySettings[] difficultySettings = new DifficultySettings[] { new DifficultySettings("Easy", 600, 2, 6), new DifficultySettings("Medium", 500, 2, 8), new DifficultySettings("Hard", 400, 3, 10) };
@@ -49,5 +49,7 @@ public class MainMenuSystem : MonoBehaviour
     public void SetIslandSpawnChance(float value) => setupData.newLandmassChance = value;
     public void SetLandDensity(float value) => setupData.landByLandChance = value;
     public void SetLandmassMaxSize(float value) => setupData.landMassMaxSize = Mathf.RoundToInt(value);
+
+    public void SaveSetup() => SessionSetupTransfer.SetNewSession(setupData);
     #endregion
 }
