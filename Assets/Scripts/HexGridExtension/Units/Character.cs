@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Character : HexUnit
 {
-    public CharacterData characterData = new CharacterData();
+    public CharacterData characterData;
 
     public GameObject animatedArrow;
     public CharacterOverHeadUI overHeadUI;
@@ -43,6 +43,7 @@ public class Character : HexUnit
                 Debug.LogError("Ability ID " + item + " not found in dictionary");
             }
         }
+        characterData.Setup();
     }
 
     public void CombatSetup() => characterData.SendValuesToRequesters();

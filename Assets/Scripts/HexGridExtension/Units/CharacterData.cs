@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterStatType { Strength, Stamina, Constitution, Agility, Toughness, Accuracy, NONE }
+public enum CharacterStatType { Strength, Accuracy, Agility, Fortitude, Intelligence, Charisma, NONE }
 public enum CharacterResourceType { Vitality, Loyalty, Energy, Hunger, Hygiene}
 
 [Serializable]
@@ -22,14 +22,15 @@ public class CharacterData
     [SerializeField] string characterFirstName = "name";
     [SerializeField] string characterLastName = "namesson";
 
-    [SerializeField] public int recruitBountyDemand = 100;
+    public int recruitBountyDemand = 100;
 
-    [SerializeField] int STARTSTRENGTH = 1;
-    [SerializeField] int STARTSTAMINA = 1;
-    [SerializeField] int STARTCONSTITUTION = 1;
-    [SerializeField] int STARTAGILITY = 1;
-    [SerializeField] int STARTTOUGHNESS = 1;
-    [SerializeField] int STARTACCURACY = 1;
+    [SerializeField] int startVitalityMax = 1;
+    [SerializeField] int startStrength = 1;
+    [SerializeField] int startAccuracy = 1;
+    [SerializeField] int startAgility = 1;
+    [SerializeField] int startFortitude = 1;
+    [SerializeField] int startIntelligence = 1;
+    [SerializeField] int startCharisma = 1;
 
     public string CharacterName
     {
@@ -47,7 +48,7 @@ public class CharacterData
     public const int DEFAULTENERGYREGEN = 20;
 
     //Resources
-    public Resource Vitality { get; private set; } = new Resource("Vitality", 30, 30);
+    public Resource Vitality { get; private set; }
     public Resource Energy { get; private set; } = new Resource("Energy", 100, 100);
     public Resource Hunger { get; private set; } = new Resource("Hunger", 100, 100);
     public Resource Hygiene { get; private set; } = new Resource("Hygiene", 100, 100);
@@ -55,24 +56,26 @@ public class CharacterData
 
     //Stats
     public Stat Strength { get; private set; }
-    public Stat Stamina { get; private set; }
-    public Stat Constitution { get; private set; }
-    public Stat Agility { get; private set; }
-    public Stat Toughness { get; private set; }
     public Stat Accuracy { get; private set; }
+    public Stat Agility { get; private set; }
+    public Stat Fortitude { get; private set; }
+    public Stat Intelligence { get; private set; }
+    public Stat Charisma { get; private set; }
 
     public Level BountyLevel { get; private set; } = new Level(1);
 
 
 
-    public CharacterData()
+    public void Setup()
     {
-        Strength = new Stat("Strength", STARTSTRENGTH, 20);
-        Stamina = new Stat("Stamina", STARTSTAMINA, 20);
-        Constitution = new Stat("Constitution", STARTCONSTITUTION, 20);
-        Agility = new Stat("Agility", STARTAGILITY, 20);
-        Toughness = new Stat("Toughness", STARTTOUGHNESS, 20);
-        Accuracy = new Stat("Accuracy", STARTACCURACY, 20);
+        Vitality = new Resource("Vitality", startVitalityMax, startVitalityMax);
+
+        Strength = new Stat("Strength", startStrength, 10);
+        Accuracy = new Stat("Accuracy", startAccuracy, 10);
+        Agility = new Stat("Agility", startAgility, 10);
+        Fortitude = new Stat("Fortitude", startFortitude, 10);
+        Intelligence = new Stat("Intelligence", startIntelligence, 10);
+        Charisma = new Stat("Charisma", startCharisma, 10);
 
         Vitality.OnResourceChanged += ResourceChanged;
         Energy.OnResourceChanged += ResourceChanged;
@@ -117,16 +120,17 @@ public class CharacterData
         {
             case CharacterStatType.Strength:
                 return Strength;
-            case CharacterStatType.Stamina:
-                return Stamina;
-            case CharacterStatType.Constitution:
-                return Constitution;
-            case CharacterStatType.Agility:
-                return Agility;
-            case CharacterStatType.Toughness:
-                return Toughness;
             case CharacterStatType.Accuracy:
                 return Accuracy;
+            case CharacterStatType.Agility:
+                return Agility;
+            case CharacterStatType.Fortitude:
+                return Fortitude;
+            case CharacterStatType.Intelligence:
+                return Intelligence;
+            case CharacterStatType.Charisma:
+                return Charisma;
+            case CharacterStatType.NONE:
             default:
                 Debug.LogError("Stat not found");
                 return null;
