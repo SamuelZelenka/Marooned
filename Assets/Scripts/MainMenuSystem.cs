@@ -8,7 +8,7 @@ public class MainMenuSystem : MonoBehaviour
     [SerializeField] SetupData setupData = new SetupData();
 
     public MapSize[] mapSizes = new MapSize[] { new MapSize("Small", 20, 15), new MapSize("Medium", 30, 20), new MapSize("Large", 40, 25) };
-    public DifficultySettings[] difficultySettings = new DifficultySettings[] { new DifficultySettings("Easy", 600, 2, 6), new DifficultySettings("Medium", 500, 2, 8), new DifficultySettings("Hard", 400, 3, 10) };
+    public DifficultySettings[] difficultySettings = new DifficultySettings[] { new DifficultySettings("Easy", 600, 2, 6, 2, 4), new DifficultySettings("Medium", 500, 2, 8, 3, 5), new DifficultySettings("Hard", 400, 3, 10, 4, 6) };
 
     public MapSize SelectedMapSize
     {

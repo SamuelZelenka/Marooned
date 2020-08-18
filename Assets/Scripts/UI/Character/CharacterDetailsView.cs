@@ -7,11 +7,11 @@ public class CharacterDetailsView : MonoBehaviour
     [SerializeField] Text characterName = null;
 
     [SerializeField] Text strength = null;
-    [SerializeField] Text stamina = null;
-    [SerializeField] Text constitution = null;
-    [SerializeField] Text agility = null;
-    [SerializeField] Text toughness = null;
     [SerializeField] Text accuracy = null;
+    [SerializeField] Text agility = null;
+    [SerializeField] Text fortitude = null;
+    [SerializeField] Text intelligence = null;
+    [SerializeField] Text charisma = null;
 
     [SerializeField] Bar vitality = null;
     [SerializeField] Bar loyalty = null;
@@ -35,16 +35,16 @@ public class CharacterDetailsView : MonoBehaviour
 
         if (strength)
             strength.text = data.Strength.CurrentValue.ToString();
-        if (stamina)
-            stamina.text = data.Stamina.CurrentValue.ToString();
-        if (constitution)
-            constitution.text = data.Constitution.CurrentValue.ToString();
-        if (agility)
-            agility.text = data.Agility.CurrentValue.ToString();
-        if (toughness)
-            toughness.text = data.Toughness.CurrentValue.ToString();
         if (accuracy)
             accuracy.text = data.Accuracy.CurrentValue.ToString();
+        if (agility)
+            agility.text = data.Agility.CurrentValue.ToString();
+        if (fortitude)
+            fortitude.text = data.Fortitude.CurrentValue.ToString();
+        if (intelligence)
+            intelligence.text = data.Intelligence.CurrentValue.ToString();
+        if (charisma)
+            charisma.text = data.Charisma.CurrentValue.ToString();
 
         if (vitality)
         {

@@ -6,7 +6,10 @@ using UnityEngine.UI;
 public class WorldUIView : MonoBehaviour
 {
     [SerializeField] GameObject poiPanel = null;
+    [SerializeField] GameObject harborPanel = null;
+    [SerializeField] GameObject strongholdPanel = null;
     [SerializeField] HarborView harborView = null;
+    [SerializeField] StrongholdView strongholdView = null;
     [SerializeField] GameObject openPOIButton = null;
     [SerializeField] GameObject shipInspectPanel = null;
     [SerializeField] ResourceInteractionController shipInspectController = null;
@@ -39,14 +42,19 @@ public class WorldUIView : MonoBehaviour
     public void OpenPOI()
     {
         poiPanel.SetActive(true);
+        harborPanel.SetActive(false);
+        strongholdPanel.SetActive(false);
+
         latestPOI.InteractedWith();
         switch (latestPOI.MyType)
         {
             case PointOfInterest.Type.Harbor:
+                harborPanel.SetActive(true);
                 harborView.Setup(latestPOI as Harbor);
                 break;
             case PointOfInterest.Type.Stronghold:
-                Debug.LogWarning("NOT IMPLEMENTED");
+                strongholdPanel.SetActive(true);
+                strongholdView.Setup(latestPOI as Stronghold);
                 break;
         }
     }
