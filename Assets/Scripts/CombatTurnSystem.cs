@@ -6,7 +6,7 @@ public class CombatTurnSystem : MonoBehaviour
 {
     public delegate void CharacterHandler(Character character);
     public static CharacterHandler OnTurnEnding;
-    public static CharacterHandler OnTurnBegining;
+    public static CharacterHandler OnTurnBeginning;
 
     public static Queue<Character> TurnOrder
     {
@@ -78,7 +78,7 @@ public class CombatTurnSystem : MonoBehaviour
         HexGridController.ActiveCharacter = TurnOrder.Dequeue();
         Debug.Log("Starting turn for " + HexGridController.ActiveCharacter.characterData.CharacterName);
 
-        OnTurnBegining?.Invoke(HexGridController.ActiveCharacter);
+        OnTurnBeginning?.Invoke(HexGridController.ActiveCharacter);
 
         if (!HexGridController.ActiveCharacter.playerControlled)
         {

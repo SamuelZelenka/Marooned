@@ -1,67 +1,132 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+[ExecuteInEditMode()]
 public class Bar : MonoBehaviour
 {
-    [SerializeField] Slider slider = null;
+#if UNITY_EDITOR
+    [MenuItem("GameObject/UI/Linear Bar")]
+    public static void AddLinearBar()
+    {
+        GameObject obj = Instantiate(Resources.Load<GameObject>("UI/Linear Bar"));
+        obj.transform.SetParent(Selection.activeGameObject.transform, false);
+    }
+    [MenuItem("GameObject/UI/Radial Bar")]
+    public static void AddRadialBar()
+    {
+        GameObject obj = Instantiate(Resources.Load<GameObject>("UI/Radial Bar"));
+        obj.transform.SetParent(Selection.activeGameObject.transform, false);
+    }
+#endif
+
+    [SerializeField] int minimumValue;
+    [SerializeField] int maximumValue;
+    [SerializeField] int currentValue;
+
+    [SerializeField] Image mask = null;
+    [SerializeField] Image fill = null;
     [SerializeField] Text currentValueText = null;
 
-    [SerializeField] float animationTime = 1f;
+    [SerializeField] float animationTime = 2f;
 
-    //Use this method to set the max value of the slider
-    public void SetMaxValue(int value)
+    public Color color;
+
+    bool animatingChange;
+    Queue<ProgressStatus> changes = new Queue<ProgressStatus>();
+
+    private void Update()
     {
-        StopAllCoroutines();
-        if (value > 0)
+        SetCurrentFill();
+        SetColor();
+        ShowCurrentValue();
+    }
+
+    private void OnEnable()
+    {
+        if (changes.Count > 0 && !animatingChange)
         {
-            slider.maxValue = value;
-        }
-        else
-        {
-            Debug.LogWarning(value + " is not over 0!");
+            ChangeValues(changes.Dequeue());
         }
     }
 
-    //Use this one to set the fill of the bar 
-    public void SetCurrentValue(int newValue)
+    void SetColor()
     {
-        StopAllCoroutines();
-        if (this.gameObject.activeInHierarchy)
+        fill.color = color;
+    }
+
+    void SetCurrentFill()
+    {
+        float currentOffset = currentValue - minimumValue;
+        float maximumOffset = maximumValue - minimumValue;
+        float fillAmount = currentOffset / maximumOffset;
+        mask.fillAmount = fillAmount;
+    }
+
+    public void EnqueueChange(ProgressStatus change)
+    {
+        changes.Enqueue(change);
+        if (this.gameObject.activeInHierarchy && !animatingChange)
         {
-            StartCoroutine(ChangeSliderValueOverTime(slider, newValue));
-        }
-        else
-        {
-            slider.value = newValue;
+            ChangeValues(changes.Dequeue());
         }
     }
 
-    IEnumerator ChangeSliderValueOverTime(Slider slider, int targetValue)
+    private void ChangeValues(ProgressStatus newStatus)
     {
+        maximumValue = newStatus.newMaximum;
+        minimumValue = newStatus.newMinimum;
+        StartCoroutine(ChangeCurrentOverTime(newStatus.newCurrent, animationTime));
+    }
+
+    IEnumerator ChangeCurrentOverTime(int targetValue, float animationTime)
+    {
+        animatingChange = true;
         float timer = 0;
         float t = 0;
-        int sliderStartValue = Mathf.RoundToInt(slider.value);
+        int startCurrent = currentValue;
 
-        while (timer < this.animationTime)
+        while (timer < animationTime && currentValue < maximumValue)
         {
             timer += Time.deltaTime;
             t = timer / animationTime;
-            slider.value = Mathf.Lerp(sliderStartValue, targetValue, t);
-            ShowValueInText(slider.value);
+            currentValue = Mathf.RoundToInt(Mathf.Lerp(startCurrent, targetValue, t));
             yield return null;
         }
-        slider.value = targetValue;
+        currentValue = targetValue;
+        animatingChange = false;
 
-        ShowValueInText(slider.value);
+        if (changes.Count > 0)
+        {
+            ChangeValues(changes.Dequeue());
+        }
     }
 
-    private void ShowValueInText(float currentValue)
+    private void ShowCurrentValue()
     {
         if (currentValueText != null)
         {
-            currentValueText.text = Mathf.RoundToInt(currentValue).ToString() + " / " + Mathf.RoundToInt(slider.maxValue).ToString();
+            currentValueText.text = currentValue.ToString() + " / " + maximumValue.ToString();
+        }
+    }
+
+    public struct ProgressStatus
+    {
+        public readonly int newCurrent;
+        public readonly int newMaximum;
+        public readonly int newMinimum;
+
+        public ProgressStatus(int newCurrent, int newMaximum, int newMinimum)
+        {
+            this.newCurrent = newCurrent;
+            this.newMaximum = newMaximum;
+            this.newMinimum = newMinimum;
         }
     }
 }
+

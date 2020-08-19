@@ -13,9 +13,9 @@ public class TravelQuest : Quest
     }
 
 
-    private void CheckIfReached(HexUnit unitMoved)
+    private void CheckIfReached()
     {
-        if (unitMoved.Location == cellToReach)
+        if (player.Ship.Location == cellToReach)
         {
             CompleteQuest();
         }

@@ -160,10 +160,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 8449044857697031265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf88d1fab784464fbe536e157f8fe43, type: 3}
+  m_Script: {fileID: 11500000, guid: 70e9406c44427a74a92ab733dbb5741c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profileImage: {fileID: 4403902313764152715}
+  portrait: {fileID: 4403902313764152715}
+  characterName: {fileID: 0}
+  additionalText: {fileID: 0}
+  strength: {fileID: 0}
+  accuracy: {fileID: 0}
+  agility: {fileID: 0}
+  fortitude: {fileID: 0}
+  intelligence: {fileID: 0}
+  charisma: {fileID: 0}
+  vitality: {fileID: 0}
+  loyalty: {fileID: 0}
+  energy: {fileID: 0}
+  hunger: {fileID: 0}
+  hygiene: {fileID: 0}
+  abilityIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  bounty: {fileID: 0}
+  bountyFill: {fileID: 0}
+  focusedBorder: {fileID: 0}
+  moves: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  effectParent: {fileID: 0}
+  showActiveEffects: 0
+  selectedByClick: 1
 --- !u!114 &4210330337909581811
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1603,6 +1603,7 @@ MonoBehaviour:
   cellPrefab: {fileID: 170003624449977040, guid: cfc035cbc32c5684db00e3a1af59b8d9,
     type: 3}
   cameraController: {fileID: 5280913648492075691}
+  fow: {fileID: 0}
 --- !u!1 &4994165448617904570
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,8 +2216,8 @@ MonoBehaviour:
   hexGrid: {fileID: 4994165448592012843}
   enemyCharacterParent: {fileID: 4994165448073962438}
   turnSystem: {fileID: 1542911765}
+  combatUIView: {fileID: 0}
   hexGridController: {fileID: 0}
-  skillcheckSystem: {fileID: 0}
   managementMap: {fileID: 0}
   battleMaps:
   - {fileID: 11400000, guid: f16f1e6929bfb92498bc6031043eb469, type: 2}

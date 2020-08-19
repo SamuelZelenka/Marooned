@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public abstract class HexUnit : MonoBehaviour
 {
-    public delegate void HexUnitUpdateHandler(HexUnit unit);
-    public static event HexUnitUpdateHandler OnAnyUnitBeganMove;
-    public static event HexUnitUpdateHandler OnAnyUnitMoved;
+    public delegate void HexUnitUpdateHandler();
+    public delegate void HexUnitReferenceUpdateHandler(HexUnit unit);
+    public static event HexUnitReferenceUpdateHandler OnAnyUnitBeganMove;
     public event HexUnitUpdateHandler OnUnitMoved;
 
     public delegate void VisionHandler(List<HexCell> viewedCells);
@@ -61,8 +61,7 @@ public abstract class HexUnit : MonoBehaviour
                 CalculateReachableCells();
                 ShowReachableCells(true);
             }
-            OnAnyUnitMoved?.Invoke(this);
-            OnUnitMoved?.Invoke(this);
+            OnUnitMoved?.Invoke();
             CheckInteractableCells();
         }
     }

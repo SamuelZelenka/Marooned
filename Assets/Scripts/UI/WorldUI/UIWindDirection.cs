@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class UIWindDirection : MonoBehaviour
 {
-    [SerializeField] Sprite[] windSprites;
+    [SerializeField] Sprite[] windSprites = null;
     Image image;
     private void Start()
     {

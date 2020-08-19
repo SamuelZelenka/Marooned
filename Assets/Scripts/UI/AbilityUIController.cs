@@ -1,21 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class AbilityUIController : MonoBehaviour
 {
-    [SerializeField] List<AbilityUI> abilityUIObjects = new List<AbilityUI>();
     [SerializeField] GameObject disableOverlay = null;
     [SerializeField] Text disableText = null;
 
-
-    // Update is called once per frame
-    public void UpdateUI()
+    public void UpdateUI( Character activeCharacter)
     {
-        List<bool> disabledAbilities = new List<bool>();
-        Character activeCharacter = HexGridController.ActiveCharacter;
-
         if (DisableAbilities("Wait For your turn", !activeCharacter.playerControlled))
         {
             return;
@@ -24,11 +16,6 @@ public class AbilityUIController : MonoBehaviour
         {
             return;
         }
-
-        for (int i = 0; i < activeCharacter.Abilities.Count; i++)
-            {
-                abilityUIObjects[i].UpdateUI(activeCharacter.Abilities[i]);
-            }
             EnableAbilities();
     }
     public bool DisableAbilities(string reason, bool condition)

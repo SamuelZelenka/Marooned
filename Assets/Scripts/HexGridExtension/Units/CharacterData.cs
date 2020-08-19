@@ -10,13 +10,12 @@ public enum CharacterResourceType { Vitality, Loyalty, Energy, Hunger, Hygiene}
 public class CharacterData
 {
 
-    public delegate void CharacterDataHandler(CharacterData characterData);
+    public delegate void CharacterDataHandler();
     public delegate void CharacterDataValueHandler(int newValue);
 
     public event CharacterDataHandler OnCharacterDataInfoRequested;
     public event CharacterDataHandler OnEffectChanged;
     public event CharacterDataHandler OnAnyResourceChanged;
-    public event CharacterDataHandler OnVitalityChanged;
 
     [Header("Setup")]
     public int ID;
@@ -141,7 +140,7 @@ public class CharacterData
     public void AddEffect(TickEffect effect)
     {
         activeEffects.Add(effect);
-        OnEffectChanged?.Invoke(this);
+        OnEffectChanged?.Invoke();
         Debug.Log(activeEffects.Count);
     }
 
@@ -151,7 +150,7 @@ public class CharacterData
         {
             activeEffects.Remove(effect);
             removedEffects.Add(effect);
-            OnEffectChanged?.Invoke(this);
+            OnEffectChanged?.Invoke();
         }
         else
         {
@@ -159,8 +158,8 @@ public class CharacterData
         }
     }
 
-    public void SendValuesToRequesters() => OnCharacterDataInfoRequested?.Invoke(this);
-    public void ResourceChanged(int newValue) => OnAnyResourceChanged(this);
+    public void SendValuesToRequesters() => OnCharacterDataInfoRequested?.Invoke();
+    public void ResourceChanged(int newValue) => OnAnyResourceChanged?.Invoke();
 
     [Serializable]
     public class Resource

@@ -10,6 +10,7 @@ public class CombatSystem : MonoBehaviour
     [SerializeField] Transform enemyCharacterParent = null;
 
     [SerializeField] CombatTurnSystem turnSystem = null;
+    [SerializeField] CombatUIView combatUIView = null;
     [SerializeField] HexGridController hexGridController = null;
 
 
@@ -23,6 +24,7 @@ public class CombatSystem : MonoBehaviour
     public static CombatHandler OnCombatStart;
     public static CombatHandler OnCombatEnd;
 
+    private Character latestCharacter;
 
     private Ability selectedAbility;
     List<HexCell> validTargetHexes;
@@ -101,16 +103,14 @@ public class CombatSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        CombatTurnSystem.OnTurnBegining += NewCharacterTurn;
-        HexUnit.OnAnyUnitMoved += UnitMoved;
+        CombatTurnSystem.OnTurnBeginning += NewCharacterTurn;
         HexCell.OnHexCellHoover += MarkCellsAndCharactersToBeAffected;
         HexGridController.OnCellSelected += UseAbility;
     }
 
     private void OnDisable()
     {
-        CombatTurnSystem.OnTurnBegining -= NewCharacterTurn;
-        HexUnit.OnAnyUnitMoved -= UnitMoved;
+        CombatTurnSystem.OnTurnBeginning -= NewCharacterTurn;
         HexCell.OnHexCellHoover -= MarkCellsAndCharactersToBeAffected;
         HexGridController.OnCellSelected -= UseAbility;
     }
@@ -185,6 +185,8 @@ public class CombatSystem : MonoBehaviour
         {
             character.CombatSetup();
         }
+        if (playerIsDefending) combatUIView.UpdateCrew(defender.Crew);
+        else combatUIView.UpdateCrew(defender.Crew);
 
         turnSystem.SetupNewCombat(allCharacters);
         turnSystem.StartCombat();
@@ -218,14 +220,16 @@ public class CombatSystem : MonoBehaviour
         Debug.Log("Combat End");
     }
 
-    private void UnitMoved(HexUnit movedUnit)
+    private void NewCharacterTurn(Character newTurnCharacter)
     {
-        if (HexGridController.ActiveCharacter == movedUnit)
+        if (latestCharacter != null)
         {
-            ResetSelections();
+            newTurnCharacter.OnUnitMoved -= ResetSelections;
         }
+        latestCharacter = newTurnCharacter;
+        ResetSelections();
+        newTurnCharacter.OnUnitMoved += ResetSelections;
     }
-    private void NewCharacterTurn(Character newTurnCharacter) => ResetSelections();
 
     private void ResetSelections()
     {
@@ -246,13 +250,13 @@ public class CombatSystem : MonoBehaviour
             {
                 float hitchance = GetHitChance(activeCharacter, character, selectedAbility.HostileHitChanceSkillcheck);
                 string hitChanceString = Utility.FactorToPercentageText(hitchance);
-                character.overHeadUI.SetOverheadText(hitChanceString);
+                character.overHeadUI.SetAdditionalText(hitChanceString);
             }
             foreach (var character in friendlyAbilityAffectedCharacters)
             {
                 float hitchance = GetHitChance(activeCharacter, character, selectedAbility.FriendlyHitChanceSkillcheck);
                 string hitChanceString = Utility.FactorToPercentageText(hitchance);
-                character.overHeadUI.SetOverheadText(hitChanceString);
+                character.overHeadUI.SetAdditionalText(hitChanceString);
             }
         }
     }

@@ -9,7 +9,7 @@ public class Character : HexUnit
     public CharacterData characterData;
 
     public GameObject animatedArrow;
-    public CharacterOverHeadUI overHeadUI;
+    public CharacterView overHeadUI;
 
     public delegate bool CharacterStatHandler();
     CharacterStatHandler OnCharacterDowned;
@@ -228,7 +228,7 @@ public class Character : HexUnit
         {
             OnCharacterDowned?.Invoke();
             isDowned = true;
-            CombatTurnSystem.OnTurnBegining += CharacterDownTick;
+            CombatTurnSystem.OnTurnBeginning += CharacterDownTick;
         }
         isDowned = false;
         Debug.Log("Character is down");
@@ -254,7 +254,7 @@ public class Character : HexUnit
     public override IEnumerator PerformAutomaticTurn(int visionRange) //Visionrange is not used by characters
     {
         //Do turn
-        CombatTurnSystem.OnTurnBegining?.Invoke(this);
+        CombatTurnSystem.OnTurnBeginning?.Invoke(this);
 
         if (!IsStunned)
         {

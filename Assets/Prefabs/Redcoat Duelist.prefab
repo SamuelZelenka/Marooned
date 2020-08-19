@@ -100,17 +100,30 @@ MonoBehaviour:
   defaultMovementPoints: 5
   oceanMovementCost: 1
   landMovementCost: 1
+  unitRenderer: {fileID: 0}
+  unitSprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   playerControlled: 0
   myGrid: {fileID: 0}
-  currentVisionRange: 0
-  defaultVisionRange: 0
   characterData:
-    characterName: Redcoat Duelist
-    portrait: {fileID: 7340332454120297748, guid: e8983668ed68f5f41b4772feb50b6d84,
-      type: 3}
+    ID: 0
+    characterFirstName: name
+    characterLastName: namesson
+    recruitBountyDemand: 100
+    startVitalityMax: 1
+    startStrength: 1
+    startAccuracy: 1
+    startAgility: 1
+    startFortitude: 1
+    startIntelligence: 1
+    startCharisma: 1
   animatedArrow: {fileID: 6954361461245706277}
-  overHeadUI: {fileID: 1178439175894574254}
-  isStunned: 0
+  overHeadUI: {fileID: 4730963711880252477}
+  isDead: 0
+  isDowned: 0
+  portrait: {fileID: 0}
   tauntedBy: []
   abilityID: 64000000
 --- !u!1001 &428124082419506653
@@ -253,21 +266,21 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 428124082419506653}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6954361461245706277 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7310426805818629624, guid: 7200afe5f297a1a4394daea4cc744c6c,
-    type: 3}
-  m_PrefabInstance: {fileID: 428124082419506653}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1178439175894574254 stripped
+--- !u!114 &4730963711880252477 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1561527214661319027, guid: 7200afe5f297a1a4394daea4cc744c6c,
+  m_CorrespondingSourceObject: {fileID: 4924337628276675040, guid: 7200afe5f297a1a4394daea4cc744c6c,
     type: 3}
   m_PrefabInstance: {fileID: 428124082419506653}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Script: {fileID: 11500000, guid: 70e9406c44427a74a92ab733dbb5741c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6954361461245706277 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7310426805818629624, guid: 7200afe5f297a1a4394daea4cc744c6c,
+    type: 3}
+  m_PrefabInstance: {fileID: 428124082419506653}
+  m_PrefabAsset: {fileID: 0}

@@ -12,9 +12,9 @@ public class HarborView : MonoBehaviour
     [SerializeField] GameObject merchantButton = null;
 
     [Header("Tavern")]
-    [SerializeField] PartyMember[] partyMembers = null;
+    [SerializeField] CharacterView[] partyMembers = null;
     [SerializeField] Transform partyTransform = null;
-    [SerializeField] CharacterDetailsView[] recruitablePirateStatsViews = null;
+    [SerializeField] CharacterView[] recruitablePirateStatsViews = null;
     [SerializeField] GameObject[] recruitCharacterObjects = null;
     [SerializeField] Button[] tavernFeedButtons = null;
     [SerializeField] Button tavernRecruitButton = null;
@@ -28,8 +28,8 @@ public class HarborView : MonoBehaviour
         {
             foreach (var partyMember in partyMembers)
             {
-                partyMember.OnButtonClick -= latestHarbor.FeedCharacter;
-                partyMember.OnButtonClick -= UpdateTavernCrew;
+                //partyMember.OnButtonClick -= latestHarbor.FeedCharacter;
+                //partyMember.OnButtonClick -= UpdateTavernCrew;
             }
             latestHarbor.OnHarborChanged -= HarborUpdated;
             HexGridController.player.PlayerData.OnGoldChanged -= UpdateTavernButtonStatuses;
@@ -49,12 +49,12 @@ public class HarborView : MonoBehaviour
         {
             for (int i = 0; i < HexGridController.player.Crew.Count; i++)
             {
-                partyMembers[i].character = HexGridController.player.Crew[i];
+                //partyMembers[i].character = HexGridController.player.Crew[i];
             }
             foreach (var partyMember in partyMembers)
             {
-                partyMember.OnButtonClick += harbor.FeedCharacter;
-                partyMember.OnButtonClick += UpdateTavernCrew;
+                //partyMember.OnButtonClick += harbor.FeedCharacter;
+                //partyMember.OnButtonClick += UpdateTavernCrew;
             }
             harbor.OnHarborChanged += HarborUpdated;
             HexGridController.player.PlayerData.OnGoldChanged += UpdateTavernButtonStatuses;
@@ -75,10 +75,10 @@ public class HarborView : MonoBehaviour
         SyncPortraitCount();
         foreach (var partyMember in partyMembers)
         {
-            if (partyMember.character != null)
-            {
-                partyMember.UpdateUI(CharacterResourceType.Vitality, CharacterResourceType.Hunger);
-            }
+            //if (partyMember.character != null)
+            //{
+            //    partyMember.UpdateUI(CharacterResourceType.Vitality, CharacterResourceType.Hunger);
+            //}
         }
     }
 
@@ -87,7 +87,7 @@ public class HarborView : MonoBehaviour
         for (int i = 0; i < HexGridController.player.Crew.Count; i++)
         {
             partyTransform.GetChild(i).gameObject.SetActive(true);
-            partyMembers[i].SetCharacter(HexGridController.player.Crew[i]);
+            //partyMembers[i].SetCharacter(HexGridController.player.Crew[i]);
         }
         if (partyTransform.childCount > HexGridController.player.Crew.Count)
         {
@@ -108,7 +108,7 @@ public class HarborView : MonoBehaviour
         {
             foreach (var item in recruitablePirateStatsViews)
             {
-                item.UpdateValues(latestHarbor.recruitableCharacter);
+                item.SetCharacter(latestHarbor.recruitableCharacter);
             }
         }
     }

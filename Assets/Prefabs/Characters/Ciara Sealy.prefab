@@ -59,8 +59,18 @@ MonoBehaviour:
     ID: 1
     characterFirstName: Ciara
     characterLastName: Sealy
+    recruitBountyDemand: 100
+    startVitalityMax: 1
+    startStrength: 1
+    startAccuracy: 1
+    startAgility: 1
+    startFortitude: 1
+    startIntelligence: 1
+    startCharisma: 1
   animatedArrow: {fileID: 800652676508173865}
-  overHeadUI: {fileID: 8918270303014118050}
+  overHeadUI: {fileID: 3042574997784169009}
+  isDead: 0
+  isDowned: 0
   portrait: {fileID: 0}
   tauntedBy: []
   abilityID: 0a0000000b0000000c0000000d000000
@@ -204,21 +214,21 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7957762876539427793}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &800652676508173865 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7310426805818629624, guid: 7200afe5f297a1a4394daea4cc744c6c,
-    type: 3}
-  m_PrefabInstance: {fileID: 7957762876539427793}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8918270303014118050 stripped
+--- !u!114 &3042574997784169009 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1561527214661319027, guid: 7200afe5f297a1a4394daea4cc744c6c,
+  m_CorrespondingSourceObject: {fileID: 4924337628276675040, guid: 7200afe5f297a1a4394daea4cc744c6c,
     type: 3}
   m_PrefabInstance: {fileID: 7957762876539427793}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23cce6f50d5ba9a4dbb9d6295c3ebcda, type: 3}
+  m_Script: {fileID: 11500000, guid: 70e9406c44427a74a92ab733dbb5741c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &800652676508173865 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7310426805818629624, guid: 7200afe5f297a1a4394daea4cc744c6c,
+    type: 3}
+  m_PrefabInstance: {fileID: 7957762876539427793}
+  m_PrefabAsset: {fileID: 0}

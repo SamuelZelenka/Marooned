@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 public class CombatLog : MonoBehaviour
 {
     [SerializeField] int combatLogLimit = 6;
@@ -16,7 +14,7 @@ public class CombatLog : MonoBehaviour
         CombatTurnSystem.OnTurnEnding -= NewLog;
 
     }
-    public void NewLog(Character character)
+    private void NewLog(Character character)
     {
         string text;
         MouseHoverImage logBox = Instantiate(prefab, transform);
@@ -35,6 +33,5 @@ public class CombatLog : MonoBehaviour
             text = character.logMessage.Message;
         }
         logBox.UpdateUI(text, character.portrait);
-        logBox.GetComponent<CharacterPortrait>().UpdatePortrait(character);
     }
 }

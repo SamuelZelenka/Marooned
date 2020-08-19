@@ -2,7 +2,7 @@
 
 public class BountyView : MonoBehaviour
 {
-    [SerializeField] ProgressBar bountyProgress = null;
+    [SerializeField] Bar bountyProgress = null;
     Player player;
 
     void Setup(Player player)
@@ -34,6 +34,6 @@ public class BountyView : MonoBehaviour
 
     void UpdateUI()
     {
-        bountyProgress.EnqueueChange(new ProgressBar.ProgressStatus(player.PlayerData.Bounty, player.PlayerData.NextBountyChange, player.PlayerData.PreviousBountyChange));
+        bountyProgress.EnqueueChange(new Bar.ProgressStatus(player.PlayerData.Bounty, player.PlayerData.NextBountyChange, player.PlayerData.PreviousBountyChange));
     }
 }

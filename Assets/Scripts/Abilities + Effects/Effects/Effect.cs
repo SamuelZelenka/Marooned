@@ -70,7 +70,6 @@ public abstract class TickEffect : Effect
             RemoveEffect(owner);
         }
         counter++;
-        owner.overHeadUI.UpdateValues(owner);
     }
     public virtual void RemoveEffect(Character owner)
     {
