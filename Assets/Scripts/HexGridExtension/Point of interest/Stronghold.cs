@@ -15,11 +15,11 @@ public class Stronghold : PointOfInterest
         {
             if (i == combatIndex)
             {
-                challenges.Add(new Challenge(Challenge.Type.Combat, CharacterStatType.NONE));
+                challenges.Add(new Challenge(Challenge.Type.Combat, CharacterStatType.NONE, 5));
             }
             else
             {
-                challenges.Add(new Challenge(Challenge.Type.SkillcheckChallenge, (CharacterStatType)Random.Range(0, (int)CharacterStatType.Charisma) + 1));
+                challenges.Add(new Challenge(Challenge.Type.SkillcheckChallenge, (CharacterStatType)Random.Range(0, (int)CharacterStatType.Charisma) + 1, 5));
             }
         }
         Debug.Log("Stronghold made");
