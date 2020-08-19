@@ -20,7 +20,7 @@ public class ChallengeTest : MonoBehaviour
     public void TestChallenge()
     {
         challengeManager.StartChallenge(new Challenge(Challenge.Type.SkillcheckChallenge, CharacterStatType.Accuracy, challengeLevel));
-        challengeManager.SetCharacter(characterSkillLevel);
+        challengeManager.SetCharacterSkill(characterSkillLevel);
     }
 
 }

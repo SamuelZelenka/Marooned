@@ -3,12 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChallengeManager : MonoBehaviour
+public class ChallengeManager : MonoBehaviour, ICharacterReceiver
 {
+    public enum Result { CriticalFail, Fail, Success, CriticalSuccess}
+
     static int[] BASECARDVALUES = new int[] { -2, -1, 0, 1, 1, 1, 2, 2 };
     const int DIFFICULTYCARDVALUE = 3;
-    List<int> cardValues;
+    const int FAILREQUIREMENT = 0;
+    const int SUCCESSREQUIREMENT = 1;
+    const int CRITICALSUCCESSREQUIREMENT = 3;
+
+    public delegate void ResultHandler(Character character);
+    public ResultHandler OnCriticalSuccess;
+    public ResultHandler OnSuccess;
+    public ResultHandler OnFail;
+    public ResultHandler OnCriticalFail;
+
+
     [SerializeField] ChallengeCard[] challengeCards = null;
+    [SerializeField] ProgressBar resultBar = null;
+
     [SerializeField] Text scoreText = null;
     [SerializeField] Text cardNumbersExplanation = null;
 
@@ -21,7 +35,10 @@ public class ChallengeManager : MonoBehaviour
 
 
     Challenge activeChallenge;
+    Character activeCharacter;
     int activeCharacterSkillLevel;
+    List<int> cardValues;
+    int turnedCards = 0;
 
     int score;
     int Score
@@ -31,13 +48,9 @@ public class ChallengeManager : MonoBehaviour
         {
             score = value;
             scoreText.text = $"{value}";
+            resultBar.EnqueueChange(new ProgressBar.ProgressStatus(value, 3, -1));
         }
     }
-
-    const int FAILREQUIREMENT = 0;
-    const int SUCCESSREQUIREMENT = 1;
-    const int CRITICALSUCCESSREQUIREMENT = 2;
-
 
     bool challengeStarted = false;
 
@@ -46,6 +59,7 @@ public class ChallengeManager : MonoBehaviour
     public void StartChallenge(Challenge challenge)
     {
         Score = 0;
+        turnedCards = 0;
         foreach (var card in challengeCards)
         {
             card.ResetCard();
@@ -125,7 +139,13 @@ public class ChallengeManager : MonoBehaviour
             $"+3 cards: {GetNumberOfPositiveDifficultyCards()}";
     }
 
-    public void SetCharacter(int skillValue)
+    public void ReceiveCharacter(Character character)
+    {
+        activeCharacter = character;
+        SetCharacterSkill(character.characterData.GetStatValue(activeChallenge.skillcheckType));
+    }
+
+    public void SetCharacterSkill(int skillValue)
     {
         if (challengeStarted)
         {
@@ -143,6 +163,7 @@ public class ChallengeManager : MonoBehaviour
         GiveCards(skillValue);
     }
 
+
     private void GiveCards(int skillValue)
     {
         int totalValueOfCardsGiven = 0;
@@ -159,36 +180,54 @@ public class ChallengeManager : MonoBehaviour
             DebugValueOfCardsGiven(totalValueOfCardsGiven);
     }
 
-    private void DebugValueOfCardsGiven(int value)
-    {
-        Debug.Log(value);
-        if (value >= FAILREQUIREMENT)
-        {
-            if (value >= SUCCESSREQUIREMENT)
-            {
-                if (value >= CRITICALSUCCESSREQUIREMENT)
-                    Debug.Log("Critical Success");
-                else
-                    Debug.Log("Success");
-            }
-            else
-                Debug.Log("Fail");
-        }
-        else
-            Debug.Log("Critical Fail");
-    }
+    private void DebugValueOfCardsGiven(int value) => Debug.Log(GetResult(value));
 
     public void TurnCard(int valueOfCard)
     {
         if (!challengeStarted)
             challengeStarted = true;
         Score += valueOfCard;
+        turnedCards++;
+        if (turnedCards == activeCharacterSkillLevel)
+            CompleteChallenge();
     }
 
-    private void VisualizeState()
+    private Result GetResult(int score)
     {
+        if (score >= FAILREQUIREMENT)
+        {
+            if (score >= SUCCESSREQUIREMENT)
+            {
+                if (score >= CRITICALSUCCESSREQUIREMENT)
+                    return Result.CriticalSuccess;
+                else
+                    return Result.Success;
+            }
+            else
+                return Result.Fail;
+        }
+        else
+            return Result.CriticalFail;
+    }
 
+    public void CompleteChallenge()
+    {
+        Result result = GetResult(Score);
+        switch (result)
+        {
+            case Result.CriticalFail:
+                OnCriticalFail?.Invoke(activeCharacter);
+                break;
+            case Result.Fail:
+                OnFail?.Invoke(activeCharacter);
+                break;
+            case Result.Success:
+                OnSuccess?.Invoke(activeCharacter);
+                break;
+            case Result.CriticalSuccess:
+                OnCriticalSuccess?.Invoke(activeCharacter);
+                break;
+        }
+        Debug.Log(result.ToString());
     }
 }
-
-
