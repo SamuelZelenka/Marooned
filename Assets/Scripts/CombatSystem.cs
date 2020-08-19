@@ -198,7 +198,7 @@ public class CombatSystem : MonoBehaviour
 
         foreach (Character character in HexGridController.player.Crew)
         {
-            isCombatOver = !character.isDowned ? true : false ;
+            isCombatOver = character.IsCharacterDown() ? true : false ;
         }
         if (isCombatOver) EndCombat();
     }
@@ -215,6 +215,7 @@ public class CombatSystem : MonoBehaviour
             item.Location = hexGrid.GetCell(item.SavedShipLocation.coordinates);
             item.SavedShipLocation = item.Location;
         }
+        Debug.Log("Combat End");
     }
 
     private void UnitMoved(HexUnit movedUnit)

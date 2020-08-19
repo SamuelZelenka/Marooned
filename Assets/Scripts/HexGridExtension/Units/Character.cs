@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Character : HexUnit
 {
+    const int DOWNTURNLIMIT = 5;
+
     public CharacterData characterData;
 
     public GameObject animatedArrow;
     public CharacterOverHeadUI overHeadUI;
 
     public delegate bool CharacterStatHandler();
-    CharacterStatHandler OnCharacterDeath;
+    CharacterStatHandler OnCharacterDowned;
+
+
+    public bool isDead = false;
 
     public bool isDowned;
+    int downCounter = 0;
 
     #region Visuals
     public Sprite portrait = null;
@@ -216,14 +222,27 @@ public class Character : HexUnit
     }
 
 
-    public bool IsCharacterDead()
+    public bool IsCharacterDown()
     {
         if (characterData.Vitality.CurrentValue <= 0)
         {
-            OnCharacterDeath?.Invoke();
-            isDowned = true; 
+            OnCharacterDowned?.Invoke();
+            isDowned = true;
+            CombatTurnSystem.OnTurnBegining += CharacterDownTick;
         }
         isDowned = false;
+        Debug.Log("Character is down");
+        return isDowned;
+    }
+
+    public void CharacterDownTick(Character character) => downCounter++;
+    public bool IsCharacterDead()
+    {
+        if (downCounter >= DOWNTURNLIMIT)
+        {
+            isDead = true;
+        }
+        return isDead;
     }
 
     #region AI
