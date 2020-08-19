@@ -128,13 +128,18 @@ public class DifficultySettings
 
     public int minimumEnemyCrewSize = 2;
     public int maximumEnemyCrewSize = 10;
+    public int strongholdMinChallenges = 2;
+    public int strongholdMaxChallenges = 5;
 
-    public DifficultySettings(string name, int bountyChange, int minEnemyCrewSize, int maxEnemyCrewSize)
+
+    public DifficultySettings(string name, int bountyChange, int minEnemyCrewSize, int maxEnemyCrewSize, int strongholdMinChallenges, int strongholdMaxChallenges)
     {
         this.name = name;
         this.bountyChanges = bountyChange;
         this.minimumEnemyCrewSize = minEnemyCrewSize;
         this.maximumEnemyCrewSize = maxEnemyCrewSize;
+        this.strongholdMinChallenges = strongholdMinChallenges;
+        this.strongholdMaxChallenges = strongholdMaxChallenges;
     }
 }
 

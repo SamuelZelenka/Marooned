@@ -245,7 +245,7 @@ public class WorldSetup : MonoBehaviour
         }
 
 
-        Stronghold newStronghold = new Stronghold(strongholdName, cell, worldUIView.EnablePOIInteraction);
+        Stronghold newStronghold = new Stronghold(strongholdName, cell, setupData.difficultySettings , worldUIView.EnablePOIInteraction);
         cell.PointOfInterest = newStronghold;
 
         List<HexDirection> openwaterConnections = new List<HexDirection>();

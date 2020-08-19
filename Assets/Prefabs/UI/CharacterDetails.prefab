@@ -1351,11 +1351,11 @@ MonoBehaviour:
   portrait: {fileID: 4669208496694496089}
   characterName: {fileID: 4669208498093464328}
   strength: {fileID: 2007581700553881134}
-  stamina: {fileID: 223502693025576591}
-  constitution: {fileID: 4128619462865634570}
-  agility: {fileID: 282494645291838035}
-  toughness: {fileID: 5798712418134207973}
-  accuracy: {fileID: 5939895359084264058}
+  accuracy: {fileID: 223502693025576591}
+  agility: {fileID: 4128619462865634570}
+  fortitude: {fileID: 282494645291838035}
+  intelligence: {fileID: 5798712418134207973}
+  charisma: {fileID: 5939895359084264058}
   vitality: {fileID: 2375439725068048375}
   loyalty: {fileID: 4301751371216950726}
   energy: {fileID: 738289133354875059}
@@ -3481,12 +3481,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: eef40e262a7e97d49855a4ec128f5a76,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 6492031209823526777, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
       propertyPath: m_Name
-      value: Toughness
+      value: Intelligence
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270741007285106163, guid: 71460ecd33bd9f54f97580e9e3a2f509,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7599391837897392528, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
@@ -3624,12 +3628,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0e72def66a7ce1348a4b485e3e49cdb2,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 6492031209823526777, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
       propertyPath: m_Name
-      value: Accuracy
+      value: Charisma
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270741007285106163, guid: 71460ecd33bd9f54f97580e9e3a2f509,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7599391837897392528, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
@@ -4193,12 +4201,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 0a40c5e3e729dc04aa31e529f1d05004,
+      objectReference: {fileID: 21300000, guid: 732b64803949b7f4aa4d36f569d3b090,
         type: 3}
     - target: {fileID: 6492031209823526777, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
       propertyPath: m_Name
-      value: Constitution
+      value: Agility
       objectReference: {fileID: 0}
     - target: {fileID: 7599391837897392528, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
@@ -4621,12 +4629,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 732b64803949b7f4aa4d36f569d3b090,
+      objectReference: {fileID: 21300000, guid: eef40e262a7e97d49855a4ec128f5a76,
         type: 3}
     - target: {fileID: 6492031209823526777, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
       propertyPath: m_Name
-      value: Agility
+      value: Fortitude
       objectReference: {fileID: 0}
     - target: {fileID: 7599391837897392528, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
@@ -4764,12 +4772,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: bd32733d1953c7440925f6bce52d1111,
+      objectReference: {fileID: 21300000, guid: 0e72def66a7ce1348a4b485e3e49cdb2,
         type: 3}
     - target: {fileID: 6492031209823526777, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
       propertyPath: m_Name
-      value: Stamina
+      value: Accuracy
       objectReference: {fileID: 0}
     - target: {fileID: 7599391837897392528, guid: 71460ecd33bd9f54f97580e9e3a2f509,
         type: 3}
