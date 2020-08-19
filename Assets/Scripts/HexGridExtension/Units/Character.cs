@@ -9,6 +9,11 @@ public class Character : HexUnit
     public GameObject animatedArrow;
     public CharacterOverHeadUI overHeadUI;
 
+    public delegate bool CharacterStatHandler();
+    CharacterStatHandler OnCharacterDeath;
+
+    public bool isDowned;
+
     #region Visuals
     public Sprite portrait = null;
     #endregion
@@ -208,6 +213,17 @@ public class Character : HexUnit
     public void TurnEnded()
     {
         EffectTickUpdate();
+    }
+
+
+    public bool IsCharacterDead()
+    {
+        if (characterData.Vitality.CurrentValue <= 0)
+        {
+            OnCharacterDeath?.Invoke();
+            isDowned = true; 
+        }
+        isDowned = false;
     }
 
     #region AI

@@ -16,6 +16,7 @@ public class CharacterData
     public event CharacterDataHandler OnCharacterDataInfoRequested;
     public event CharacterDataHandler OnEffectChanged;
     public event CharacterDataHandler OnAnyResourceChanged;
+    public event CharacterDataHandler OnVitalityChanged;
 
     [Header("Setup")]
     public int ID;

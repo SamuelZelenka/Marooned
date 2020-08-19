@@ -23,6 +23,7 @@ public class CombatSystem : MonoBehaviour
     public static CombatHandler OnCombatStart;
     public static CombatHandler OnCombatEnd;
 
+
     private Ability selectedAbility;
     List<HexCell> validTargetHexes;
     private List<HexCell> ValidTargetHexes
@@ -187,6 +188,19 @@ public class CombatSystem : MonoBehaviour
 
         turnSystem.SetupNewCombat(allCharacters);
         turnSystem.StartCombat();
+    }
+
+    public void IsCombatOver()
+    {
+        bool isCombatOver = true;
+
+        // Combat end conditions
+
+        foreach (Character character in HexGridController.player.Crew)
+        {
+            isCombatOver = !character.isDowned ? true : false ;
+        }
+        if (isCombatOver) EndCombat();
     }
 
     public void EndCombat()
