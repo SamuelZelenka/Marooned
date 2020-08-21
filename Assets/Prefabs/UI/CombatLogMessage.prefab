@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3823599481507529719}
   - component: {fileID: 737691835755564548}
   - component: {fileID: 4396846000312362931}
-  - component: {fileID: 4358459732913408791}
+  - component: {fileID: 1705009427017140313}
   m_Layer: 5
   m_Name: CombatLogMessage
   m_TagString: Untagged
@@ -138,7 +138,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 4358459732913408791}
+        - m_Target: {fileID: 1705009427017140313}
           m_MethodName: OnClick
           m_Mode: 1
           m_Arguments:
@@ -149,7 +149,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &4358459732913408791
+--- !u!114 &1705009427017140313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,7 +158,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 6710653906300293798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf88d1fab784464fbe536e157f8fe43, type: 3}
+  m_Script: {fileID: 11500000, guid: 70e9406c44427a74a92ab733dbb5741c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profileImage: {fileID: 3823599481507529719}
+  portrait: {fileID: 3823599481507529719}
+  characterName: {fileID: 0}
+  additionalText: {fileID: 0}
+  strength: {fileID: 0}
+  accuracy: {fileID: 0}
+  agility: {fileID: 0}
+  fortitude: {fileID: 0}
+  intelligence: {fileID: 0}
+  charisma: {fileID: 0}
+  vitality: {fileID: 0}
+  loyalty: {fileID: 0}
+  energy: {fileID: 0}
+  hunger: {fileID: 0}
+  hygiene: {fileID: 0}
+  abilityIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  bountyText: {fileID: 0}
+  bounty: {fileID: 0}
+  focusedBorder: {fileID: 0}
+  moves: {fileID: 0}
+  effectPrefab: {fileID: 0}
+  effectParent: {fileID: 0}
+  showActiveEffects: 0
+  selectedByClick: 1

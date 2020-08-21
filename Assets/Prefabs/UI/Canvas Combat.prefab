@@ -2246,7 +2246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d036b15b20869f44e8dce24d99612457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crewDisplay: {fileID: 0}
+  crewDisplay: {fileID: 5666441524484571742}
   selectedCharacter: {fileID: 3739527418294212185}
   activeCharacter: {fileID: 2808294605961281752}
   abilityUI: {fileID: 6038964565350220251}
@@ -3264,7 +3264,7 @@ GameObject:
   - component: {fileID: 7190033762766839046}
   - component: {fileID: 5666441524484571742}
   m_Layer: 5
-  m_Name: PlayerParty
+  m_Name: PlayerCrew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

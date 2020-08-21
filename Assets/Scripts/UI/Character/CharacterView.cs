@@ -47,8 +47,8 @@ public class CharacterView : MonoBehaviour
 
     [SerializeField] AbilityUI[] abilityIcons = new AbilityUI[4];
 
-    [SerializeField] Text bounty = null;
-    [SerializeField] Image bountyFill = null;
+    [SerializeField] Text bountyText = null;
+    [SerializeField] Bar bounty = null;
 
     [SerializeField] Image focusedBorder = null;
 
@@ -117,10 +117,10 @@ public class CharacterView : MonoBehaviour
         if (charisma)
             charisma.text = data.Charisma.CurrentValue.ToString();
 
+        if (bountyText)
+            bountyText.text = data.BountyLevel.ToString();
         if (bounty)
-            bounty.text = data.BountyLevel.ToString();
-        if (bountyFill)
-            bountyFill.fillAmount = (float)data.BountyLevel.XP / (float)data.BountyLevel.XPLevelUpRequirement;
+            bounty.EnqueueChange(new Bar.ProgressStatus(data.BountyLevel.XP, data.BountyLevel.XPLevelUpRequirement, 0));
 
         for (int i = 0; i < abilityIcons.Length; i++)
         {

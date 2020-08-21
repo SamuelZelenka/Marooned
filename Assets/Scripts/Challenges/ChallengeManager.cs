@@ -21,7 +21,7 @@ public class ChallengeManager : MonoBehaviour, ICharacterReceiver
 
 
     [SerializeField] ChallengeCard[] challengeCards = null;
-    [SerializeField] ProgressBar resultBar = null;
+    [SerializeField] Bar resultBar = null;
 
     [SerializeField] Text scoreText = null;
     [SerializeField] Text cardNumbersExplanation = null;
@@ -48,7 +48,7 @@ public class ChallengeManager : MonoBehaviour, ICharacterReceiver
         {
             score = value;
             scoreText.text = $"{value}";
-            resultBar.EnqueueChange(new ProgressBar.ProgressStatus(value, 3, -1));
+            resultBar.EnqueueChange(new Bar.ProgressStatus(value, 3, -1));
         }
     }
 
