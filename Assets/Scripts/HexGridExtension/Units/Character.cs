@@ -55,6 +55,7 @@ public class Character : HexUnit
             }
         }
         characterData.Setup();
+        overHeadUI.SetCharacter(this);
     }
 
     public void CombatSetup() => characterData.SendValuesToRequesters();
