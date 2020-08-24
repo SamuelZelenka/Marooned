@@ -37,7 +37,7 @@ public class InGameCamera : MonoBehaviour
     bool isTracking = false;
     //float detectRange = 0.5f;
     //Unused /Simon
-    Transform trackingTransform;
+    ITrackable trackedObject;
 
 
     private void Start()
@@ -163,14 +163,15 @@ public class InGameCamera : MonoBehaviour
             //This part was not used for anything
             //Simon Voss
 
-            if (trackingTransform == null)
+            if (trackedObject == null)
             {
                 isTracking = false;
                 return;
             }
             else
             {
-                newCameraTransform.cameraPosition = trackingTransform.position;
+                if (trackedObject.TrackMe())
+                    newCameraTransform.cameraPosition = trackedObject.MyTransform().position;
             }
         }
         //bool IsPointReached()
@@ -187,25 +188,30 @@ public class InGameCamera : MonoBehaviour
         //Simon Voss
     }
 
-    public void ToggleTracking()
-    {
-        isTracking = !isTracking;
-    }
-
     void SetCharacterTarget(Character character)
     {
         if (character != null)
         {
-            trackingTransform = character.transform;
+            trackedObject = character;
             isTracking = true;
+        }
+        else
+        {
+            trackedObject = null;
+            isTracking = false;
         }
     }
     void SetShipTarget(Ship ship)
     {
         if (ship != null)
         {
-            trackingTransform = ship.transform;
+            trackedObject = ship;
             isTracking = true;
+        }
+        else
+        {
+            trackedObject = null;
+            isTracking = false;
         }
     }
     #endregion

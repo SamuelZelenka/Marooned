@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class ShipViewer : MonoBehaviour
 {
@@ -9,16 +6,31 @@ public class ShipViewer : MonoBehaviour
     [SerializeField] GameObject shootButton = null;
     [SerializeField] GameObject boardingButton = null;
 
+    private void Awake()
+    {
+        HexUnit.OnAnyUnitBeganMove += HideAll;
+    }
+
+    private void HideAll(HexUnit unit)
+    {
+        ShowViewPossible(false);
+        ShowShootingPossible(false);
+        ShowBoardingPossible(false);
+    }
+
     public void ShowViewPossible(bool status)
     {
-        viewButton.SetActive(status);
+        if (viewButton)
+            viewButton.SetActive(status);
     }
     public void ShowShootingPossible(bool status)
     {
-        shootButton.SetActive(status);
+        if (shootButton)
+            shootButton.SetActive(status);
     }
     public void ShowBoardingPossible(bool status)
     {
-        boardingButton.SetActive(status);
+        if (boardingButton)
+            boardingButton.SetActive(status);
     }
 }

@@ -55,14 +55,20 @@ public class FOW : MonoBehaviour
             case FOWMode.Hidden:
                 hiddenTilemap.SetTile(tilemapPosition, hidden);
                 outOfViewTilemap.SetTile(tilemapPosition, outOfView);
+                if (cell.Unit)
+                    cell.Unit.ShowUnit(false);
                 break;
             case FOWMode.Viewed:
                 hiddenTilemap.SetTile(tilemapPosition, null);
                 outOfViewTilemap.SetTile(tilemapPosition, outOfView);
+                if (cell.Unit)
+                    cell.Unit.ShowUnit(false);
                 break;
             case FOWMode.InView:
                 hiddenTilemap.SetTile(tilemapPosition, null);
                 outOfViewTilemap.SetTile(tilemapPosition, null);
+                if (cell.Unit)
+                    cell.Unit.ShowUnit(true);
                 break;
         }
     }

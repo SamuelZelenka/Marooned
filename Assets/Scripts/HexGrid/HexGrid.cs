@@ -12,7 +12,6 @@ public class HexGrid : MonoBehaviour
     public InGameCamera cameraController;
     public FOW fow;
 
-
     public HexCell[] Cells { private set; get; }
     public List<HexUnit> Units { get; private set; }
 
@@ -38,7 +37,7 @@ public class HexGrid : MonoBehaviour
 
         CellCountX = x;
         CellCountY = y;
-        CreateCells(newMap, defaultTraversable);
+        CreateCells(newMap, defaultTraversable, fow != null);
 
         if (!destroyUnits)
         {
@@ -55,7 +54,7 @@ public class HexGrid : MonoBehaviour
         return true;
     }
 
-    void CreateCells(bool newMap, bool defaultTraversable)
+    void CreateCells(bool newMap, bool defaultTraversable, bool fowHidden)
     {
         Cells = new HexCell[CellCountY * CellCountX];
 
@@ -63,14 +62,14 @@ public class HexGrid : MonoBehaviour
         {
             for (int x = 0; x < CellCountX; x++)
             {
-                CreateCell(x, y, i++, newMap, defaultTraversable);
+                CreateCell(x, y, i++, newMap, defaultTraversable, fowHidden);
             }
         }
 
         SetCameraBoundriesToMatchHexGrid();
     }
 
-    void CreateCell(int x, int y, int i, bool newMap, bool defaultTraversable)
+    void CreateCell(int x, int y, int i, bool newMap, bool defaultTraversable, bool fowHidden)
     {
         Vector3 position;
         position.x = (x + y * 0.5f - y / 2) * (HexMetrics.innerRadius * 2f);
@@ -81,6 +80,8 @@ public class HexGrid : MonoBehaviour
         cell.transform.SetParent(this.transform);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, y);
+        cell.FOWMode = fowHidden ? FOW.FOWMode.Hidden : FOW.FOWMode.InView;
+
 
         if (newMap)
         {

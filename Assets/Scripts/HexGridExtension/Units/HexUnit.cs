@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class HexUnit : MonoBehaviour
+public abstract class HexUnit : MonoBehaviour, ITrackable
 {
     public delegate void HexUnitUpdateHandler();
     public delegate void HexUnitReferenceUpdateHandler(HexUnit unit);
@@ -61,6 +61,7 @@ public abstract class HexUnit : MonoBehaviour
                 CalculateReachableCells();
                 ShowReachableCells(true);
             }
+            ShowUnit(InView);
             OnUnitMoved?.Invoke();
             CheckInteractableCells();
         }
@@ -91,7 +92,7 @@ public abstract class HexUnit : MonoBehaviour
                 int index = (int)value;
                 if (value == HexDirection.SW)
                 {
-                    index = (int) HexDirection.SE;
+                    index = (int)HexDirection.SE;
                 }
                 else if (value == HexDirection.W)
                 {
@@ -150,6 +151,12 @@ public abstract class HexUnit : MonoBehaviour
         }
     }
 
+    public void ShowUnit(bool status)
+    {
+        if (unitRenderer)
+            unitRenderer.enabled = status;
+    }
+
     public void ValidateLocation() => transform.localPosition = location.Position;
 
     public abstract bool CanEnter(HexCell cell);
@@ -167,6 +174,10 @@ public abstract class HexUnit : MonoBehaviour
             item.ShowHighlight(status, HexCell.HighlightType.ValidMoveInteraction);
         }
     }
+
+    public bool TrackMe() => InView;
+    bool InView => Location.FOWMode == FOW.FOWMode.InView;
+    public Transform MyTransform() => transform;
 
     public abstract IEnumerator PerformAutomaticTurn(int visionRange);
 
@@ -207,21 +218,26 @@ public abstract class HexUnit : MonoBehaviour
             b = pathToTravel[i - 1].Position;
             c = (b + pathToTravel[i].Position) * 0.5f;
 
+            ShowUnit(Location.FOWMode == FOW.FOWMode.InView);
+
             //Rotation
             latestCell = pathToTravel[i - 1];
             Orientation = HexDirectionExtension.GetDirectionToNeighbor(latestCell, pathToTravel[i]);
 
-            for (; t < 1f; t += Time.deltaTime * travelSpeed)
+            if (InView || pathToTravel[i].FOWMode == FOW.FOWMode.InView)
             {
-                //Move
-                Vector3 newPos = Bezier.GetPoint(a, b, c, t);
-                newPos.z = zPos;
-                transform.localPosition = newPos;
+                for (; t < 1f; t += Time.deltaTime * travelSpeed)
+                {
+                    //Move
+                    Vector3 newPos = Bezier.GetPoint(a, b, c, t);
+                    newPos.z = zPos;
+                    transform.localPosition = newPos;
 
-                yield return null;
+                    yield return null;
+                }
+                t -= 1f;
             }
-            //Location = pathToTravel[i - 1]; //Removed to ignore OnHexUnit moved while only being on a path (need solution for Fog of War updates)
-            t -= 1f;
+            Location = pathToTravel[i];
         }
 
         //Last point
@@ -247,7 +263,7 @@ public abstract class HexUnit : MonoBehaviour
         pathToTravel = null; //Clear the list
     }
 
-    protected virtual void CheckInteractableCells() 
+    protected virtual void CheckInteractableCells()
     {
         //Vision range
         List<HexCell> hexCells = CellFinder.GetCellsWithinRange(Location, currentVisionRange);
