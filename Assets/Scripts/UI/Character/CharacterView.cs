@@ -70,11 +70,10 @@ public class CharacterView : MonoBehaviour
     public void SetCharacter(Character newCharacter)
     {
         if (character != null)
-        {
             UnSubscribe();
-        }
         character = newCharacter;
-        Subscribe();
+        if (!character)
+            Subscribe();
         UpdateAllUI();
     }
     public void SetAdditionalText(string text)
@@ -95,8 +94,9 @@ public class CharacterView : MonoBehaviour
         character.characterData.OnEffectChanged -= UpdateEffectIcons;
     }
 
-    private void UpdateAllUI() 
+    private void UpdateAllUI()
     {
+        this.gameObject.SetActive(true);
         CharacterData data = character.characterData;
 
         if (portrait)
@@ -122,7 +122,7 @@ public class CharacterView : MonoBehaviour
         if (bounty)
             bounty.EnqueueChange(new Bar.ProgressStatus(data.BountyLevel.XP, data.BountyLevel.XPLevelUpRequirement, 0));
 
-        for (int i = 0; i < abilityIcons.Length; i++)
+        for (int i = 0; i < abilityIcons.Length && i < character.Abilities.Count; i++)
         {
             if (abilityIcons[i])
             {
@@ -133,6 +133,8 @@ public class CharacterView : MonoBehaviour
         UpdateResourceBars();
         UpdateEffectIcons();
     }
+
+    private void HideAllUI() => this.gameObject.SetActive(false);
 
     private void UpdateResourceBars()
     {

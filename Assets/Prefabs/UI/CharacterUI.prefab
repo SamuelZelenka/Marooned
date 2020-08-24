@@ -698,8 +698,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  bountyText: {fileID: 0}
   bounty: {fileID: 0}
-  bountyFill: {fileID: 0}
   focusedBorder: {fileID: 0}
   moves: {fileID: 0}
   effectPrefab: {fileID: 1471646416812493414, guid: cb4ef66feb5892945b3924f0614acce4,
@@ -784,7 +784,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!1 &8335049685974458310
 GameObject:
   m_ObjectHideFlags: 0

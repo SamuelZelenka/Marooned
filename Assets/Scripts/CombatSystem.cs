@@ -186,7 +186,7 @@ public class CombatSystem : MonoBehaviour
             character.CombatSetup();
         }
         if (playerIsDefending) combatUIView.UpdateCrew(defender.Crew);
-        else combatUIView.UpdateCrew(defender.Crew);
+        else combatUIView.UpdateCrew(attacker.Crew);
 
         turnSystem.SetupNewCombat(allCharacters);
         turnSystem.StartCombat();

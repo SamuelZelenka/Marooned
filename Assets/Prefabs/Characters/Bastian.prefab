@@ -61,13 +61,13 @@ MonoBehaviour:
     characterFirstName: Bastian
     characterLastName: 
     recruitBountyDemand: 100
-    startVitalityMax: 1
-    startStrength: 1
-    startAccuracy: 1
-    startAgility: 1
-    startFortitude: 1
-    startIntelligence: 1
-    startCharisma: 1
+    startVitalityMax: 50
+    startStrength: 7
+    startAccuracy: 3
+    startAgility: 2
+    startFortitude: 4
+    startIntelligence: 3
+    startCharisma: 4
   animatedArrow: {fileID: 2743367475867939713}
   overHeadUI: {fileID: 520023534314110873}
   isDead: 0
@@ -166,6 +166,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2832495509124659475, guid: c7e7429730d14da43a577ab34b263a02,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -2832495509124659475, guid: c7e7429730d14da43a577ab34b263a02,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -2068356011358853723, guid: c7e7429730d14da43a577ab34b263a02,
         type: 3}
