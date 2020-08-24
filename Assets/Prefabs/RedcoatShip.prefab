@@ -460,8 +460,8 @@ SpriteRenderer:
   m_SortingLayerID: 2019508797
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1c9e622e7446de047b1662c3c324d8ca, type: 3}
-  m_Color: {r: 1, g: 0.021099266, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 0eaca282240e0a442b062447a9efaa37, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -969,9 +969,9 @@ MonoBehaviour:
   landMovementCost: 5
   unitRenderer: {fileID: 8967362086542788484}
   unitSprites:
-  - {fileID: 21300000, guid: 71d4b69604911534db35a85f080e8b88, type: 3}
-  - {fileID: 21300000, guid: 1c9e622e7446de047b1662c3c324d8ca, type: 3}
-  - {fileID: 21300000, guid: ef3e6079e5a4f3744b6e87b7c363fcef, type: 3}
+  - {fileID: 21300000, guid: 70f82deb736fc7f4ba6830f23e6af4c5, type: 3}
+  - {fileID: 21300000, guid: 0eaca282240e0a442b062447a9efaa37, type: 3}
+  - {fileID: 21300000, guid: 7c5b1eefe122a1749bb20ce6523cba18, type: 3}
   playerControlled: 0
   myGrid: {fileID: 0}
   shipViewer: {fileID: 2105936915044697083}
