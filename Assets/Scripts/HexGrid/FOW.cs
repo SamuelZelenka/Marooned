@@ -6,9 +6,11 @@ public class FOW : MonoBehaviour
 {
     public enum FOWMode { Hidden, Viewed, InView }
 
-    [SerializeField] Tilemap fowTilemap = null;
+    [SerializeField] Tilemap hiddenTilemap = null;
+    [SerializeField] Tilemap outOfViewTilemap = null;
+
     [SerializeField] TileBase hidden = null;
-    [SerializeField] TileBase viewed = null;
+    [SerializeField] TileBase outOfView = null;
 
     List<HexCell> previousCellsInView = new List<HexCell>();
 
@@ -51,13 +53,16 @@ public class FOW : MonoBehaviour
         switch (cell.FOWMode)
         {
             case FOWMode.Hidden:
-                fowTilemap.SetTile(tilemapPosition, hidden);
+                hiddenTilemap.SetTile(tilemapPosition, hidden);
+                outOfViewTilemap.SetTile(tilemapPosition, outOfView);
                 break;
             case FOWMode.Viewed:
-                fowTilemap.SetTile(tilemapPosition, viewed);
+                hiddenTilemap.SetTile(tilemapPosition, null);
+                outOfViewTilemap.SetTile(tilemapPosition, outOfView);
                 break;
             case FOWMode.InView:
-                fowTilemap.SetTile(tilemapPosition, null);
+                hiddenTilemap.SetTile(tilemapPosition, null);
+                outOfViewTilemap.SetTile(tilemapPosition, null);
                 break;
         }
     }
