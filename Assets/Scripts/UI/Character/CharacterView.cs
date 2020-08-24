@@ -69,12 +69,18 @@ public class CharacterView : MonoBehaviour
 
     public void SetCharacter(Character newCharacter)
     {
-        if (character != null)
+        if (character)
             UnSubscribe();
         character = newCharacter;
-        if (!character)
+        if (character)
+        {
             Subscribe();
-        UpdateAllUI();
+            UpdateAllUI();
+        }
+        else
+        {
+            HideAllUI();
+        }
     }
     public void SetAdditionalText(string text)
     {
