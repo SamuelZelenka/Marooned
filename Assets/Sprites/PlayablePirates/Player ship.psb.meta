@@ -94,11 +94,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 1940
+      x: 590
+      y: 997
       width: 594
       height: 1391
-    spriteID: 16e121a84ccd1d843b49c55b692c6094
+    spriteID: 5e79d0b354e07384db11d5ee2a8f23a4
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -108,7 +108,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: -1682, y: 1487}
+    uvTransform: {x: -1096, y: 544}
   - name: JL front left
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -116,11 +116,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 606
-      y: 1940
+      x: 1192
+      y: 997
       width: 580
       height: 1392
-    spriteID: ebcee8b5cef65ce4ca4f33ea628be948
+    spriteID: 2d566669f93b10d429797b8499ebc0c7
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -130,7 +130,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: -228, y: 1488}
+    uvTransform: {x: 358, y: 545}
   - name: Mast right
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -138,11 +138,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 1194
-      y: 1940
+      x: 1780
+      y: 997
       width: 554
       height: 1254
-    spriteID: d170774720a4f094bbcc644e95bc07e7
+    spriteID: 8cefc5e84b9b15646ae57a9822a9c034
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -152,7 +152,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: -516, y: 1266}
+    uvTransform: {x: 70, y: 323}
   - name: Mast left
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -160,11 +160,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 3228
-      y: 4
+      x: 4
+      y: 997
       width: 578
       height: 1456
-    spriteID: b90ac4d3806aad8489fa48578244d42f
+    spriteID: 1f2b5fed42e758744a76c500642e6859
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -174,7 +174,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: 2394, y: -468}
+    uvTransform: {x: -830, y: 525}
   - name: JL right back
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -182,11 +182,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 606
-      y: 3340
+      x: 3177
+      y: 4
       width: 258
       height: 727
-    spriteID: 1acf5ef3ecde7d04c8c0678b36b77801
+    spriteID: 5dd42548e7e806c4b9c4201674fb13b1
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -196,7 +196,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: -1080, y: 2230}
+    uvTransform: {x: 1491, y: -1106}
   - name: JL left back
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -204,11 +204,11 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 872
-      y: 3340
+      x: 3443
+      y: 4
       width: 258
       height: 727
-    spriteID: d23f06e959e507a4fb2082960c129e7f
+    spriteID: e5330dd8b8f77324aaefad3112b8b812
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -218,7 +218,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: 38, y: 2230}
+    uvTransform: {x: 2609, y: -1106}
   - name: Ship
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -228,9 +228,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 3216
-      height: 1928
-    spriteID: 3a1229c1934c2b94cb5f2b5394d7f6a5
+      width: 3165
+      height: 985
+    spriteID: 00d9e5b64c917d642b3356e4ad6b32b2
     internalID: 0
     spriteBone: []
     spriteOutline: []
@@ -240,25 +240,14 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: 4, y: 4}
-  platformSettings:
-  - name: Default
-    overridden: 1
-    maxTextureSize: 4096
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    androidETC2FallbackOverride: 0
+    uvTransform: {x: -29, y: -165}
+  platformSettings: []
   mosaicLayers: 1
   documentPivot: {x: 0, y: 0}
   documentAlignment: 7
   importHiddenLayers: 0
-  importedTextureWidth: 4096
-  importedTextureHeight: 4096
+  importedTextureWidth: 2048
+  importedTextureHeight: 2048
   documentSize: {x: 3216, y: 1928}
   paperDollMode: 0
   keepDupilcateSpriteName: 0
@@ -275,49 +264,49 @@ ScriptedImporter:
     spriteName: JL front right
     isGroup: 0
     parentIndex: -1
-    spriteID: 16e121a84ccd1d843b49c55b692c6094
+    spriteID: 5e79d0b354e07384db11d5ee2a8f23a4
     layerID: 399
-    mosaicPosition: {x: 4, y: 1940}
+    mosaicPosition: {x: 590, y: 997}
   - name: JL front left
     spriteName: JL front left
     isGroup: 0
     parentIndex: -1
-    spriteID: ebcee8b5cef65ce4ca4f33ea628be948
+    spriteID: 2d566669f93b10d429797b8499ebc0c7
     layerID: 394
-    mosaicPosition: {x: 606, y: 1940}
+    mosaicPosition: {x: 1192, y: 997}
   - name: Mast right
     spriteName: Mast right
     isGroup: 0
     parentIndex: -1
-    spriteID: d170774720a4f094bbcc644e95bc07e7
+    spriteID: 8cefc5e84b9b15646ae57a9822a9c034
     layerID: 398
-    mosaicPosition: {x: 1194, y: 1940}
+    mosaicPosition: {x: 1780, y: 997}
   - name: Mast left
     spriteName: Mast left
     isGroup: 0
     parentIndex: -1
-    spriteID: b90ac4d3806aad8489fa48578244d42f
+    spriteID: 1f2b5fed42e758744a76c500642e6859
     layerID: 388
-    mosaicPosition: {x: 3228, y: 4}
+    mosaicPosition: {x: 4, y: 997}
   - name: JL right back
     spriteName: JL right back
     isGroup: 0
     parentIndex: -1
-    spriteID: 1acf5ef3ecde7d04c8c0678b36b77801
+    spriteID: 5dd42548e7e806c4b9c4201674fb13b1
     layerID: 397
-    mosaicPosition: {x: 606, y: 3340}
+    mosaicPosition: {x: 3177, y: 4}
   - name: JL left back
     spriteName: JL left back
     isGroup: 0
     parentIndex: -1
-    spriteID: d23f06e959e507a4fb2082960c129e7f
+    spriteID: e5330dd8b8f77324aaefad3112b8b812
     layerID: 379
-    mosaicPosition: {x: 872, y: 3340}
+    mosaicPosition: {x: 3443, y: 4}
   - name: Ship
     spriteName: Ship
     isGroup: 0
     parentIndex: -1
-    spriteID: 3a1229c1934c2b94cb5f2b5394d7f6a5
+    spriteID: 00d9e5b64c917d642b3356e4ad6b32b2
     layerID: 338
     mosaicPosition: {x: 4, y: 4}
   characterData:
