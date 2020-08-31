@@ -23,6 +23,7 @@ public class CombatSystem : MonoBehaviour
     public delegate void CombatHandler();
     public static CombatHandler OnCombatStart;
     public static CombatHandler OnCombatEnd;
+    public static CombatHandler OnAbilityUsed;
 
     private Character latestCharacter;
 
@@ -125,6 +126,7 @@ public class CombatSystem : MonoBehaviour
         OnCombatStart?.Invoke();
         hexGridController.StartCombatMode();
         SetUpCombat(0, defender, attacker);
+        OnAbilityUsed += IsCombatOver;
     }
 
     private void SetUpCombat(int size, Player defender, Player attacker)
@@ -194,15 +196,13 @@ public class CombatSystem : MonoBehaviour
 
     public void IsCombatOver()
     {
-        bool isCombatOver = true;
-
         // Combat end conditions
 
         foreach (Character character in HexGridController.player.Crew)
         {
-            isCombatOver = character.IsCharacterDown() ? true : false ;
+            if (!character.isDowned) return;
         }
-        if (isCombatOver) EndCombat();
+        EndCombat();
     }
 
     public void EndCombat()
@@ -210,6 +210,7 @@ public class CombatSystem : MonoBehaviour
         OnCombatEnd?.Invoke();
         hexGrid.Load(managementMap, false);
         HexGridController.CurrentMode = HexGridController.GridMode.Map;
+        OnAbilityUsed -= IsCombatOver;
 
         foreach (var item in HexGridController.player.Crew)
         {
@@ -330,6 +331,7 @@ public class CombatSystem : MonoBehaviour
         {
             Debug.Log("Action not possible. No action selected or clicked hex is not a valid hex");
         }
+        OnAbilityUsed?.Invoke();
     }
 
     private void PostAbilityCalculations()
