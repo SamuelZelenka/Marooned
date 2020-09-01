@@ -5,6 +5,16 @@ public class AbilityUIController : MonoBehaviour
 {
     [SerializeField] GameObject disableOverlay = null;
     [SerializeField] Text disableText = null;
+    private void OnEnable()
+    {
+        CombatSystem.OnAbilityUsed += UpdateUIOnAbility;
+    }
+    private void OnDisable()
+    {
+        CombatSystem.OnAbilityUsed -= UpdateUIOnAbility;
+    }
+
+    public void UpdateUIOnAbility() => UpdateUI(HexGridController.ActiveCharacter);
 
     public void UpdateUI( Character activeCharacter)
     {
@@ -12,10 +22,15 @@ public class AbilityUIController : MonoBehaviour
         {
             return;
         }
+        if (DisableAbilities("Downed", activeCharacter.isDowned))
+        {
+            return;
+        }
         if (DisableAbilities("Stunned", activeCharacter.IsStunned))
         {
             return;
         }
+
             EnableAbilities();
     }
     public bool DisableAbilities(string reason, bool condition)

@@ -11,8 +11,8 @@ public class Character : HexUnit
     public GameObject animatedArrow;
     public CharacterView overHeadUI;
 
-    public delegate bool CharacterStatHandler();
-    CharacterStatHandler OnCharacterDowned;
+    public delegate void CharacterStatHandler();
+    public static CharacterStatHandler OnCharacterDowned;
 
 
     public bool isDead = false;
@@ -55,6 +55,7 @@ public class Character : HexUnit
             }
         }
         characterData.Setup();
+        characterData.Vitality.OnResourceChanged += CheckCharacterDown;
         overHeadUI.SetCharacter(this);
     }
 
@@ -220,28 +221,36 @@ public class Character : HexUnit
     public void TurnEnded()
     {
         EffectTickUpdate();
+        if (isDowned)
+        {
+            CharacterDownTick();
+        }
     }
 
-
+    void CheckCharacterDown(int notUsed) => IsCharacterDown();
     public bool IsCharacterDown()
     {
-        if (characterData.Vitality.CurrentValue <= 0)
+        if (characterData.Vitality.CurrentValue <= 0 && !IsCharacterDead())
         {
             OnCharacterDowned?.Invoke();
             isDowned = true;
-            CombatTurnSystem.OnTurnBeginning += CharacterDownTick;
+            Debug.Log($"{characterData.CharacterName} is down");
         }
-        isDowned = false;
-        Debug.Log("Character is down");
+        else
+        {
+            isDowned = false;
+        }
         return isDowned;
     }
 
-    public void CharacterDownTick(Character character) => downCounter++;
+    public void CharacterDownTick() => downCounter++;
     public bool IsCharacterDead()
     {
+        print($"{downCounter}/{DOWNTURNLIMIT} down counter");
         if (downCounter >= DOWNTURNLIMIT)
         {
             isDead = true;
+            Debug.Log($"{characterData.CharacterName} died");
         }
         return isDead;
     }
