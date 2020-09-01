@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Character : HexUnit
 {
-    const int DOWNTURNLIMIT = 5;
-
     public CharacterData characterData;
 
     public GameObject animatedArrow;
@@ -14,11 +12,9 @@ public class Character : HexUnit
     public delegate void CharacterStatHandler();
     public static CharacterStatHandler OnCharacterDowned;
 
-
     public bool isDead = false;
-
     public bool isDowned;
-    int downCounter = 0;
+    int downCounter = 3;
 
     #region Visuals
     public Sprite portrait = null;
@@ -187,6 +183,13 @@ public class Character : HexUnit
         }
         return true;
     }
+    public bool CanMove()
+    {
+        if (isDowned) return false;
+        if (isDead) return false;
+        if (IsStunned) return false;
+        return true;
+    }
 
     public override void MakeUnitActive()
     {
@@ -195,7 +198,7 @@ public class Character : HexUnit
             case HexGridController.GridMode.Map:
                 break;
             case HexGridController.GridMode.Combat:
-                if (!IsStunned)
+                if (CanMove())
                 {
                     remainingMovementPoints = defaultMovementPoints;
                     characterData.Energy.CurrentValue += CharacterData.DEFAULTENERGYREGEN;
@@ -224,6 +227,7 @@ public class Character : HexUnit
         if (isDowned)
         {
             CharacterDownTick();
+            IsCharacterDead();
         }
     }
 
@@ -243,13 +247,14 @@ public class Character : HexUnit
         return isDowned;
     }
 
-    public void CharacterDownTick() => downCounter++;
+    public void CharacterDownTick() => downCounter--;
+
     public bool IsCharacterDead()
     {
-        print($"{downCounter}/{DOWNTURNLIMIT} down counter");
-        if (downCounter >= DOWNTURNLIMIT)
+        if (downCounter <= 0)
         {
             isDead = true;
+            // Remove character from  player session
             Debug.Log($"{characterData.CharacterName} died");
         }
         return isDead;

@@ -22,6 +22,10 @@ public class AbilityUIController : MonoBehaviour
         {
             return;
         }
+        if (DisableAbilities("Dead", activeCharacter.isDead))
+        {
+            return;
+        }
         if (DisableAbilities("Downed", activeCharacter.isDowned))
         {
             return;
